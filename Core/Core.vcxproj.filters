@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Исходные файлы">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Файлы заголовков">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Файлы ресурсов">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Исходные файлы\Shared">
+      <UniqueIdentifier>{bf204c05-52cc-46aa-8fb7-42b802f8c925}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Components">
+      <UniqueIdentifier>{894db70e-f312-4940-beef-91d73f4bd401}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Assets">
+      <UniqueIdentifier>{60bc8e4d-baed-4473-ac01-69311654f674}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Renderer">
+      <UniqueIdentifier>{2ffa8e37-7ccc-413b-b4bb-713db561c187}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shared\IO.cpp">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shared\Path.cpp">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shared\String.cpp">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Transform.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\MeshRenderer.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\Material.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\Mesh.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\Shader.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Components\Component.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\Asset.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Renderer\OpenGL4.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Shared\IO.h">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shared\Path.h">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shared\String.h">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Transform.h">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\MeshRenderer.h">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\Material.h">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\Mesh.h">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\Shader.h">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Component.h">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\Asset.h">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\OpenGL4.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
