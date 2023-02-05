@@ -9,6 +9,7 @@
 
 #include "Shared/String.h"
 #include "Shared/Path.h"
+#include "Renderer/RendererGL4.h"
 
 float points[] = {
    0.0f,  0.5f,  0.0f,
@@ -33,6 +34,8 @@ int main(void)
     glfwMakeContextCurrent(window);
 
     glewInit();
+
+    Core::RendererGL4* gl4Renderer = new Core::RendererGL4();
 
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);

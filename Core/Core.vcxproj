@@ -27,7 +27,8 @@
     <ClCompile Include="Source\Components\MeshRenderer.cpp" />
     <ClCompile Include="Source\Components\Transform.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\Renderer\OpenGL4.cpp" />
+    <ClCompile Include="Source\Renderer\Renderer.cpp" />
+    <ClCompile Include="Source\Renderer\RendererGL4.cpp" />
     <ClCompile Include="Source\Shared\IO.cpp" />
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
@@ -40,7 +41,8 @@
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
-    <ClInclude Include="Source\Renderer\OpenGL4.h" />
+    <ClInclude Include="Source\Renderer\Renderer.h" />
+    <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />

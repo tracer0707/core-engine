@@ -60,7 +60,10 @@
     <ClCompile Include="Source\Assets\Asset.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\OpenGL4.cpp">
+    <ClCompile Include="Source\Renderer\Renderer.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Renderer\RendererGL4.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
@@ -95,7 +98,10 @@
     <ClInclude Include="Source\Assets\Asset.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\OpenGL4.h">
+    <ClInclude Include="Source\Renderer\Renderer.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\RendererGL4.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
   </ItemGroup>
