@@ -1,5 +1,5 @@
+#include <sdl/SDL.h>
 #include <GL/glew.h>
-#include <GLFW/glfw3.h>
 
 #include <iostream>
 
@@ -10,6 +10,11 @@
 #include "Shared/String.h"
 #include "Shared/Path.h"
 #include "Renderer/RendererGL4.h"
+#include "Assets/Shader.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 float points[] = {
    0.0f,  0.5f,  0.0f,
@@ -17,25 +22,25 @@ float points[] = {
   -0.5f, -0.5f,  0.0f
 };
 
-int main(void)
+int main(int argc, char* argv[])
 {
-    GLFWwindow* window;
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 
-    if (!glfwInit())
-        return -1;
+    SDL_Window* window = SDL_CreateWindow("Core", SDL_WINDOWPOS_UNDEFINED,
+        SDL_WINDOWPOS_UNDEFINED, 1366, 768,
+        SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-    window = glfwCreateWindow(1366, 768, "Core", NULL, NULL);
-    if (!window)
-    {
-        glfwTerminate();
+    if (window == NULL) {
         return -1;
     }
 
-    glfwMakeContextCurrent(window);
+    SDL_GLContext context = SDL_GL_CreateContext((SDL_Window*)window);
+
+    SDL_GL_SetSwapInterval(1);
+    SDL_GL_MakeCurrent(window, context);
+    SDL_GL_SwapWindow(window);
 
     glewInit();
-
-    Core::RendererGL4* gl4Renderer = new Core::RendererGL4();
 
     GLuint vbo = 0;
     glGenBuffers(1, &vbo);
@@ -49,31 +54,17 @@ int main(void)
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
 
-    const char* vertex_shader =
-        "#version 400\n"
+    Shader shader;
+    shader.loadFromString("#version 400\n"
         "in vec3 vp;"
         "void main() {"
         "  gl_Position = vec4(vp, 1.0);"
-        "}";
-
-    const char* fragment_shader =
+        "}",
         "#version 400\n"
         "out vec4 frag_colour;"
         "void main() {"
         "  frag_colour = vec4(0.5, 0.0, 0.5, 1.0);"
-        "}";
-
-    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vertex_shader, NULL);
-    glCompileShader(vs);
-    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fragment_shader, NULL);
-    glCompileShader(fs);
-
-    GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, fs);
-    glAttachShader(shader_program, vs);
-    glLinkProgram(shader_program);
+        "}");
 
     Assimp::Importer* importer = new Assimp::Importer();
     importer->SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.0f);
@@ -98,20 +89,71 @@ int main(void)
         std::cout << "Error loading model";
     }
 
-    while (!glfwWindowShouldClose(window))
+    bool running = true;
+
+    SDL_Event event;
+    while (running)
     {
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                {
+                    running = false;
+                }
+                break;
+
+                case SDL_WINDOWEVENT:
+                {
+                    const SDL_WindowEvent& wev = event.window;
+                    switch (wev.event)
+                    {
+                    case SDL_WINDOWEVENT_RESIZED:
+                    case SDL_WINDOWEVENT_SIZE_CHANGED:
+                    {
+                        //TODO
+                    }
+                    break;
+                    case SDL_WINDOWEVENT_RESTORED:
+                    case SDL_WINDOWEVENT_FOCUS_GAINED:
+                    {
+                        //TODO
+                    }
+                    break;
+
+                    case SDL_WINDOWEVENT_CLOSE:
+                        running = false;
+                    }
+                    break;
+                }
+                break;
+            }
+        }
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glUseProgram(shader_program);
+        shader.bind();
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        glfwSwapBuffers(window);
+        /////
 
-        glfwPollEvents();
+        if (!(SDL_GetWindowFlags(window) & SDL_WINDOW_INPUT_FOCUS))
+        {
+#ifdef _WIN32
+            Sleep(200);
+#else
+            usleep(200 * 1000);
+#endif
+        }
+
+        SDL_GL_MakeCurrent(window, context);
+        SDL_GL_SwapWindow(window);
     }
 
-    glfwTerminate();
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     return 0;
 }

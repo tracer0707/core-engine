@@ -6,7 +6,13 @@ namespace Core
 {
 	class RendererGL4 : public Renderer
 	{
-		const unsigned int createProgram(const char* vertexSrc, const char* fragmentSrc);
+	private:
+
+	public:
+		const unsigned int createProgram(UString vertexSrc, UString fragmentSrc);
 		const void deleteProgram(unsigned int programId);
-	};
+		const void bindProgram(unsigned int programId);
+
+		static RendererGL4* singleton();
+	};	
 }

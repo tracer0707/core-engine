@@ -2,7 +2,12 @@
 
 class Asset
 {
+private:
+	bool loaded = false;
+
 public:
-	virtual const void load() = 0;
-	virtual const void unload() = 0;
+	virtual const void load();
+	virtual const void unload();
+
+	const bool isLoaded();
 };

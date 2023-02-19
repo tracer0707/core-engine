@@ -3,6 +3,8 @@
 #include <vector>
 #include <map>
 
+#include "../Shared/String.h"
+
 namespace Core
 {
 	class Renderer
@@ -20,7 +22,8 @@ namespace Core
 		std::vector<Program> shaderPrograms;
 
 	public:
-		virtual const unsigned int createProgram(const char* vertexSrc, const char* fragmentSrc) = 0;
+		virtual const unsigned int createProgram(UString vertexSrc, UString fragmentSrc) = 0;
 		virtual const void deleteProgram(unsigned int programId) = 0;
+		virtual const void bindProgram(unsigned int programId) = 0;
 	};
 }

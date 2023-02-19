@@ -104,5 +104,8 @@
     <ClInclude Include="Source\Renderer\RendererGL4.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="Source\config.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

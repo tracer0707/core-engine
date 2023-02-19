@@ -41,6 +41,7 @@
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
+    <ClInclude Include="Source\config.h" />
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Shared\IO.h" />
@@ -149,15 +150,15 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Dependencies/glfw/include;Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;Dependencies/sdl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;Dependencies/glfw/lib/x64/glfw3_mt.lib;Dependencies/glew/lib/x64/glew32.lib;Dependencies/glew/lib/x64/glew32s.lib;Dependencies/assimp/lib/x64/assimp-vc143-mt.lib;Dependencies/glm/lib/x64/glm_static.lib;Dependencies/icu/lib/x64/icudt.lib;Dependencies/icu/lib/x64/icuin.lib;Dependencies/icu/lib/x64/icuio.lib;Dependencies/icu/lib/x64/icutest.lib;Dependencies/icu/lib/x64/icutu.lib;Dependencies/icu/lib/x64/icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;Dependencies/glew/lib/x64/glew32.lib;Dependencies/glew/lib/x64/glew32s.lib;Dependencies/assimp/lib/x64/assimp-vc143-mt.lib;Dependencies/glm/lib/x64/glm_static.lib;Dependencies/icu/lib/x64/icudt.lib;Dependencies/icu/lib/x64/icuin.lib;Dependencies/icu/lib/x64/icuio.lib;Dependencies/icu/lib/x64/icutest.lib;Dependencies/icu/lib/x64/icutu.lib;Dependencies/icu/lib/x64/icuuc.lib;Dependencies/sdl/lib/x64/SDL2.lib;Dependencies/sdl/lib/x64/SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
