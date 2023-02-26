@@ -47,6 +47,7 @@
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
+    <ClInclude Include="Source\System\dirent.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

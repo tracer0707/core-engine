@@ -9,4 +9,10 @@ namespace Core
 
 		return dst;
 	}
+
+	UString String::fromStdString(const std::string& src)
+	{
+		UString dst = src.data();
+		return dst;
+	}
 }

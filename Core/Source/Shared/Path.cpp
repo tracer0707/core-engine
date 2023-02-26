@@ -14,7 +14,7 @@
 
 namespace Core
 {
-	const UString Core::Path::getFileExtension(const UString& fileName)
+	const UString Path::getFileExtension(const UString& fileName)
 	{
 		if (fileName.length() > 0)
 		{
@@ -34,7 +34,7 @@ namespace Core
 		return "";
 	}
 
-	const UString Core::Path::getFileName(const UString& fileName)
+	const UString Path::getFileName(const UString& fileName)
 	{
 		int32_t index0 = fileName.lastIndexOf('/');
 		int32_t index1 = fileName.lastIndexOf('.');
@@ -51,7 +51,7 @@ namespace Core
 		return "";
 	}
 
-	const UString Core::Path::getFileNameWithExtension(const UString& fileName)
+	const UString Path::getFileNameWithExtension(const UString& fileName)
 	{
 		int32_t index0 = fileName.lastIndexOf('/');
 		int32_t index1 = fileName.lastIndexOf('\\');
@@ -66,7 +66,7 @@ namespace Core
 		return "";
 	}
 
-	const UString Core::Path::getFilePath(const UString& fileName)
+	const UString Path::getFilePath(const UString& fileName)
 	{
 		std::filesystem::path p(fileName.getBuffer());
 		std::filesystem::path dir = p.remove_filename();
@@ -107,5 +107,11 @@ namespace Core
 	const UString Path::combine(const UString& part0, const UString& part1, const UString& part2)
 	{
 		return combine(combine(part0, part1), part2);
+	}
+
+	const bool Path::isDir(const UString& dir)
+	{
+		const std::string dir_str = String::toStdString(dir);
+		return std::filesystem::is_directory(dir_str);
 	}
 }

@@ -43,26 +43,22 @@ namespace Core
             }
         );
 
-        if (it != shaderPrograms.end())
-        {
-            if (it->vertexShader > 0)
-                glDeleteShader(it->vertexShader);
-
-            if (it->fragmentShader > 0)
-                glDeleteShader(it->fragmentShader);
-
-            if (it->geometryShader > 0)
-                glDeleteShader(it->geometryShader);
-
-            if (it->computeShader > 0)
-                glDeleteShader(it->computeShader);
-
-            shaderPrograms.erase(it);
-        }
-        else
-        {
+        if (it == shaderPrograms.end())
             throw std::invalid_argument("Попытка удалить несуществующую программу");
-        }
+
+        if (it->vertexShader > 0)
+            glDeleteShader(it->vertexShader);
+
+        if (it->fragmentShader > 0)
+            glDeleteShader(it->fragmentShader);
+
+        if (it->geometryShader > 0)
+            glDeleteShader(it->geometryShader);
+
+        if (it->computeShader > 0)
+            glDeleteShader(it->computeShader);
+
+        shaderPrograms.erase(it);
     }
 
     const void RendererGL4::bindProgram(unsigned int programId)

@@ -25,6 +25,9 @@
     <Filter Include="Исходные файлы\Renderer">
       <UniqueIdentifier>{2ffa8e37-7ccc-413b-b4bb-713db561c187}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\System">
+      <UniqueIdentifier>{5f4688da-3640-4ba2-afa9-b5fe5f694f68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -106,6 +109,9 @@
     </ClInclude>
     <ClInclude Include="Source\config.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\dirent.h">
+      <Filter>Исходные файлы\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

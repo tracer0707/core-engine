@@ -14,5 +14,6 @@ namespace Core
 	{
 	public:
 		static std::string toStdString(const UString& src);
+		static UString fromStdString(const std::string& src);
 	};
 }
