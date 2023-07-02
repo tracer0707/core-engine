@@ -9,10 +9,13 @@ namespace Core
 	private:
 
 	public:
-		const unsigned int createProgram(UString vertexSrc, UString fragmentSrc);
-		const void deleteProgram(unsigned int programId);
-		const void bindProgram(unsigned int programId);
+		const Program createProgram(UString vertexSrc, UString fragmentSrc);
+		const void deleteProgram(const Program& programId);
+		const void bindProgram(const Program& programId);
 
-		static RendererGL4* singleton();
+		const Buffer createBuffer(real* vertexArray, uint vertexArraySize, uint* indexArray, uint indexArraySize);
+		const void deleteBuffer(const Buffer& buffer);
+		const void bindBuffer(const Buffer& buffer);
+		const void drawBuffer(const Buffer& buffer);
 	};	
 }

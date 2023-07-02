@@ -1,19 +1,22 @@
 #pragma once
 
+#include "../Renderer/Renderer.h"
 #include "Asset.h"
 #include "../Shared/String.h"
 
-class Shader : public Asset
+namespace Core
 {
-private:
-	unsigned int nativeId = 0;
+	class Shader : public Asset
+	{
+	private:
+		Program nativeId;
 
-public:
-	~Shader();
+	public:
+		~Shader();
 
-	virtual const void load();
-	virtual const void unload();
-	virtual const void loadFromString(UString vertexSrc, UString fragmentSrc);
-	virtual const void bind();
-	virtual const void unbind();
-};
+		virtual const void load();
+		virtual const void unload();
+		virtual const void loadFromString(UString vertexSrc, UString fragmentSrc);
+		virtual const void bind();
+	};
+}

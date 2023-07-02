@@ -69,6 +69,9 @@
     <ClCompile Include="Source\Renderer\RendererGL4.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Components\Camera.cpp">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -107,11 +110,14 @@
     <ClInclude Include="Source\Renderer\RendererGL4.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\config.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\dirent.h">
       <Filter>Исходные файлы\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Components\Camera.h">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Config.h">
+      <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

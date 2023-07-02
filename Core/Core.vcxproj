@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Assets\Material.cpp" />
     <ClCompile Include="Source\Assets\Mesh.cpp" />
     <ClCompile Include="Source\Assets\Shader.cpp" />
+    <ClCompile Include="Source\Components\Camera.cpp" />
     <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\Components\MeshRenderer.cpp" />
     <ClCompile Include="Source\Components\Transform.cpp" />
@@ -38,10 +39,11 @@
     <ClInclude Include="Source\Assets\Material.h" />
     <ClInclude Include="Source\Assets\Mesh.h" />
     <ClInclude Include="Source\Assets\Shader.h" />
+    <ClInclude Include="Source\Components\Camera.h" />
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
-    <ClInclude Include="Source\config.h" />
+    <ClInclude Include="Source\Config.h" />
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Shared\IO.h" />

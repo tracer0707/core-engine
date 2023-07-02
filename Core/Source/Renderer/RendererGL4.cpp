@@ -1,12 +1,11 @@
 #include "RendererGL4.h"
 
 #include <GL/glew.h>
+#include <cassert>
 
 namespace Core
 {
-    static RendererGL4 singletonInstance;
-
-    const unsigned int RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)
+    const Program RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)
     {
         std::string vertexSrcUtf8 = String::toStdString(vertexSrc);
         std::string fragmentSrcUtf8 = String::toStdString(fragmentSrc);
@@ -27,19 +26,19 @@ namespace Core
         glAttachShader(programId, vs);
         glLinkProgram(programId);
 
-        shaderPrograms.push_back({ programId, vs, fs, 0, 0 });
+        Program program = { programId, vs, fs, 0, 0 };
+        shaderPrograms.push_back(program);
 
-        return programId;
+        return program;
     }
 
-    const void RendererGL4::deleteProgram(unsigned int programId)
+    const void RendererGL4::deleteProgram(const Program& program)
     {
         const auto& it = std::find_if(
             shaderPrograms.begin(),
             shaderPrograms.end(),
-            [=](Program& p) -> bool
-            {
-                return p.program == programId;
+            [=](Program& a) -> bool {
+                return program == a;
             }
         );
 
@@ -61,13 +60,84 @@ namespace Core
         shaderPrograms.erase(it);
     }
 
-    const void RendererGL4::bindProgram(unsigned int programId)
+    const void RendererGL4::bindProgram(const Program& program)
     {
-        glUseProgram(programId);
+        glUseProgram(program.program);
     }
 
-    RendererGL4* RendererGL4::singleton()
+    const Buffer RendererGL4::createBuffer(real* vertexArray, uint vertexArraySize, uint* indexArray, uint indexArraySize)
     {
-        return &singletonInstance;
+        assert(vertexArray != nullptr && vertexArraySize > 0);
+
+        GLuint vbo = 0;
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, vertexArraySize * sizeof(real), vertexArray, GL_STATIC_DRAW);
+
+        GLuint ibo = 0;
+        if (indexArray != nullptr)
+        {
+            assert(indexArraySize > 0);
+
+            glGenBuffers(1, &ibo);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(uint), indexArray, GL_STATIC_DRAW);
+        }
+
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+        Buffer buffer = { vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize };
+        buffers.push_back(buffer);
+
+        return buffer;
+    }
+
+    const void RendererGL4::deleteBuffer(const Buffer& buffer)
+    {
+        const auto& it = std::find(
+            buffers.begin(),
+            buffers.end(),
+            buffer
+        );
+
+        if (it == buffers.end())
+            throw std::invalid_argument("Попытка удалить несуществующий буфер");
+
+        glDeleteBuffers(1, &buffer.vbo);
+
+        if (buffer.indexArray != nullptr)
+            glDeleteBuffers(1, &buffer.ibo);
+    }
+
+    const void RendererGL4::bindBuffer(const Buffer& buffer)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, buffer.vbo);
+        
+        if (buffer.indexArray != nullptr)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer.ibo);
+
+#if DOUBLE_PRECISION == 1
+        glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, 0, 0);
+#elif
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+#endif
+    }
+
+    const void RendererGL4::drawBuffer(const Buffer& buffer)
+    {
+        if (buffer.indexArray != nullptr)
+        {
+            glDrawElements(
+                GL_TRIANGLES,
+                buffer.indexArraySize,
+                GL_UNSIGNED_INT,
+                0
+            );
+        }
+        else
+        {
+            glDrawArrays(GL_TRIANGLES, 0, buffer.vertexArraySize);
+        }
     }
 }
