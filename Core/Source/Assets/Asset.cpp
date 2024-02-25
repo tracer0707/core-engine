@@ -1,16 +1,19 @@
 #include "Asset.h"
 
-const void Asset::load()
+namespace Core
 {
-    loaded = true;
-}
+    const void Asset::load()
+    {
+        loaded = true;
+    }
 
-const void Asset::unload()
-{
-    loaded = false;
-}
+    const void Asset::unload()
+    {
+        loaded = false;
+    }
 
-const bool Asset::isLoaded()
-{
-    return loaded;
+    const bool Asset::isLoaded()
+    {
+        return loaded;
+    }
 }

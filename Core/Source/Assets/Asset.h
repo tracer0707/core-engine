@@ -1,13 +1,16 @@
 #pragma once
 
-class Asset
+namespace Core
 {
-private:
-	bool loaded = false;
+	class Asset
+	{
+	private:
+		bool loaded = false;
 
-public:
-	virtual const void load();
-	virtual const void unload();
+	public:
+		virtual const void load();
+		virtual const void unload();
 
-	const bool isLoaded();
-};
+		const bool isLoaded();
+	};
+}

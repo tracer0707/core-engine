@@ -30,28 +30,6 @@ namespace Core
 		return program == left.program;
 	}
 
-	const Buffer& Buffer::operator=(const Buffer& left)
-	{
-		vbo = left.vbo;
-		ibo = left.ibo;
-		vertexArray = left.vertexArray;
-		vertexArraySize = left.vertexArraySize;
-		indexArray = left.indexArray;
-		indexArraySize = left.indexArraySize;
-
-		return *this;
-	}
-
-	const bool Buffer::operator==(const Buffer& left)
-	{
-		return vbo == left.vbo && ibo == left.ibo;
-	}
-
-	const void Renderer::frame(Camera* camera)
-	{
-		return void();
-	}
-
 	Renderer* Renderer::singleton()
 	{
 		return _singleton;

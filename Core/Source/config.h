@@ -5,16 +5,16 @@
 
 #define CURRENT_RENDERER GL4
 
-#define DOUBLE_PRECISION 1
+#define DOUBLE_PRECISION 0
 
 #if CURRENT_RENDERER == 0
 
-#define uint unsigned int
+#define UInt32 unsigned int
 
 #if DOUBLE_PRECISION == 1
-#define real double
-#elif
-#define real float
+#define Real double
+#else
+#define Real float
 #endif
 
 #endif

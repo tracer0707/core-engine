@@ -19,33 +19,63 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Dependencies\imgui\imgui.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_demo.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
+    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Assets\Asset.cpp" />
     <ClCompile Include="Source\Assets\Material.cpp" />
     <ClCompile Include="Source\Assets\Mesh.cpp" />
     <ClCompile Include="Source\Assets\Shader.cpp" />
+    <ClCompile Include="Source\Assets\Texture.cpp" />
+    <ClCompile Include="Source\Classes\bc7compressor.cpp" />
+    <ClCompile Include="Source\Classes\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="Source\Classes\imgui_impl_sdl2.cpp" />
     <ClCompile Include="Source\Components\Camera.cpp" />
     <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\Components\MeshRenderer.cpp" />
     <ClCompile Include="Source\Components\Transform.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Math\AxisAlignedBox.cpp" />
+    <ClCompile Include="Source\Math\Mathf.cpp" />
+    <ClCompile Include="Source\Math\Plane.cpp" />
+    <ClCompile Include="Source\Math\Ray.cpp" />
     <ClCompile Include="Source\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Renderer\RendererGL4.cpp" />
+    <ClCompile Include="Source\Renderer\VertexBuffer.cpp" />
     <ClCompile Include="Source\Shared\IO.cpp" />
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Dependencies\imgui\imconfig.h" />
+    <ClInclude Include="Dependencies\imgui\imgui.h" />
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Assets\Asset.h" />
     <ClInclude Include="Source\Assets\Material.h" />
     <ClInclude Include="Source\Assets\Mesh.h" />
     <ClInclude Include="Source\Assets\Shader.h" />
+    <ClInclude Include="Source\Assets\Texture.h" />
+    <ClInclude Include="Source\Classes\bc7compressor.h" />
+    <ClInclude Include="Source\Classes\imgui_impl_opengl3.h" />
+    <ClInclude Include="Source\Classes\imgui_impl_sdl2.h" />
     <ClInclude Include="Source\Components\Camera.h" />
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
     <ClInclude Include="Source\Config.h" />
+    <ClInclude Include="Source\Math\AxisAlignedBox.h" />
+    <ClInclude Include="Source\Math\Mathf.h" />
+    <ClInclude Include="Source\Math\Plane.h" />
+    <ClInclude Include="Source\Math\Ray.h" />
+    <ClInclude Include="Source\Renderer\Color.h" />
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
+    <ClInclude Include="Source\Renderer\VertexBuffer.h" />
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
@@ -153,7 +183,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;Dependencies/sdl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;Dependencies/sdl/include;Dependencies/FreeImage/include;Dependencies/Carve/include;Dependencies/bc7enc/include;Dependencies/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -161,7 +191,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;Dependencies/glew/lib/x64/glew32.lib;Dependencies/glew/lib/x64/glew32s.lib;Dependencies/assimp/lib/x64/assimp-vc143-mt.lib;Dependencies/glm/lib/x64/glm_static.lib;Dependencies/icu/lib/x64/icudt.lib;Dependencies/icu/lib/x64/icuin.lib;Dependencies/icu/lib/x64/icuio.lib;Dependencies/icu/lib/x64/icutest.lib;Dependencies/icu/lib/x64/icutu.lib;Dependencies/icu/lib/x64/icuuc.lib;Dependencies/sdl/lib/x64/SDL2.lib;Dependencies/sdl/lib/x64/SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;Dependencies/glew/lib/x64/glew32.lib;Dependencies/glew/lib/x64/glew32s.lib;Dependencies/assimp/lib/x64/assimp-vc143-mt.lib;Dependencies/glm/lib/x64/glm_static.lib;Dependencies/icu/lib/x64/icudt.lib;Dependencies/icu/lib/x64/icuin.lib;Dependencies/icu/lib/x64/icuio.lib;Dependencies/icu/lib/x64/icutest.lib;Dependencies/icu/lib/x64/icutu.lib;Dependencies/icu/lib/x64/icuuc.lib;Dependencies/sdl/lib/x64/SDL2.lib;Dependencies/sdl/lib/x64/SDL2main.lib;Dependencies/FreeImage/lib/x64/FreeImage.lib;Dependencies/Carve/lib/x64/carve.lib;Dependencies/bc7enc/lib/bc7enc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

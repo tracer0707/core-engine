@@ -28,6 +28,15 @@
     <Filter Include="Исходные файлы\System">
       <UniqueIdentifier>{5f4688da-3640-4ba2-afa9-b5fe5f694f68}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Math">
+      <UniqueIdentifier>{a12ba527-c620-4af4-89ff-7056734a20ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Classes">
+      <UniqueIdentifier>{9aee67e7-a4ca-4834-ac19-029a8e6763d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Classes\ImGui">
+      <UniqueIdentifier>{c5b97f6e-2f3d-4388-a77e-c2171db7c598}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -71,6 +80,48 @@
     </ClCompile>
     <ClCompile Include="Source\Components\Camera.cpp">
       <Filter>Исходные файлы\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\Texture.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Renderer\VertexBuffer.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\AxisAlignedBox.cpp">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Mathf.cpp">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Plane.cpp">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Math\Ray.cpp">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Classes\bc7compressor.cpp">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Classes\imgui_impl_opengl3.cpp">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Classes\imgui_impl_sdl2.cpp">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_demo.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_draw.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_tables.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +169,54 @@
     </ClInclude>
     <ClInclude Include="Source\Config.h">
       <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\Texture.h">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\Color.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\VertexBuffer.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\AxisAlignedBox.h">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Mathf.h">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Plane.h">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Math\Ray.h">
+      <Filter>Исходные файлы\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Classes\bc7compressor.h">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Classes\imgui_impl_opengl3.h">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Classes\imgui_impl_sdl2.h">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imconfig.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_internal.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_rectpack.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_textedit.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
