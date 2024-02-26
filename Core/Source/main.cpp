@@ -10,11 +10,6 @@
 #include "Shared/String.h"
 #include "Shared/Path.h"
 #include "Renderer/RendererGL4.h"
-#include "Assets/Mesh.h"
-#include "Assets/Material.h"
-
-#include "Components/Camera.h"
-#include "Math/Mathf.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -24,6 +19,10 @@
 #include "Classes/imgui_impl_opengl3.h"
 
 #include <glm/mat4x4.hpp>
+
+#include "Scene/Scene.h"
+#include "Editor/Editor.h"
+#include "System/EventHandler.h"
 
 int main(int argc, char* argv[])
 {
@@ -47,22 +46,14 @@ int main(int argc, char* argv[])
 
     Core::Renderer::init();
 
+    Core::Scene* scene = new Core::Scene();
+    Editor::Editor::setScene(scene);
+
     ImGui::CreateContext();
     ImGui_ImplSDL2_InitForOpenGL(window, context);
     ImGui_ImplOpenGL3_Init("#version 130");
 
-    Core::Camera* camera = new Core::Camera();
-    camera->setPosition(glm::vec3(0, 0.15f, -1.5f));
-
-    Core::Mesh* mesh = Core::Mesh::loadFromFile("D:/Dev/C++/core-engine/x64/Release/Test Project/model.fbx");
-
     bool running = true;
-
-    glm::quat rotation = glm::identity<glm::quat>();
-    glm::vec3 position = glm::vec3(0, 0, 0);
-    glm::vec3 scale = glm::vec3(1.0f);
-
-    float yRot = 0.0f;
 
     int oldtime = 0;
     int newtime = 0;
@@ -70,10 +61,13 @@ int main(int argc, char* argv[])
 
     int w, h;
     SDL_GetWindowSize(window, &w, &h);
+    Core::Renderer::singleton()->setViewportSize(w, h);
 
     SDL_Event event;
     while (running)
     {
+        oldtime = SDL_GetTicks();
+
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -114,7 +108,7 @@ int main(int argc, char* argv[])
             ImGui_ImplSDL2_ProcessEvent(&event);
         }
 
-        oldtime = SDL_GetTicks();
+        Core::EventHandler::singleton()->processEvents();
 
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
@@ -123,40 +117,13 @@ int main(int argc, char* argv[])
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 model = glm::identity<glm::mat4x4>();
-        glm::mat4 rotMat = glm::mat4_cast(rotation);
-
-        glm::vec3 pos = glm::inverse(rotMat) * (glm::vec4(position, 1.0f));
-
-        model = glm::translate(model, pos);
-        model = rotMat * model;
-        model = glm::scale(model, scale);
-
-        yRot += 1.0f;
-        rotation = Core::Mathf::toQuaternion(glm::vec3(90.0f, 0, 0)) * Core::Mathf::toQuaternion(glm::vec3(0, 0, yRot));
-
-        for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
-        {
-            Core::SubMesh* subMesh = mesh->getSubMesh(i);
-            Core::Material* material = subMesh->getMaterial();
-
-            glm::mat4 view = camera->getViewMatrix();
-            glm::mat4 proj = camera->getProjectionMatrix((float)w / (float)h);
-
-            Core::Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
-            
-            if (material != nullptr)
-                material->bind();
-
-            Core::Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), view, proj, model);
-        }
+        scene->render();
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
 
-        bool dwin = true;
-        ImGui::ShowDemoWindow(&dwin);
+        Editor::Editor::renderUI();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

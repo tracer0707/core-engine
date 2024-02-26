@@ -36,6 +36,7 @@
     <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\Components\MeshRenderer.cpp" />
     <ClCompile Include="Source\Components\Transform.cpp" />
+    <ClCompile Include="Source\Editor\Editor.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Math\AxisAlignedBox.cpp" />
     <ClCompile Include="Source\Math\Mathf.cpp" />
@@ -44,9 +45,14 @@
     <ClCompile Include="Source\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Renderer\RendererGL4.cpp" />
     <ClCompile Include="Source\Renderer\VertexBuffer.cpp" />
+    <ClCompile Include="Source\Scene\CSGBrush.cpp" />
+    <ClCompile Include="Source\Scene\CSGModel.cpp" />
+    <ClCompile Include="Source\Scene\Object.cpp" />
+    <ClCompile Include="Source\Scene\Scene.cpp" />
     <ClCompile Include="Source\Shared\IO.cpp" />
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
+    <ClCompile Include="Source\System\EventHandler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\imgui\imconfig.h" />
@@ -61,6 +67,7 @@
     <ClInclude Include="Source\Assets\Shader.h" />
     <ClInclude Include="Source\Assets\Texture.h" />
     <ClInclude Include="Source\Classes\bc7compressor.h" />
+    <ClInclude Include="Source\Classes\dirent.h" />
     <ClInclude Include="Source\Classes\imgui_impl_opengl3.h" />
     <ClInclude Include="Source\Classes\imgui_impl_sdl2.h" />
     <ClInclude Include="Source\Components\Camera.h" />
@@ -68,6 +75,7 @@
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
     <ClInclude Include="Source\Config.h" />
+    <ClInclude Include="Source\Editor\Editor.h" />
     <ClInclude Include="Source\Math\AxisAlignedBox.h" />
     <ClInclude Include="Source\Math\Mathf.h" />
     <ClInclude Include="Source\Math\Plane.h" />
@@ -76,10 +84,14 @@
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Renderer\VertexBuffer.h" />
+    <ClInclude Include="Source\Scene\CSGBrush.h" />
+    <ClInclude Include="Source\Scene\CSGModel.h" />
+    <ClInclude Include="Source\Scene\Object.h" />
+    <ClInclude Include="Source\Scene\Scene.h" />
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
-    <ClInclude Include="Source\System\dirent.h" />
+    <ClInclude Include="Source\System\EventHandler.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

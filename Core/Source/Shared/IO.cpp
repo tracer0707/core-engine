@@ -1,7 +1,7 @@
 #include "IO.h"
 
 #ifdef _WIN32
-#include "../System/dirent.h"
+#include "../Classes/dirent.h"
 #include <filesystem>
 #else
 #include <dirent.h>

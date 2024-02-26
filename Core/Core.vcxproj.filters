@@ -37,6 +37,12 @@
     <Filter Include="Исходные файлы\Classes\ImGui">
       <UniqueIdentifier>{c5b97f6e-2f3d-4388-a77e-c2171db7c598}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Editor">
+      <UniqueIdentifier>{4670db86-7aab-4aad-aaf6-b2c5139a929e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Scene">
+      <UniqueIdentifier>{2083552b-33df-4c69-b3d8-cf3dacad79f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\main.cpp">
@@ -123,6 +129,24 @@
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Editor.cpp">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Scene.cpp">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\Object.cpp">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\CSGBrush.cpp">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Scene\CSGModel.cpp">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\EventHandler.cpp">
+      <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -160,9 +184,6 @@
     </ClInclude>
     <ClInclude Include="Source\Renderer\RendererGL4.h">
       <Filter>Исходные файлы\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\System\dirent.h">
-      <Filter>Исходные файлы\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\Camera.h">
       <Filter>Исходные файлы\Components</Filter>
@@ -217,6 +238,27 @@
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Editor.h">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Scene.h">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\Object.h">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\CSGBrush.h">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Scene\CSGModel.h">
+      <Filter>Исходные файлы\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Classes\dirent.h">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\EventHandler.h">
+      <Filter>Исходные файлы\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

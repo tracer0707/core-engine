@@ -44,6 +44,9 @@ namespace Core
 
 		static void init();
 
+		const UInt32& getWidth() { return width; }
+		const UInt32& getHeight() { return height; }
+
 		virtual const void setViewportSize(int w, int h) = 0;
 
 		virtual const Program createProgram(UString vertexSrc, UString fragmentSrc) = 0;
