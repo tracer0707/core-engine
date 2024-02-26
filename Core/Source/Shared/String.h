@@ -7,6 +7,8 @@
 #include <unicode/locid.h>
 
 #define UString icu::UnicodeString
+#define ToStdString(VAL) Core::String::toStdString(VAL)
+#define FromStdString(VAL) Core::String::fromStdString(VAL)
 
 namespace Core
 {

@@ -3,10 +3,10 @@
 #include <vector>
 #include <functional>
 
-namespace Core
-{
 #define EVENT(FUNC, ...) Core::EventHandler::singleton()->addEvent([__VA_ARGS__]() FUNC)
 
+namespace Core
+{
 	class EventHandler
 	{
 	private:

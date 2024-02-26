@@ -51,7 +51,7 @@ namespace Editor
 		for (int i = 0; i < scene->getNumCSGModels(); ++i)
 		{
 			Core::CSGModel* model = scene->getCSGModel(i);
-			if (ImGui::Selectable(Core::String::toStdString(model->getName()).c_str(), selectedCsgModel == model))
+			if (ImGui::Selectable(ToStdString(model->getName()).c_str(), selectedCsgModel == model))
 			{
 				EVENT({
 					select(model);
