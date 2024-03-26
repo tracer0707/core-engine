@@ -7,6 +7,11 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_opengl3.h>
+
+#include <glm/mat4x4.hpp>
+
 #include "Shared/String.h"
 #include "Shared/Path.h"
 #include "Renderer/RendererGL4.h"
@@ -14,11 +19,6 @@
 #ifdef _WIN32
 #include <windows.h>
 #endif
-
-#include "Classes/imgui_impl_sdl2.h"
-#include "Classes/imgui_impl_opengl3.h"
-
-#include <glm/mat4x4.hpp>
 
 #include "Scene/Scene.h"
 #include "Editor/Editor.h"
@@ -47,6 +47,7 @@ int main(int argc, char* argv[])
     Core::Renderer::init();
 
     Core::Scene* scene = new Core::Scene();
+    Editor::Editor::init();
     Editor::Editor::setScene(scene);
 
     ImGui::CreateContext();
@@ -121,8 +122,9 @@ int main(int argc, char* argv[])
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
+        
         ImGui::NewFrame();
-
+        
         Editor::Editor::renderUI();
 
         ImGui::Render();
@@ -147,6 +149,8 @@ int main(int argc, char* argv[])
 
         SDL_SetWindowTitle(window, ("GPU Renderer: " + std::to_string(fps) + "fps").c_str());
     }
+
+    Editor::Editor::free();
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();

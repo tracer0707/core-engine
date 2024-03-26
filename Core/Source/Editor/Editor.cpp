@@ -4,22 +4,49 @@
 #include <imgui.h>
 
 #include "../System/EventHandler.h"
+#include "../Components/Camera.h"
 #include "../Scene/Scene.h"
 #include "../Scene/CSGModel.h"
 #include "../Scene/CSGBrush.h"
 
+#include "Gizmo.h"
+#include <glm/gtc/type_ptr.hpp>
+
 namespace Editor
 {
+	Gizmo* Editor::gizmo = nullptr;
+
+	Core::Camera* Editor::camera = nullptr;
 	Core::Scene* Editor::scene = nullptr;
+
+	glm::mat4* Editor::selectedMtx = nullptr;
 
 	Core::CSGModel* Editor::selectedCsgModel = nullptr;
 	Core::CSGBrush* Editor::selectedCsgBrush = nullptr;
 
 	int Editor::numCSGModels = 0;
 
+	void Editor::init()
+	{
+		gizmo = new Gizmo();
+	}
+
+	void Editor::free()
+	{
+		delete gizmo;
+	}
+
 	void Editor::renderUI()
 	{
 		bool opened = true;
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		glm::mat4 view = camera->getViewMatrix();
+		glm::mat4 proj = camera->getProjectionMatrix(io.DisplaySize.x / io.DisplaySize.y);
+
+		glm::mat4& mtx = *selectedMtx;
+		gizmo->manipulate(view, proj, mtx);
 
 		ImGui::SetNextWindowSize(ImVec2(300, 600));
 		ImGui::Begin("CSG Editor", &opened, ImGuiWindowFlags_NoCollapse);

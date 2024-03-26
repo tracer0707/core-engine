@@ -108,12 +108,6 @@
     <ClCompile Include="Source\Classes\bc7compressor.cpp">
       <Filter>Исходные файлы\Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Classes\imgui_impl_opengl3.cpp">
-      <Filter>Исходные файлы\Classes</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Classes\imgui_impl_sdl2.cpp">
-      <Filter>Исходные файлы\Classes</Filter>
-    </ClCompile>
     <ClCompile Include="Dependencies\imgui\imgui.cpp">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
@@ -146,6 +140,18 @@
     </ClCompile>
     <ClCompile Include="Source\System\EventHandler.cpp">
       <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\ImGuizmo.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Gizmo.cpp">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_impl_sdl2.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,12 +221,6 @@
     <ClInclude Include="Source\Classes\bc7compressor.h">
       <Filter>Исходные файлы\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Classes\imgui_impl_opengl3.h">
-      <Filter>Исходные файлы\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Classes\imgui_impl_sdl2.h">
-      <Filter>Исходные файлы\Classes</Filter>
-    </ClInclude>
     <ClInclude Include="Dependencies\imgui\imconfig.h">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClInclude>
@@ -259,6 +259,18 @@
     </ClInclude>
     <ClInclude Include="Source\System\EventHandler.h">
       <Filter>Исходные файлы\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\ImGuizmo.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Gizmo.h">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_opengl3.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_impl_sdl2.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
