@@ -26,6 +26,7 @@ namespace Editor
 		static Core::CSGBrush* selectedCsgBrush;
 
 		static int numCSGModels;
+		static int numCSGBrushes;
 
 		static glm::mat4* selectedMtx;
 

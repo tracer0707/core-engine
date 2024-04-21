@@ -25,7 +25,7 @@ namespace Core
 	{
 	}
 
-	void Scene::render()
+	void Scene::render(Camera* camera)
 	{
         int w = Renderer::singleton()->getWidth();
         int h = Renderer::singleton()->getHeight();
@@ -39,6 +39,8 @@ namespace Core
         {
             Transform* transform = it->getTransform();
             Mesh* mesh = it->getMesh();
+
+            if (mesh == nullptr) continue;
 
             for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
             {

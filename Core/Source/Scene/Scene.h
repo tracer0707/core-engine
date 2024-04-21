@@ -12,14 +12,9 @@ namespace Core
 	private:
 		std::vector<CSGModel*> csgModels;
 
-		Camera* camera = nullptr;
-
 	public:
 		Scene();
 		~Scene();
-
-		Camera* getCamera() { return camera; }
-		void setCamera(Camera* value) { camera = value; }
 
 		int getNumCSGModels() { return csgModels.size(); }
 
@@ -28,6 +23,6 @@ namespace Core
 		void addCSGModel(CSGModel* value) { csgModels.push_back(value); }
 		void removeCSGModel(int index) { csgModels.erase(csgModels.begin() + index); }
 
-		void render();
+		void render(Camera* camera);
 	};
 }

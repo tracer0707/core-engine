@@ -25,6 +25,7 @@ namespace Editor
 	Core::CSGBrush* Editor::selectedCsgBrush = nullptr;
 
 	int Editor::numCSGModels = 0;
+	int Editor::numCSGBrushes = 0;
 
 	void Editor::init()
 	{
@@ -47,8 +48,11 @@ namespace Editor
 			glm::mat4 view = camera->getViewMatrix();
 			glm::mat4 proj = camera->getProjectionMatrix(io.DisplaySize.x / io.DisplaySize.y);
 
-			glm::mat4& mtx = *selectedMtx;
-			gizmo->manipulate(view, proj, mtx);
+			if (selectedMtx != nullptr)
+			{
+				glm::mat4& mtx = *selectedMtx;
+				gizmo->manipulate(view, proj, mtx);
+			}
 		}
 
 		ImGui::SetNextWindowSize(ImVec2(300, 600));
@@ -69,7 +73,17 @@ namespace Editor
 		ImGui::Separator();
 		if (selectedCsgModel != nullptr)
 		{
-			ImGui::Button("Add box"); ImGui::SameLine();
+			if (ImGui::Button("Add box"))
+			{
+				EVENT({
+					Core::CSGBrush* brush = new Core::CSGBrush();
+					brush->setName(("CSG Brush " + std::to_string(numCSGBrushes)).c_str());
+					selectedCsgModel->addCSGBrush(brush);
+
+					numCSGBrushes++;
+				});
+			}
+			ImGui::SameLine();
 			ImGui::Button("Add cylinder");
 			ImGui::Button("Add sphere"); ImGui::SameLine();
 			ImGui::Button("Add cone");
@@ -81,11 +95,38 @@ namespace Editor
 		for (int i = 0; i < scene->getNumCSGModels(); ++i)
 		{
 			Core::CSGModel* model = scene->getCSGModel(i);
-			if (ImGui::Selectable(ToStdString(model->getName()).c_str(), selectedCsgModel == model))
+			
+			uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			if (selectedCsgModel == model) flags |= ImGuiTreeNodeFlags_Selected;
+			if (model->getNumCSGBrushes() == 0) flags |= ImGuiTreeNodeFlags_Leaf;
+
+			if (ImGui::TreeNodeEx(ToStdString(model->getName()).c_str(), flags))
 			{
-				EVENT({
-					select(model);
-				}, model);
+				if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+				{
+					EVENT({
+						select(model);
+					}, model);
+				}
+
+				for (int j = 0; j < model->getNumCSGBrushes(); ++j)
+				{
+					Core::CSGBrush* brush = model->getCSGBrush(j);
+
+					uint64_t brushFlags = ImGuiTreeNodeFlags_Leaf;
+					if (selectedCsgBrush == brush) brushFlags |= ImGuiTreeNodeFlags_Selected;
+
+					ImGui::TreeNodeEx(ToStdString(brush->getName()).c_str(), brushFlags);
+					if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+					{
+						EVENT({
+							select(brush);
+						}, brush);
+					}
+					ImGui::TreePop();
+				}
+
+				ImGui::TreePop();
 			}
 		}
 		ImGui::EndChild();

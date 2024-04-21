@@ -51,8 +51,7 @@ int main(int argc, char* argv[])
     Core::Scene* scene = new Core::Scene();
     Editor::Editor::init();
     Editor::Editor::setScene(scene);
-
-    scene->setCamera(camera);
+    Editor::Editor::setCamera(camera);
 
     ImGui::CreateContext();
     ImGui_ImplSDL2_InitForOpenGL(window, context);
@@ -122,7 +121,7 @@ int main(int argc, char* argv[])
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        scene->render();
+        scene->render(camera);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
