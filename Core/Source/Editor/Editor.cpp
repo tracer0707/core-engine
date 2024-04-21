@@ -42,11 +42,14 @@ namespace Editor
 
 		ImGuiIO& io = ImGui::GetIO();
 
-		glm::mat4 view = camera->getViewMatrix();
-		glm::mat4 proj = camera->getProjectionMatrix(io.DisplaySize.x / io.DisplaySize.y);
+		if (camera != nullptr)
+		{
+			glm::mat4 view = camera->getViewMatrix();
+			glm::mat4 proj = camera->getProjectionMatrix(io.DisplaySize.x / io.DisplaySize.y);
 
-		glm::mat4& mtx = *selectedMtx;
-		gizmo->manipulate(view, proj, mtx);
+			glm::mat4& mtx = *selectedMtx;
+			gizmo->manipulate(view, proj, mtx);
+		}
 
 		ImGui::SetNextWindowSize(ImVec2(300, 600));
 		ImGui::Begin("CSG Editor", &opened, ImGuiWindowFlags_NoCollapse);

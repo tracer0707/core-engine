@@ -21,6 +21,7 @@
 #endif
 
 #include "Scene/Scene.h"
+#include "Components/Camera.h"
 #include "Editor/Editor.h"
 #include "System/EventHandler.h"
 
@@ -46,9 +47,12 @@ int main(int argc, char* argv[])
 
     Core::Renderer::init();
 
+    Core::Camera* camera = new Core::Camera();
     Core::Scene* scene = new Core::Scene();
     Editor::Editor::init();
     Editor::Editor::setScene(scene);
+
+    scene->setCamera(camera);
 
     ImGui::CreateContext();
     ImGui_ImplSDL2_InitForOpenGL(window, context);

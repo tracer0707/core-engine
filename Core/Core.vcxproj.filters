@@ -153,6 +153,12 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_sdl2.cpp">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\InputManager.cpp">
+      <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shared\Guid.cpp">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -271,6 +277,15 @@
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imgui_impl_sdl2.h">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\InputManager.h">
+      <Filter>Исходные файлы\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Classes\uuid.h">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shared\Guid.h">
+      <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

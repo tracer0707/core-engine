@@ -3,36 +3,38 @@
 #include <glm/vec3.hpp>
 #include <glm/ext/quaternion_float.hpp>
 
+#include "Component.h"
+#include "../Shared/String.h"
+
 namespace Core
 {
 	class Renderer;
+	class Transform;
 
-	class Camera
+	class Camera: Component
 	{
 	private:
-		glm::vec3 position = glm::vec3(0.0f);
-		glm::quat rotation = glm::identity<glm::quat>();
-		float fov = 75.0f;
-		float near = 0.01f;
-		float far = 1000.0f;
+		Transform* transform = nullptr;
+
+		float _fov = 75.0f;
+		float _near = 0.01f;
+		float _far = 1000.0f;
 
 	public:
-		Camera() = default;
+		Camera();
+		virtual ~Camera();
 
-		glm::vec3 getPosition() { return position; }
-		void setPosition(glm::vec3 value) { position = value; }
+		static UString COMPONENT_TYPE;
+		virtual UString getComponentType();
 
-		glm::quat getRotation() { return rotation; }
-		void setRotation(glm::quat value) { rotation = value; }
+		float getFov() { return _fov; }
+		void setFov(float value) { _fov = value; }
 
-		float getFov() { return fov; }
-		void setFov(float value) { fov = value; }
+		float getNear() { return _near; }
+		void setNear(float value) { _near = value; }
 
-		float getNear() { return near; }
-		void setNear(float value) { near = value; }
-
-		float getFar() { return far; }
-		void setFar(float value) { far = value; }
+		float getFar() { return _far; }
+		void setFar(float value) { _far = value; }
 
 		const glm::mat4x4 getViewMatrix();
 		const glm::mat4x4 getProjectionMatrix(float aspect);
