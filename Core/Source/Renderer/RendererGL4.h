@@ -8,7 +8,10 @@ namespace Core
 {
 	class RendererGL4 : public Renderer
 	{
-	private:
+	friend class Renderer;
+
+	protected:
+		RendererGL4(DeviceContext* ctx);
 
 	public:
 		virtual const void setViewportSize(int w, int h);

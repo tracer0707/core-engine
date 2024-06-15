@@ -12,6 +12,8 @@
 
 namespace Core
 {
+	class DeviceContext;
+
 	struct Program
 	{
 	public:
@@ -29,8 +31,11 @@ namespace Core
 	{
 	private:
 		Program defaultProgram = { 0, 0, 0, 0, 0 };
+		DeviceContext* context = nullptr;
 
 	protected:
+		Renderer(DeviceContext* ctx);
+
 		std::vector<Program> shaderPrograms;
 
 		Program& currentProgram = defaultProgram;
@@ -39,10 +44,9 @@ namespace Core
 		int height = 0;
 
 	public:
-		Renderer() = default;
 		static Renderer* singleton();
 
-		static void init();
+		static void init(DeviceContext* ctx);
 
 		const UInt32& getWidth() { return width; }
 		const UInt32& getHeight() { return height; }

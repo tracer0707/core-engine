@@ -55,6 +55,7 @@
     <ClCompile Include="Source\Shared\IO.cpp" />
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
+    <ClCompile Include="Source\System\DeviceContext.cpp" />
     <ClCompile Include="Source\System\EventHandler.cpp" />
     <ClCompile Include="Source\System\InputManager.cpp" />
   </ItemGroup>
@@ -99,6 +100,7 @@
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
+    <ClInclude Include="Source\System\DeviceContext.h" />
     <ClInclude Include="Source\System\EventHandler.h" />
     <ClInclude Include="Source\System\InputManager.h" />
   </ItemGroup>

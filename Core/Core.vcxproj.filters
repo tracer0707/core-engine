@@ -159,6 +159,9 @@
     <ClCompile Include="Source\Shared\Guid.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="Source\System\DeviceContext.cpp">
+      <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -286,6 +289,9 @@
     </ClInclude>
     <ClInclude Include="Source\Shared\Guid.h">
       <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\DeviceContext.h">
+      <Filter>Исходные файлы\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

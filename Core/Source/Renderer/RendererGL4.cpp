@@ -10,6 +10,10 @@
 
 namespace Core
 {
+    RendererGL4::RendererGL4(DeviceContext* ctx): Renderer(ctx)
+    {
+    }
+
     const void RendererGL4::setViewportSize(int w, int h)
     {
         width = w;
