@@ -1,20 +1,17 @@
 #include <iostream>
 
-#include <sdl/SDL.h>
-
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
+#include <GL/glew.h>
 
 #include <glm/mat4x4.hpp>
 
-#include "System/DeviceContext.h"
-#include "Shared/String.h"
-#include "Shared/Path.h"
-#include "Renderer/RendererGL4.h"
+#include <System/DeviceContext.h>
+#include <Shared/String.h>
+#include <Shared/Path.h>
+#include <Renderer/RendererGL4.h>
 
-#include "Scene/Scene.h"
-#include "Components/Camera.h"
+#include <Scene/Scene.h>
+#include <Components/Camera.h>
+
 #include "Editor/Editor.h"
 
 Core::Camera* camera = nullptr;
@@ -38,7 +35,7 @@ int main(int argc, char* argv[])
     Editor::Editor::init();
     Editor::Editor::setScene(scene);
     Editor::Editor::setCamera(camera);
-    
+
     bool isRunning = true;
 
     while (isRunning)

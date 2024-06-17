@@ -37,9 +37,6 @@
     <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\Components\MeshRenderer.cpp" />
     <ClCompile Include="Source\Components\Transform.cpp" />
-    <ClCompile Include="Source\Editor\Editor.cpp" />
-    <ClCompile Include="Source\Editor\Gizmo.cpp" />
-    <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Math\AxisAlignedBox.cpp" />
     <ClCompile Include="Source\Math\Mathf.cpp" />
     <ClCompile Include="Source\Math\Plane.cpp" />
@@ -47,12 +44,11 @@
     <ClCompile Include="Source\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Renderer\RendererGL4.cpp" />
     <ClCompile Include="Source\Renderer\VertexBuffer.cpp" />
-    <ClCompile Include="Source\Scene\CSGBrush.cpp" />
-    <ClCompile Include="Source\Scene\CSGModel.cpp" />
     <ClCompile Include="Source\Scene\Object.cpp" />
     <ClCompile Include="Source\Scene\Scene.cpp" />
     <ClCompile Include="Source\Shared\Guid.cpp" />
     <ClCompile Include="Source\Shared\IO.cpp" />
+    <ClCompile Include="Source\Shared\List.cpp" />
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
     <ClCompile Include="Source\System\DeviceContext.cpp" />
@@ -82,8 +78,6 @@
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
     <ClInclude Include="Source\Config.h" />
-    <ClInclude Include="Source\Editor\Editor.h" />
-    <ClInclude Include="Source\Editor\Gizmo.h" />
     <ClInclude Include="Source\Math\AxisAlignedBox.h" />
     <ClInclude Include="Source\Math\Mathf.h" />
     <ClInclude Include="Source\Math\Plane.h" />
@@ -92,12 +86,11 @@
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Renderer\VertexBuffer.h" />
-    <ClInclude Include="Source\Scene\CSGBrush.h" />
-    <ClInclude Include="Source\Scene\CSGModel.h" />
     <ClInclude Include="Source\Scene\Object.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
     <ClInclude Include="Source\Shared\Guid.h" />
     <ClInclude Include="Source\Shared\IO.h" />
+    <ClInclude Include="Source\Shared\List.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
     <ClInclude Include="Source\System\DeviceContext.h" />
@@ -132,7 +125,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -156,6 +149,9 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -206,7 +202,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;Dependencies/sdl/include;Dependencies/FreeImage/include;Dependencies/Carve/include;Dependencies/bc7enc/include;Dependencies/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;Dependencies/sdl/include;Dependencies/FreeImage/include;Dependencies/bc7enc/include;Dependencies/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>

@@ -29,3 +29,8 @@
 /.vs/CoreEngine
 /Core/x64/Release
 /x64/Release/Core.pdb
+/Editor/x64/Release
+/Core/imgui.ini
+/Editor/imgui.ini
+/x64/Release/Core.lib
+/x64/Release/Editor.pdb

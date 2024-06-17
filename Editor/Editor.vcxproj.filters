@@ -13,5 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Исходные файлы\Editor">
+      <UniqueIdentifier>{cbf8e486-6889-4d38-bbe4-4e8a0282bce8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\CSG">
+      <UniqueIdentifier>{2d12b8b4-7adc-4bd9-9dc0-ad5bdcd0110e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Editor\Editor.cpp">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Gizmo.cpp">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CSG\CSGBrush.cpp">
+      <Filter>Исходные файлы\CSG</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CSG\CSGModel.cpp">
+      <Filter>Исходные файлы\CSG</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Editor\Editor.h">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Gizmo.h">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CSG\CSGBrush.h">
+      <Filter>Исходные файлы\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CSG\CSGModel.h">
+      <Filter>Исходные файлы\CSG</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

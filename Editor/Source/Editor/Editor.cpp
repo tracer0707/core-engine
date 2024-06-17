@@ -2,15 +2,16 @@
 
 #include <string>
 #include <imgui.h>
+#include <glm/gtc/type_ptr.hpp>
 
-#include "../System/EventHandler.h"
-#include "../Components/Camera.h"
-#include "../Scene/Scene.h"
-#include "../Scene/CSGModel.h"
-#include "../Scene/CSGBrush.h"
+#include <System/EventHandler.h>
+#include <Components/Camera.h>
+#include <Scene/Scene.h>
 
 #include "Gizmo.h"
-#include <glm/gtc/type_ptr.hpp>
+
+#include "../CSG/CSGModel.h"
+#include "../CSG/CSGBrush.h"
 
 namespace Editor
 {
@@ -21,11 +22,13 @@ namespace Editor
 
 	glm::mat4* Editor::selectedMtx = nullptr;
 
-	Core::CSGModel* Editor::selectedCsgModel = nullptr;
-	Core::CSGBrush* Editor::selectedCsgBrush = nullptr;
+	CSGModel* Editor::selectedCsgModel = nullptr;
+	CSGBrush* Editor::selectedCsgBrush = nullptr;
 
 	int Editor::numCSGModels = 0;
 	int Editor::numCSGBrushes = 0;
+
+	Core::List<CSGModel*> Editor::csgModels;
 
 	void Editor::init()
 	{
@@ -63,9 +66,9 @@ namespace Editor
 		if (ImGui::Button("Add model"))
 		{
 			EVENT({
-				Core::CSGModel* model = new Core::CSGModel();
+				CSGModel* model = new CSGModel();
 				model->setName(("CSG Model " + std::to_string(numCSGModels)).c_str());
-				scene->addCSGModel(model);
+				csgModels.add(model);
 
 				numCSGModels++;
 			});
@@ -76,9 +79,9 @@ namespace Editor
 			if (ImGui::Button("Add box"))
 			{
 				EVENT({
-					Core::CSGBrush* brush = new Core::CSGBrush();
+					CSGBrush* brush = new CSGBrush();
 					brush->setName(("CSG Brush " + std::to_string(numCSGBrushes)).c_str());
-					selectedCsgModel->addCSGBrush(brush);
+					selectedCsgModel->getBrushes().add(brush);
 
 					numCSGBrushes++;
 				});
@@ -92,13 +95,13 @@ namespace Editor
 
 		ImGui::Text("Hierarchy");
 		ImGui::BeginChild("Hierarchy", ImVec2(0, 100), ImGuiChildFlags_Border);
-		for (int i = 0; i < scene->getNumCSGModels(); ++i)
+		for (int i = 0; i < csgModels.count(); ++i)
 		{
-			Core::CSGModel* model = scene->getCSGModel(i);
+			CSGModel* model = csgModels.getAt(i);
 			
 			uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 			if (selectedCsgModel == model) flags |= ImGuiTreeNodeFlags_Selected;
-			if (model->getNumCSGBrushes() == 0) flags |= ImGuiTreeNodeFlags_Leaf;
+			if (model->getBrushes().count() == 0) flags |= ImGuiTreeNodeFlags_Leaf;
 
 			if (ImGui::TreeNodeEx(ToStdString(model->getName()).c_str(), flags))
 			{
@@ -109,9 +112,9 @@ namespace Editor
 					}, model);
 				}
 
-				for (int j = 0; j < model->getNumCSGBrushes(); ++j)
+				for (int j = 0; j < model->getBrushes().count(); ++j)
 				{
-					Core::CSGBrush* brush = model->getCSGBrush(j);
+					CSGBrush* brush = model->getBrushes().getAt(j);
 
 					uint64_t brushFlags = ImGuiTreeNodeFlags_Leaf;
 					if (selectedCsgBrush == brush) brushFlags |= ImGuiTreeNodeFlags_Selected;
@@ -140,13 +143,13 @@ namespace Editor
 		selectedCsgBrush = nullptr;
 	}
 
-	void Editor::select(Core::CSGModel* value)
+	void Editor::select(CSGModel* value)
 	{
 		clearSelection();
 		selectedCsgModel = value;
 	}
 
-	void Editor::select(Core::CSGBrush* value)
+	void Editor::select(CSGBrush* value)
 	{
 		clearSelection();
 		if (value != nullptr)

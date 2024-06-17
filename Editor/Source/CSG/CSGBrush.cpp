@@ -1,6 +1,6 @@
 #include "CSGBrush.h"
 
-namespace Core
+namespace Editor
 {
 	CSGBrush::CSGBrush()
 	{

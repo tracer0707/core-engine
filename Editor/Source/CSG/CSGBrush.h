@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Shared/String.h"
+#include <Shared/String.h>
 
-namespace Core
+namespace Editor
 {
 	class CSGModel;
 

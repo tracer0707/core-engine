@@ -1,18 +1,19 @@
 #pragma once
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <Shared/List.h>
 
 namespace Core
 {
 	class Scene;
-	class CSGModel;
-	class CSGBrush;
 	class Camera;
 }
 
 namespace Editor
 {
 	class Gizmo;
+	class CSGModel;
+	class CSGBrush;
 
 	class Editor
 	{
@@ -22,13 +23,15 @@ namespace Editor
 		static Core::Scene* scene;
 		static Core::Camera* camera;
 
-		static Core::CSGModel* selectedCsgModel;
-		static Core::CSGBrush* selectedCsgBrush;
+		static CSGModel* selectedCsgModel;
+		static CSGBrush* selectedCsgBrush;
 
 		static int numCSGModels;
 		static int numCSGBrushes;
 
 		static glm::mat4* selectedMtx;
+
+		static Core::List<CSGModel*> csgModels;
 
 	public:
 		static void init();
@@ -41,7 +44,7 @@ namespace Editor
 		static void renderUI();
 
 		static void clearSelection();
-		static void select(Core::CSGModel* value);
-		static void select(Core::CSGBrush* value);
+		static void select(CSGModel* value);
+		static void select(CSGBrush* value);
 	};
 }

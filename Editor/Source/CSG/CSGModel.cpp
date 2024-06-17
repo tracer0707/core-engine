@@ -1,12 +1,12 @@
 #include "CSGModel.h"
 
-#include "../Components/Transform.h"
+#include <Components/Transform.h>
 
-namespace Core
+namespace Editor
 {
 	CSGModel::CSGModel()
 	{
-		transform = new Transform();
+		transform = new Core::Transform();
 	}
 
 	CSGModel::~CSGModel()

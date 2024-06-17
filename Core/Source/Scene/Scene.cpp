@@ -7,7 +7,6 @@
 #include "../Components/Transform.h"
 #include "../Assets/Mesh.h"
 #include "../Assets/Material.h"
-#include "../Scene/CSGModel.h"
 
 #include "../Renderer/Renderer.h"
 
@@ -35,7 +34,7 @@ namespace Core
         glm::mat4 view = camera->getViewMatrix();
         glm::mat4 proj = camera->getProjectionMatrix((float)w / (float)h);
 
-        for (auto* it : csgModels)
+        /*for (auto* it : csgModels)
         {
             Transform* transform = it->getTransform();
             Mesh* mesh = it->getMesh();
@@ -56,6 +55,6 @@ namespace Core
 
                 Core::Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), view, proj, model);
             }
-        }
+        }*/
 	}
 }
