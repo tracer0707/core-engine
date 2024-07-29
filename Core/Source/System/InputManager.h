@@ -5,7 +5,7 @@
 #include <vector>
 #include <string>
 
-namespace GX
+namespace Core
 {
 	class InputManager
 	{
@@ -57,11 +57,11 @@ namespace GX
 		void setMouseButtonDown(int button, bool state);
 		void setMouseButtonUp(int button, bool state);
 		void setMouseWheel(int x, int y);
-		void SetKey(int key, bool pressed);
+		void setKey(int key, bool pressed);
 		void setKeyDown(int key, bool state);
-		void SetKeyUp(int key, bool state);
+		void setKeyUp(int key, bool state);
 		void setMouseDirection(int x, int y);
-		void SetMousePosition(int x, int y);
+		void setMousePosition(int x, int y);
 		void setMouseRelativePosition(int x, int y);
 
 	public:
@@ -108,6 +108,5 @@ namespace GX
 
 		void setCursorVisible(bool value);
 		bool getCursorVisible() { return cursorVisible; }
-		
 	};
 }

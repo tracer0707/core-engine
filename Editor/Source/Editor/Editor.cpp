@@ -12,6 +12,7 @@
 
 #include "../CSG/CSGModel.h"
 #include "../CSG/CSGBrush.h"
+#include "../CSG/CSGBrushCube.h"
 
 namespace Editor
 {
@@ -79,7 +80,7 @@ namespace Editor
 			if (ImGui::Button("Add box"))
 			{
 				EVENT({
-					CSGBrush* brush = new CSGBrush();
+					CSGBrushCube* brush = new CSGBrushCube();
 					brush->setName(("CSG Brush " + std::to_string(numCSGBrushes)).c_str());
 					selectedCsgModel->getBrushes().add(brush);
 
@@ -97,7 +98,7 @@ namespace Editor
 		ImGui::BeginChild("Hierarchy", ImVec2(0, 100), ImGuiChildFlags_Border);
 		for (int i = 0; i < csgModels.count(); ++i)
 		{
-			CSGModel* model = csgModels.getAt(i);
+			CSGModel* model = csgModels.get(i);
 			
 			uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 			if (selectedCsgModel == model) flags |= ImGuiTreeNodeFlags_Selected;
@@ -114,7 +115,7 @@ namespace Editor
 
 				for (int j = 0; j < model->getBrushes().count(); ++j)
 				{
-					CSGBrush* brush = model->getBrushes().getAt(j);
+					CSGBrush* brush = model->getBrushes().get(j);
 
 					uint64_t brushFlags = ImGuiTreeNodeFlags_Leaf;
 					if (selectedCsgBrush == brush) brushFlags |= ImGuiTreeNodeFlags_Selected;

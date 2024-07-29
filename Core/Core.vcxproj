@@ -89,6 +89,7 @@
     <ClInclude Include="Source\Scene\Object.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
     <ClInclude Include="Source\Shared\Guid.h" />
+    <ClInclude Include="Source\Shared\Hash.h" />
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\List.h" />
     <ClInclude Include="Source\Shared\Path.h" />
@@ -204,6 +205,9 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>Dependencies/glew/include;Dependencies/assimp/include;Dependencies/glm/include;Dependencies/icu/include;Dependencies/sdl/include;Dependencies/FreeImage/include;Dependencies/bc7enc/include;Dependencies/imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -212,6 +216,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;Dependencies/glew/lib/x64/glew32.lib;Dependencies/glew/lib/x64/glew32s.lib;Dependencies/assimp/lib/x64/assimp-vc143-mt.lib;Dependencies/glm/lib/x64/glm_static.lib;Dependencies/icu/lib/x64/icudt.lib;Dependencies/icu/lib/x64/icuin.lib;Dependencies/icu/lib/x64/icuio.lib;Dependencies/icu/lib/x64/icutest.lib;Dependencies/icu/lib/x64/icutu.lib;Dependencies/icu/lib/x64/icuuc.lib;Dependencies/sdl/lib/x64/SDL2.lib;Dependencies/sdl/lib/x64/SDL2main.lib;Dependencies/FreeImage/lib/x64/FreeImage.lib;Dependencies/Carve/lib/x64/carve.lib;Dependencies/bc7enc/lib/bc7enc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Lib />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

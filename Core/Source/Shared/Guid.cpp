@@ -3,7 +3,7 @@
 #define UUID_SYSTEM_GENERATOR
 #include "../Classes/uuid.h"
 
-namespace GX
+namespace Core
 {
 	std::string Guid::genGuid()
 	{

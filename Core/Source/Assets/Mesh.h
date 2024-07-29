@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Asset.h"
+
 namespace Core
 {
 	struct VertexBuffer;
@@ -21,7 +23,7 @@ namespace Core
 		void setMaterial(Material* value) { _material = value; }
 	};
 
-	class Mesh
+	class Mesh : public Asset
 	{
 	private:
 		SubMesh** _subMeshes = nullptr;
@@ -30,6 +32,8 @@ namespace Core
 	public:
 		Mesh(SubMesh** subMeshes, int count);
 		~Mesh();
+
+		virtual const void unload();
 
 		static Mesh* loadFromFile(const char* fileName);
 

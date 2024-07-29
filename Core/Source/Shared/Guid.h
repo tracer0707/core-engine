@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace GX
+namespace Core
 {
 	class Guid
 	{

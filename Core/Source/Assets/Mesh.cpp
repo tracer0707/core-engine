@@ -28,6 +28,8 @@ namespace Core
 			Renderer::singleton()->deleteBuffer(_vertexBuffer);
 			_vertexBuffer = nullptr;
 		}
+
+		_material = nullptr;
 	}
 
 	/* Mesh */
@@ -40,6 +42,12 @@ namespace Core
 
 	Mesh::~Mesh()
 	{
+		if (isLoaded())
+			unload();
+	}
+
+	const void Mesh::unload()
+	{
 		if (_subMeshes != nullptr)
 		{
 			for (int i = 0; i < _count; ++i)
@@ -47,6 +55,11 @@ namespace Core
 
 			delete[] _subMeshes;
 		}
+
+		_subMeshes = nullptr;
+		_count = 0;
+
+		Asset::unload();
 	}
 
 	Mesh* Mesh::loadFromFile(const char* fileName)
@@ -111,6 +124,8 @@ namespace Core
 		}
 
 		delete importer;
+
+		_mesh->load();
 
 		return _mesh;
 	}

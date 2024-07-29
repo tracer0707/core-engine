@@ -36,7 +36,8 @@ namespace Core
 
 	Material::~Material()
 	{
-		
+		if (isLoaded())
+			unload();
 	}
 
 	void Material::bind()

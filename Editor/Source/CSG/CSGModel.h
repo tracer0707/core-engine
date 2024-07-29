@@ -8,6 +8,7 @@ namespace Core
 {
 	class Mesh;
 	class Transform;
+	class Material;
 }
 
 namespace Editor
@@ -23,6 +24,10 @@ namespace Editor
 		Core::Transform* transform = nullptr;
 		Core::Mesh* mesh = nullptr;
 
+		static Core::Material* defaultMaterial;
+
+		CSGBrush* nullBrush = nullptr;
+
 	public:
 		CSGModel();
 		~CSGModel();
@@ -34,5 +39,7 @@ namespace Editor
 
 		Core::Transform* getTransform() { return transform; }
 		Core::Mesh* getMesh() { return mesh; }
+
+		void rebuild();
 	};
 }

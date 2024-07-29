@@ -8,7 +8,7 @@
 
 #include <sdl/SDL_events.h>
 
-namespace GX
+namespace Core
 {
 	InputManager InputManager::singleton;
 
@@ -265,7 +265,7 @@ namespace GX
 
 		if (evt->type == SDL_KEYDOWN)
 		{
-			SetKey(evt->key.keysym.scancode, true);
+			setKey(evt->key.keysym.scancode, true);
 
 			if (evt->key.repeat == 0)
 			{
@@ -283,11 +283,11 @@ namespace GX
 
 		if (evt->type == SDL_KEYUP)
 		{
-			SetKey(evt->key.keysym.scancode, false);
+			setKey(evt->key.keysym.scancode, false);
 
 			if (evt->key.repeat == 0)
 			{
-				SetKeyUp(evt->key.keysym.scancode, true);
+				setKeyUp(evt->key.keysym.scancode, true);
 
 				int key = (int)evt->key.keysym.scancode;
 
@@ -309,7 +309,7 @@ namespace GX
 		int _y = 0;
 
 		SDL_GetGlobalMouseState(&_gx, &_gy);
-		SetMousePosition(_gx, _gy);
+		setMousePosition(_gx, _gy);
 
 		SDL_GetMouseState(&_x, &_y);
 		setMouseRelativePosition(_x, _y);
@@ -411,7 +411,7 @@ namespace GX
 		return mousePos;
 	}
 
-	void InputManager::SetMousePosition(int x, int y)
+	void InputManager::setMousePosition(int x, int y)
 	{
 		mousePos = std::make_pair(x, y);
 	}
@@ -447,7 +447,7 @@ namespace GX
 		return keyStates[key];
 	}
 
-	void InputManager::SetKey(int key, bool pressed)
+	void InputManager::setKey(int key, bool pressed)
 	{
 		keyStates[key] = pressed;
 	}
@@ -467,7 +467,7 @@ namespace GX
 		return keyUpStates[key];
 	}
 
-	void InputManager::SetKeyUp(int key, bool state)
+	void InputManager::setKeyUp(int key, bool state)
 	{
 		keyUpStates[key] = state;
 	}

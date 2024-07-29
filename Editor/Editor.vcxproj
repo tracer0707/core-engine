@@ -116,9 +116,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../Core/Source;../Core/Dependencies/glew/include;../Core/Dependencies/icu/include;../Core/Dependencies/glm/include;../Core/Dependencies/imgui;Dependencies/Carve/include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <DisableSpecificWarnings>
+      </DisableSpecificWarnings>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\CSG\CSGBrush.cpp" />
+    <ClCompile Include="Source\CSG\CSGBrushCube.cpp" />
     <ClCompile Include="Source\CSG\CSGModel.cpp" />
     <ClCompile Include="Source\Editor\Editor.cpp" />
     <ClCompile Include="Source\Editor\Gizmo.cpp" />
@@ -137,6 +142,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\CSG\CSGBrush.h" />
+    <ClInclude Include="Source\CSG\CSGBrushCube.h" />
     <ClInclude Include="Source\CSG\CSGModel.h" />
     <ClInclude Include="Source\Editor\Editor.h" />
     <ClInclude Include="Source\Editor\Gizmo.h" />

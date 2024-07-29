@@ -8,11 +8,6 @@ namespace Core
             unload();
     }
 
-    const void Shader::load()
-    {
-        Asset::load();
-    }
-
     const void Shader::unload()
     {
         Renderer::singleton()->deleteProgram(nativeId);
@@ -24,7 +19,7 @@ namespace Core
     {
         nativeId = Renderer::singleton()->createProgram(vertexSrc, fragmentSrc);
 
-        load();
+        Asset::load();
     }
 
     const void Shader::bind()

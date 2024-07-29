@@ -1,11 +1,13 @@
 #pragma once
 
+#include "Asset.h"
+
 namespace Core
 {
 	class Texture;
 	class Shader;
 
-	class Material
+	class Material : public Asset
 	{
 	private:
 		Texture* _texture = nullptr;

@@ -48,6 +48,11 @@ namespace Core
         return 0;
     }
 
+    void DeviceContext::setWindowTitle(UString title)
+    {
+        SDL_SetWindowTitle((SDL_Window*)window, ToStdString(title).c_str());
+    }
+
     void DeviceContext::update(bool& isRunning)
     {
         SDL_Event event;
@@ -96,38 +101,33 @@ namespace Core
         EventHandler::singleton()->processEvents();
     }
 
-    void DeviceContext::render()
+    void DeviceContext::clear()
     {
-        oldtime = SDL_GetTicks();
-
         glFrontFace(GL_CCW);
         glCullFace(GL_BACK);
         glEnable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    }
 
-        if (renderFunction != nullptr)
-            renderFunction();
-
+    void DeviceContext::renderUiBegin()
+    {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
-
         ImGui::NewFrame();
+    }
 
-        if (renderUIFunction != nullptr)
-            renderUIFunction();
-
+    void DeviceContext::renderUiEnd()
+    {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
 
+    void DeviceContext::swapWindow()
+    {
         SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
         SDL_GL_SwapWindow((SDL_Window*)window);
-
-        newtime = SDL_GetTicks() - oldtime;
-        fps = (newtime > 0) ? 1000.0f / newtime : 0.0f;
-
-        SDL_SetWindowTitle((SDL_Window*)window, ("GPU Renderer: " + std::to_string(fps) + "fps").c_str());
     }
 
     void DeviceContext::destroyWindow()
@@ -138,8 +138,6 @@ namespace Core
 
         SDL_DestroyWindow((SDL_Window*)window);
 
-        renderFunction = nullptr;
-        renderUIFunction = nullptr;
         window = nullptr;
         rendererContext = nullptr;
 

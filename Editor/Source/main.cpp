@@ -1,14 +1,13 @@
 #include <iostream>
+#include <chrono>
 
 #include <GL/glew.h>
-
 #include <glm/mat4x4.hpp>
 
 #include <System/DeviceContext.h>
 #include <Shared/String.h>
 #include <Shared/Path.h>
 #include <Renderer/RendererGL4.h>
-
 #include <Scene/Scene.h>
 #include <Components/Camera.h>
 
@@ -17,17 +16,14 @@
 Core::Camera* camera = nullptr;
 Core::Scene* scene = nullptr;
 
-void renderScene();
-void renderUI();
+int fpsInterval = 100;
+int fpsTicks = 0;
 
 int main(int argc, char* argv[])
 {
     Core::DeviceContext* ctx = new Core::DeviceContext();
-    if (ctx->createWindow("Core", 1366, 768) != 0)
+    if (ctx->createWindow("Core Engine", 1366, 768) != 0)
         return -1;
-
-    ctx->setRenderFunction(renderScene);
-    ctx->setRenderUIFunction(renderUI);
 
     camera = new Core::Camera();
     scene = new Core::Scene();
@@ -40,8 +36,32 @@ int main(int argc, char* argv[])
 
     while (isRunning)
     {
+        auto start_time = std::chrono::high_resolution_clock::now();
+
         ctx->update(isRunning);
-        ctx->render();
+        ctx->clear();
+
+        scene->render(camera);
+
+        ctx->renderUiBegin();
+        Editor::Editor::renderUI();
+        ctx->renderUiEnd();
+
+        ctx->swapWindow();
+
+        auto end_time = std::chrono::high_resolution_clock::now();
+        auto elapsed = end_time - start_time;
+        auto fps = std::chrono::milliseconds(1000) / elapsed;
+
+        if (fpsTicks < fpsInterval)
+        {
+            ++fpsTicks;
+        }
+        else
+        {
+            fpsTicks = 0;
+            ctx->setWindowTitle(("Core Engine: " + std::to_string(fps) + "fps").c_str());
+        }
     }
 
     Editor::Editor::free();
@@ -49,14 +69,4 @@ int main(int argc, char* argv[])
     ctx->destroyWindow();
 
     return 0;
-}
-
-void renderScene()
-{
-    scene->render(camera);
-}
-
-void renderUI()
-{
-    Editor::Editor::renderUI();
 }

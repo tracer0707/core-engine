@@ -2,6 +2,8 @@
 
 #include <FreeImage.h>
 
+#include "Asset.h"
+
 #include "../Renderer/Color.h"
 #include "../Classes/bc7compressor.h"
 
@@ -13,7 +15,7 @@ namespace Core
 		BC7
 	};
 
-	class Texture
+	class Texture : public Asset
 	{
 	private:
 		FIBITMAP* _bitmap = nullptr;
@@ -31,6 +33,8 @@ namespace Core
 	public:
 		Texture();
 		~Texture();
+
+		virtual const void unload();
 
 		static Texture* loadFromFile(const char* fileName, TextureFormat fmt);
 		static Texture* loadFromBytes(unsigned char* data, int w, int h, int bpp, TextureFormat fmt);
