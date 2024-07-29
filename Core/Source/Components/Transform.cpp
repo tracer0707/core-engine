@@ -4,21 +4,16 @@
 
 #include "../Math/Mathf.h"
 
+#include "ComponentList.h"
+
 namespace Core
 {
-	UString Transform::COMPONENT_TYPE = "Transform";
+	Transform::Transform(Object* owner) : Component(owner) {}
+	Transform::~Transform() {}
 
-	Transform::Transform()
+	UInt32 Transform::getComponentType()
 	{
-	}
-
-	Transform::~Transform()
-	{
-	}
-
-	UString Transform::getComponentType()
-	{
-		return COMPONENT_TYPE;
+		return COMPONENT_TRANSFORM;
 	}
 
 	void Transform::setParent(Transform* value)

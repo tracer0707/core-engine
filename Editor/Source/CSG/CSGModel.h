@@ -6,6 +6,7 @@
 
 namespace Core
 {
+	class Object;
 	class Mesh;
 	class Transform;
 	class Material;
@@ -21,6 +22,7 @@ namespace Editor
 		UString name = "";
 		Core::List<CSGBrush*> csgBrushes;
 
+		Core::Object* object = nullptr;
 		Core::Transform* transform = nullptr;
 		Core::Mesh* mesh = nullptr;
 
@@ -37,6 +39,7 @@ namespace Editor
 
 		Core::List<CSGBrush*>& getBrushes() { return csgBrushes; }
 
+		Core::Object* getObject() { return object; }
 		Core::Transform* getTransform() { return transform; }
 		Core::Mesh* getMesh() { return mesh; }
 

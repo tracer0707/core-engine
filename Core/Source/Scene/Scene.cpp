@@ -2,6 +2,8 @@
 
 #include <glm/glm.hpp>
 
+#include "Object.h"
+
 #include "../Math/Mathf.h"
 #include "../Components/Camera.h"
 #include "../Components/Transform.h"
@@ -14,15 +16,32 @@ namespace Core
 {
 	Scene::Scene()
 	{
-		//mesh = Core::Mesh::loadFromFile("D:/Dev/C++/core-engine/x64/Release/Test Project/model.fbx");
-
-        //Editor::Editor::setCamera(camera);
-        //Editor::Editor::setSelectedMtx(&model);
+		
 	}
 
 	Scene::~Scene()
 	{
+
 	}
+
+    Object* Scene::createObject()
+    {
+        Object* object = new Object();
+        objects.add(object);
+
+        return object;
+    }
+
+    void Scene::addObject(Object* object)
+    {
+        if (object != nullptr)
+            objects.add(object);
+    }
+
+    void Scene::removeObject(Object* object)
+    {
+        objects.remove(object);
+    }
 
 	void Scene::render(Camera* camera)
 	{
@@ -34,9 +53,11 @@ namespace Core
         glm::mat4 view = camera->getViewMatrix();
         glm::mat4 proj = camera->getProjectionMatrix((float)w / (float)h);
 
-        /*for (auto* it : csgModels)
+        for (int i = 0; i < objects.count(); ++i)
         {
-            Transform* transform = it->getTransform();
+            Object* object = objects.get(i);
+
+            /*Transform* transform = it->getTransform();
             Mesh* mesh = it->getMesh();
 
             if (mesh == nullptr) continue;
@@ -54,7 +75,7 @@ namespace Core
                 glm::mat4 model = transform->getTransformMatrix();
 
                 Core::Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), view, proj, model);
-            }
-        }*/
+            }*/
+        }
 	}
 }

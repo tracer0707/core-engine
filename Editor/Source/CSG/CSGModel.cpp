@@ -8,6 +8,7 @@
 #include <carve/csg.hpp>
 #include <carve/input.hpp>
 
+#include <Scene/Object.h>
 #include <Components/Transform.h>
 #include <Assets/Material.h>
 #include <Assets/Mesh.h>
@@ -29,7 +30,9 @@ namespace Editor
 
 	CSGModel::CSGModel()
 	{
-		transform = new Core::Transform();
+        object = new Core::Object();
+		transform = object->addComponent<Core::Transform*>();
+
         nullBrush = new CSGBrushCube();
         if (defaultMaterial == nullptr)
             defaultMaterial = new Core::Material();
@@ -37,7 +40,8 @@ namespace Editor
 
 	CSGModel::~CSGModel()
 	{
-		delete transform;
+		delete object;
+        object = nullptr;
 		transform = nullptr;
 
         if (nullBrush != nullptr)

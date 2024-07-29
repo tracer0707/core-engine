@@ -8,20 +8,23 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Math/Mathf.h>
+#include <Scene/Object.h>
 #include <Components/Transform.h>
 
 namespace Editor
 {
 	CSGBrush::CSGBrush()
 	{
-		transform = new Core::Transform();
+		object = new Core::Object();
+		transform = object->addComponent<Core::Transform*>();
 		
 		make();
 	}
 
 	CSGBrush::~CSGBrush()
 	{
-		delete transform;
+		delete object;
+		object = nullptr;
 		transform = nullptr;
 
 		destroy();

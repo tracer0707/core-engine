@@ -272,5 +272,8 @@
     <ClInclude Include="Source\Shared\Hash.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Components\ComponentList.h">
+      <Filter>Исходные файлы\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,27 +1,26 @@
 #pragma once
 
-#include <vector>
+#include "../Shared/List.h"
 
 namespace Core
 {
-	//class CSGModel;
+	class Object;
 	class Camera;
 
 	class Scene
 	{
 	private:
-		//std::vector<CSGModel*> csgModels;
+		List<Object*> objects;
 
 	public:
 		Scene();
 		~Scene();
 
-		/*int getNumCSGModels() { return csgModels.size(); }
+		List<Object*>& getObjects() { return objects; }
 
-		CSGModel* getCSGModel(int index) { return csgModels[index]; }
-
-		void addCSGModel(CSGModel* value) { csgModels.push_back(value); }
-		void removeCSGModel(int index) { csgModels.erase(csgModels.begin() + index); }*/
+		Object* createObject();
+		void addObject(Object* object);
+		void removeObject(Object* object);
 
 		void render(Camera* camera);
 	};

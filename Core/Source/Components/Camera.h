@@ -3,29 +3,26 @@
 #include <glm/vec3.hpp>
 #include <glm/ext/quaternion_float.hpp>
 
-#include "Component.h"
 #include "../Shared/String.h"
+
+#include "Component.h"
 
 namespace Core
 {
-	class Renderer;
-	class Transform;
+	class Object;
 
-	class Camera: Component
+	class Camera: public Component
 	{
 	private:
-		Transform* transform = nullptr;
-
 		float _fov = 75.0f;
 		float _near = 0.01f;
 		float _far = 1000.0f;
 
 	public:
-		Camera();
+		Camera(Object* owner);
 		virtual ~Camera();
 
-		static UString COMPONENT_TYPE;
-		virtual UString getComponentType();
+		virtual UInt32 getComponentType();
 
 		float getFov() { return _fov; }
 		void setFov(float value) { _fov = value; }

@@ -15,6 +15,7 @@ namespace Core
 		int count() { return list.size(); }
 
 		void add(T value);
+		void remove(T val);
 		void removeAt(int index);
 		T& get(int index);
 		void set(int index, T value);
@@ -30,6 +31,14 @@ namespace Core
 	inline void List<T>::add(T value)
 	{
 		list.push_back(value);
+	}
+
+	template<typename T>
+	inline void List<T>::remove(T val)
+	{
+		auto it = std::find(list.begin(), list.end(), val);
+		if (it != list.end())
+			list.erase(it);
 	}
 
 	template<typename T>

@@ -1,15 +1,17 @@
 #pragma once
 
+#include "Component.h"
+
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "../Shared/String.h"
 
-#include "Component.h"
-
 namespace Core
 {
-	class Transform: Component
+	class Object;
+
+	class Transform: public Component
 	{
 	private:
 		glm::vec3 position = glm::vec3(0, 0, 0);
@@ -23,11 +25,10 @@ namespace Core
 		Transform* parent = nullptr;
 
 	public:
-		Transform();
+		Transform(Object* owner);
 		virtual ~Transform();
 
-		static UString COMPONENT_TYPE;
-		virtual UString getComponentType();
+		virtual UInt32 getComponentType();
 
 		Transform* getParent() { return parent; }
 		void setParent(Transform* value);
