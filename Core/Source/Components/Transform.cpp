@@ -102,7 +102,7 @@ namespace Core
 		return glm::normalize(rotation * glm::vec3(1, 0, 0));
 	}
 
-	glm::mat3x3 Transform::getLocalAxes()
+	glm::mat3 Transform::getLocalAxes()
 	{
 		glm::vec3 axisX = glm::vec3(1, 0, 0);
 		glm::vec3 axisY = glm::vec3(0, 1, 0);
@@ -112,15 +112,15 @@ namespace Core
 		axisY = getLocalRotation() * axisY;
 		axisZ = getLocalRotation() * axisZ;
 
-		return glm::mat3x3(axisX.x, axisY.x, axisZ.x,
+		return glm::mat3(axisX.x, axisY.x, axisZ.x,
 			axisX.y, axisY.y, axisZ.y,
 			axisX.z, axisY.z, axisZ.z);
 	}
 
-	glm::mat4x4 Transform::getTransformMatrix()
+	glm::mat4 Transform::getTransformMatrix()
 	{
-		glm::mat4x4 trans = glm::identity<glm::mat4x4>();
-		glm::mat4x4 rotMat = glm::mat4_cast(rotation);
+		glm::mat4 trans = glm::identity<glm::mat4>();
+		glm::mat4 rotMat = glm::mat4_cast(rotation);
 
 		glm::vec3 pos = glm::inverse(rotMat) * (glm::vec4(position, 1.0f));
 
@@ -131,12 +131,12 @@ namespace Core
 		return trans;
 	}
 
-	glm::mat4x4 Transform::getTransformMatrixInverse()
+	glm::mat4 Transform::getTransformMatrixInverse()
 	{
 		return glm::inverse(getTransformMatrix());
 	}
 
-	glm::mat4x4 Transform::getLocalTransformMatrix()
+	glm::mat4 Transform::getLocalTransformMatrix()
 	{
 		if (parent != nullptr)
 			return glm::inverse(parent->getTransformMatrix()) * getTransformMatrix();
@@ -144,7 +144,7 @@ namespace Core
 			return getTransformMatrix();
 	}
 
-	void Transform::setTransformMatrix(glm::mat4x4 value)
+	void Transform::setTransformMatrix(glm::mat4 value)
 	{
 		glm::vec3 pos = glm::vec3(0, 0, 0);
 		glm::vec3 scl = glm::vec3(1, 1, 1);
@@ -160,7 +160,7 @@ namespace Core
 		setScale(scl, false);
 	}
 
-	void Transform::setLocalTransformMatrix(glm::mat4x4 value)
+	void Transform::setLocalTransformMatrix(glm::mat4 value)
 	{
 		if (parent != nullptr)
 			setTransformMatrix(parent->getTransformMatrix() * value);
@@ -236,10 +236,10 @@ namespace Core
 		return rotation * localRot;
 	}
 
-	glm::mat4x4 Transform::makeTransformMatrix(glm::vec3 position, glm::highp_quat rotation, glm::vec3 scale)
+	glm::mat4 Transform::makeTransformMatrix(glm::vec3 position, glm::highp_quat rotation, glm::vec3 scale)
 	{
-		glm::mat4x4 trans = glm::identity<glm::mat4x4>();
-		glm::mat4x4 rotMat = glm::mat4_cast(rotation);
+		glm::mat4 trans = glm::identity<glm::mat4>();
+		glm::mat4 rotMat = glm::mat4_cast(rotation);
 
 		glm::vec3 pos = glm::inverse(rotMat) * (glm::vec4(position, 1.0f));
 

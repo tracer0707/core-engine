@@ -7,7 +7,7 @@
 namespace Core
 {
 	class Object;
-	class Mesh;
+	class MeshRenderer;
 	class Transform;
 	class Material;
 }
@@ -24,7 +24,7 @@ namespace Editor
 
 		Core::Object* object = nullptr;
 		Core::Transform* transform = nullptr;
-		Core::Mesh* mesh = nullptr;
+		Core::MeshRenderer* meshRenderer = nullptr;
 
 		static Core::Material* defaultMaterial;
 
@@ -41,7 +41,7 @@ namespace Editor
 
 		Core::Object* getObject() { return object; }
 		Core::Transform* getTransform() { return transform; }
-		Core::Mesh* getMesh() { return mesh; }
+		Core::MeshRenderer* getMeshRenderer() { return meshRenderer; }
 
 		void rebuild();
 	};

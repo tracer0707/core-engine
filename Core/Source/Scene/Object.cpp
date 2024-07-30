@@ -31,12 +31,12 @@ namespace Core
 		}
 	}
 
-	void Object::render()
+	void Object::render(Camera* camera)
 	{
 		for (int i = 0; i < components.count(); ++i)
 		{
 			Component* component = components.get(i);
-			component->render();
+			component->render(camera);
 		}
 	}
 

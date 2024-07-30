@@ -3,25 +3,37 @@
 #include "ComponentList.h"
 
 #include "Transform.h"
+
+#include "../Scene/Object.h"
 #include "../Assets/Material.h"
 #include "../Assets/Mesh.h"
+#include "../Components/Camera.h"
+#include "../Renderer/Renderer.h"
 
 namespace Core
 {
     MeshRenderer::MeshRenderer(Object* owner) : Component(owner) {}
-    MeshRenderer::~MeshRenderer() {}
+    MeshRenderer::~MeshRenderer()
+    {
+        mesh = nullptr;
+    }
 
     UInt32 MeshRenderer::getComponentType()
     {
         return COMPONENT_MESHRENDERER;
     }
 
-    void MeshRenderer::render()
+    void MeshRenderer::render(Camera* camera)
     {
-        Transform* transform = object->findComponent<Transform*>();
-        Mesh* mesh = it->getMesh();
-
         if (mesh == nullptr) return;
+
+        Transform* transform = owner->findComponent<Transform*>();
+
+        int w = Renderer::singleton()->getWidth();
+        int h = Renderer::singleton()->getHeight();
+
+        glm::mat4 view = camera->getViewMatrix();
+        glm::mat4 proj = camera->getProjectionMatrix((float)w / (float)h);
 
         for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
         {

@@ -86,7 +86,7 @@ namespace Editor
 
 	public:
 		CSGBrush();
-		~CSGBrush();
+		virtual ~CSGBrush();
 
 		void rebuild();
 		virtual void make() {};

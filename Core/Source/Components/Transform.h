@@ -44,12 +44,12 @@ namespace Core
 		glm::vec3 getForward();
 		glm::vec3 getUp();
 		glm::vec3 getRight();
-		glm::mat4x4 getTransformMatrix();
-		glm::mat4x4 getTransformMatrixInverse();
-		glm::mat4x4 getLocalTransformMatrix();
-		glm::mat3x3 getLocalAxes();
+		glm::mat4 getTransformMatrix();
+		glm::mat4 getTransformMatrixInverse();
+		glm::mat4 getLocalTransformMatrix();
+		glm::mat3 getLocalAxes();
 
-		static glm::mat4x4 makeTransformMatrix(glm::vec3 position, glm::highp_quat rotation, glm::vec3 scale);
+		static glm::mat4 makeTransformMatrix(glm::vec3 position, glm::highp_quat rotation, glm::vec3 scale);
 
 		void setPosition(glm::vec3 value, bool updateChildren = true);
 		void setLocalPosition(glm::vec3 value, bool updateChildren = true);
@@ -57,8 +57,8 @@ namespace Core
 		void setLocalRotation(glm::highp_quat value, bool updateChildren = true);
 		void setScale(glm::vec3 value, bool updateChildren = true);
 		void setLocalScale(glm::vec3 value, bool updateChildren = true);
-		void setTransformMatrix(glm::mat4x4 value);
-		void setLocalTransformMatrix(glm::mat4x4 value);
+		void setTransformMatrix(glm::mat4 value);
+		void setLocalTransformMatrix(glm::mat4 value);
 
 		void yaw(float degree, bool world = true);
 		void pitch(float degree, bool world = true);

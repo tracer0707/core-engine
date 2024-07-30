@@ -6,6 +6,7 @@
 
 #include <System/EventHandler.h>
 #include <Components/Camera.h>
+#include <Components/Transform.h>
 #include <Scene/Scene.h>
 
 #include "Gizmo.h"
@@ -52,10 +53,19 @@ namespace Editor
 			glm::mat4 view = camera->getViewMatrix();
 			glm::mat4 proj = camera->getProjectionMatrix(io.DisplaySize.x / io.DisplaySize.y);
 
+			if (selectedCsgBrush != nullptr)
+			{
+				glm::mat4 mtx = selectedCsgBrush->getTransform()->getTransformMatrix();
+				selectedMtx = &mtx;
+			}
+
 			if (selectedMtx != nullptr)
 			{
 				glm::mat4& mtx = *selectedMtx;
 				gizmo->manipulate(view, proj, mtx);
+
+				if (selectedCsgBrush != nullptr)
+					selectedCsgBrush->getTransform()->setTransformMatrix(mtx);
 			}
 		}
 
@@ -93,6 +103,21 @@ namespace Editor
 			ImGui::Button("Add cone");
 		}
 		ImGui::EndChild();
+
+		if (selectedCsgModel != nullptr)
+		{
+			ImGui::Separator();
+			if (ImGui::Button("Rebuild"))
+			{
+				Core::Object* obj = selectedCsgModel->getObject();
+				if (obj != nullptr) scene->removeObject(obj);
+
+				selectedCsgModel->rebuild();
+
+				obj = selectedCsgModel->getObject();
+				if (obj != nullptr) scene->addObject(obj);
+			}
+		}
 
 		ImGui::Text("Hierarchy");
 		ImGui::BeginChild("Hierarchy", ImVec2(0, 100), ImGuiChildFlags_Border);

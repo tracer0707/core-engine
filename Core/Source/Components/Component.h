@@ -5,6 +5,7 @@
 namespace Core
 {
 	class Object;
+	class Camera;
 
 	class Component
 	{
@@ -18,6 +19,6 @@ namespace Core
 		virtual UInt32 getComponentType() = 0;
 
 		virtual void update(float& dt);
-		virtual void render();
+		virtual void render(Camera* camera);
 	};
 }

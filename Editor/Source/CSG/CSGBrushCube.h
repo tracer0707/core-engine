@@ -7,6 +7,9 @@ namespace Editor
 	class CSGBrushCube : public CSGBrush
 	{
 	public:
+		CSGBrushCube();
+		virtual ~CSGBrushCube();
+
 		void make() override;
 	};
 }

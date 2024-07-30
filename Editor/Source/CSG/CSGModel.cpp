@@ -10,6 +10,7 @@
 
 #include <Scene/Object.h>
 #include <Components/Transform.h>
+#include <Components/MeshRenderer.h>
 #include <Assets/Material.h>
 #include <Assets/Mesh.h>
 #include <Renderer/VertexBuffer.h>
@@ -31,6 +32,7 @@ namespace Editor
 	CSGModel::CSGModel()
 	{
         object = new Core::Object();
+        meshRenderer = object->addComponent<Core::MeshRenderer*>();
 		transform = object->addComponent<Core::Transform*>();
 
         nullBrush = new CSGBrushCube();
@@ -43,6 +45,7 @@ namespace Editor
 		delete object;
         object = nullptr;
 		transform = nullptr;
+        meshRenderer = nullptr;
 
         if (nullBrush != nullptr)
             delete nullBrush;
@@ -52,6 +55,11 @@ namespace Editor
 
 	void CSGModel::rebuild()
 	{
+        Core::Mesh* currentMesh = meshRenderer->getMesh();
+        if (currentMesh != nullptr) delete currentMesh;
+
+        meshRenderer->setMesh(nullptr);
+
         carve::csg::CSG csg;
 
         carve::interpolate::FaceVertexAttr<CSGBrush::uv_t> fv_uv;
@@ -69,6 +77,7 @@ namespace Editor
         
         for (auto brush : csgBrushes)
         {
+            brush->rebuild();
             brush->bind(&fv_uv, &f_material, &f_layer, &f_castShadows, &f_smoothNormals, &f_brushId);
         }
 
@@ -187,7 +196,8 @@ namespace Editor
             delete csgGeom;
 
         Core::SubMesh** _subMeshes = new Core::SubMesh*[subMeshes.size()];
-        mesh = new Core::Mesh(_subMeshes, subMeshes.size());
+        Core::Mesh* mesh = new Core::Mesh(_subMeshes, subMeshes.size());
+        meshRenderer->setMesh(mesh);
 
         for (int i = 0; i < subMeshes.size(); ++i)
         {

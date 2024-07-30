@@ -1,19 +1,18 @@
 #pragma once
 
 #include "../Config.h"
-#include "../Shared/Hash.h"
 
 namespace Core
 {
 #ifndef COMPONENT_TRANSFORM
-	#define COMPONENT_TRANSFORM Hash::getHash("Transform")
+	#define COMPONENT_TRANSFORM 0
 #endif
 
 #ifndef COMPONENT_MESHRENDERER
-	#define COMPONENT_MESHRENDERER Hash::getHash("MeshRenderer")
+	#define COMPONENT_MESHRENDERER 1
 #endif
 
 #ifndef COMPONENT_CAMERA
-	#define COMPONENT_CAMERA Hash::getHash("Camera")
+	#define COMPONENT_CAMERA 2
 #endif
 }

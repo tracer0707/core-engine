@@ -2,6 +2,15 @@
 
 namespace Editor
 {
+	CSGBrushCube::CSGBrushCube() : CSGBrush()
+	{
+		make();
+	}
+
+	CSGBrushCube::~CSGBrushCube()
+	{
+	}
+
 	void CSGBrushCube::make()
 	{
 		vertices.clear();

@@ -43,26 +43,17 @@ namespace Core
         objects.remove(object);
     }
 
-    void Scene::update()
-    {
-
-    }
-
-    void Scene::render(Camera* camera)
+    void Scene::render()
 	{
-        int w = Renderer::singleton()->getWidth();
-        int h = Renderer::singleton()->getHeight();
+        if (mainCamera == nullptr) return;
 
-        if (camera == nullptr) return;
-
-        glm::mat4 view = camera->getViewMatrix();
-        glm::mat4 proj = camera->getProjectionMatrix((float)w / (float)h);
+        float dt = 0.0f;
 
         for (int i = 0; i < objects.count(); ++i)
         {
             Object* object = objects.get(i);
-
-            object->render();
+            object->update(dt);
+            object->render(mainCamera);
         }
 	}
 }

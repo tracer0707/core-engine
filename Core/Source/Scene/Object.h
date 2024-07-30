@@ -24,7 +24,7 @@ namespace Core
 		List<Component*>& getComponents() { return components; }
 
 		void update(float& dt);
-		void render();
+		void render(Camera* camera);
 
 		void removeComponent(Component* component);
 
@@ -48,13 +48,13 @@ namespace Core
 	template <>
 	inline MeshRenderer* Object::addComponent<MeshRenderer*>()
 	{
-		return (MeshRenderer*)findComponent(COMPONENT_MESHRENDERER);
+		return (MeshRenderer*)addComponent(COMPONENT_MESHRENDERER);
 	}
 
 	template <>
 	inline Transform* Object::addComponent<Transform*>()
 	{
-		return (Transform*)findComponent(COMPONENT_TRANSFORM);
+		return (Transform*)addComponent(COMPONENT_TRANSFORM);
 	}
 
 	/* FIND */

@@ -11,6 +11,7 @@ namespace Core
 	{
 	private:
 		List<Object*> objects;
+		Camera* mainCamera = nullptr;
 
 	public:
 		Scene();
@@ -22,7 +23,9 @@ namespace Core
 		void addObject(Object* object);
 		void removeObject(Object* object);
 
-		void update();
-		void render(Camera* camera);
+		Camera* getMainCamera() { return mainCamera; }
+		void setMainCamera(Camera* value) { mainCamera = value; }
+
+		void render();
 	};
 }

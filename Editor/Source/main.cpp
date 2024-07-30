@@ -11,11 +11,13 @@
 #include <Scene/Scene.h>
 #include <Scene/Object.h>
 #include <Components/Camera.h>
+#include <Components/Transform.h>
 
 #include "Editor/Editor.h"
 
 Core::Object* object = nullptr;
 Core::Camera* camera = nullptr;
+Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
 
 int fpsInterval = 100;
@@ -30,7 +32,13 @@ int main(int argc, char* argv[])
     scene = new Core::Scene();
 
     object = new Core::Object();
+    transform = object->addComponent<Core::Transform*>();
     camera = object->addComponent<Core::Camera*>();
+
+    transform->setPosition(glm::vec3(0, -5, -5));
+    transform->setRotation(glm::vec3(-45, 0, 0));
+
+    scene->setMainCamera(camera);
 
     Editor::Editor::init();
     Editor::Editor::setScene(scene);
@@ -45,7 +53,7 @@ int main(int argc, char* argv[])
         ctx->update(isRunning);
         ctx->clear();
 
-        scene->render(camera);
+        scene->render();
 
         ctx->renderUiBegin();
         Editor::Editor::renderUI();

@@ -17,8 +17,6 @@ namespace Editor
 	{
 		object = new Core::Object();
 		transform = object->addComponent<Core::Transform*>();
-		
-		make();
 	}
 
 	CSGBrush::~CSGBrush()

@@ -17,7 +17,7 @@ namespace Core
 
     }
 
-    void Component::render()
+    void Component::render(Camera* camera)
     {
 
     }

@@ -32,6 +32,9 @@ namespace Core
 			"  vec4 color = texture2D(u_diffuseTex, f_uv0);"
 			"  frag_colour = vec4(color.rgb, 1.0);"
 			"}");
+
+		Texture* texture = Texture::loadFromFile("C:/Dev/core-engine/x64/Release/1.jpg", TextureFormat::BC7);
+		setTexture(texture);
 	}
 
 	Material::~Material()
