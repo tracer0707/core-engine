@@ -22,6 +22,7 @@ namespace Core
 		void addObject(Object* object);
 		void removeObject(Object* object);
 
+		void update();
 		void render(Camera* camera);
 	};
 }

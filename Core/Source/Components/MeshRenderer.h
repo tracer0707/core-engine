@@ -13,5 +13,7 @@ namespace Core
 		virtual ~MeshRenderer();
 
 		virtual UInt32 getComponentType();
+
+		void render();
 	};
 }

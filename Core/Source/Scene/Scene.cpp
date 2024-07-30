@@ -43,7 +43,12 @@ namespace Core
         objects.remove(object);
     }
 
-	void Scene::render(Camera* camera)
+    void Scene::update()
+    {
+
+    }
+
+    void Scene::render(Camera* camera)
 	{
         int w = Renderer::singleton()->getWidth();
         int h = Renderer::singleton()->getHeight();
@@ -57,25 +62,7 @@ namespace Core
         {
             Object* object = objects.get(i);
 
-            /*Transform* transform = it->getTransform();
-            Mesh* mesh = it->getMesh();
-
-            if (mesh == nullptr) continue;
-
-            for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
-            {
-                Core::SubMesh* subMesh = mesh->getSubMesh(i);
-                Core::Material* material = subMesh->getMaterial();
-
-                Core::Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
-
-                if (material != nullptr)
-                    material->bind();
-
-                glm::mat4 model = transform->getTransformMatrix();
-
-                Core::Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), view, proj, model);
-            }*/
+            object->render();
         }
 	}
 }
