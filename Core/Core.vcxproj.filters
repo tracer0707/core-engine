@@ -147,6 +147,12 @@
     <ClCompile Include="Source\Shared\List.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Renderer\Primitives.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Time.cpp">
+      <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -274,6 +280,12 @@
     </ClInclude>
     <ClInclude Include="Source\Components\ComponentList.h">
       <Filter>Исходные файлы\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\Primitives.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Time.h">
+      <Filter>Исходные файлы\System</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

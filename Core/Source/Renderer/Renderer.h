@@ -7,8 +7,25 @@
 
 #include "../Shared/String.h"
 #include "VertexBuffer.h"
+#include "Color.h"
 
 #include <GL/glew.h>
+
+#define C_CW 1 << 0
+#define C_CCW 1 << 1
+#define C_CULL_BACK 1 << 2
+#define C_CULL_FRONT 1 << 3
+#define C_ENABLE_DEPTH_TEST 1 << 4
+#define C_ENABLE_DEPTH_WRITE 1 << 5
+#define C_ENABLE_CULL_FACE 1 << 6
+#define C_DEPTH_ALWAYS 1 << 7
+#define C_DEPTH_NEVER 1 << 8
+#define C_DEPTH_LEQUAL 1 << 9
+#define C_DEPTH_GEQUAL 1 << 10
+#define C_DEPTH_LESS 1 << 11
+#define C_DEPTH_GREATER 1 << 12
+#define C_DEPTH_EQUAL 1 << 13
+#define C_DEPTH_NOTEQUAL 1 << 14
 
 namespace Core
 {
@@ -60,10 +77,12 @@ namespace Core
 		virtual const VertexBuffer* createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize) = 0;
 		virtual const void deleteBuffer(const VertexBuffer* buffer) = 0;
 		virtual const void bindBuffer(const VertexBuffer* buffer) = 0;
-		virtual const void drawBuffer(const VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
+		virtual const void drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
 
-		virtual const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, GLenum format) = 0;
+		virtual const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format) = 0;
 		virtual const void bindTexture(UInt32 id, const char* name, UInt32 slot) = 0;
 		virtual const void deleteTexture(UInt32 id) = 0;
+
+		virtual const void clear(UInt32 flags) = 0;
 	};
 }

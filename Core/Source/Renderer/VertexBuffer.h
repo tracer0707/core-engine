@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "../Config.h"
+#include "Color.h"
 
 namespace Core
 {
@@ -11,6 +12,9 @@ namespace Core
 	public:
 		Real position[3];
 		Real uv[2];
+		Real color[4];
+
+		void make(glm::vec3 pos, glm::vec2 uvs, Color col);
 	};
 
 	struct VertexBuffer

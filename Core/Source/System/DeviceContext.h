@@ -20,7 +20,6 @@ namespace Core
 		void* getRendererContext() { return rendererContext; }
 
 		void update(bool& isRunning);
-		void clear();
 		void renderUiBegin();
 		void renderUiEnd();
 		void swapWindow();

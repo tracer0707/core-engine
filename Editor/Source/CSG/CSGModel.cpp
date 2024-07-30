@@ -35,7 +35,8 @@ namespace Editor
         meshRenderer = object->addComponent<Core::MeshRenderer*>();
 		transform = object->addComponent<Core::Transform*>();
 
-        nullBrush = new CSGBrushCube();
+        nullBrush = new CSGBrush();
+
         if (defaultMaterial == nullptr)
             defaultMaterial = new Core::Material();
 	}
@@ -74,7 +75,6 @@ namespace Editor
         nullBrush->rebuild();
 
         //Bind attributes
-        
         for (auto brush : csgBrushes)
         {
             brush->rebuild();
@@ -161,7 +161,6 @@ namespace Editor
             if (it != subMeshes.end())
             {
                 subMesh = it->second;
-                break;
             }
             else
             {
@@ -187,6 +186,11 @@ namespace Editor
 
                 vtx.uv[0] = uv.u;
                 vtx.uv[1] = uv.v;
+
+                vtx.color[0] = 1.0f;
+                vtx.color[1] = 1.0f;
+                vtx.color[2] = 1.0f;
+                vtx.color[3] = 1.0f;
 
                 subMesh->vertices.add(vtx);
             }

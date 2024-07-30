@@ -1,10 +1,10 @@
 #include <iostream>
-#include <chrono>
 
 #include <GL/glew.h>
 #include <glm/mat4x4.hpp>
 
 #include <System/DeviceContext.h>
+#include <System/Time.h>
 #include <Shared/String.h>
 #include <Shared/Path.h>
 #include <Renderer/RendererGL4.h>
@@ -20,9 +20,6 @@ Core::Camera* camera = nullptr;
 Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
 
-int fpsInterval = 100;
-int fpsTicks = 0;
-
 int main(int argc, char* argv[])
 {
     Core::DeviceContext* ctx = new Core::DeviceContext();
@@ -35,8 +32,8 @@ int main(int argc, char* argv[])
     transform = object->addComponent<Core::Transform*>();
     camera = object->addComponent<Core::Camera*>();
 
-    transform->setPosition(glm::vec3(0, -5, -5));
-    transform->setRotation(glm::vec3(-45, 0, 0));
+    transform->setPosition(glm::vec3(0, 5, 5));
+    transform->setRotation(glm::vec3(-10, 0, 0));
 
     scene->setMainCamera(camera);
 
@@ -48,12 +45,13 @@ int main(int argc, char* argv[])
 
     while (isRunning)
     {
-        auto start_time = std::chrono::high_resolution_clock::now();
-
         ctx->update(isRunning);
-        ctx->clear();
+        Editor::Editor::update();
+        
+        Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         scene->render();
+        Editor::Editor::render();
 
         ctx->renderUiBegin();
         Editor::Editor::renderUI();
@@ -61,19 +59,7 @@ int main(int argc, char* argv[])
 
         ctx->swapWindow();
 
-        auto end_time = std::chrono::high_resolution_clock::now();
-        auto elapsed = end_time - start_time;
-        auto fps = std::chrono::milliseconds(1000) / elapsed;
-
-        if (fpsTicks < fpsInterval)
-        {
-            ++fpsTicks;
-        }
-        else
-        {
-            fpsTicks = 0;
-            ctx->setWindowTitle(("Core Engine: " + std::to_string(fps) + "fps").c_str());
-        }
+        ctx->setWindowTitle(("Core Engine: " + std::to_string(Core::Time::getFramesPerSecond()) + "fps").c_str());
     }
 
     Editor::Editor::free();

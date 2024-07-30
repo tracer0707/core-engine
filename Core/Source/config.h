@@ -7,7 +7,7 @@
 
 #define DOUBLE_PRECISION 0
 
-#if CURRENT_RENDERER == 0
+#if CURRENT_RENDERER == GL4
 
 #define UInt32 unsigned int
 

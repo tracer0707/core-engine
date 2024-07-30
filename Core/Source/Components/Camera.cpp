@@ -17,7 +17,7 @@ namespace Core
         return COMPONENT_CAMERA;
     }
 
-    const glm::mat4x4 Camera::getViewMatrix()
+    const glm::mat4 Camera::getViewMatrix()
     {
         Transform* transform = owner->findComponent<Transform*>();
 
@@ -34,8 +34,13 @@ namespace Core
         return glm::lookAt(position, at, up);
     }
 
-    const glm::mat4x4 Camera::getProjectionMatrix(float aspect)
+    const glm::mat4 Camera::getProjectionMatrix()
     {
+        int w = Renderer::singleton()->getWidth();
+        int h = Renderer::singleton()->getHeight();
+
+        float aspect = (float)w / (float)h;
+
         return glm::perspective(glm::radians(_fov), aspect, _near, _far);
     }
 }

@@ -104,6 +104,7 @@ namespace Core
 
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
+        glEnableVertexAttribArray(2);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
         VertexBuffer* buffer = new VertexBuffer { vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize };
@@ -131,13 +132,15 @@ namespace Core
 #if DOUBLE_PRECISION == 1
         glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, sizeof(Vertex), 0);
         glVertexAttribPointer(1, 2, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3 * sizeof(Real)));
+        glVertexAttribPointer(2, 4, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (const GLvoid*)(5 * sizeof(Real)));
 #else
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
         glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3 * sizeof(Real)));
+        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(5 * sizeof(Real)));
 #endif
     }
 
-    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
+    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
     {
         GLuint viewMtxId = glGetUniformLocation(currentProgram.program, "u_viewMtx");
         GLuint projMtxId = glGetUniformLocation(currentProgram.program, "u_projMtx");
@@ -147,10 +150,33 @@ namespace Core
         glUniformMatrix4fv(projMtxId, 1, false, glm::value_ptr(proj));
         glUniformMatrix4fv(modelMtxId, 1, false, glm::value_ptr(model));
 
+        glFrontFace(GL_CCW);
+        glCullFace(GL_BACK);
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LEQUAL);
+        glDepthMask(GL_FALSE);
+
+        if (flags & C_CW) glFrontFace(GL_CW);
+        if (flags & C_CCW) glFrontFace(GL_CCW);
+        if (flags & C_CULL_BACK) glCullFace(GL_BACK);
+        if (flags & C_CULL_FRONT) glCullFace(GL_FRONT);
+        if (flags & C_ENABLE_CULL_FACE) glEnable(GL_CULL_FACE);
+        if (flags & C_ENABLE_DEPTH_TEST) glEnable(GL_DEPTH_TEST);
+        if (flags & C_ENABLE_DEPTH_WRITE) glDepthMask(GL_TRUE);
+        if (flags & C_DEPTH_ALWAYS) glDepthFunc(GL_ALWAYS);
+        if (flags & C_DEPTH_EQUAL) glDepthFunc(GL_EQUAL);
+        if (flags & C_DEPTH_GEQUAL) glDepthFunc(GL_GEQUAL);
+        if (flags & C_DEPTH_GREATER) glDepthFunc(GL_GREATER);
+        if (flags & C_DEPTH_LEQUAL) glDepthFunc(GL_LEQUAL);
+        if (flags & C_DEPTH_LESS) glDepthFunc(GL_LESS);
+        if (flags & C_DEPTH_NEVER) glDepthFunc(GL_NEVER);
+        if (flags & C_DEPTH_NOTEQUAL) glDepthFunc(GL_NOTEQUAL);
+
         if (buffer->indexArray != nullptr)
         {
             glDrawElements(
-                GL_TRIANGLES,
+                primitiveType,
                 buffer->indexArraySize,
                 GL_UNSIGNED_INT,
                 0
@@ -158,11 +184,11 @@ namespace Core
         }
         else
         {
-            glDrawArrays(GL_TRIANGLES, 0, buffer->vertexArraySize);
+            glDrawArrays(primitiveType, 0, buffer->vertexArraySize);
         }
     }
 
-    const UInt32 RendererGL4::createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, GLenum format)
+    const UInt32 RendererGL4::createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format)
     {
         GLuint tex;
         glGenTextures(1, &tex);
@@ -195,5 +221,12 @@ namespace Core
     const void RendererGL4::deleteTexture(UInt32 id)
     {
         glDeleteTextures(1, &id);
+    }
+
+    const void RendererGL4::clear(UInt32 flags)
+    {
+        glClearDepth(1.0f);
+        glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
+        glClear(flags);
     }
 }

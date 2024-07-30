@@ -3,6 +3,7 @@
 
 #include "../System/DeviceContext.h"
 #include "../Components/Camera.h"
+#include "../Assets/Material.h"
 
 namespace Core
 {
@@ -29,6 +30,8 @@ namespace Core
 #if CURRENT_RENDERER == GL4
 		_singleton = new RendererGL4(ctx);
 #endif
+
+		Material::defaultMaterial = new Material();
 	}
 
 	Renderer::Renderer(DeviceContext* ctx)

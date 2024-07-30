@@ -41,6 +41,7 @@
     <ClCompile Include="Source\Math\Mathf.cpp" />
     <ClCompile Include="Source\Math\Plane.cpp" />
     <ClCompile Include="Source\Math\Ray.cpp" />
+    <ClCompile Include="Source\Renderer\Primitives.cpp" />
     <ClCompile Include="Source\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Renderer\RendererGL4.cpp" />
     <ClCompile Include="Source\Renderer\VertexBuffer.cpp" />
@@ -54,6 +55,7 @@
     <ClCompile Include="Source\System\DeviceContext.cpp" />
     <ClCompile Include="Source\System\EventHandler.cpp" />
     <ClCompile Include="Source\System\InputManager.cpp" />
+    <ClCompile Include="Source\System\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\imgui\imconfig.h" />
@@ -84,6 +86,7 @@
     <ClInclude Include="Source\Math\Plane.h" />
     <ClInclude Include="Source\Math\Ray.h" />
     <ClInclude Include="Source\Renderer\Color.h" />
+    <ClInclude Include="Source\Renderer\Primitives.h" />
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Renderer\VertexBuffer.h" />
@@ -98,6 +101,7 @@
     <ClInclude Include="Source\System\DeviceContext.h" />
     <ClInclude Include="Source\System\EventHandler.h" />
     <ClInclude Include="Source\System\InputManager.h" />
+    <ClInclude Include="Source\System\Time.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

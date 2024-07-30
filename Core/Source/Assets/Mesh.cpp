@@ -101,6 +101,11 @@ namespace Core
 				vtx.uv[0] = mesh->mTextureCoords[0][j].x;
 				vtx.uv[1] = mesh->mTextureCoords[0][j].y;
 
+				vtx.color[0] = mesh->mColors[0][j].r;
+				vtx.color[1] = mesh->mColors[0][j].g;
+				vtx.color[2] = mesh->mColors[0][j].b;
+				vtx.color[3] = mesh->mColors[0][j].a;
+
 				verts.push_back(vtx);
 			}
 

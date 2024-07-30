@@ -23,10 +23,12 @@ namespace Core
 		const VertexBuffer* createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize);
 		const void deleteBuffer(const VertexBuffer* buffer);
 		const void bindBuffer(const VertexBuffer* buffer);
-		const void drawBuffer(const VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
+		const void drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
 
-		virtual const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, GLenum format);
-		virtual const void bindTexture(UInt32 id, const char* name, UInt32 slot);
-		virtual const void deleteTexture(UInt32 id);
+		const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format);
+		const void bindTexture(UInt32 id, const char* name, UInt32 slot);
+		const void deleteTexture(UInt32 id);
+
+		const void clear(UInt32 flags);
 	};	
 }

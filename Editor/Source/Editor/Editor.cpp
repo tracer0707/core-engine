@@ -1,19 +1,26 @@
 #include "Editor.h"
 
+#include <../sdl/include/sdl/SDL.h>
 #include <string>
 #include <imgui.h>
 #include <glm/gtc/type_ptr.hpp>
 
 #include <System/EventHandler.h>
+#include <System/InputManager.h>
+#include <System/Time.h>
 #include <Components/Camera.h>
 #include <Components/Transform.h>
 #include <Scene/Scene.h>
+#include <Scene/Object.h>
+#include <Math/Mathf.h>
 
 #include "Gizmo.h"
 
 #include "../CSG/CSGModel.h"
 #include "../CSG/CSGBrush.h"
 #include "../CSG/CSGBrushCube.h"
+
+#include "Scene.h"
 
 namespace Editor
 {
@@ -30,16 +37,67 @@ namespace Editor
 	int Editor::numCSGModels = 0;
 	int Editor::numCSGBrushes = 0;
 
+	bool Editor::hovered = true;
+	bool Editor::wasHovered = true;
+
+	bool Editor::lButtonDown = false;
+	bool Editor::rButtonDown = false;
+	bool Editor::mButtonDown = false;
+	bool Editor::ctrlPressed = false;
+	bool Editor::shiftPressed = false;
+	bool Editor::mouseOver = false;
+
+	float Editor::cameraSpeed = 5.0f;
+	float Editor::cameraSpeedNormal = 5.0f;
+	float Editor::cameraSpeedFast = 10.0f;
+
+	glm::vec2 Editor::prevMousePos = glm::vec2(0, 0);
+
 	Core::List<CSGModel*> Editor::csgModels;
 
 	void Editor::init()
 	{
 		gizmo = new Gizmo();
+
+		Core::InputManager::getSingleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+			{
+				if (!hovered)
+					return;
+
+				mouseDown(x, y, static_cast<int>(mb));
+			}
+		);
+
+		Core::InputManager::getSingleton()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+			{
+				mouseUp(x, y, static_cast<int>(mb));
+			}
+		);
+
+		Core::InputManager::getSingleton()->subscribeMouseMoveEvent([=](int x, int y)
+			{
+				mouseMove(x, y);
+			}
+		);
+
+		Core::InputManager::getSingleton()->subscribeMouseWheelEvent([=](int x, int y)
+			{
+				if (!hovered)
+					return;
+
+				mouseWheel(x, y);
+			}
+		);
 	}
 
 	void Editor::free()
 	{
 		delete gizmo;
+	}
+
+	void Editor::render()
+	{
+		Scene::renderGrid(camera);
 	}
 
 	void Editor::renderUI()
@@ -51,7 +109,7 @@ namespace Editor
 		if (camera != nullptr)
 		{
 			glm::mat4 view = camera->getViewMatrix();
-			glm::mat4 proj = camera->getProjectionMatrix(io.DisplaySize.x / io.DisplaySize.y);
+			glm::mat4 proj = camera->getProjectionMatrix();
 
 			if (selectedCsgBrush != nullptr)
 			{
@@ -183,5 +241,145 @@ namespace Editor
 			selectedCsgModel = value->getParent();
 		}
 		selectedCsgBrush = value;
+	}
+
+	void Editor::update()
+	{
+		ctrlPressed = Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_LCTRL);
+		shiftPressed = Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_LSHIFT);
+
+		if (shiftPressed)
+			cameraSpeed = cameraSpeedFast;
+		else
+			cameraSpeed = cameraSpeedNormal;
+
+		if (rButtonDown)
+		{
+			float dt = Core::Time::getDeltaTime();
+
+			Core::Transform* t = camera->getOwner()->findComponent<Core::Transform*>();
+
+			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_W)) // W
+			{
+				t->translate(glm::vec3(0, 0, 1) * cameraSpeed * dt);
+			}
+
+			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_S)) // S
+			{
+				t->translate(glm::vec3(0, 0, -1) * cameraSpeed * dt);
+			}
+
+			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_A)) // A
+			{
+				t->translate(glm::vec3(-1, 0, 0) * cameraSpeed * dt);
+			}
+
+			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_D)) // D
+			{
+				t->translate(glm::vec3(1, 0, 0) * cameraSpeed * dt);
+			}
+
+			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_Q)) // Q
+			{
+				t->translate(glm::vec3(0, 1, 0) * cameraSpeed * dt);
+			}
+
+			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_E)) // E
+			{
+				t->translate(glm::vec3(0, -1, 0) * cameraSpeed * dt);
+			}
+		}
+	}
+
+	void Editor::mouseDown(int x, int y, int mb)
+	{
+		Core::InputManager::MouseButton mbe = static_cast<Core::InputManager::MouseButton>(mb);
+
+		if (mbe == Core::InputManager::MouseButton::MBE_LEFT)
+		{
+			if (!rButtonDown && !mButtonDown)
+			{
+				lButtonDown = true;
+			}
+		}
+
+		if (mbe == Core::InputManager::MouseButton::MBE_RIGHT)
+		{
+			if (!lButtonDown && !mButtonDown)
+				rButtonDown = true;
+		}
+
+		if (mbe == Core::InputManager::MouseButton::MBE_MIDDLE)
+		{
+			if (!lButtonDown && !rButtonDown)
+				mButtonDown = true;
+		}
+	}
+
+	void Editor::mouseUp(int x, int y, int mb)
+	{
+		Core::InputManager::MouseButton mbe = static_cast<Core::InputManager::MouseButton>(mb);
+
+		if (mbe == Core::InputManager::MouseButton::MBE_LEFT)
+		{
+			lButtonDown = false;
+		}
+
+		if (mbe == Core::InputManager::MouseButton::MBE_RIGHT)
+		{
+			rButtonDown = false;
+		}
+
+		if (mbe == Core::InputManager::MouseButton::MBE_MIDDLE)
+		{
+			mButtonDown = false;
+		}
+
+		wasHovered = false;
+	}
+
+	void Editor::mouseMove(int x, int y)
+	{
+		float rOffsetX = x - prevMousePos.x;
+		float rOffsetY = y - prevMousePos.y;
+
+		Core::Transform* t = camera->getOwner()->findComponent<Core::Transform*>();
+
+		if (rButtonDown)
+		{
+			rOffsetX *= 0.15f;
+			rOffsetY *= 0.15f;
+
+			t->yaw(-rOffsetX, true);
+			t->pitch(-rOffsetY, false);
+		}
+
+		if (mButtonDown)
+		{
+			rOffsetX *= 0.025f * cameraSpeedNormal * 0.02f;
+			rOffsetY *= 0.025f * cameraSpeedNormal * 0.02f;
+
+			glm::vec3 vCamPos = t->getPosition();
+			glm::vec3 vDirUp = -t->getUp();
+			glm::vec3 vDirRight = -t->getRight();
+
+			vCamPos += (vDirRight * rOffsetX) + (vDirUp * rOffsetY);
+			t->setPosition(vCamPos);
+		}
+
+		prevMousePos = glm::vec2(x, y);
+	}
+
+	void Editor::mouseWheel(int x, int y)
+	{
+		if (!lButtonDown)
+		{
+			Core::Transform* t = camera->getOwner()->findComponent<Core::Transform*>();
+
+			glm::vec3 vCamPos = t->getPosition();
+			glm::vec3 vCamDir = t->getForward();
+			vCamPos += vCamDir * (float)y * cameraSpeedNormal * 0.1f;
+			t->setPosition(vCamPos);
+		}
 	}
 }

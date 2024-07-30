@@ -39,6 +39,9 @@
     <ClCompile Include="Source\CSG\CSGBrushCube.cpp">
       <Filter>Исходные файлы\CSG</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Scene.cpp">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\Editor.h">
@@ -55,6 +58,9 @@
     </ClInclude>
     <ClInclude Include="Source\CSG\CSGBrushCube.h">
       <Filter>Исходные файлы\CSG</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Scene.h">
+      <Filter>Исходные файлы\Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

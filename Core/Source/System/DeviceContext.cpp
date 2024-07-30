@@ -8,10 +8,8 @@
 
 #include "../Renderer/Renderer.h"
 #include "../System/EventHandler.h"
-
-//#ifdef _WIN32
-//#include <windows.h>
-//#endif
+#include "../System/InputManager.h"
+#include "../System/Time.h"
 
 namespace Core
 {
@@ -58,6 +56,8 @@ namespace Core
         SDL_Event event;
         int w, h;
 
+        Time::beginTimer();
+
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
@@ -95,20 +95,12 @@ namespace Core
             break;
             }
 
+            InputManager::getSingleton()->updateKeys(&event);
             ImGui_ImplSDL2_ProcessEvent(&event);
         }
 
+        InputManager::getSingleton()->updateMouse(window);
         EventHandler::singleton()->processEvents();
-    }
-
-    void DeviceContext::clear()
-    {
-        glFrontFace(GL_CCW);
-        glCullFace(GL_BACK);
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
     void DeviceContext::renderUiBegin()
@@ -126,8 +118,11 @@ namespace Core
 
     void DeviceContext::swapWindow()
     {
+        InputManager::getSingleton()->reset();
         SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
         SDL_GL_SwapWindow((SDL_Window*)window);
+
+        Time::endTimer();
     }
 
     void DeviceContext::destroyWindow()

@@ -17,6 +17,8 @@ namespace Core
 		Material();
 		~Material();
 
+		static Material* defaultMaterial;
+
 		Texture* getTexture() { return _texture; }
 		void setTexture(Texture* value) { _texture = value; }
 

@@ -29,25 +29,29 @@ namespace Core
 
         Transform* transform = owner->findComponent<Transform*>();
 
-        int w = Renderer::singleton()->getWidth();
-        int h = Renderer::singleton()->getHeight();
-
         glm::mat4 view = camera->getViewMatrix();
-        glm::mat4 proj = camera->getProjectionMatrix((float)w / (float)h);
+        glm::mat4 proj = camera->getProjectionMatrix();
 
         for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
         {
-            Core::SubMesh* subMesh = mesh->getSubMesh(i);
-            Core::Material* material = subMesh->getMaterial();
+            SubMesh* subMesh = mesh->getSubMesh(i);
+            Material* material = subMesh->getMaterial();
 
-            Core::Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
+            Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
 
             if (material != nullptr)
                 material->bind();
 
             glm::mat4 model = transform->getTransformMatrix();
 
-            Core::Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), view, proj, model);
+            Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
+                C_CCW
+                | C_CULL_BACK
+                | C_ENABLE_DEPTH_TEST
+                | C_ENABLE_DEPTH_WRITE
+                | C_ENABLE_CULL_FACE
+                | C_DEPTH_LEQUAL,
+                view, proj, model);
         }
     }
 }

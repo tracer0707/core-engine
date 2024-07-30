@@ -33,7 +33,7 @@ namespace Core
 		float getFar() { return _far; }
 		void setFar(float value) { _far = value; }
 
-		const glm::mat4x4 getViewMatrix();
-		const glm::mat4x4 getProjectionMatrix(float aspect);
+		const glm::mat4 getViewMatrix();
+		const glm::mat4 getProjectionMatrix();
 	};
 }

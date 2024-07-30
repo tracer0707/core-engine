@@ -20,5 +20,7 @@ namespace Core
 
 		virtual void update(float& dt);
 		virtual void render(Camera* camera);
+
+		Object* getOwner() { return owner; }
 	};
 }
