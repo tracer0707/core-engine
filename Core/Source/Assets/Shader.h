@@ -9,7 +9,7 @@ namespace Core
 	class Shader : public Asset
 	{
 	private:
-		Program nativeId;
+		const Program* nativeId = nullptr;
 
 	public:
 		~Shader();

@@ -37,10 +37,10 @@ namespace Core
             SubMesh* subMesh = mesh->getSubMesh(i);
             Material* material = subMesh->getMaterial();
 
-            Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
-
             if (material != nullptr)
                 material->bind();
+
+            Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
 
             glm::mat4 model = transform->getTransformMatrix();
 

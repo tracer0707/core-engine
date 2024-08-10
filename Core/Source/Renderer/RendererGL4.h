@@ -16,9 +16,10 @@ namespace Core
 	public:
 		virtual const void setViewportSize(int w, int h);
 
-		const Program createProgram(UString vertexSrc, UString fragmentSrc);
-		const void deleteProgram(const Program& programId);
-		const void bindProgram(const Program& programId);
+		const Program* createProgram(UString vertexSrc, UString fragmentSrc);
+		const void deleteProgram(const Program* programId);
+		const void bindProgram(const Program* programId);
+		const char* checkProgramErrors(UInt32 program);
 
 		const VertexBuffer* createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize);
 		const void deleteBuffer(const VertexBuffer* buffer);

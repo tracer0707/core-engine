@@ -47,15 +47,15 @@ namespace Core
 	class Renderer
 	{
 	private:
-		Program defaultProgram = { 0, 0, 0, 0, 0 };
 		DeviceContext* context = nullptr;
 
 	protected:
 		Renderer(DeviceContext* ctx);
 
-		std::vector<Program> shaderPrograms;
+		Program* defaultProgram = new Program();
+		std::vector<Program*> shaderPrograms;
 
-		Program& currentProgram = defaultProgram;
+		const Program* currentProgram = nullptr;
 
 		int width = 0;
 		int height = 0;
@@ -70,9 +70,10 @@ namespace Core
 
 		virtual const void setViewportSize(int w, int h) = 0;
 
-		virtual const Program createProgram(UString vertexSrc, UString fragmentSrc) = 0;
-		virtual const void deleteProgram(const Program& program) = 0;
-		virtual const void bindProgram(const Program& program) = 0;
+		virtual const Program* createProgram(UString vertexSrc, UString fragmentSrc) = 0;
+		virtual const void deleteProgram(const Program* program) = 0;
+		virtual const void bindProgram(const Program* program) = 0;
+		virtual const char* checkProgramErrors(UInt32 program) = 0;
 
 		virtual const VertexBuffer* createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize) = 0;
 		virtual const void deleteBuffer(const VertexBuffer* buffer) = 0;

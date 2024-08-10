@@ -22,7 +22,7 @@ namespace Core
         glViewport(0, 0, w, h);
     }
 
-    const Program RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)
+    const Program* RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)
     {
         std::string vertexSrcUtf8 = String::toStdString(vertexSrc);
         std::string fragmentSrcUtf8 = String::toStdString(fragmentSrc);
@@ -38,49 +38,93 @@ namespace Core
         glShaderSource(fs, 1, &_fragmentSrcUtf8, NULL);
         glCompileShader(fs);
 
+        const char* errorsVs = checkProgramErrors(vs);
+        const char* errorsFs = checkProgramErrors(fs);
+
+        if (errorsVs != nullptr) std::cout << errorsVs;
+        if (errorsFs != nullptr) std::cout << errorsFs;
+
+        if (errorsVs != nullptr || errorsFs != nullptr)
+        {
+            return nullptr;
+        }
+
         GLuint programId = glCreateProgram();
         glAttachShader(programId, fs);
         glAttachShader(programId, vs);
         glLinkProgram(programId);
 
-        Program program = { programId, vs, fs, 0, 0 };
+        Program* program = new Program();
+        program->program = programId;
+        program->vertexShader = vs;
+        program->fragmentShader = fs;
+
         shaderPrograms.push_back(program);
 
         return program;
     }
 
-    const void RendererGL4::deleteProgram(const Program& program)
+    const void RendererGL4::deleteProgram(const Program* program)
     {
         const auto& it = std::find_if(
             shaderPrograms.begin(),
             shaderPrograms.end(),
-            [=](Program& a) -> bool {
-                return program == a;
+            [=](Program* a) -> bool {
+                return program->program == a->program;
             }
         );
 
         if (it == shaderPrograms.end())
             throw std::invalid_argument("Попытка удалить несуществующую программу");
 
-        if (it->vertexShader > 0)
-            glDeleteShader(it->vertexShader);
+        if ((*it)->vertexShader > 0)
+            glDeleteShader((*it)->vertexShader);
 
-        if (it->fragmentShader > 0)
-            glDeleteShader(it->fragmentShader);
+        if ((*it)->fragmentShader > 0)
+            glDeleteShader((*it)->fragmentShader);
 
-        if (it->geometryShader > 0)
-            glDeleteShader(it->geometryShader);
+        if ((*it)->geometryShader > 0)
+            glDeleteShader((*it)->geometryShader);
 
-        if (it->computeShader > 0)
-            glDeleteShader(it->computeShader);
+        if ((*it)->computeShader > 0)
+            glDeleteShader((*it)->computeShader);
 
         shaderPrograms.erase(it);
+
+        delete program;
     }
 
-    const void RendererGL4::bindProgram(const Program& program)
+    const void RendererGL4::bindProgram(const Program* program)
     {
-        currentProgram = program;
-        glUseProgram(program.program);
+        if (program != nullptr)
+        {
+            currentProgram = program;
+            glUseProgram(program->program);
+        }
+        else
+        {
+            currentProgram = defaultProgram;
+            glUseProgram(defaultProgram->program);
+        }
+    }
+
+    const char* RendererGL4::checkProgramErrors(UInt32 program)
+    {
+        GLint isCompiled = 0;
+        glGetShaderiv(program, GL_COMPILE_STATUS, &isCompiled);
+        if (isCompiled == GL_FALSE)
+        {
+            GLint maxLength = 0;
+            glGetShaderiv(program, GL_INFO_LOG_LENGTH, &maxLength);
+
+            char* result = new char[maxLength];
+            glGetShaderInfoLog(program, maxLength, &maxLength, result);
+
+            glDeleteShader(program);
+            return result;
+        }
+
+        return nullptr;
     }
 
     const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize)
@@ -102,12 +146,10 @@ namespace Core
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(UInt32), indexArray, GL_STATIC_DRAW);
         }
 
-        glEnableVertexAttribArray(0);
-        glEnableVertexAttribArray(1);
-        glEnableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, vbo);
-
         VertexBuffer* buffer = new VertexBuffer { vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize };
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
         
         return buffer;
     }
@@ -125,26 +167,34 @@ namespace Core
     const void RendererGL4::bindBuffer(const VertexBuffer* buffer)
     {
         glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
-        
-        if (buffer->indexArray != nullptr)
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
+     
+        UInt32 position = glGetAttribLocation(currentProgram->program, "position");
+        UInt32 uv0 = glGetAttribLocation(currentProgram->program, "uv0");
+        UInt32 color0 = glGetAttribLocation(currentProgram->program, "color0");
+
+        glEnableVertexAttribArray(position);
+        glEnableVertexAttribArray(uv0);
+        glEnableVertexAttribArray(color0);
 
 #if DOUBLE_PRECISION == 1
-        glVertexAttribPointer(0, 3, GL_DOUBLE, GL_FALSE, sizeof(Vertex), 0);
-        glVertexAttribPointer(1, 2, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3 * sizeof(Real)));
-        glVertexAttribPointer(2, 4, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (const GLvoid*)(5 * sizeof(Real)));
+        glVertexAttribPointer(position, 3, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (void*)(0));
+        glVertexAttribPointer(uv0, 2, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(Real)));
+        glVertexAttribPointer(color0, 4, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(Real)));
 #else
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(3 * sizeof(Real)));
-        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)(5 * sizeof(Real)));
+        glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
+        glVertexAttribPointer(uv0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(Real)));
+        glVertexAttribPointer(color0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(Real)));
 #endif
+
+        if (buffer->indexArray != nullptr)
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
     }
 
     const void RendererGL4::drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
     {
-        GLuint viewMtxId = glGetUniformLocation(currentProgram.program, "u_viewMtx");
-        GLuint projMtxId = glGetUniformLocation(currentProgram.program, "u_projMtx");
-        GLuint modelMtxId = glGetUniformLocation(currentProgram.program, "u_modelMtx");
+        GLuint viewMtxId = glGetUniformLocation(currentProgram->program, "u_viewMtx");
+        GLuint projMtxId = glGetUniformLocation(currentProgram->program, "u_projMtx");
+        GLuint modelMtxId = glGetUniformLocation(currentProgram->program, "u_modelMtx");
 
         glUniformMatrix4fv(viewMtxId, 1, false, glm::value_ptr(view));
         glUniformMatrix4fv(projMtxId, 1, false, glm::value_ptr(proj));
@@ -211,7 +261,7 @@ namespace Core
 
     const void RendererGL4::bindTexture(UInt32 id, const char* name, UInt32 slot)
     {
-        GLuint texId = glGetUniformLocation(currentProgram.program, name);
+        GLuint texId = glGetUniformLocation(currentProgram->program, name);
 
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, id);

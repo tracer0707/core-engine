@@ -11,6 +11,7 @@ namespace Core
     const void Shader::unload()
     {
         Renderer::singleton()->deleteProgram(nativeId);
+        nativeId = nullptr;
 
         Asset::unload();
     }
