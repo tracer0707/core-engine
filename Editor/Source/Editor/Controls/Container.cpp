@@ -6,6 +6,21 @@
 
 namespace Editor
 {
+	Container::Container()
+	{
+	}
+
+	Container::~Container()
+	{
+		for (int i = 0; i < _controls.count(); ++i)
+		{
+			Control* control = _controls.get(i);
+			delete control;
+		}
+
+		_controls.clear();
+	}
+
 	void Container::addControl(Control* value)
 	{
 		EVENT({
@@ -19,15 +34,6 @@ namespace Editor
 		EVENT({
 			_controls.remove(value);
 			value->_parent = nullptr;
-		}, =);
-	}
-
-	void Container::removeControl(int index)
-	{
-		EVENT({
-			Control * control = _controls.get(index);
-			control->_parent = nullptr;
-			_controls.removeAt(index);
 		}, =);
 	}
 

@@ -15,10 +15,11 @@ namespace Core
 		int count() { return list.size(); }
 
 		void add(T value);
-		void remove(T val);
+		void remove(T value);
 		void removeAt(int index);
 		T& get(int index);
 		void set(int index, T value);
+		int indexOf(T value);
 		void clear();
 		T* ptr();
 		std::vector<T>::iterator begin() { return list.begin(); }
@@ -34,9 +35,9 @@ namespace Core
 	}
 
 	template<typename T>
-	inline void List<T>::remove(T val)
+	inline void List<T>::remove(T value)
 	{
-		auto it = std::find(list.begin(), list.end(), val);
+		auto it = std::find(list.begin(), list.end(), value);
 		if (it != list.end())
 			list.erase(it);
 	}
@@ -63,6 +64,16 @@ namespace Core
 		assert(list.size() > index && "List index out of bounds");
 
 		list[index] = value;
+	}
+
+	template<typename T>
+	inline int List<T>::indexOf(T value)
+	{
+		auto it = std::find(list.begin(), list.end(), value);
+		if (it != list.end())
+			return std::distance(list.begin(), it);
+
+		return -1;
 	}
 
 	template<typename T>

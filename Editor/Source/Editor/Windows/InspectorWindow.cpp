@@ -2,9 +2,15 @@
 
 #include <imgui.h>
 
+#include "../Controls/Button.h"
+
 namespace Editor
 {
-	InspectorWindow::InspectorWindow(UString name) : Window(name)
+	InspectorWindow::InspectorWindow() : Window("Inspector")
 	{
+		Button* btn = new Button();
+		btn->setText("Test button");
+
+		addControl(btn);
 	}
 }

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Shared/String.h>
-#include <Shared/List.h>
 
 #include "WindowManager.h"
 #include "../Controls/Container.h"
@@ -26,8 +25,7 @@ namespace Editor
 	private:
 		unsigned int _id = -1;
 		UString _name;
-		Window* _parent = nullptr;
-		Core::List<Window*> _children;
+		Window* _dockParent = nullptr;
 		DockDirection _dockDirection = DockDirection::None;
 		float _splitSize = 0.5f;
 		int _width = 400;
@@ -41,8 +39,8 @@ namespace Editor
 
 		UString getName() { return _name; };
 
-		void addWindow(Window* wnd);
-		void removeWindow(Window* wnd);
+		void setDockParent(Window* value) { _dockParent = value; }
+		Window* getDockParent() { return _dockParent; };
 
 		int getWidth() { return _width; }
 		void setWidth(int value) { _width = value; }

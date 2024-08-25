@@ -8,7 +8,7 @@ namespace Editor
 	{
 	private:
 	public:
-		InspectorWindow(UString name);
+		InspectorWindow();
 		virtual ~InspectorWindow() = default;
 	};
 }

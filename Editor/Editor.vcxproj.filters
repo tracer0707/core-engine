@@ -66,14 +66,23 @@
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\ToolbarWindow.cpp">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\Controls\Control.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\Controls\Container.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\Button.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\TreeView.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\MenuBar.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\MenuWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -113,14 +122,23 @@
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\ToolbarWindow.h">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\Controls\Control.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Controls\Container.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Button.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\TreeView.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\MenuBar.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\MenuWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

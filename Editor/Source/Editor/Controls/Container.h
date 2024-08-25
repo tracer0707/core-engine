@@ -12,9 +12,11 @@ namespace Editor
 		Core::List<Control*> _controls;
 
 	public:
+		Container();
+		~Container();
+
 		void addControl(Control* value);
 		void removeControl(Control* value);
-		void removeControl(int index);
 		Control* getControl(int index) { return _controls.get(index); }
 		int getControlsCount() { return _controls.count(); }
 

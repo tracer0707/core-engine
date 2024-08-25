@@ -136,8 +136,11 @@
     <ClCompile Include="Source\CSG\CSGBrush.cpp" />
     <ClCompile Include="Source\CSG\CSGBrushCube.cpp" />
     <ClCompile Include="Source\CSG\CSGModel.cpp" />
+    <ClCompile Include="Source\Editor\Controls\Button.cpp" />
     <ClCompile Include="Source\Editor\Controls\Container.cpp" />
     <ClCompile Include="Source\Editor\Controls\Control.cpp" />
+    <ClCompile Include="Source\Editor\Controls\MenuBar.cpp" />
+    <ClCompile Include="Source\Editor\Controls\TreeView.cpp" />
     <ClCompile Include="Source\Editor\Editor.cpp" />
     <ClCompile Include="Source\Editor\Gizmo.cpp" />
     <ClCompile Include="Source\Editor\Scene.cpp" />
@@ -145,7 +148,7 @@
     <ClCompile Include="Source\Editor\Windows\CSGWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\InspectorWindow.cpp" />
-    <ClCompile Include="Source\Editor\Windows\ToolbarWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\MenuWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\Window.cpp" />
     <ClCompile Include="Source\Editor\Windows\WindowManager.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -154,8 +157,11 @@
     <ClInclude Include="Source\CSG\CSGBrush.h" />
     <ClInclude Include="Source\CSG\CSGBrushCube.h" />
     <ClInclude Include="Source\CSG\CSGModel.h" />
+    <ClInclude Include="Source\Editor\Controls\Button.h" />
     <ClInclude Include="Source\Editor\Controls\Container.h" />
     <ClInclude Include="Source\Editor\Controls\Control.h" />
+    <ClInclude Include="Source\Editor\Controls\MenuBar.h" />
+    <ClInclude Include="Source\Editor\Controls\TreeView.h" />
     <ClInclude Include="Source\Editor\Editor.h" />
     <ClInclude Include="Source\Editor\Gizmo.h" />
     <ClInclude Include="Source\Editor\Scene.h" />
@@ -163,7 +169,7 @@
     <ClInclude Include="Source\Editor\Windows\CSGWindow.h" />
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h" />
     <ClInclude Include="Source\Editor\Windows\InspectorWindow.h" />
-    <ClInclude Include="Source\Editor\Windows\ToolbarWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\MenuWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
   </ItemGroup>

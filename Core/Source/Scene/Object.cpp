@@ -16,6 +16,7 @@ namespace Core
 		for (int i = 0; i < components.count(); ++i)
 		{
 			Component* component = components.get(i);
+			component->owner = nullptr;
 			delete component;
 		}
 

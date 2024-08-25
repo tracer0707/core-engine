@@ -9,6 +9,8 @@ namespace Core
 
 	class Component
 	{
+		friend class Object;
+
 	protected:
 		Object* owner = nullptr;
 

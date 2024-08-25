@@ -19,6 +19,13 @@ namespace Editor
 
 	WindowManager::~WindowManager()
 	{
+		for (int i = 0; i < _windows.count(); ++i)
+		{
+			Window* window = _windows.get(i);
+			delete window;
+		}
+
+		_windows.clear();
 	}
 
 	void WindowManager::addWindow(Window* value)
@@ -68,6 +75,8 @@ namespace Editor
 					default: dir = ImGuiDir_None; break;
 				}
 
+				if (it->_dockDirection == DockDirection::None) continue;
+				
 				ImGuiID split1ID;
 				ImGuiID split2ID = ImGui::DockBuilderSplitNode(dockID, dir, it->_splitSize, nullptr, &split1ID);
 				ImGui::DockBuilderDockWindow(ToStdString(it->_name).c_str(), split2ID);

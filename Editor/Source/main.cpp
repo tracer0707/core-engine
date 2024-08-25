@@ -14,13 +14,20 @@
 #include <Components/Transform.h>
 
 #include "Editor/Windows/WindowManager.h"
+#include "Editor/Windows/MenuWindow.h"
 #include "Editor/Windows/InspectorWindow.h"
+#include "Editor/Windows/CSGWindow.h"
 #include "Editor/Editor.h"
 
 Core::Object* object = nullptr;
 Core::Camera* camera = nullptr;
 Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
+
+Editor::WindowManager* windowManager = nullptr;
+Editor::MenuWindow* menuWindow = nullptr;
+Editor::InspectorWindow* inspectorWindow = nullptr;
+Editor::CSGWindow* csgWindow = nullptr;
 
 int main(int argc, char* argv[])
 {
@@ -43,11 +50,19 @@ int main(int argc, char* argv[])
     Editor::Editor::setScene(scene);
     Editor::Editor::setCamera(camera);
 
-    Editor::WindowManager* windowManager = new Editor::WindowManager();
-    Editor::InspectorWindow* inspectorWindow = new Editor::InspectorWindow("Inspector");
-    inspectorWindow->setDockDirection(Editor::DockDirection::Right);
+    windowManager = new Editor::WindowManager();
+    
+    menuWindow = new Editor::MenuWindow();
+    inspectorWindow = new Editor::InspectorWindow();
+    csgWindow = new Editor::CSGWindow();
 
+    //menuWindow->setDockDirection(Editor::DockDirection::Up);
+    inspectorWindow->setDockDirection(Editor::DockDirection::Right);
+    csgWindow->setDockDirection(Editor::DockDirection::Left);
+
+    windowManager->addWindow(menuWindow);
     windowManager->addWindow(inspectorWindow);
+    windowManager->addWindow(csgWindow);
 
     bool isRunning = true;
 
@@ -61,11 +76,10 @@ int main(int argc, char* argv[])
 
         Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        scene->render();
         Editor::Editor::render();
+        scene->render();
 
         ctx->renderUiBegin();
-        //Editor::Editor::renderUI();
         windowManager->update(width, height);
         ctx->renderUiEnd();
 
@@ -75,6 +89,9 @@ int main(int argc, char* argv[])
     }
 
     Editor::Editor::free();
+
+    delete scene;
+    delete windowManager;
 
     ctx->destroyWindow();
 
