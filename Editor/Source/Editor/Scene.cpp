@@ -21,7 +21,6 @@ namespace Editor
 		Core::Transform* t = camera->getOwner()->findComponent<Core::Transform*>();
 		glm::vec3 camPos = t->getPosition();
 
-		//GRID
 		Core::List<Core::Vertex> verts1;
 		Core::List<Core::Vertex> verts2;
 
@@ -66,23 +65,33 @@ namespace Editor
 		startX = camPos.x / 64.0f * 64.0f;
 		int startZ = camPos.z / 64.0f * 64.0f;
 
-		glm::vec3 px1 = glm::vec3(startX - 32.0f, 0.0f, startZ);
-		glm::vec3 px2 = glm::vec3(startX + 31.0f, 0.0f, startZ);
+		glm::vec3 px1 = glm::vec3(startX - 32.0f, 0.0f, 0.0f);
+		glm::vec3 px2 = glm::vec3(startX + 31.0f, 0.0f, 0.0f);
 
-		glm::vec3 pz1 = glm::vec3(startX, 0.0f, startZ - 32.0f);
-		glm::vec3 pz2 = glm::vec3(startX, 0.0f, startZ + 31.0f);
+		glm::vec3 pz1 = glm::vec3(0.0f, 0.0f, startZ - 32.0f);
+		glm::vec3 pz2 = glm::vec3(0.0f, 0.0f, startZ + 31.0f);
 
-		Core::Vertex v1, v2, v3, v4;
+		if (startZ > -32.0f && startZ < 33.0f)
+		{
+			Core::Vertex v1, v2;
 
-		v1.make(px1, {0, 0}, xColor);
-		v2.make(px2, {0, 0}, xColor);
-		v3.make(pz1, {0, 0}, zColor);
-		v4.make(pz2, {0, 0}, zColor);
+			v1.make(px1, { 0, 0 }, xColor);
+			v2.make(px2, { 0, 0 }, xColor);
 
-		verts2.add(v1);
-		verts2.add(v2);
-		verts2.add(v3);
-		verts2.add(v4);
+			verts2.add(v1);
+			verts2.add(v2);
+		}
+
+		if (startX > -32.0f && startX < 33.0f)
+		{
+			Core::Vertex v3, v4;
+
+			v3.make(pz1, { 0, 0 }, zColor);
+			v4.make(pz2, { 0, 0 }, zColor);
+
+			verts2.add(v3);
+			verts2.add(v4);
+		}
 
 		UInt32 flags = C_CCW
 			| C_CULL_BACK
@@ -92,6 +101,8 @@ namespace Editor
 			| C_DEPTH_LEQUAL;
 
 		Core::Primitives::lines(view, proj, mtx, verts1.ptr(), verts1.count(), flags);
-		Core::Primitives::lines(view, proj, mtx, verts2.ptr(), verts2.count(), flags);
+
+		if (verts2.count() > 0)
+			Core::Primitives::lines(view, proj, mtx, verts2.ptr(), verts2.count(), flags);
 	}
 }

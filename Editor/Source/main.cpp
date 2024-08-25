@@ -13,6 +13,8 @@
 #include <Components/Camera.h>
 #include <Components/Transform.h>
 
+#include "Editor/Windows/WindowManager.h"
+#include "Editor/Windows/InspectorWindow.h"
 #include "Editor/Editor.h"
 
 Core::Object* object = nullptr;
@@ -41,6 +43,12 @@ int main(int argc, char* argv[])
     Editor::Editor::setScene(scene);
     Editor::Editor::setCamera(camera);
 
+    Editor::WindowManager* windowManager = new Editor::WindowManager();
+    Editor::InspectorWindow* inspectorWindow = new Editor::InspectorWindow("Inspector");
+    inspectorWindow->setDockDirection(Editor::DockDirection::Right);
+
+    windowManager->addWindow(inspectorWindow);
+
     bool isRunning = true;
 
     while (isRunning)
@@ -48,13 +56,17 @@ int main(int argc, char* argv[])
         ctx->update(isRunning);
         Editor::Editor::update();
         
+        int width = Core::Renderer::singleton()->getWidth();
+        int height = Core::Renderer::singleton()->getHeight();
+
         Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         scene->render();
         Editor::Editor::render();
 
         ctx->renderUiBegin();
-        Editor::Editor::renderUI();
+        //Editor::Editor::renderUI();
+        windowManager->update(width, height);
         ctx->renderUiEnd();
 
         ctx->swapWindow();

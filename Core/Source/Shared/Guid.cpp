@@ -7,6 +7,6 @@ namespace Core
 {
 	std::string Guid::genGuid()
 	{
-		return uuids::to_string(uuids::uuid_system_generator{}());;
+		return uuids::to_string(uuids::uuid_system_generator{}());
 	}
 }

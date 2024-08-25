@@ -20,6 +20,9 @@ namespace Core
 
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
+
         window = SDL_CreateWindow(ToStdString(title).c_str(), SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED, width, height,
             SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
@@ -42,6 +45,8 @@ namespace Core
         ImGui::CreateContext();
         ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)window, (SDL_GLContext)rendererContext);
         ImGui_ImplOpenGL3_Init("#version 130");
+
+        glEnable(GL_MULTISAMPLE);
 
         return 0;
     }

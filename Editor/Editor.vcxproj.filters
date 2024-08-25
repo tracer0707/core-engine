@@ -19,6 +19,12 @@
     <Filter Include="Исходные файлы\CSG">
       <UniqueIdentifier>{2d12b8b4-7adc-4bd9-9dc0-ad5bdcd0110e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Editor\Windows">
+      <UniqueIdentifier>{2dbf7123-50df-408e-b6e0-e449f8edeb4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Editor\Controls">
+      <UniqueIdentifier>{de117b95-b328-4047-84e7-f9e2b82dde62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor\Editor.cpp">
@@ -42,6 +48,33 @@
     <ClCompile Include="Source\Editor\Scene.cpp">
       <Filter>Исходные файлы\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\Window.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\WindowManager.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\InspectorWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\CSGWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\ToolbarWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\Control.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\Container.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\Editor.h">
@@ -61,6 +94,33 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Scene.h">
       <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\Window.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\WindowManager.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\InspectorWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\AssetsWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\CSGWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\ToolbarWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Control.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Container.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
