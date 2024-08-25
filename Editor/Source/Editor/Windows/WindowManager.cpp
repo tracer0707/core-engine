@@ -81,7 +81,7 @@ namespace Editor
 
 		for (auto it : _windows)
 		{
-			it->updateInternal();
+			it->update();
 		}
 	}
 }

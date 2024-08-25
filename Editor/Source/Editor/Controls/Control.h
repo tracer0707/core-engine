@@ -14,10 +14,10 @@ namespace Editor
 	private:
 		Container* _parent = nullptr;
 
+		virtual void update() = 0;
+
 	public:
 		Control();
 		virtual ~Control();
-
-		virtual void update() = 0;
 	};
 }

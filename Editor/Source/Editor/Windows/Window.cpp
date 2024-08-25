@@ -4,6 +4,7 @@
 #include <imgui_internal.h>
 
 #include <Shared/String.h>
+#include <System/EventHandler.h>
 
 #include "../Controls/Control.h"
 
@@ -26,19 +27,23 @@ namespace Editor
 	{
 		assert(wnd->_parent == nullptr && "Window has already been added to another parent window");
 
-		_children.add(wnd);
-		wnd->_parent = this;
+		EVENT({
+			_children.add(wnd);
+			wnd->_parent = this;
+		}, =);
 	}
 
 	void Window::removeWindow(Window* wnd)
 	{
 		assert(wnd->_parent == this && "Child window is not owned by this window");
 
-		_children.remove(wnd);
-		wnd->_parent = nullptr;
+		EVENT({
+			_children.remove(wnd);
+			wnd->_parent = nullptr;
+		}, =);
 	}
 
-	void Window::updateInternal()
+	void Window::update()
 	{
 		bool opened = true;
 		ImGui::Begin(ToStdString(_name).c_str(), &opened);

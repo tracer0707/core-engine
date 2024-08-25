@@ -33,7 +33,7 @@ namespace Editor
 		int _width = 400;
 		int _height = 300;
 
-		void updateInternal();
+		void update();
 
 	public:
 		Window(UString name);
