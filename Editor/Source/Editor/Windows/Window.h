@@ -16,6 +16,13 @@ namespace Editor
 		Right
 	};
 
+	class DockArea
+	{
+	public:
+		unsigned int area1 = 0;
+		unsigned int area2 = 0;
+	};
+
 	class Control;
 
 	class Window: public Container
@@ -23,11 +30,11 @@ namespace Editor
 		friend class WindowManager;
 
 	private:
-		unsigned int _id = -1;
+		unsigned long long _id = -1;
+
+		DockArea _dockArea;
+
 		UString _name;
-		Window* _dockParent = nullptr;
-		DockDirection _dockDirection = DockDirection::None;
-		float _splitSize = 0.5f;
 		int _width = 400;
 		int _height = 300;
 
@@ -39,19 +46,14 @@ namespace Editor
 
 		UString getName() { return _name; };
 
-		void setDockParent(Window* value) { _dockParent = value; }
-		Window* getDockParent() { return _dockParent; };
-
 		int getWidth() { return _width; }
 		void setWidth(int value) { _width = value; }
 
 		int getHeight() { return _height; }
 		void setHeight(int value) { _height = value; }
 
-		DockDirection getDockDirection() { return _dockDirection; };
-		void setDockDirection(DockDirection dockDirection) { _dockDirection = dockDirection; };
+		unsigned long long getId() { return _id; }
 
-		float getSplitSize() { return _splitSize; }
-		void setSplitSize(float value) { _splitSize = value; }
+		DockArea dock(DockDirection dockDirection, unsigned int relativeTo, float splitSize);
 	};
 }

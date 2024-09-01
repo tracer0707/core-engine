@@ -4,11 +4,14 @@
 #include <imgui_internal.h>
 
 #include <Shared/String.h>
+#include <Shared/Hash.h>
 
 #include "Window.h"
 
 namespace Editor
 {
+	const int MAIN_MENU_SIZE = 19;
+
 	WindowManager::WindowManager()
 	{
 		ImGuiIO& io = ImGui::GetIO();
@@ -38,8 +41,8 @@ namespace Editor
 		bool open = true;
 		ImGuiID dockID = ImGui::GetID("HUB_DockSpace");
 
-		ImGui::SetNextWindowPos(ImVec2(0, 0));
-		ImGui::SetNextWindowSize(ImVec2(width, height));
+		ImGui::SetNextWindowPos(ImVec2(0, MAIN_MENU_SIZE));
+		ImGui::SetNextWindowSize(ImVec2(width, height - MAIN_MENU_SIZE));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -61,25 +64,11 @@ namespace Editor
 			ImGui::DockBuilderAddNode(dockID, ImGuiDockNodeFlags_DockSpace);
 			ImGui::DockBuilderSetNodeSize(dockID, ImVec2(width, height));
 
+			if (_onDock != nullptr) _onDock();
+
 			for (auto it : _windows)
 			{
-				ImGuiDir dir;
-
-				switch (it->_dockDirection)
-				{
-					case DockDirection::None: dir = ImGuiDir_None; break;
-					case DockDirection::Left: dir = ImGuiDir_Left; break;
-					case DockDirection::Right: dir = ImGuiDir_Right; break;
-					case DockDirection::Up: dir = ImGuiDir_Up; break;
-					case DockDirection::Down: dir = ImGuiDir_Down; break;
-					default: dir = ImGuiDir_None; break;
-				}
-
-				if (it->_dockDirection == DockDirection::None) continue;
-				
-				ImGuiID split1ID;
-				ImGuiID split2ID = ImGui::DockBuilderSplitNode(dockID, dir, it->_splitSize, nullptr, &split1ID);
-				ImGui::DockBuilderDockWindow(ToStdString(it->_name).c_str(), split2ID);
+				ImGui::DockBuilderDockWindow(ToStdString(it->_name).c_str(), it->_dockArea.area1);
 			}
 
 			ImGui::DockBuilderFinish(dockID);
