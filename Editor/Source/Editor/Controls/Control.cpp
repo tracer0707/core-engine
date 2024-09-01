@@ -2,9 +2,7 @@
 
 namespace Editor
 {
-	Control::Control(): Container()
-	{
-	}
+	Control::Control() : Container() {}
 
 	Control::~Control()
 	{

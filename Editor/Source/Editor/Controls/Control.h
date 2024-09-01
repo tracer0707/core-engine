@@ -11,13 +11,13 @@ namespace Editor
 	{
 		friend class Container;
 
-	private:
+	protected:
 		Container* _parent = nullptr;
-
-		virtual void update() = 0;
 
 	public:
 		Control();
 		virtual ~Control();
+
+		virtual void update() = 0;
 	};
 }

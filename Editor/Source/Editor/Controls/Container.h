@@ -11,6 +11,8 @@ namespace Editor
 	protected:
 		Core::List<Control*> _controls;
 
+		void updateControls();
+
 	public:
 		Container();
 		~Container();
@@ -19,7 +21,5 @@ namespace Editor
 		void removeControl(Control* value);
 		Control* getControl(int index) { return _controls.get(index); }
 		int getControlsCount() { return _controls.count(); }
-
-		void updateControls();
 	};
 }

@@ -1,0 +1,31 @@
+#include "MenuItem.h"
+
+#include <imgui.h>
+
+namespace Editor
+{
+	MenuItem::~MenuItem() {}
+
+	void MenuItem::update()
+	{
+		if (_controls.count() > 0)
+		{
+			if (ImGui::BeginMenu(ToStdString(_text).c_str()))
+			{
+				for (auto it : _controls)
+				{
+					it->update();
+				}
+
+				ImGui::EndMenu();
+			}
+		}
+		else
+		{
+			if (ImGui::MenuItem(ToStdString(_text).c_str()))
+			{
+				if (_onClick != nullptr) _onClick();
+			}
+		}
+	}
+}

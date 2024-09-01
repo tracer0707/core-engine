@@ -6,9 +6,7 @@
 
 namespace Editor
 {
-	Container::Container()
-	{
-	}
+	Container::Container() {}
 
 	Container::~Container()
 	{

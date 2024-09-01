@@ -10,6 +10,7 @@ namespace Editor
 	{
 	private:
 		TreeView* tvBrushes = nullptr;
+
 	public:
 		CSGWindow();
 		virtual ~CSGWindow();

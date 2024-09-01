@@ -84,6 +84,18 @@
     <ClCompile Include="Source\Editor\Windows\MenuWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\LinearLayout.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\MenuItem.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\Separator.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\TreeNode.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\Editor.h">
@@ -139,6 +151,18 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\MenuWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\LinearLayout.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\MenuItem.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Separator.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\TreeNode.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

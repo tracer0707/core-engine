@@ -4,16 +4,20 @@
 
 namespace Editor
 {
-	Button::Button(): Control()
+	Button::Button() : Control() {}
+
+	Button::Button(UString text) : Control()
 	{
+		_text = text;
 	}
 
-	Button::~Button()
-	{
-	}
+	Button::~Button() {}
 
 	void Button::update()
 	{
-		ImGui::Button(ToStdString(text).c_str());
+		if (ImGui::Button(ToStdString(_text).c_str()))
+		{
+			if (_onClick != nullptr) _onClick();
+		}
 	}
 }

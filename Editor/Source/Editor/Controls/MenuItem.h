@@ -2,23 +2,25 @@
 
 #include <functional>
 
+#include <Shared/List.h>
 #include <Shared/String.h>
 
 #include "Control.h"
 
 namespace Editor
 {
-	class Button: public Control
+	class MenuItem : public Control
 	{
+		friend class MenuBar;
+
 	private:
 		UString _text = "";
-
+		
 		std::function<void()> _onClick = nullptr;
 
 	public:
-		Button();
-		Button(UString text);
-		virtual ~Button();
+		MenuItem(UString text) { _text = text; }
+		~MenuItem();
 
 		virtual void update();
 
