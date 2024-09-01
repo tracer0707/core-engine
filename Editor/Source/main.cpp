@@ -56,8 +56,11 @@ int main(int argc, char* argv[])
     inspectorWindow = new Editor::InspectorWindow();
     csgWindow = new Editor::CSGWindow();
 
+    menuWindow->setHasTitle(false);
+    menuWindow->setCanAcceptDocking(false);
+
     windowManager->setOnDock([] {
-        auto dockMenu = menuWindow->dock(Editor::DockDirection::Up, 0, 0.08f);
+        auto dockMenu = menuWindow->dock(Editor::DockDirection::Up, 0, 0.05f);
         auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, dockMenu.area2, 0.25);
         auto dockCsg = csgWindow->dock(Editor::DockDirection::Left, dockInspector.area2, 0.2f); 
     });

@@ -38,6 +38,9 @@ namespace Editor
 		int _width = 400;
 		int _height = 300;
 
+		bool _hasTitle = true;
+		bool _canAcceptDocking = true;
+
 		void update();
 
 	public:
@@ -51,6 +54,12 @@ namespace Editor
 
 		int getHeight() { return _height; }
 		void setHeight(int value) { _height = value; }
+
+		void setHasTitle(bool value) { _hasTitle = value; }
+		bool getHasTitle() { return _hasTitle; }
+
+		void setCanAcceptDocking(bool value) { _canAcceptDocking = value; }
+		bool getCanAcceptDocking() { return _canAcceptDocking; }
 
 		unsigned long long getId() { return _id; }
 

@@ -10,6 +10,51 @@ namespace Editor
 
 	MenuBar::~MenuBar()
 	{
+		for (auto it : _menuItems)
+		{
+			delete it;
+		}
+
+		_menuItems.clear();
+	}
+
+	MenuItem::~MenuItem()
+	{
+		for (auto it : _menuItems)
+		{
+			delete it;
+		}
+
+		_menuItems.clear();
+	}
+
+	void MenuItem::update()
+	{
+		if (_text == "-")
+		{
+			ImGui::Separator();
+			return;
+		}
+
+		if (_menuItems.count() > 0)
+		{
+			if (ImGui::BeginMenu(ToStdString(_text).c_str()))
+			{
+				for (auto it : _menuItems)
+				{
+					it->update();
+				}
+
+				ImGui::EndMenu();
+			}
+		}
+		else
+		{
+			if (ImGui::MenuItem(ToStdString(_text).c_str()))
+			{
+				if (_onClick != nullptr) _onClick();
+			}
+		}
 	}
 
 	void MenuBar::update()
@@ -22,21 +67,9 @@ namespace Editor
 
 		if (_menu)
 		{
-			if (ImGui::BeginMenu("File"))
+			for (auto it : _menuItems)
 			{
-				if (ImGui::MenuItem("Create"))
-				{
-				}
-				if (ImGui::MenuItem("Open", "Ctrl+O"))
-				{
-				}
-				if (ImGui::MenuItem("Save", "Ctrl+S"))
-				{
-				}
-				if (ImGui::MenuItem("Save as.."))
-				{
-				}
-				ImGui::EndMenu();
+				it->update();
 			}
 
 			if (_isMainMenu)
