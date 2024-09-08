@@ -1,18 +1,18 @@
 #pragma once
 
-#include "Window.h"
-
 namespace Editor
 {
 	class MenuBar;
 
-	class ToolWindow : public Window
+	class MainMenu
 	{
 	private:
 		MenuBar* _menuBar = nullptr;
 
 	public:
-		ToolWindow();
-		virtual ~ToolWindow();
+		MainMenu();
+		~MainMenu();
+
+		MenuBar* getMenuBar() { return _menuBar; }
 	};
 }

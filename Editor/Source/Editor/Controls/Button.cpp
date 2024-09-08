@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include <System/EventHandler.h>
+
 #include <Assets/Texture.h>
 
 namespace Editor
@@ -30,7 +32,10 @@ namespace Editor
 
 		if (hasClick)
 		{
-			if (_onClick != nullptr) _onClick();
+			if (_onClick != nullptr)
+			{
+				Core::EventHandler::singleton()->addEvent(_onClick);
+			}
 		}
 	}
 }

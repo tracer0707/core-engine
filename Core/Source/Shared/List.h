@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <vector>
+#include <functional>
 
 namespace Core
 {
@@ -24,6 +25,8 @@ namespace Core
 		T* ptr();
 		std::vector<T>::iterator begin() { return list.begin(); }
 		std::vector<T>::iterator end() { return list.end(); }
+		bool tryFind(T& out, std::function<bool(T)>);
+		bool tryFind(T search);
 
 		List& operator = (std::vector<T> other);
 	};
@@ -86,6 +89,25 @@ namespace Core
 	inline T* List<T>::ptr()
 	{
 		return &list[0];
+	}
+
+	template<typename T>
+	inline bool List<T>::tryFind(T& out, std::function<bool(T)> func)
+	{
+		auto it = std::find_if(list.begin(), list.end(), func);
+		if (it == list.end()) return false;
+
+		out = *it;
+		return true;
+	}
+
+	template<typename T>
+	inline bool List<T>::tryFind(T search)
+	{
+		auto it = std::find(list.begin(), list.end(), search);
+		if (it == list.end()) return false;
+
+		return true;
 	}
 
 	template<typename T>

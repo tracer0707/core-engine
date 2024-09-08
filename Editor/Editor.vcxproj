@@ -147,16 +147,23 @@
     <ClCompile Include="Source\Editor\Controls\TreeView.cpp" />
     <ClCompile Include="Source\Editor\Editor.cpp" />
     <ClCompile Include="Source\Editor\Gizmo.cpp" />
+    <ClCompile Include="Source\Editor\Modifiers\CSGModifier.cpp" />
+    <ClCompile Include="Source\Editor\Modifiers\Modifier.cpp" />
+    <ClCompile Include="Source\Editor\Modifiers\ModifierManager.cpp" />
     <ClCompile Include="Source\Editor\Scene.cpp" />
     <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\EditWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\GizmoWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\InspectorWindow.cpp" />
-    <ClCompile Include="Source\Editor\Windows\ToolWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\MainMenu.cpp" />
+    <ClCompile Include="Source\Editor\Windows\ObjectWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\Window.cpp" />
     <ClCompile Include="Source\Editor\Windows\WindowManager.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Source\CSG\CSGBrush.h" />
     <ClInclude Include="Source\CSG\CSGBrushCube.h" />
     <ClInclude Include="Source\CSG\CSGModel.h" />
@@ -171,13 +178,25 @@
     <ClInclude Include="Source\Editor\Controls\TreeView.h" />
     <ClInclude Include="Source\Editor\Editor.h" />
     <ClInclude Include="Source\Editor\Gizmo.h" />
+    <ClInclude Include="Source\Editor\Modifiers\CSGModifier.h" />
+    <ClInclude Include="Source\Editor\Modifiers\Modifier.h" />
+    <ClInclude Include="Source\Editor\Modifiers\ModifierManager.h" />
     <ClInclude Include="Source\Editor\Scene.h" />
     <ClInclude Include="Source\Editor\Windows\AssetsWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\EditWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\GizmoWindow.h" />
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h" />
     <ClInclude Include="Source\Editor\Windows\InspectorWindow.h" />
-    <ClInclude Include="Source\Editor\Windows\ToolWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\MainMenu.h" />
+    <ClInclude Include="Source\Editor\Windows\ObjectWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="corelogo.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

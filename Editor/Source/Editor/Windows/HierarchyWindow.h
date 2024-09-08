@@ -9,7 +9,7 @@ namespace Editor
 	class HierarchyWindow : public Window
 	{
 	private:
-		TreeView* tvBrushes = nullptr;
+		TreeView* _objectTree = nullptr;
 
 	public:
 		HierarchyWindow();

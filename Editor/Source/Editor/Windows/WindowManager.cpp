@@ -8,6 +8,8 @@
 
 #include "Window.h"
 
+#include "../Controls/MenuBar.h"
+
 namespace Editor
 {
 	const int MAIN_MENU_SIZE = 19;
@@ -18,6 +20,8 @@ namespace Editor
 
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 		io.ConfigWindowsMoveFromTitleBarOnly = true;
+
+		ImGui::GetStyle().ItemSpacing = ImVec2(4, 4);
 	}
 
 	WindowManager::~WindowManager()
@@ -76,6 +80,9 @@ namespace Editor
 
 		ImGui::DockSpace(dockID, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode | ImGuiDockNodeFlags_NoWindowMenuButton);
 		ImGui::End();
+
+		if (_menuBar != nullptr)
+			_menuBar->update();
 
 		for (auto it : _windows)
 		{

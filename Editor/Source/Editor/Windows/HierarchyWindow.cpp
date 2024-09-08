@@ -8,28 +8,16 @@ namespace Editor
 {
 	HierarchyWindow::HierarchyWindow() : Window("Hierarchy")
 	{
-		LinearLayout* layout1 = new LinearLayout(LayoutDirection::Vertical);
-		LinearLayout* layout2 = new LinearLayout(LayoutDirection::Horizontal);
+		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
+		
+		_objectTree = new TreeView();
 
-		Button* addModelButton = new Button("Add model");
+		layoutMain->addControl(_objectTree);
 
-		Button* addCubeButton = new Button("Add cube");
-		Button* addSphereButton = new Button("Add sphere");
-
-		layout1->addControl(addModelButton);
-
-		layout2->addControl(addCubeButton);
-		layout2->addControl(addSphereButton);
-
-		tvBrushes = new TreeView();
-
-		addControl(layout1);
-		addControl(layout2);
-		addControl(tvBrushes);
+		addControl(layoutMain);
 	}
 
 	HierarchyWindow::~HierarchyWindow()
 	{
-		tvBrushes = nullptr;
 	}
 }

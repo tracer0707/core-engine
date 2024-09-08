@@ -25,6 +25,9 @@
     <Filter Include="Исходные файлы\Editor\Controls">
       <UniqueIdentifier>{de117b95-b328-4047-84e7-f9e2b82dde62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Editor\Modifiers">
+      <UniqueIdentifier>{4e292aeb-6545-4956-8849-f5663955fe8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor\Editor.cpp">
@@ -90,8 +93,26 @@
     <ClCompile Include="Source\Editor\Controls\TreeNode.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\ToolWindow.cpp">
+    <ClCompile Include="Source\Editor\Windows\GizmoWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\ObjectWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\MainMenu.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\EditWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Modifiers\CSGModifier.cpp">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Modifiers\Modifier.cpp">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Modifiers\ModifierManager.cpp">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +176,39 @@
     <ClInclude Include="Source\Editor\Controls\TreeNode.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\ToolWindow.h">
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\GizmoWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\ObjectWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\MainMenu.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\EditWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Modifiers\CSGModifier.h">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Modifiers\Modifier.h">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Modifiers\ModifierManager.h">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Editor.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="corelogo.ico">
+      <Filter>Файлы ресурсов</Filter>
+    </Image>
   </ItemGroup>
 </Project>
