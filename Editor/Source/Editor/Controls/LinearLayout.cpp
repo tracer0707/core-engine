@@ -23,6 +23,10 @@ namespace Editor
 			{
 				ImGui::SameLine();
 			}
+			else if (_controls.count() > 1)
+			{
+				ImGui::NewLine();
+			}
 		}
 	}
 }

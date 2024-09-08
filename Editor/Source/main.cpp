@@ -14,9 +14,9 @@
 #include <Components/Transform.h>
 
 #include "Editor/Windows/WindowManager.h"
-#include "Editor/Windows/MenuWindow.h"
+#include "Editor/Windows/ToolWindow.h"
 #include "Editor/Windows/InspectorWindow.h"
-#include "Editor/Windows/CSGWindow.h"
+#include "Editor/Windows/HierarchyWindow.h"
 #include "Editor/Editor.h"
 
 Core::Object* object = nullptr;
@@ -25,9 +25,9 @@ Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
 
 Editor::WindowManager* windowManager = nullptr;
-Editor::MenuWindow* menuWindow = nullptr;
+Editor::ToolWindow* toolWindow = nullptr;
 Editor::InspectorWindow* inspectorWindow = nullptr;
-Editor::CSGWindow* csgWindow = nullptr;
+Editor::HierarchyWindow* hierarchyWindow = nullptr;
 
 int main(int argc, char* argv[])
 {
@@ -52,22 +52,22 @@ int main(int argc, char* argv[])
 
     windowManager = new Editor::WindowManager();
     
-    menuWindow = new Editor::MenuWindow();
+    toolWindow = new Editor::ToolWindow();
     inspectorWindow = new Editor::InspectorWindow();
-    csgWindow = new Editor::CSGWindow();
+    hierarchyWindow = new Editor::HierarchyWindow();
 
-    menuWindow->setHasTitle(false);
-    menuWindow->setCanAcceptDocking(false);
+    toolWindow->setHasTitle(false);
+    toolWindow->setCanAcceptDocking(false);
+    toolWindow->setCanDock(false);
 
     windowManager->setOnDock([] {
-        auto dockMenu = menuWindow->dock(Editor::DockDirection::Up, 0, 0.05f);
-        auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, dockMenu.area2, 0.25);
-        auto dockCsg = csgWindow->dock(Editor::DockDirection::Left, dockInspector.area2, 0.2f); 
+        auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, 0, 0.25);
+        auto dockHierarchy = hierarchyWindow->dock(Editor::DockDirection::Right, dockInspector.area2, 0.2f);
     });
 
-    windowManager->addWindow(menuWindow);
+    windowManager->addWindow(toolWindow);
     windowManager->addWindow(inspectorWindow);
-    windowManager->addWindow(csgWindow);
+    windowManager->addWindow(hierarchyWindow);
 
     bool isRunning = true;
 

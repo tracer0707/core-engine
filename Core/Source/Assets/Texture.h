@@ -6,6 +6,7 @@
 
 #include "../Renderer/Color.h"
 #include "../Classes/bc7compressor.h"
+#include "../Shared/String.h"
 
 namespace Core
 {
@@ -36,7 +37,9 @@ namespace Core
 
 		virtual const void unload();
 
-		static Texture* loadFromFile(const char* fileName, TextureFormat fmt);
+		int getNativeId() { return nativeId; }
+
+		static Texture* loadFromFile(UString fileName, TextureFormat fmt);
 		static Texture* loadFromBytes(unsigned char* data, int w, int h, int bpp, TextureFormat fmt);
 
 		void rescale(int newW, int newH);

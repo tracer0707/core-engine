@@ -6,13 +6,13 @@ namespace Editor
 {
 	class MenuBar;
 
-	class MenuWindow : public Window
+	class ToolWindow : public Window
 	{
 	private:
 		MenuBar* _menuBar = nullptr;
 
 	public:
-		MenuWindow();
-		virtual ~MenuWindow();
+		ToolWindow();
+		virtual ~ToolWindow();
 	};
 }

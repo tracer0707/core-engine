@@ -29,16 +29,23 @@ namespace Core
 		Asset::unload();
 	}
 
-	Texture* Texture::loadFromFile(const char* fileName, TextureFormat fmt)
+	Texture* Texture::loadFromFile(UString fileName, TextureFormat fmt)
 	{
 		Texture* tex = new Texture();
 		tex->format = fmt;
 
-		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(fileName);
-		FIBITMAP* texture = FreeImage_Load(_fmt, fileName);
-		tex->_bitmap = FreeImage_ConvertTo32Bits(texture);
+		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(ToStdString(fileName).c_str());
+		FIBITMAP* texture = FreeImage_Load(_fmt, ToStdString(fileName).c_str());
+		
+		if (FreeImage_GetBPP(texture) != 32)
+		{
+			FIBITMAP* convert = FreeImage_ConvertTo32Bits(texture);
+			FreeImage_Unload(texture);
+			texture = convert;
+		}
+
+		tex->_bitmap = texture;
 		tex->updateSize();
-		FreeImage_Unload(texture);
 
 		tex->makeSquare();
 

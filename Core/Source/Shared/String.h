@@ -3,8 +3,6 @@
 #include <string>
 
 #include <unicode/unistr.h>
-#include <unicode/ustream.h>
-#include <unicode/locid.h>
 
 #define UString icu::UnicodeString
 #define ToStdString(VAL) Core::String::toStdString(VAL)

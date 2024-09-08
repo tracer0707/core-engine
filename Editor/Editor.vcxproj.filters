@@ -60,9 +60,6 @@
     <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\CSGWindow.cpp">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
@@ -81,9 +78,6 @@
     <ClCompile Include="Source\Editor\Controls\MenuBar.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\MenuWindow.cpp">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\Controls\LinearLayout.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClCompile>
@@ -95,6 +89,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\Controls\TreeNode.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\ToolWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,9 +125,6 @@
     <ClInclude Include="Source\Editor\Windows\AssetsWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\CSGWindow.h">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
@@ -149,9 +143,6 @@
     <ClInclude Include="Source\Editor\Controls\MenuBar.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\MenuWindow.h">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\Controls\LinearLayout.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
@@ -163,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Controls\TreeNode.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\ToolWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

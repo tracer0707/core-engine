@@ -9,11 +9,20 @@ namespace Editor
 		Horizontal,
 		Vertical,
 	};
+	
+	enum class LayoutAlignment
+	{
+		Start,
+		Center,
+		End
+	};
 
 	class LinearLayout : public Control
 	{
 	private:
 		LayoutDirection _direction = LayoutDirection::Horizontal;
+		LayoutAlignment _hAlignment = LayoutAlignment::Start;
+		LayoutAlignment _vAlignment = LayoutAlignment::Start;
 
 	public:
 		LinearLayout();
@@ -24,5 +33,11 @@ namespace Editor
 
 		void setDirection(LayoutDirection value) { _direction = value; }
 		LayoutDirection getDirection() { return _direction; }
+
+		void setAlignmentHorizontal(LayoutAlignment value) { _hAlignment = value; }
+		LayoutAlignment getAlignmentHorizontal() { return _hAlignment; }
+
+		void setAlignmentVertical(LayoutAlignment value) { _vAlignment = value; }
+		LayoutAlignment getAlignmentVertical() { return _vAlignment; }
 	};
 }

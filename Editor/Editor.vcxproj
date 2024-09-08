@@ -118,7 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;_SILENCE_ALL_CXX17_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>../Core/Source;../Core/Dependencies/glew/include;../Core/Dependencies/icu/include;../Core/Dependencies/glm/include;../Core/Dependencies/imgui;Dependencies/Carve/include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../Core/Source;../Core/Dependencies/glew/include;../Core/Dependencies/icu/include;../Core/Dependencies/glm/include;../Core/Dependencies/imgui;../Core/Dependencies/FreeImage/include;../Core/Dependencies/bc7enc/include;Dependencies/Carve/include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <DisableSpecificWarnings>
       </DisableSpecificWarnings>
@@ -149,10 +149,9 @@
     <ClCompile Include="Source\Editor\Gizmo.cpp" />
     <ClCompile Include="Source\Editor\Scene.cpp" />
     <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp" />
-    <ClCompile Include="Source\Editor\Windows\CSGWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\InspectorWindow.cpp" />
-    <ClCompile Include="Source\Editor\Windows\MenuWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\ToolWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\Window.cpp" />
     <ClCompile Include="Source\Editor\Windows\WindowManager.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -174,10 +173,9 @@
     <ClInclude Include="Source\Editor\Gizmo.h" />
     <ClInclude Include="Source\Editor\Scene.h" />
     <ClInclude Include="Source\Editor\Windows\AssetsWindow.h" />
-    <ClInclude Include="Source\Editor\Windows\CSGWindow.h" />
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h" />
     <ClInclude Include="Source\Editor\Windows\InspectorWindow.h" />
-    <ClInclude Include="Source\Editor\Windows\MenuWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\ToolWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
   </ItemGroup>

@@ -6,12 +6,21 @@
 
 #include "Control.h"
 
+namespace Core
+{
+	class Texture;
+}
+
 namespace Editor
 {
 	class Button: public Control
 	{
 	private:
 		UString _text = "";
+
+		Core::Texture* _image = nullptr;
+		int _width = 0;
+		int _height = 0;
 
 		std::function<void()> _onClick = nullptr;
 
@@ -24,6 +33,17 @@ namespace Editor
 
 		UString getText() { return _text; }
 		void setText(UString value) { _text = value; }
+
+		void setImage(Core::Texture* value) { _image = value;  }
+		Core::Texture* getImage() { return _image;  }
+
+		void setWidth(int value) { _width = value; }
+		int getWidth() { return _width; }
+
+		void setHeight(int value) { _height = value; }
+		int getHeight() { return _height; }
+
+		void setSize(int width, int height) { _width = width; _height = height; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 	};

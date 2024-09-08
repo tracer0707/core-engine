@@ -40,6 +40,7 @@ namespace Editor
 
 		bool _hasTitle = true;
 		bool _canAcceptDocking = true;
+		bool _canDock = true;
 
 		void update();
 
@@ -60,6 +61,9 @@ namespace Editor
 
 		void setCanAcceptDocking(bool value) { _canAcceptDocking = value; }
 		bool getCanAcceptDocking() { return _canAcceptDocking; }
+
+		void setCanDock(bool value) { _canDock = value; }
+		bool getCanDock() { return _canDock; }
 
 		unsigned long long getId() { return _id; }
 

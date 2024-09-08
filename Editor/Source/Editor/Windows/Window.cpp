@@ -59,6 +59,11 @@ namespace Editor
 			_dockFlags |= ImGuiDockNodeFlags_NoDockingOverMe;
 		}
 
+		if (!_canDock)
+		{
+			_dockFlags |= ImGuiDockNodeFlags_NoDocking;
+		}
+
 		ImGuiWindowClass _wndClass;
 		_wndClass.DockNodeFlagsOverrideSet = _dockFlags;
 		ImGui::SetNextWindowClass(&_wndClass);
