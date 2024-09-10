@@ -3,6 +3,7 @@
 #include <Assets/Texture.h>
 #include <Shared/Path.h>
 #include <Shared/String.h>
+#include <System/EventHandler.h>
 
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
@@ -12,20 +13,12 @@
 
 namespace Editor
 {
-	ObjectWindow::ObjectWindow() : Window("Tools")
+	ObjectWindow::ObjectWindow() : Window("Objects")
 	{
 		/* Layout */
 
-		LinearLayout* layout1 = new LinearLayout(LayoutDirection::Horizontal);
-		LinearLayout* layout2 = new LinearLayout(LayoutDirection::Horizontal);
-		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
-
-		layout1->setAlignmentHorizontal(LayoutAlignment::Center);
-		layout2->setAlignmentHorizontal(LayoutAlignment::Center);
-
-		layoutMain->addControl(layout1);
-		layoutMain->addControl(layout2);
-
+		layoutMain = new LinearLayout(LayoutDirection::Horizontal);
+		
 		addControl(layoutMain);
 
 		/* CSG tool */
@@ -36,10 +29,14 @@ namespace Editor
 		csgTool->setImage(csgToolImage);
 
 		csgTool->setOnClick([=] {
-			ModifierManager::singleton()->setCurrentModifier(CSGModifier::NAME);
+			disableAll();
+			if (setModifier(CSGModifier::NAME))
+			{
+				csgTool->setActive(true);
+			}
 		});
 
-		layout1->addControl(csgTool);
+		layoutMain->addControl(csgTool);
 
 		/* Light tool */
 
@@ -48,11 +45,13 @@ namespace Editor
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
 
-		csgTool->setOnClick([=] {
-			
-		});
+		lightTool->setOnClick([=] {
+			disableAll();
+			ModifierManager::singleton()->unsetCurrentModifier();
+			lightTool->setActive(true);
+			});
 
-		layout1->addControl(lightTool);
+		layoutMain->addControl(lightTool);
 
 		/* Camera tool */
 
@@ -61,63 +60,41 @@ namespace Editor
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);
 
-		csgTool->setOnClick([=] {
-			
-		});
+		cameraTool->setOnClick([=] {
+			disableAll();
+			ModifierManager::singleton()->unsetCurrentModifier();
+			cameraTool->setActive(true);
+			});
 
-		layout1->addControl(cameraTool);
+		layoutMain->addControl(cameraTool);
 
-		/* CSG cube */
-
-		Button* csgCube = new Button();
-		Core::Texture* csgCubeImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cube.png"), Core::TextureFormat::RGBA);
-		csgCube->setSize(32, 32);
-		csgCube->setImage(csgCubeImage);
-
-		/* CSG sphere */
-
-		Button* csgSphere = new Button();
-		Core::Texture* csgSphereImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/sphere.png"), Core::TextureFormat::RGBA);
-		csgSphere->setSize(32, 32);
-		csgSphere->setImage(csgSphereImage);
-
-		/* CSG cylinder */
-
-		Button* csgCylinder = new Button();
-		Core::Texture* csgCylinderImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cylinder.png"), Core::TextureFormat::RGBA);
-		csgCylinder->setSize(32, 32);
-		csgCylinder->setImage(csgCylinderImage);
-
-		/* CSG cone */
-
-		Button* csgCone = new Button();
-		Core::Texture* csgConeImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cone.png"), Core::TextureFormat::RGBA);
-		csgCone->setSize(32, 32);
-		csgCone->setImage(csgConeImage);
-
-		/* CSG stair */
-
-		Button* csgStair = new Button();
-		Core::Texture* csgStairImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/stairs.png"), Core::TextureFormat::RGBA);
-		csgStair->setSize(32, 32);
-		csgStair->setImage(csgStairImage);
-
-		/* CSG polygon */
-
-		Button* csgPolygon = new Button();
-		Core::Texture* csgPolygonImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/polygon.png"), Core::TextureFormat::RGBA);
-		csgPolygon->setSize(32, 32);
-		csgPolygon->setImage(csgPolygonImage);
-
-		layout2->addControl(csgCube);
-		layout2->addControl(csgSphere);
-		layout2->addControl(csgCylinder);
-		layout2->addControl(csgCone);
-		layout2->addControl(csgStair);
-		layout2->addControl(csgPolygon);
+		EVENT({
+			disableAll();
+		}, =);
 	}
 
 	ObjectWindow::~ObjectWindow()
 	{
+	}
+
+	void ObjectWindow::disableAll()
+	{
+		for (int i = 0; i < layoutMain->getControlsCount(); ++i)
+		{
+			Button* button = (Button*)layoutMain->getControl(i);
+			button->setActive(false);
+		}
+	}
+
+	bool ObjectWindow::setModifier(UString name)
+	{
+		if (ModifierManager::singleton()->getCurrentModifierName() == name)
+		{
+			ModifierManager::singleton()->unsetCurrentModifier();
+			return false;
+		}
+
+		ModifierManager::singleton()->setCurrentModifier(name);
+		return true;
 	}
 }

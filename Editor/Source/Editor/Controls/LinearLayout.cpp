@@ -29,6 +29,8 @@ namespace Editor
 
 	void LinearLayout::update()
 	{
+		if (!_visible) return;
+
 		if (_hAlignment != LayoutAlignment::Start || _vAlignment != LayoutAlignment::Start)
 		{
 			float prevX = ImGui::GetCursorPosX();
@@ -44,7 +46,9 @@ namespace Editor
 
 			for (auto it : _controls)
 			{
+				ImGui::PushID("null");
 				it->update();
+				ImGui::PopID();
 				ImVec2 sz = ImGui::GetItemRectSize();
 				width += sz.x;
 				height += sz.y;

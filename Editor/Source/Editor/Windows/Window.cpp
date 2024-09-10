@@ -45,6 +45,8 @@ namespace Editor
 
 	void Window::update()
 	{
+		if (!_visible) return;
+
 		ImGuiWindowFlags _flags = 0;
 		ImGuiDockNodeFlags _dockFlags = 0;
 
@@ -68,8 +70,7 @@ namespace Editor
 		_wndClass.DockNodeFlagsOverrideSet = _dockFlags;
 		ImGui::SetNextWindowClass(&_wndClass);
 
-		bool opened = true;
-		ImGui::Begin(ToStdString(_name).c_str(), &opened, _flags);
+		ImGui::Begin(ToStdString(_name).c_str(), &_visible, _flags);
 		updateControls();
 		ImGui::End();
 	}

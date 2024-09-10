@@ -1,19 +1,22 @@
-#include "EditWindow.h"
+#include "CSGEditWindow.h"
 
 #include <Assets/Texture.h>
 #include <Shared/Path.h>
 #include <Shared/String.h>
+#include <System/EventHandler.h>
 
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
+#include "../Modifiers/CSGModifier.h"
+
 namespace Editor
 {
-	EditWindow::EditWindow() : Window("Edit")
+	CSGEditWindow::CSGEditWindow() : Window("Edit")
 	{
 		/* Layout */
 
-		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
+		layoutMain = new LinearLayout(LayoutDirection::Vertical);
 
 		addControl(layoutMain);
 
@@ -52,9 +55,23 @@ namespace Editor
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
 
 		layoutMain->addControl(csgEditFacesBtn);
+
+		EVENT({
+			disableAll();
+			csgAddBtn->setActive(true);
+		}, =);
 	}
 
-	EditWindow::~EditWindow()
+	CSGEditWindow::~CSGEditWindow()
 	{
+	}
+
+	void CSGEditWindow::disableAll()
+	{
+		for (int i = 0; i < layoutMain->getControlsCount(); ++i)
+		{
+			Button* button = (Button*)layoutMain->getControl(i);
+			button->setActive(false);
+		}
 	}
 }

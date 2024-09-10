@@ -152,12 +152,13 @@
     <ClCompile Include="Source\Editor\Modifiers\ModifierManager.cpp" />
     <ClCompile Include="Source\Editor\Scene.cpp" />
     <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp" />
-    <ClCompile Include="Source\Editor\Windows\EditWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\CSGEditWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\GizmoWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\InspectorWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\MainMenu.cpp" />
     <ClCompile Include="Source\Editor\Windows\ObjectWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\CSGObjectWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\Window.cpp" />
     <ClCompile Include="Source\Editor\Windows\WindowManager.cpp" />
     <ClCompile Include="Source\main.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Source\Editor\Controls\MenuBar.h" />
     <ClInclude Include="Source\Editor\Controls\MenuItem.h" />
     <ClInclude Include="Source\Editor\Controls\Separator.h" />
+    <ClInclude Include="Source\Editor\Controls\Style.h" />
     <ClInclude Include="Source\Editor\Controls\TreeNode.h" />
     <ClInclude Include="Source\Editor\Controls\TreeView.h" />
     <ClInclude Include="Source\Editor\Editor.h" />
@@ -183,12 +185,13 @@
     <ClInclude Include="Source\Editor\Modifiers\ModifierManager.h" />
     <ClInclude Include="Source\Editor\Scene.h" />
     <ClInclude Include="Source\Editor\Windows\AssetsWindow.h" />
-    <ClInclude Include="Source\Editor\Windows\EditWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\CSGEditWindow.h" />
     <ClInclude Include="Source\Editor\Windows\GizmoWindow.h" />
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h" />
     <ClInclude Include="Source\Editor\Windows\InspectorWindow.h" />
     <ClInclude Include="Source\Editor\Windows\MainMenu.h" />
     <ClInclude Include="Source\Editor\Windows\ObjectWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\CSGObjectWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
   </ItemGroup>

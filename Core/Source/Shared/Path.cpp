@@ -68,7 +68,8 @@ namespace Core
 
 	const UString Path::getFilePath(const UString& fileName)
 	{
-		std::filesystem::path p(fileName.getBuffer());
+		std::string str = ToStdString(fileName);
+		std::filesystem::path p(str);
 		std::filesystem::path dir = p.remove_filename();
 		UString _fpath = dir.generic_string().data();
 

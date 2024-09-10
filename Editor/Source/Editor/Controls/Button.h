@@ -17,10 +17,14 @@ namespace Editor
 	{
 	private:
 		UString _text = "";
+		UString _id = "";
 
 		Core::Texture* _image = nullptr;
+		
 		int _width = 0;
 		int _height = 0;
+
+		bool _active = true;
 
 		std::function<void()> _onClick = nullptr;
 
@@ -44,6 +48,9 @@ namespace Editor
 		int getHeight() { return _height; }
 
 		void setSize(int width, int height) { _width = width; _height = height; }
+
+		bool getActive() { return _active; }
+		void setActive(bool value);
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 	};

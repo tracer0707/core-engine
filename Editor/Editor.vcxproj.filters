@@ -96,13 +96,13 @@
     <ClCompile Include="Source\Editor\Windows\GizmoWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\ObjectWindow.cpp">
+    <ClCompile Include="Source\Editor\Windows\CSGObjectWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\Windows\MainMenu.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\EditWindow.cpp">
+    <ClCompile Include="Source\Editor\Windows\CSGEditWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\Modifiers\CSGModifier.cpp">
@@ -113,6 +113,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\Modifiers\ModifierManager.cpp">
       <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\ObjectWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -182,13 +185,13 @@
     <ClInclude Include="Source\Editor\Windows\GizmoWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\ObjectWindow.h">
+    <ClInclude Include="Source\Editor\Windows\CSGObjectWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\MainMenu.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\EditWindow.h">
+    <ClInclude Include="Source\Editor\Windows\CSGEditWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Modifiers\CSGModifier.h">
@@ -199,6 +202,12 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Modifiers\ModifierManager.h">
       <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Style.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\ObjectWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

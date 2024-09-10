@@ -38,6 +38,7 @@ namespace Editor
 		int _width = 400;
 		int _height = 300;
 
+		bool _visible = true;
 		bool _hasTitle = true;
 		bool _canAcceptDocking = true;
 		bool _canDock = true;
@@ -49,6 +50,9 @@ namespace Editor
 		virtual ~Window();
 
 		UString getName() { return _name; };
+
+		void setVisible(bool value) { _visible = value; }
+		bool getVisible() { return _visible; }
 
 		int getWidth() { return _width; }
 		void setWidth(int value) { _width = value; }

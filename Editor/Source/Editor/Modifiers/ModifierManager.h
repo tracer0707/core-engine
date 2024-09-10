@@ -15,12 +15,16 @@ namespace Editor
 
 		Modifier* _currentModifier = nullptr;
 
+		void enableWindows(bool enable);
+
 	public:
 		static ModifierManager* singleton();
 
 		void addModifier(Modifier* value) { _modifiers.add(value); }
 		
 		void setCurrentModifier(UString name);
+		void unsetCurrentModifier();
 		Modifier* getCurrentModifier() { return _currentModifier; }
+		UString getCurrentModifierName();
 	};
 }

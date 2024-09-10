@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include <GL/glew.h>
-#include <glm/mat4x4.hpp>
 
 #include <System/DeviceContext.h>
 #include <System/Time.h>
@@ -16,11 +15,12 @@
 #include "Editor/Windows/MainMenu.h"
 #include "Editor/Windows/WindowManager.h"
 #include "Editor/Windows/ObjectWindow.h"
+#include "Editor/Windows/CSGObjectWindow.h"
 #include "Editor/Windows/InspectorWindow.h"
 #include "Editor/Windows/HierarchyWindow.h"
 #include "Editor/Windows/AssetsWindow.h"
 #include "Editor/Windows/GizmoWindow.h"
-#include "Editor/Windows/EditWindow.h"
+#include "Editor/Windows/CSGEditWindow.h"
 
 #include "Editor/Modifiers/ModifierManager.h"
 #include "Editor/Modifiers/CSGModifier.h"
@@ -35,11 +35,12 @@ Core::Scene* scene = nullptr;
 Editor::MainMenu* mainMenu = nullptr;
 Editor::WindowManager* windowManager = nullptr;
 Editor::ObjectWindow* objectWindow = nullptr;
+Editor::CSGObjectWindow* csgObjectWindow = nullptr;
 Editor::InspectorWindow* inspectorWindow = nullptr;
 Editor::HierarchyWindow* hierarchyWindow = nullptr;
 Editor::AssetsWindow* assetsWindow = nullptr;
 Editor::GizmoWindow* gizmoWindow = nullptr;
-Editor::EditWindow* editWindow = nullptr;
+Editor::CSGEditWindow* csgEditWindow = nullptr;
 
 Editor::CSGModifier* csgModifier = nullptr;
 
@@ -67,24 +68,31 @@ int main(int argc, char* argv[])
     windowManager = new Editor::WindowManager();
     mainMenu = new Editor::MainMenu();
 
-    objectWindow = new Editor::ObjectWindow();
     inspectorWindow = new Editor::InspectorWindow();
     hierarchyWindow = new Editor::HierarchyWindow();
     assetsWindow = new Editor::AssetsWindow();
+    
     gizmoWindow = new Editor::GizmoWindow();
-    editWindow = new Editor::EditWindow();
-
-    objectWindow->setHasTitle(false);
-    objectWindow->setCanAcceptDocking(false);
-    objectWindow->setCanDock(false);
-
     gizmoWindow->setHasTitle(false);
     gizmoWindow->setCanAcceptDocking(false);
     gizmoWindow->setCanDock(false);
 
-    editWindow->setHasTitle(false);
-    editWindow->setCanAcceptDocking(false);
-    editWindow->setCanDock(false);
+    objectWindow = new Editor::ObjectWindow();
+    objectWindow->setHasTitle(false);
+    objectWindow->setCanAcceptDocking(false);
+    objectWindow->setCanDock(false);
+
+    csgObjectWindow = new Editor::CSGObjectWindow();
+    csgObjectWindow->setHasTitle(false);
+    csgObjectWindow->setCanAcceptDocking(false);
+    csgObjectWindow->setCanDock(false);
+    csgObjectWindow->setVisible(false);
+
+    csgEditWindow = new Editor::CSGEditWindow();
+    csgEditWindow->setHasTitle(false);
+    csgEditWindow->setCanAcceptDocking(false);
+    csgEditWindow->setCanDock(false);
+    csgEditWindow->setVisible(false);
 
     windowManager->setOnDock([] {
         auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, 0, 0.25);
@@ -95,13 +103,20 @@ int main(int argc, char* argv[])
     windowManager->setMenuBar(mainMenu->getMenuBar());
 
     windowManager->addWindow(objectWindow);
+    windowManager->addWindow(csgObjectWindow);
     windowManager->addWindow(gizmoWindow);
-    windowManager->addWindow(editWindow);
+    windowManager->addWindow(csgEditWindow);
     windowManager->addWindow(inspectorWindow);
     windowManager->addWindow(hierarchyWindow);
     windowManager->addWindow(assetsWindow);
 
     csgModifier = new Editor::CSGModifier();
+    csgModifier->addWindow(csgObjectWindow);
+    csgModifier->addWindow(csgEditWindow);
+
+    csgObjectWindow->setModifier(csgModifier);
+    csgEditWindow->setModifier(csgModifier);
+
     Editor::ModifierManager::singleton()->addModifier(csgModifier);
 
     bool isRunning = true;
