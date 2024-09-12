@@ -25,7 +25,8 @@
 #include "Editor/Modifiers/ModifierManager.h"
 #include "Editor/Modifiers/CSGModifier.h"
 
-#include "Editor/Editor.h"
+#include "Editor/CameraController.h"
+#include "Editor/Rendering.h"
 
 Core::Object* object = nullptr;
 Core::Camera* camera = nullptr;
@@ -50,8 +51,6 @@ int main(int argc, char* argv[])
     if (ctx->createWindow("Core Engine", 1366, 768) != 0)
         return -1;
 
-    scene = new Core::Scene();
-
     object = new Core::Object();
     transform = object->addComponent<Core::Transform*>();
     camera = object->addComponent<Core::Camera*>();
@@ -59,11 +58,10 @@ int main(int argc, char* argv[])
     transform->setPosition(glm::vec3(0, 5, 5));
     transform->setRotation(glm::vec3(-10, 0, 0));
 
+    scene = new Core::Scene();
     scene->setMainCamera(camera);
 
-    Editor::Editor::init();
-    Editor::Editor::setScene(scene);
-    Editor::Editor::setCamera(camera);
+    Editor::CameraController::init(camera);
 
     windowManager = new Editor::WindowManager();
     mainMenu = new Editor::MainMenu();
@@ -124,14 +122,14 @@ int main(int argc, char* argv[])
     while (isRunning)
     {
         ctx->update(isRunning);
-        Editor::Editor::update();
+        Editor::CameraController::update();
         
         int width = Core::Renderer::singleton()->getWidth();
         int height = Core::Renderer::singleton()->getHeight();
 
         Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        Editor::Editor::render();
+        Editor::Rendering::renderGrid(camera);
         scene->render();
 
         ctx->renderUiBegin();
@@ -142,8 +140,6 @@ int main(int argc, char* argv[])
 
         ctx->setWindowTitle(("Core Engine: " + std::to_string(Core::Time::getFramesPerSecond()) + "fps").c_str());
     }
-
-    Editor::Editor::free();
 
     delete scene;
     delete windowManager;
