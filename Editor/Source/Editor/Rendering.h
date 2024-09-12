@@ -7,7 +7,7 @@ namespace Core
 
 namespace Editor
 {
-	class Scene
+	class Rendering
 	{
 	public:
 		static void renderGrid(Core::Camera* camera);

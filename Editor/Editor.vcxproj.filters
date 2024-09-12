@@ -30,7 +30,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Editor\Editor.cpp">
+    <ClCompile Include="Source\Editor\CameraController.cpp">
       <Filter>Исходные файлы\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\Gizmo.cpp">
@@ -48,7 +48,7 @@
     <ClCompile Include="Source\CSG\CSGBrushCube.cpp">
       <Filter>Исходные файлы\CSG</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Scene.cpp">
+    <ClCompile Include="Source\Editor\Rendering.cpp">
       <Filter>Исходные файлы\Editor</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\Windows\Window.cpp">
@@ -119,7 +119,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Editor\Editor.h">
+    <ClInclude Include="Source\Editor\CameraController.h">
       <Filter>Исходные файлы\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Gizmo.h">
@@ -134,7 +134,7 @@
     <ClInclude Include="Source\CSG\CSGBrushCube.h">
       <Filter>Исходные файлы\CSG</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Scene.h">
+    <ClInclude Include="Source\Editor\Rendering.h">
       <Filter>Исходные файлы\Editor</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\Window.h">

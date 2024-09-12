@@ -1,4 +1,4 @@
-#include "Scene.h"
+#include "Rendering.h"
 
 #include <Renderer/Color.h>
 #include <Renderer/Renderer.h>
@@ -9,11 +9,8 @@
 
 namespace Editor
 {
-	void Scene::renderGrid(Core::Camera* camera)
+	void Rendering::renderGrid(Core::Camera* camera)
 	{
-		auto view = camera->getViewMatrix();
-		auto proj = camera->getProjectionMatrix();
-
 		Core::Color lineColor = Core::Color(0.8f, 0.8f, 0.8f, 0.8f);
 		Core::Color xColor = Core::Color(0.8f, 0.0f, 0.0f, 0.8f);
 		Core::Color zColor = Core::Color(0.0f, 0.0f, 0.8f, 0.8f);
@@ -60,8 +57,6 @@ namespace Editor
 			verts1.add(v2);
 		}
 		
-		glm::mat4 mtx = glm::identity<glm::mat4>();
-
 		startX = camPos.x / 64.0f * 64.0f;
 		int startZ = camPos.z / 64.0f * 64.0f;
 
@@ -99,6 +94,10 @@ namespace Editor
 			| C_ENABLE_DEPTH_WRITE
 			| C_ENABLE_CULL_FACE
 			| C_DEPTH_LEQUAL;
+
+		glm::mat4 view = camera->getViewMatrix();
+		glm::mat4 proj = camera->getProjectionMatrix();
+		glm::mat4 mtx = glm::identity<glm::mat4>();
 
 		Core::Primitives::lines(view, proj, mtx, verts1.ptr(), verts1.count(), flags);
 
