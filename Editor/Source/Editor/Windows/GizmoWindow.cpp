@@ -38,7 +38,7 @@ namespace Editor
 		/* Select */
 
 		Button* selectBtn = new Button();
-		Core::Texture* selectBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/transform.png"), Core::TextureFormat::RGBA);
+		Core::Texture* selectBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA);
 		selectBtn->setSize(32, 32);
 		selectBtn->setImage(selectBtnImage);
 

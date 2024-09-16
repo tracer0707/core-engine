@@ -54,4 +54,26 @@ namespace Editor
             wnd->setVisible(enable);
         }
     }
+
+    void ModifierManager::init(Core::Scene* scene)
+    {
+        _scene = scene;
+
+        for (auto it : _modifiers)
+        {
+            it->init(_scene);
+        }
+    }
+
+    void ModifierManager::update()
+    {
+        if (_currentModifier == nullptr) return;
+        _currentModifier->update();
+    }
+
+    void ModifierManager::render()
+    {
+        if (_currentModifier == nullptr) return;
+        _currentModifier->render();
+    }
 }

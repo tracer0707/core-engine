@@ -12,5 +12,9 @@ namespace Editor
 		virtual ~CSGModifier();
 
 		static UString NAME;
+
+		virtual void init(Core::Scene* scene);
+		virtual void update();
+		virtual void render();
 	};
 }

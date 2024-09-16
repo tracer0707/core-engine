@@ -116,6 +116,7 @@ int main(int argc, char* argv[])
     csgEditWindow->setModifier(csgModifier);
 
     Editor::ModifierManager::singleton()->addModifier(csgModifier);
+    Editor::ModifierManager::singleton()->init(scene);
 
     bool isRunning = true;
 
@@ -123,6 +124,7 @@ int main(int argc, char* argv[])
     {
         ctx->update(isRunning);
         Editor::CameraController::update();
+        Editor::ModifierManager::singleton()->update();
         
         int width = Core::Renderer::singleton()->getWidth();
         int height = Core::Renderer::singleton()->getHeight();
@@ -131,6 +133,7 @@ int main(int argc, char* argv[])
 
         Editor::Rendering::renderGrid(camera);
         scene->render();
+        Editor::ModifierManager::singleton()->render();
 
         ctx->renderUiBegin();
         windowManager->update(width, height);

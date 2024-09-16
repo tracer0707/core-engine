@@ -3,6 +3,11 @@
 #include <Shared/String.h>
 #include <Shared/List.h>
 
+namespace Core
+{
+	class Scene;
+}
+
 namespace Editor
 {
 	class Window;
@@ -13,6 +18,7 @@ namespace Editor
 		UString _name = "";
 
 		Core::List<Window*> _windows;
+		Core::Scene* _scene = nullptr;
 
 	public:
 		Modifier(UString name);
@@ -23,5 +29,9 @@ namespace Editor
 		void addWindow(Window* value) { _windows.add(value); }
 		int getWindowCount() { return _windows.count(); }
 		Window* getWindow(int index) { return _windows.get(index); }
+
+		virtual void init(Core::Scene* scene) = 0 { _scene = scene; }
+		virtual void update() = 0;
+		virtual void render() = 0;
 	};
 }
