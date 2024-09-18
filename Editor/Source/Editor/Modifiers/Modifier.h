@@ -18,6 +18,8 @@ namespace Editor
 		UString _name = "";
 
 		Core::List<Window*> _windows;
+
+	protected:
 		Core::Scene* _scene = nullptr;
 
 	public:

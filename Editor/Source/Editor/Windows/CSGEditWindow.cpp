@@ -12,8 +12,10 @@
 
 namespace Editor
 {
-	CSGEditWindow::CSGEditWindow() : Window("Edit")
+	CSGEditWindow::CSGEditWindow(CSGModifier* modifier) : Window("Edit")
 	{
+		_modifier = modifier;
+
 		/* Layout */
 
 		layoutMain = new LinearLayout(LayoutDirection::Vertical);
@@ -26,6 +28,11 @@ namespace Editor
 		Core::Texture* csgAddBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA);
 		csgAddBtn->setSize(32, 32);
 		csgAddBtn->setImage(csgAddBtnImage);
+		csgAddBtn->setOnClick([=] {
+			disableAll();
+			_modifier->setEditMode(CSGModifier::EditMode::AddBrush);
+			csgAddBtn->setActive(true);
+		});
 
 		layoutMain->addControl(csgAddBtn);
 
@@ -35,6 +42,11 @@ namespace Editor
 		Core::Texture* csgEditPointsBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/points.png"), Core::TextureFormat::RGBA);
 		csgEditPointsBtn->setSize(32, 32);
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
+		csgEditPointsBtn->setOnClick([=] {
+			disableAll();
+			_modifier->setEditMode(CSGModifier::EditMode::EditVertices);
+			csgEditPointsBtn->setActive(true);
+		});
 
 		layoutMain->addControl(csgEditPointsBtn);
 
@@ -44,6 +56,11 @@ namespace Editor
 		Core::Texture* csgEditEdgesBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/edges.png"), Core::TextureFormat::RGBA);
 		csgEditEdgesBtn->setSize(32, 32);
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
+		csgEditEdgesBtn->setOnClick([=] {
+			disableAll();
+			_modifier->setEditMode(CSGModifier::EditMode::EditEdges);
+			csgEditEdgesBtn->setActive(true);
+		});
 
 		layoutMain->addControl(csgEditEdgesBtn);
 
@@ -53,6 +70,11 @@ namespace Editor
 		Core::Texture* csgEditFacesBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/face.png"), Core::TextureFormat::RGBA);
 		csgEditFacesBtn->setSize(32, 32);
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
+		csgEditFacesBtn->setOnClick([=] {
+			disableAll();
+			_modifier->setEditMode(CSGModifier::EditMode::EditFaces);
+			csgEditFacesBtn->setActive(true);
+		});
 
 		layoutMain->addControl(csgEditFacesBtn);
 

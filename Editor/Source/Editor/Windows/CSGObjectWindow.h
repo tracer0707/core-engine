@@ -17,9 +17,7 @@ namespace Editor
 		void disableAll();
 		
 	public:
-		CSGObjectWindow();
+		CSGObjectWindow(CSGModifier* modifier);
 		virtual ~CSGObjectWindow();
-
-		void setModifier(CSGModifier* value) { _modifier = value; }
 	};
 }
