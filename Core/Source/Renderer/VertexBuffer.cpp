@@ -2,6 +2,11 @@
 
 namespace Core
 {
+	Vertex::Vertex(glm::vec3 pos, glm::vec2 uvs, Color col)
+	{
+		make(pos, uvs, col);
+	}
+
 	void Vertex::make(glm::vec3 pos, glm::vec2 uvs, Color col)
 	{
 		position[0] = pos.x;

@@ -14,6 +14,9 @@ namespace Core
 		Real uv[2];
 		Real color[4];
 
+		Vertex() = default;
+		Vertex(glm::vec3 pos, glm::vec2 uvs, Color col);
+
 		void make(glm::vec3 pos, glm::vec2 uvs, Color col);
 	};
 
