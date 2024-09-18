@@ -4,6 +4,7 @@
 
 namespace Editor
 {
+	class Button;
 	class LinearLayout;
 	class CSGModifier;
 
@@ -13,6 +14,7 @@ namespace Editor
 		CSGModifier* _modifier = nullptr;
 
 		LinearLayout* layoutMain = nullptr;
+		Button* _csgAddModelBtn = nullptr;
 
 		void disableAll();
 		

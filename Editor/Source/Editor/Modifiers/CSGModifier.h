@@ -1,5 +1,9 @@
 #pragma once
 
+#include <glm/gtc/matrix_transform.hpp>
+
+#include <Shared/List.h>
+
 #include "Modifier.h"
 
 namespace Core
@@ -9,6 +13,8 @@ namespace Core
 
 namespace Editor
 {
+	class CSGModel;
+
 	class CSGModifier : public Modifier
 	{
 	public:
@@ -34,6 +40,11 @@ namespace Editor
 		EditMode _editMode = EditMode::AddBrush;
 		BrushType _brushType = BrushType::Cube;
 
+		Core::List<CSGModel*> _csgModels;
+		CSGModel* _currentCSGModel = nullptr;
+
+		glm::mat4 _brushMtx = glm::identity<glm::mat4>();
+
 	public:
 		CSGModifier();
 		virtual ~CSGModifier();
@@ -45,6 +56,8 @@ namespace Editor
 
 		void setBrushType(BrushType value) { _brushType = value; }
 		BrushType getBrushType() { return _brushType; }
+
+		void addCSGModel();
 
 		virtual void init(Core::Scene* scene);
 		virtual void update();

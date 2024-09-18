@@ -14,13 +14,11 @@ namespace Editor
 
 	class Modifier
 	{
-	private:
+	protected:
 		UString _name = "";
 
-		Core::List<Window*> _windows;
-
-	protected:
 		Core::Scene* _scene = nullptr;
+		Core::List<Window*> _windows;
 
 	public:
 		Modifier(UString name);

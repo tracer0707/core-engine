@@ -25,6 +25,18 @@ namespace Editor
 		
 		addControl(layoutMain);
 
+		/* CSG add model */
+
+		_csgAddModelBtn = new Button();
+		Core::Texture* csgAddModelBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA);
+		_csgAddModelBtn->setSize(32, 32);
+		_csgAddModelBtn->setImage(csgAddModelBtnImage);
+		_csgAddModelBtn->setOnClick([=] {
+			_modifier->addCSGModel();
+		});
+
+		layoutMain->addControl(_csgAddModelBtn);
+
 		/* CSG cube */
 
 		Button* csgCube = new Button();
@@ -126,5 +138,7 @@ namespace Editor
 			Button* button = (Button*)layoutMain->getControl(i);
 			button->setActive(false);
 		}
+
+		_csgAddModelBtn->setActive(true);
 	}
 }

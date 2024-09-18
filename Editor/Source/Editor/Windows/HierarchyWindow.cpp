@@ -6,7 +6,9 @@
 
 namespace Editor
 {
-	HierarchyWindow::HierarchyWindow() : Window("Hierarchy")
+	UString HierarchyWindow::NAME = "Hierarchy";
+
+	HierarchyWindow::HierarchyWindow() : Window(NAME)
 	{
 		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
 		

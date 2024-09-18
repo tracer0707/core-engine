@@ -14,5 +14,7 @@ namespace Editor
 	public:
 		HierarchyWindow();
 		virtual ~HierarchyWindow();
+
+		static UString NAME;
 	};
 }
