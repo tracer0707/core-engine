@@ -4,6 +4,7 @@
 #include <glm/ext/quaternion_float.hpp>
 
 #include "../Shared/String.h"
+#include "../Math/Ray.h"
 
 #include "Component.h"
 
@@ -35,5 +36,10 @@ namespace Core
 
 		const glm::mat4 getViewMatrix();
 		const glm::mat4 getProjectionMatrix();
+
+		const Ray getCameraToViewportRay(float screenX, float screenY);
+
+		const glm::vec3 worldToScreenPoint(glm::vec3 point);
+		const glm::vec3 screenToWorldPoint(glm::vec3 point);
 	};
 }

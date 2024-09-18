@@ -48,7 +48,7 @@ namespace Core
 
         Plane operator - () const
         {
-            return Plane(-(normal.x), -(normal.y), -(normal.z), -d); // not equal to Plane(-normal, -d)
+            return Plane(-(normal.x), -(normal.y), -(normal.z), -d);
         }
 
         bool operator==(const Plane& rhs) const
