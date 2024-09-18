@@ -35,7 +35,6 @@ Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
 
 Editor::MainMenu* mainMenu = nullptr;
-Editor::WindowManager* windowManager = nullptr;
 Editor::ObjectWindow* objectWindow = nullptr;
 Editor::CSGObjectWindow* csgObjectWindow = nullptr;
 Editor::InspectorWindow* inspectorWindow = nullptr;
@@ -66,7 +65,7 @@ int main(int argc, char* argv[])
 
     csgModifier = new Editor::CSGModifier();
 
-    windowManager = new Editor::WindowManager();
+    Editor::WindowManager::singleton()->init();
     mainMenu = new Editor::MainMenu();
 
     inspectorWindow = new Editor::InspectorWindow();
@@ -95,21 +94,21 @@ int main(int argc, char* argv[])
     csgEditWindow->setCanDock(false);
     csgEditWindow->setVisible(false);
 
-    windowManager->setOnDock([] {
+    Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
+
+    Editor::WindowManager::singleton()->addWindow(objectWindow);
+    Editor::WindowManager::singleton()->addWindow(csgObjectWindow);
+    Editor::WindowManager::singleton()->addWindow(gizmoWindow);
+    Editor::WindowManager::singleton()->addWindow(csgEditWindow);
+    Editor::WindowManager::singleton()->addWindow(inspectorWindow);
+    Editor::WindowManager::singleton()->addWindow(hierarchyWindow);
+    Editor::WindowManager::singleton()->addWindow(assetsWindow);
+
+    Editor::WindowManager::singleton()->setOnDock([] {
         auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, 0, 0.25);
         auto dockHierarchy = hierarchyWindow->dock(Editor::DockDirection::Right, dockInspector.area2, 0.2f);
         auto dockAssets = assetsWindow->dock(Editor::DockDirection::Down, dockHierarchy.area2, 0.3f);
     });
-
-    windowManager->setMenuBar(mainMenu->getMenuBar());
-
-    windowManager->addWindow(objectWindow);
-    windowManager->addWindow(csgObjectWindow);
-    windowManager->addWindow(gizmoWindow);
-    windowManager->addWindow(csgEditWindow);
-    windowManager->addWindow(inspectorWindow);
-    windowManager->addWindow(hierarchyWindow);
-    windowManager->addWindow(assetsWindow);
 
     csgModifier->addWindow(csgObjectWindow);
     csgModifier->addWindow(csgEditWindow);
@@ -135,7 +134,7 @@ int main(int argc, char* argv[])
         scene->render();
 
         ctx->renderUiBegin();
-        windowManager->update(width, height);
+        Editor::WindowManager::singleton()->update(width, height);
         Editor::Gizmo::singleton()->update(camera);
         ctx->renderUiEnd();
 
@@ -144,8 +143,8 @@ int main(int argc, char* argv[])
         ctx->setWindowTitle(("Core Engine: " + std::to_string(Core::Time::getFramesPerSecond()) + "fps").c_str());
     }
 
+    Editor::WindowManager::singleton()->destroy();
     delete scene;
-    delete windowManager;
 
     ctx->destroyWindow();
 

@@ -12,9 +12,15 @@
 
 namespace Editor
 {
+	WindowManager WindowManager::_singleton;
+
 	const int MAIN_MENU_SIZE = 19;
 
-	WindowManager::WindowManager()
+	WindowManager::WindowManager() { }
+
+	WindowManager::~WindowManager() { }
+
+	void WindowManager::init()
 	{
 		ImGuiIO& io = ImGui::GetIO();
 
@@ -24,7 +30,7 @@ namespace Editor
 		ImGui::GetStyle().ItemSpacing = ImVec2(4, 4);
 	}
 
-	WindowManager::~WindowManager()
+	void WindowManager::destroy()
 	{
 		for (int i = 0; i < _windows.count(); ++i)
 		{
@@ -38,6 +44,20 @@ namespace Editor
 	void WindowManager::addWindow(Window* value)
 	{
 		_windows.add(value);
+	}
+
+	Window* WindowManager::getWindow(UString name)
+	{
+		for (int i = 0; i < _windows.count(); ++i)
+		{
+			Window* window = _windows.get(i);
+			if (window->getName() == name)
+			{
+				return window;
+			}
+		}
+
+		return nullptr;
 	}
 
 	void WindowManager::update(int width, int height)

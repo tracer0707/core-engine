@@ -3,6 +3,7 @@
 #include <functional>
 
 #include <Shared/List.h>
+#include <Shared/String.h>
 
 namespace Editor
 {
@@ -12,6 +13,8 @@ namespace Editor
 	class WindowManager
 	{
 	private:
+		static WindowManager _singleton;
+
 		Core::List<Window*> _windows;
 
 		MenuBar* _menuBar = nullptr;
@@ -22,7 +25,13 @@ namespace Editor
 		WindowManager();
 		~WindowManager();
 
+		static WindowManager* singleton() { return &_singleton; }
+
+		void init();
+		void destroy();
+
 		void addWindow(Window* value);
+		Window* getWindow(UString name);
 		void setOnDock(std::function<void()> value) { _onDock = value; }
 
 		void setMenuBar(MenuBar* value) { _menuBar = value; }
