@@ -2,7 +2,7 @@
 
 namespace Core
 {
-	EventHandler* EventHandler::_singleton = new EventHandler();
+	EventHandler EventHandler::_singleton;
 
 	EventHandler::EventHandler()
 	{
@@ -10,11 +10,6 @@ namespace Core
 
 	EventHandler::~EventHandler()
 	{
-	}
-
-	EventHandler* EventHandler::singleton()
-	{
-		return _singleton;
 	}
 
 	void EventHandler::processEvents()

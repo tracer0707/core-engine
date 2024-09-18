@@ -36,7 +36,7 @@ namespace Editor
 	{
 		_camera = camera;
 
-		Core::InputManager::getSingleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		Core::InputManager::singleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 			{
 				if (!hovered)
 					return;
@@ -45,19 +45,19 @@ namespace Editor
 			}
 		);
 
-		Core::InputManager::getSingleton()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		Core::InputManager::singleton()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 			{
 				mouseUp(x, y, static_cast<int>(mb));
 			}
 		);
 
-		Core::InputManager::getSingleton()->subscribeMouseMoveEvent([=](int x, int y)
+		Core::InputManager::singleton()->subscribeMouseMoveEvent([=](int x, int y)
 			{
 				mouseMove(x, y);
 			}
 		);
 
-		Core::InputManager::getSingleton()->subscribeMouseWheelEvent([=](int x, int y)
+		Core::InputManager::singleton()->subscribeMouseWheelEvent([=](int x, int y)
 			{
 				if (!hovered)
 					return;
@@ -69,8 +69,8 @@ namespace Editor
 
 	void CameraController::update()
 	{
-		ctrlPressed = Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_LCTRL);
-		shiftPressed = Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_LSHIFT);
+		ctrlPressed = Core::InputManager::singleton()->getKey(SDL_SCANCODE_LCTRL);
+		shiftPressed = Core::InputManager::singleton()->getKey(SDL_SCANCODE_LSHIFT);
 
 		if (shiftPressed)
 			cameraSpeed = cameraSpeedFast;
@@ -83,32 +83,32 @@ namespace Editor
 
 			Core::Transform* t = _camera->getOwner()->findComponent<Core::Transform*>();
 
-			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_W))
+			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_W))
 			{
 				t->translate(glm::vec3(0, 0, 1) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_S))
+			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_S))
 			{
 				t->translate(glm::vec3(0, 0, -1) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_A))
+			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_A))
 			{
 				t->translate(glm::vec3(-1, 0, 0) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_D))
+			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_D))
 			{
 				t->translate(glm::vec3(1, 0, 0) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_Q))
+			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_Q))
 			{
 				t->translate(glm::vec3(0, 1, 0) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::getSingleton()->getKey(SDL_SCANCODE_E))
+			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_E))
 			{
 				t->translate(glm::vec3(0, -1, 0) * cameraSpeed * dt);
 			}

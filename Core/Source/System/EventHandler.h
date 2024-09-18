@@ -11,13 +11,13 @@ namespace Core
 	{
 	private:
 		std::vector<std::function<void()>> events;
-		static EventHandler* _singleton;
+		static EventHandler _singleton;
 
 	public:
 		EventHandler();
 		~EventHandler();
 
-		static EventHandler* singleton();
+		static EventHandler* singleton() { return &_singleton; }
 
 		void addEvent(std::function<void()> value);
 		void processEvents();

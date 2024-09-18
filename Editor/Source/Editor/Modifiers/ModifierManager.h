@@ -15,7 +15,7 @@ namespace Editor
 	class ModifierManager
 	{
 	private:
-		static ModifierManager* _singleton;
+		static ModifierManager _singleton;
 		Core::List<Modifier*> _modifiers;
 
 		Modifier* _currentModifier = nullptr;
@@ -24,7 +24,7 @@ namespace Editor
 		void enableWindows(bool enable);
 
 	public:
-		static ModifierManager* singleton();
+		static ModifierManager* singleton() { return &_singleton; }
 
 		void addModifier(Modifier* value) { _modifiers.add(value); }
 		

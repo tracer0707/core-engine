@@ -100,11 +100,11 @@ namespace Core
             break;
             }
 
-            InputManager::getSingleton()->updateKeys(&event);
+            InputManager::singleton()->updateKeys(&event);
             ImGui_ImplSDL2_ProcessEvent(&event);
         }
 
-        InputManager::getSingleton()->updateMouse(window);
+        InputManager::singleton()->updateMouse(window);
         EventHandler::singleton()->processEvents();
     }
 
@@ -123,7 +123,7 @@ namespace Core
 
     void DeviceContext::swapWindow()
     {
-        InputManager::getSingleton()->reset();
+        InputManager::singleton()->reset();
         SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
         SDL_GL_SwapWindow((SDL_Window*)window);
 

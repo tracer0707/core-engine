@@ -10,7 +10,7 @@
 
 namespace Core
 {
-	InputManager InputManager::singleton;
+	InputManager InputManager::_singleton;
 
 	InputManager::InputManager()
 	{

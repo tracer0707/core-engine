@@ -17,7 +17,7 @@ namespace Core
 		typedef std::function<void(int key)> KeyboardEvent;
 
 	private:
-		static InputManager singleton;
+		static InputManager _singleton;
 
 		std::pair<int, int> mouseDir;
 		std::pair<int, int> mouseWheel;
@@ -70,7 +70,7 @@ namespace Core
 		InputManager();
 		~InputManager();
 
-		static InputManager* getSingleton() { return &singleton; }
+		static InputManager* singleton() { return &_singleton; }
 
 		std::string subscribeMouseMoveEvent(MouseEvent callback);
 		std::string subscribeMouseDownEvent(MouseButtonEvent callback);

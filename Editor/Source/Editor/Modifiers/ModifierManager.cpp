@@ -6,12 +6,7 @@
 
 namespace Editor
 {
-    ModifierManager* ModifierManager::_singleton = new ModifierManager();
-
-    ModifierManager* ModifierManager::singleton()
-    {
-        return _singleton;
-    }
+    ModifierManager ModifierManager::_singleton;
 
     void ModifierManager::setCurrentModifier(UString name)
     {
