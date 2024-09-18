@@ -5,10 +5,16 @@
 #include <imgui.h>
 #include <ImGuizmo.h>
 
+#include <Components/Camera.h>
+
 namespace Editor
 {
-	void Gizmo::manipulate(glm::mat4& view, glm::mat4& proj, glm::mat4& model)
+	Gizmo Gizmo::_singleton;
+
+	void Gizmo::update(Core::Camera* camera)
 	{
+		if (_model == nullptr) return;
+
 		ImGuizmo::BeginFrame();
 
 		ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
@@ -33,9 +39,11 @@ namespace Editor
 		int viewManipulateRight = io.DisplaySize.x;
 		int viewManipulateTop = io.DisplaySize.y;
 
-		float* mtx = glm::value_ptr(model);
+		float* mtx = glm::value_ptr(*_model);
 
-		//ImGuizmo::DrawGrid(glm::value_ptr(view), glm::value_ptr(proj), glm::value_ptr(glm::identity<glm::mat4>()), 100.f);
+		glm::mat4 view = camera->getViewMatrix();
+		glm::mat4 proj = camera->getProjectionMatrix();
+
 		ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, mtx, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
 		ImGuizmo::ViewManipulate(glm::value_ptr(view), camDistance, ImVec2(viewManipulateRight - 128, 0), ImVec2(128, 128), 0x10101010);
 	}

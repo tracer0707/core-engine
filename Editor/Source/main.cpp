@@ -27,6 +27,7 @@
 
 #include "Editor/CameraController.h"
 #include "Editor/Rendering.h"
+#include "Editor/Gizmo.h"
 
 Core::Object* object = nullptr;
 Core::Camera* camera = nullptr;
@@ -63,6 +64,8 @@ int main(int argc, char* argv[])
 
     Editor::CameraController::init(camera);
 
+    csgModifier = new Editor::CSGModifier();
+
     windowManager = new Editor::WindowManager();
     mainMenu = new Editor::MainMenu();
 
@@ -80,13 +83,13 @@ int main(int argc, char* argv[])
     objectWindow->setCanAcceptDocking(false);
     objectWindow->setCanDock(false);
 
-    csgObjectWindow = new Editor::CSGObjectWindow();
+    csgObjectWindow = new Editor::CSGObjectWindow(csgModifier);
     csgObjectWindow->setHasTitle(false);
     csgObjectWindow->setCanAcceptDocking(false);
     csgObjectWindow->setCanDock(false);
     csgObjectWindow->setVisible(false);
 
-    csgEditWindow = new Editor::CSGEditWindow();
+    csgEditWindow = new Editor::CSGEditWindow(csgModifier);
     csgEditWindow->setHasTitle(false);
     csgEditWindow->setCanAcceptDocking(false);
     csgEditWindow->setCanDock(false);
@@ -108,12 +111,8 @@ int main(int argc, char* argv[])
     windowManager->addWindow(hierarchyWindow);
     windowManager->addWindow(assetsWindow);
 
-    csgModifier = new Editor::CSGModifier();
     csgModifier->addWindow(csgObjectWindow);
     csgModifier->addWindow(csgEditWindow);
-
-    csgObjectWindow->setModifier(csgModifier);
-    csgEditWindow->setModifier(csgModifier);
 
     Editor::ModifierManager::singleton()->addModifier(csgModifier);
     Editor::ModifierManager::singleton()->init(scene);
@@ -132,11 +131,12 @@ int main(int argc, char* argv[])
         Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Editor::Rendering::renderGrid(camera);
-        scene->render();
         Editor::ModifierManager::singleton()->render();
+        scene->render();
 
         ctx->renderUiBegin();
         windowManager->update(width, height);
+        Editor::Gizmo::singleton()->update(camera);
         ctx->renderUiEnd();
 
         ctx->swapWindow();
