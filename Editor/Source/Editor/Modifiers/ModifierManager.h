@@ -30,6 +30,7 @@ namespace Editor
 		
 		void setCurrentModifier(UString name);
 		void unsetCurrentModifier();
+		Modifier* getModifier(UString name);
 		Modifier* getCurrentModifier() { return _currentModifier; }
 		UString getCurrentModifierName();
 

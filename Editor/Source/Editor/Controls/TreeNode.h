@@ -17,6 +17,8 @@ namespace Editor
 
 		std::function<void()> _onClick = nullptr;
 
+		void* _userObj = nullptr;
+
 	public:
 		TreeNode(UString text);
 		~TreeNode();
@@ -27,5 +29,8 @@ namespace Editor
 		UString getText() { return _text; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
+
+		void setUserObject(void* value) { _userObj = value; }
+		void* getUserObject() { return _userObj; }
 	};
 }

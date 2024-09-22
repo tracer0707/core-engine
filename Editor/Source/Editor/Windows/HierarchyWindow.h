@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Shared/String.h>
+
 #include "Window.h"
 
 namespace Editor
@@ -16,5 +18,9 @@ namespace Editor
 		virtual ~HierarchyWindow();
 
 		static UString NAME;
+
+		TreeView* getTreeView() { return _objectTree; }
+
+		void rebuild();
 	};
 }

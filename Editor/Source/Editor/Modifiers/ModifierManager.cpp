@@ -33,6 +33,18 @@ namespace Editor
         _currentModifier = nullptr;
     }
 
+    Modifier* ModifierManager::getModifier(UString name)
+    {
+        Modifier* mod = nullptr;
+
+        bool found = _modifiers.tryFind(mod, [=](Modifier* x) {
+            return x->getName() == name;
+        });
+
+        if (found) return mod;
+        return nullptr;
+    }
+
     UString ModifierManager::getCurrentModifierName()
     {
         if (_currentModifier == nullptr) return "";

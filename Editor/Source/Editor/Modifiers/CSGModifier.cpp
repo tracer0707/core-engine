@@ -28,17 +28,22 @@ namespace Editor
 	void CSGModifier::init(Core::Scene* scene)
 	{
 		Modifier::init(scene);
+
+		_hierarchyWindow = (HierarchyWindow*)Editor::WindowManager::singleton()->getWindow(HierarchyWindow::NAME);
 	}
 
 	void CSGModifier::addCSGModel()
 	{
 		_currentCSGModel = new CSGModel();
 		_csgModels.add(_currentCSGModel);
+
+		assert(_hierarchyWindow != nullptr && "HierarchyWindow is null");
+		_hierarchyWindow->rebuild();
 	}
 
 	void CSGModifier::update()
 	{
-		HierarchyWindow* hierarchyWindow = (HierarchyWindow*)Editor::WindowManager::singleton()->getWindow(HierarchyWindow::NAME);
+		
 	}
 
 	void CSGModifier::render()
@@ -60,10 +65,10 @@ namespace Editor
 		glm::mat4 proj = camera->getProjectionMatrix();
 
 		auto mousePos = Core::InputManager::singleton()->getMouseRelativePosition();
-		glm::vec3 cursorPos = camera->screenToWorldPoint(glm::vec3(mousePos.first, mousePos.second, 5.0f));
+		glm::vec3 screenMousePos = camera->screenToWorldPoint(glm::vec3(mousePos.first, mousePos.second, 5.0f));
 
 		_brushMtx = glm::identity<glm::mat4>();
-		_brushMtx = glm::translate(_brushMtx, cursorPos);
+		_brushMtx = glm::translate(_brushMtx, screenMousePos);
 
 		Core::Color brushColor = Core::Color(0.8f, 0.0f, 0.0f, 0.8f);
 
