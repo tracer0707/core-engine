@@ -54,12 +54,7 @@ namespace Editor
     void ModifierManager::enableWindows(bool enable)
     {
         if (_currentModifier == nullptr) return;
-
-        for (int i = 0; i < _currentModifier->getWindowCount(); ++i)
-        {
-            Window* wnd = _currentModifier->getWindow(i);
-            wnd->setVisible(enable);
-        }
+        _currentModifier->enableWindows(enable);
     }
 
     void ModifierManager::init(Core::Scene* scene)

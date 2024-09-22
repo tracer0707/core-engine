@@ -15,15 +15,17 @@
 
 namespace Editor
 {
-	CSGObjectWindow::CSGObjectWindow(CSGModifier* modifier) : Window("CSGObject")
+	UString CSGObjectWindow::NAME = "CSGObject";
+
+	CSGObjectWindow::CSGObjectWindow() : Window(NAME)
 	{
-		_modifier = modifier;
+		_modifier = (CSGModifier*)ModifierManager::singleton()->getModifier(CSGModifier::NAME);
 
 		/* Layout */
 
-		layoutMain = new LinearLayout(LayoutDirection::Horizontal);
+		_layoutMain = new LinearLayout(LayoutDirection::Horizontal);
 		
-		addControl(layoutMain);
+		addControl(_layoutMain);
 
 		/* CSG add model */
 
@@ -35,7 +37,7 @@ namespace Editor
 			_modifier->addCSGModel();
 		});
 
-		layoutMain->addControl(_csgAddModelBtn);
+		_layoutMain->addControl(_csgAddModelBtn);
 
 		/* CSG cube */
 
@@ -44,12 +46,12 @@ namespace Editor
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
 		csgCube->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setBrushType(CSGModifier::BrushType::Cube);
 			csgCube->setActive(true);
 		});
 
-		layoutMain->addControl(csgCube);
+		_layoutMain->addControl(csgCube);
 
 		/* CSG sphere */
 
@@ -58,12 +60,12 @@ namespace Editor
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
 		csgSphere->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setBrushType(CSGModifier::BrushType::Sphere);
 			csgSphere->setActive(true);
 		});
 
-		layoutMain->addControl(csgSphere);
+		_layoutMain->addControl(csgSphere);
 
 		/* CSG cylinder */
 
@@ -72,12 +74,12 @@ namespace Editor
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
 		csgCylinder->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setBrushType(CSGModifier::BrushType::Cylinder);
 			csgCylinder->setActive(true);
 		});
 
-		layoutMain->addControl(csgCylinder);
+		_layoutMain->addControl(csgCylinder);
 
 		/* CSG cone */
 
@@ -86,12 +88,12 @@ namespace Editor
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
 		csgCone->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setBrushType(CSGModifier::BrushType::Cone);
 			csgCone->setActive(true);
 		});
 
-		layoutMain->addControl(csgCone);
+		_layoutMain->addControl(csgCone);
 
 		/* CSG stair */
 
@@ -100,12 +102,12 @@ namespace Editor
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
 		csgStair->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setBrushType(CSGModifier::BrushType::Stair);
 			csgStair->setActive(true);
 		});
 
-		layoutMain->addControl(csgStair);
+		_layoutMain->addControl(csgStair);
 
 		/* CSG polygon */
 
@@ -114,15 +116,16 @@ namespace Editor
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);
 		csgPolygon->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setBrushType(CSGModifier::BrushType::Polygon);
 			csgPolygon->setActive(true);
 		});
 
-		layoutMain->addControl(csgPolygon);
+		_layoutMain->addControl(csgPolygon);
 
 		EVENT({
-			disableAll();
+			activateAll(false);
+			checkControls();
 			csgCube->setActive(true);
 		}, =);
 	}
@@ -131,14 +134,35 @@ namespace Editor
 	{
 	}
 
-	void CSGObjectWindow::disableAll()
+	void Editor::CSGObjectWindow::checkControls()
 	{
-		for (int i = 0; i < layoutMain->getControlsCount(); ++i)
+		enableAll(false);
+
+		if (_modifier->getCurrentCsgModel() != nullptr)
 		{
-			Button* button = (Button*)layoutMain->getControl(i);
-			button->setActive(false);
+			enableAll(true);
+		}
+	}
+
+	void CSGObjectWindow::activateAll(bool active)
+	{
+		for (int i = 0; i < _layoutMain->getControlsCount(); ++i)
+		{
+			Button* button = (Button*)_layoutMain->getControl(i);
+			button->setActive(active);
 		}
 
 		_csgAddModelBtn->setActive(true);
+	}
+
+	void Editor::CSGObjectWindow::enableAll(bool enable)
+	{
+		for (int i = 0; i < _layoutMain->getControlsCount(); ++i)
+		{
+			Button* button = (Button*)_layoutMain->getControl(i);
+			button->setEnabled(enable);
+		}
+
+		_csgAddModelBtn->setEnabled(true);
 	}
 }

@@ -28,6 +28,9 @@ namespace Editor
 		void setVisible(bool value) { _visible = value; }
 		bool getVisible() { return _visible; }
 
+		void setEnabled(bool value) { _style.enabled = value; }
+		bool getEnabled() { return _style.enabled; }
+
 		virtual void update() = 0;
 	};
 }

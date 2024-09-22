@@ -13,13 +13,18 @@ namespace Editor
 	private:
 		CSGModifier* _modifier = nullptr;
 
-		LinearLayout* layoutMain = nullptr;
+		LinearLayout* _layoutMain = nullptr;
 		Button* _csgAddModelBtn = nullptr;
 
-		void disableAll();
+		void activateAll(bool active);
+		void enableAll(bool enable);
 		
 	public:
-		CSGObjectWindow(CSGModifier* modifier);
+		CSGObjectWindow();
 		virtual ~CSGObjectWindow();
+
+		static UString NAME;
+
+		void checkControls();
 	};
 }

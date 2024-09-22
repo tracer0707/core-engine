@@ -8,33 +8,36 @@
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
+#include "../Modifiers/ModifierManager.h"
 #include "../Modifiers/CSGModifier.h"
 
 namespace Editor
 {
-	CSGEditWindow::CSGEditWindow(CSGModifier* modifier) : Window("Edit")
+	UString CSGEditWindow::NAME = "Edit";
+
+	CSGEditWindow::CSGEditWindow() : Window(NAME)
 	{
-		_modifier = modifier;
+		_modifier = (CSGModifier*)ModifierManager::singleton()->getModifier(CSGModifier::NAME);
 
 		/* Layout */
 
-		layoutMain = new LinearLayout(LayoutDirection::Vertical);
+		_layoutMain = new LinearLayout(LayoutDirection::Vertical);
 
-		addControl(layoutMain);
+		addControl(_layoutMain);
 
 		/* CSG add */
 
-		Button* csgAddBtn = new Button();
+		_csgAddBtn = new Button();
 		Core::Texture* csgAddBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA);
-		csgAddBtn->setSize(32, 32);
-		csgAddBtn->setImage(csgAddBtnImage);
-		csgAddBtn->setOnClick([=] {
-			disableAll();
+		_csgAddBtn->setSize(32, 32);
+		_csgAddBtn->setImage(csgAddBtnImage);
+		_csgAddBtn->setOnClick([=] {
+			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::AddBrush);
-			csgAddBtn->setActive(true);
+			_csgAddBtn->setActive(true);
 		});
 
-		layoutMain->addControl(csgAddBtn);
+		_layoutMain->addControl(_csgAddBtn);
 
 		/* CSG edit points */
 
@@ -43,12 +46,12 @@ namespace Editor
 		csgEditPointsBtn->setSize(32, 32);
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
 		csgEditPointsBtn->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::EditVertices);
 			csgEditPointsBtn->setActive(true);
 		});
 
-		layoutMain->addControl(csgEditPointsBtn);
+		_layoutMain->addControl(csgEditPointsBtn);
 
 		/* CSG edit edges */
 
@@ -57,12 +60,12 @@ namespace Editor
 		csgEditEdgesBtn->setSize(32, 32);
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
 		csgEditEdgesBtn->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::EditEdges);
 			csgEditEdgesBtn->setActive(true);
 		});
 
-		layoutMain->addControl(csgEditEdgesBtn);
+		_layoutMain->addControl(csgEditEdgesBtn);
 
 		/* CSG edit faces */
 
@@ -71,16 +74,17 @@ namespace Editor
 		csgEditFacesBtn->setSize(32, 32);
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
 		csgEditFacesBtn->setOnClick([=] {
-			disableAll();
+			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::EditFaces);
 			csgEditFacesBtn->setActive(true);
 		});
 
-		layoutMain->addControl(csgEditFacesBtn);
+		_layoutMain->addControl(csgEditFacesBtn);
 
 		EVENT({
-			disableAll();
-			csgAddBtn->setActive(true);
+			activateAll(false);
+			checkControls();
+			_csgAddBtn->setActive(true);
 		}, =);
 	}
 
@@ -88,12 +92,36 @@ namespace Editor
 	{
 	}
 
-	void CSGEditWindow::disableAll()
+	void Editor::CSGEditWindow::checkControls()
 	{
-		for (int i = 0; i < layoutMain->getControlsCount(); ++i)
+		enableAll(false);
+
+		if (_modifier->getCurrentCsgModel() != nullptr)
 		{
-			Button* button = (Button*)layoutMain->getControl(i);
-			button->setActive(false);
+			_csgAddBtn->setEnabled(true);
+
+			if (_modifier->getCurrentCsgBrush() != nullptr)
+			{
+				enableAll(true);
+			}
+		}
+	}
+
+	void CSGEditWindow::activateAll(bool active)
+	{
+		for (int i = 0; i < _layoutMain->getControlsCount(); ++i)
+		{
+			Button* button = (Button*)_layoutMain->getControl(i);
+			button->setActive(active);
+		}
+	}
+
+	void Editor::CSGEditWindow::enableAll(bool enable)
+	{
+		for (int i = 0; i < _layoutMain->getControlsCount(); ++i)
+		{
+			Button* button = (Button*)_layoutMain->getControl(i);
+			button->setEnabled(enable);
 		}
 	}
 }

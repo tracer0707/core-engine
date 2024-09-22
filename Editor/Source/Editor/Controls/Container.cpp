@@ -10,6 +10,11 @@ namespace Editor
 
 	Container::~Container()
 	{
+		clear();
+	}
+
+	void Editor::Container::clear()
+	{
 		for (int i = 0; i < _controls.count(); ++i)
 		{
 			Control* control = _controls.get(i);

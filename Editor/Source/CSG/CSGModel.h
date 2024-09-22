@@ -20,7 +20,7 @@ namespace Editor
 	{
 	private:
 		UString name = "";
-		Core::List<CSGBrush*> csgBrushes;
+		Core::List<CSGBrush*> _csgBrushes;
 
 		Core::Object* object = nullptr;
 		Core::Transform* transform = nullptr;
@@ -37,11 +37,14 @@ namespace Editor
 		UString getName() { return name; }
 		void setName(UString value) { name = value; }
 
-		Core::List<CSGBrush*>& getBrushes() { return csgBrushes; }
-
 		Core::Object* getObject() { return object; }
 		Core::Transform* getTransform() { return transform; }
 		Core::MeshRenderer* getMeshRenderer() { return meshRenderer; }
+
+		void addCsgBrush(CSGBrush* value) { _csgBrushes.add(value); }
+		int getNumCsgBrushes() { return _csgBrushes.count(); }
+		CSGBrush* getCsgBrush(int index) { return _csgBrushes.get(index); }
+		void removeCsgBrush(CSGBrush* value) { _csgBrushes.remove(value); }
 
 		void rebuild();
 	};

@@ -4,6 +4,7 @@
 
 namespace Editor
 {
+	class Button;
 	class LinearLayout;
 	class CSGModifier;
 
@@ -12,12 +13,18 @@ namespace Editor
 	private:
 		CSGModifier* _modifier = nullptr;
 
-		LinearLayout* layoutMain = nullptr;
+		LinearLayout* _layoutMain = nullptr;
+		Button* _csgAddBtn = nullptr;
 
-		void disableAll();
+		void activateAll(bool active);
+		void enableAll(bool enable);
 
 	public:
-		CSGEditWindow(CSGModifier* modifier);
+		CSGEditWindow();
 		virtual ~CSGEditWindow();
+
+		static UString NAME;
+
+		void checkControls();
 	};
 }

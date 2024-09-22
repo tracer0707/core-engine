@@ -16,14 +16,14 @@ namespace Editor
 		vertices.clear();
 		faces.clear();
 
-		vertices.add(glm::vec3(+1.0f, +1.0f, +1.0f));
-		vertices.add(glm::vec3(-1.0f, +1.0f, +1.0f));
-		vertices.add(glm::vec3(-1.0f, -1.0f, +1.0f));
-		vertices.add(glm::vec3(+1.0f, -1.0f, +1.0f));
-		vertices.add(glm::vec3(+1.0f, +1.0f, -1.0f));
-		vertices.add(glm::vec3(-1.0f, +1.0f, -1.0f));
-		vertices.add(glm::vec3(-1.0f, -1.0f, -1.0f));
-		vertices.add(glm::vec3(+1.0f, -1.0f, -1.0f));
+		vertices.add(glm::vec3(+0.5f, +0.5f, +0.5f));
+		vertices.add(glm::vec3(-0.5f, +0.5f, +0.5f));
+		vertices.add(glm::vec3(-0.5f, -0.5f, +0.5f));
+		vertices.add(glm::vec3(+0.5f, -0.5f, +0.5f));
+		vertices.add(glm::vec3(+0.5f, +0.5f, -0.5f));
+		vertices.add(glm::vec3(-0.5f, +0.5f, -0.5f));
+		vertices.add(glm::vec3(-0.5f, -0.5f, -0.5f));
+		vertices.add(glm::vec3(+0.5f, -0.5f, -0.5f));
 
 		FaceInfo face1, face2, face3, face4, face5, face6;
 

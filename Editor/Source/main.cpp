@@ -64,9 +64,12 @@ int main(int argc, char* argv[])
     Editor::CameraController::init(camera);
 
     csgModifier = new Editor::CSGModifier();
+    Editor::ModifierManager::singleton()->addModifier(csgModifier);
 
     Editor::WindowManager::singleton()->init();
+
     mainMenu = new Editor::MainMenu();
+    Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
 
     inspectorWindow = new Editor::InspectorWindow();
     hierarchyWindow = new Editor::HierarchyWindow();
@@ -82,19 +85,17 @@ int main(int argc, char* argv[])
     objectWindow->setCanAcceptDocking(false);
     objectWindow->setCanDock(false);
 
-    csgObjectWindow = new Editor::CSGObjectWindow(csgModifier);
+    csgObjectWindow = new Editor::CSGObjectWindow();
     csgObjectWindow->setHasTitle(false);
     csgObjectWindow->setCanAcceptDocking(false);
     csgObjectWindow->setCanDock(false);
     csgObjectWindow->setVisible(false);
 
-    csgEditWindow = new Editor::CSGEditWindow(csgModifier);
+    csgEditWindow = new Editor::CSGEditWindow();
     csgEditWindow->setHasTitle(false);
     csgEditWindow->setCanAcceptDocking(false);
     csgEditWindow->setCanDock(false);
     csgEditWindow->setVisible(false);
-
-    Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
 
     Editor::WindowManager::singleton()->addWindow(objectWindow);
     Editor::WindowManager::singleton()->addWindow(csgObjectWindow);
@@ -104,17 +105,13 @@ int main(int argc, char* argv[])
     Editor::WindowManager::singleton()->addWindow(hierarchyWindow);
     Editor::WindowManager::singleton()->addWindow(assetsWindow);
 
+    Editor::ModifierManager::singleton()->init(scene);
+
     Editor::WindowManager::singleton()->setOnDock([] {
         auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, 0, 0.25);
         auto dockHierarchy = hierarchyWindow->dock(Editor::DockDirection::Right, dockInspector.area2, 0.2f);
         auto dockAssets = assetsWindow->dock(Editor::DockDirection::Down, dockHierarchy.area2, 0.3f);
     });
-
-    csgModifier->addWindow(csgObjectWindow);
-    csgModifier->addWindow(csgEditWindow);
-
-    Editor::ModifierManager::singleton()->addModifier(csgModifier);
-    Editor::ModifierManager::singleton()->init(scene);
 
     bool isRunning = true;
 

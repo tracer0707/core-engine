@@ -14,7 +14,10 @@ namespace Core
 namespace Editor
 {
 	class HierarchyWindow;
+	class CSGObjectWindow;
+	class CSGEditWindow;
 	class CSGModel;
+	class CSGBrush;
 
 	class CSGModifier : public Modifier
 	{
@@ -42,11 +45,19 @@ namespace Editor
 		BrushType _brushType = BrushType::Cube;
 
 		HierarchyWindow* _hierarchyWindow = nullptr;
+		CSGObjectWindow* _csgObjectWindow = nullptr;
+		CSGEditWindow* _csgEditWindow = nullptr;
 
 		Core::List<CSGModel*> _csgModels;
+
 		CSGModel* _currentCSGModel = nullptr;
+		CSGBrush* _currentCSGBrush = nullptr;
 
 		glm::mat4 _brushMtx = glm::identity<glm::mat4>();
+
+		virtual void enableWindows(bool enable);
+
+		void addCSGBrush();
 
 	public:
 		CSGModifier();
@@ -65,6 +76,9 @@ namespace Editor
 		int getNumCsgModels() { return _csgModels.count(); }
 		CSGModel* getCsgModel(int index) { return _csgModels.get(index); }
 		void removeCsgModel(CSGModel* value) { _csgModels.remove(value); }
+
+		CSGModel* getCurrentCsgModel() { return _currentCSGModel; }
+		CSGBrush* getCurrentCsgBrush() { return _currentCSGBrush; }
 
 		virtual void init(Core::Scene* scene);
 		virtual void update();

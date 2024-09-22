@@ -1,6 +1,7 @@
 #include "Button.h"
 
 #include <imgui.h>
+#include <imgui_internal.h>
 
 #include <System/EventHandler.h>
 #include <Shared/Guid.h>
@@ -28,7 +29,13 @@ namespace Editor
 
 		bool hasClick = false;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, _style.opacity);
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
+
+		if (!_style.enabled)
+		{
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
+		}
 
 		if (_image != nullptr)
 		{
@@ -40,6 +47,12 @@ namespace Editor
 		}
 
 		ImGui::PopStyleVar();
+
+		if (!_style.enabled)
+		{
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
 
 		if (hasClick)
 		{

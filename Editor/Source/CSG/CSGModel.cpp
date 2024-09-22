@@ -75,7 +75,7 @@ namespace Editor
         nullBrush->rebuild();
 
         //Bind attributes
-        for (auto brush : csgBrushes)
+        for (auto brush : _csgBrushes)
         {
             brush->rebuild();
             brush->bind(&fv_uv, &f_material, &f_layer, &f_castShadows, &f_smoothNormals, &f_brushId);
@@ -91,7 +91,7 @@ namespace Editor
         csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
         //Compute CSG
-        for (auto brush : csgBrushes)
+        for (auto brush : _csgBrushes)
         {
             glm::mat4x4 mtx = brush->getTransform()->getTransformMatrix();
             glm::quat nrmMtx = brush->getTransform()->getRotation();

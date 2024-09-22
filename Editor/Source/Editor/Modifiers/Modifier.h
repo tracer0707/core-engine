@@ -14,21 +14,21 @@ namespace Editor
 
 	class Modifier
 	{
+		friend class ModifierManager;
+
+	private:
+		virtual void enableWindows(bool enable) = 0;
+
 	protected:
 		UString _name = "";
 
 		Core::Scene* _scene = nullptr;
-		Core::List<Window*> _windows;
 
 	public:
 		Modifier(UString name);
 		virtual ~Modifier();
 
 		UString getName() { return _name; }
-
-		void addWindow(Window* value) { _windows.add(value); }
-		int getWindowCount() { return _windows.count(); }
-		Window* getWindow(int index) { return _windows.get(index); }
 
 		virtual void init(Core::Scene* scene) = 0 { _scene = scene; }
 		virtual void update() = 0;
