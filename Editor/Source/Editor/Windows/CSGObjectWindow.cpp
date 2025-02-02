@@ -46,9 +46,7 @@ namespace Editor
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
 		csgCube->setOnClick([=] {
-			activateAll(false);
-			_modifier->setBrushType(CSGModifier::BrushType::Cube);
-			csgCube->setActive(true);
+			_modifier->addCSGBrush(CSGModifier::BrushType::Cube);
 		});
 
 		_layoutMain->addControl(csgCube);
@@ -60,9 +58,7 @@ namespace Editor
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
 		csgSphere->setOnClick([=] {
-			activateAll(false);
-			_modifier->setBrushType(CSGModifier::BrushType::Sphere);
-			csgSphere->setActive(true);
+			_modifier->addCSGBrush(CSGModifier::BrushType::Sphere);
 		});
 
 		_layoutMain->addControl(csgSphere);
@@ -74,9 +70,7 @@ namespace Editor
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
 		csgCylinder->setOnClick([=] {
-			activateAll(false);
-			_modifier->setBrushType(CSGModifier::BrushType::Cylinder);
-			csgCylinder->setActive(true);
+			_modifier->addCSGBrush(CSGModifier::BrushType::Cylinder);
 		});
 
 		_layoutMain->addControl(csgCylinder);
@@ -88,9 +82,7 @@ namespace Editor
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
 		csgCone->setOnClick([=] {
-			activateAll(false);
-			_modifier->setBrushType(CSGModifier::BrushType::Cone);
-			csgCone->setActive(true);
+			_modifier->addCSGBrush(CSGModifier::BrushType::Cone);
 		});
 
 		_layoutMain->addControl(csgCone);
@@ -102,9 +94,7 @@ namespace Editor
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
 		csgStair->setOnClick([=] {
-			activateAll(false);
-			_modifier->setBrushType(CSGModifier::BrushType::Stair);
-			csgStair->setActive(true);
+			_modifier->addCSGBrush(CSGModifier::BrushType::Stair);
 		});
 
 		_layoutMain->addControl(csgStair);
@@ -116,17 +106,13 @@ namespace Editor
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);
 		csgPolygon->setOnClick([=] {
-			activateAll(false);
-			_modifier->setBrushType(CSGModifier::BrushType::Polygon);
-			csgPolygon->setActive(true);
+			_modifier->addCSGBrush(CSGModifier::BrushType::Polygon);
 		});
 
 		_layoutMain->addControl(csgPolygon);
 
 		EVENT({
-			activateAll(false);
 			checkControls();
-			csgCube->setActive(true);
 		}, =);
 	}
 

@@ -25,19 +25,19 @@ namespace Editor
 
 		addControl(_layoutMain);
 
-		/* CSG add */
+		/* CSG select */
 
-		_csgAddBtn = new Button();
-		Core::Texture* csgAddBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA);
-		_csgAddBtn->setSize(32, 32);
-		_csgAddBtn->setImage(csgAddBtnImage);
-		_csgAddBtn->setOnClick([=] {
+		_csgSelectBtn = new Button();
+		Core::Texture* csgAddBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA);
+		_csgSelectBtn->setSize(32, 32);
+		_csgSelectBtn->setImage(csgAddBtnImage);
+		_csgSelectBtn->setOnClick([=] {
 			activateAll(false);
-			_modifier->setEditMode(CSGModifier::EditMode::AddBrush);
-			_csgAddBtn->setActive(true);
+			_modifier->setEditMode(CSGModifier::EditMode::Select);
+			_csgSelectBtn->setActive(true);
 		});
 
-		_layoutMain->addControl(_csgAddBtn);
+		_layoutMain->addControl(_csgSelectBtn);
 
 		/* CSG edit points */
 
@@ -84,7 +84,7 @@ namespace Editor
 		EVENT({
 			activateAll(false);
 			checkControls();
-			_csgAddBtn->setActive(true);
+			_csgSelectBtn->setActive(true);
 		}, =);
 	}
 
@@ -98,7 +98,7 @@ namespace Editor
 
 		if (_modifier->getCurrentCsgModel() != nullptr)
 		{
-			_csgAddBtn->setEnabled(true);
+			_csgSelectBtn->setEnabled(true);
 
 			if (_modifier->getCurrentCsgBrush() != nullptr)
 			{

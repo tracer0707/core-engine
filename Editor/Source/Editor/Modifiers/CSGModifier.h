@@ -24,7 +24,7 @@ namespace Editor
 	public:
 		enum class EditMode
 		{
-			AddBrush,
+			Select,
 			EditVertices,
 			EditEdges,
 			EditFaces
@@ -41,8 +41,7 @@ namespace Editor
 		};
 
 	private:
-		EditMode _editMode = EditMode::AddBrush;
-		BrushType _brushType = BrushType::Cube;
+		EditMode _editMode = EditMode::Select;
 
 		HierarchyWindow* _hierarchyWindow = nullptr;
 		CSGObjectWindow* _csgObjectWindow = nullptr;
@@ -57,8 +56,6 @@ namespace Editor
 
 		virtual void enableWindows(bool enable);
 
-		void addCSGBrush();
-
 	public:
 		CSGModifier();
 		virtual ~CSGModifier();
@@ -68,10 +65,8 @@ namespace Editor
 		void setEditMode(EditMode value) { _editMode = value; }
 		EditMode getEditMode() { return _editMode; }
 
-		void setBrushType(BrushType value) { _brushType = value; }
-		BrushType getBrushType() { return _brushType; }
-
 		void addCSGModel();
+		void addCSGBrush(BrushType brushType);
 
 		int getNumCsgModels() { return _csgModels.count(); }
 		CSGModel* getCsgModel(int index) { return _csgModels.get(index); }

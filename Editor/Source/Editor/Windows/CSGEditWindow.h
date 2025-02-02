@@ -14,7 +14,7 @@ namespace Editor
 		CSGModifier* _modifier = nullptr;
 
 		LinearLayout* _layoutMain = nullptr;
-		Button* _csgAddBtn = nullptr;
+		Button* _csgSelectBtn = nullptr;
 
 		void activateAll(bool active);
 		void enableAll(bool enable);
