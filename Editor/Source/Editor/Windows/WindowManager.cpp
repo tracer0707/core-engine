@@ -60,6 +60,11 @@ namespace Editor
 		return nullptr;
 	}
 
+	bool WindowManager::isMouseCaptured()
+	{
+		return ImGui::GetIO().WantCaptureMouse;
+	}
+
 	void WindowManager::update(int width, int height)
 	{
 		bool open = true;

@@ -67,6 +67,20 @@ namespace Editor
         }
     }
 
+    void ModifierManager::destroy()
+    {
+        _scene = nullptr;
+        _currentModifier = nullptr;
+        
+        for (int i = 0; i < _modifiers.count(); ++i)
+        {
+            Modifier* modifier = _modifiers.get(i);
+            delete modifier;
+        }
+
+        _modifiers.clear();
+    }
+
     void ModifierManager::update()
     {
         if (_currentModifier == nullptr) return;

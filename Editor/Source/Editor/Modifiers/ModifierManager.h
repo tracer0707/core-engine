@@ -35,6 +35,7 @@ namespace Editor
 		UString getCurrentModifierName();
 
 		void init(Core::Scene* scene);
+		void destroy();
 		void update();
 		void render();
 	};

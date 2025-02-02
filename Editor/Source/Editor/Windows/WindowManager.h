@@ -34,6 +34,8 @@ namespace Editor
 		Window* getWindow(UString name);
 		void setOnDock(std::function<void()> value) { _onDock = value; }
 
+		bool isMouseCaptured();
+
 		void setMenuBar(MenuBar* value) { _menuBar = value; }
 
 		void update(int width, int height);

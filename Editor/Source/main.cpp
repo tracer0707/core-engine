@@ -140,6 +140,7 @@ int main(int argc, char* argv[])
         ctx->setWindowTitle(("Core Engine: " + std::to_string(Core::Time::getFramesPerSecond()) + "fps").c_str());
     }
 
+    Editor::ModifierManager::singleton()->destroy();
     Editor::WindowManager::singleton()->destroy();
     delete scene;
 

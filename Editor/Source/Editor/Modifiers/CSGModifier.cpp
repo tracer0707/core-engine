@@ -41,10 +41,17 @@ namespace Editor
 		{
 			if (_editMode == EditMode::AddBrush && mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
+				if (Editor::WindowManager::singleton()->isMouseCaptured()) return;
 				if (_currentCSGModel == nullptr) return;
 				addCSGBrush();
 			}
 		});
+	}
+
+	void CSGModifier::enableWindows(bool enable)
+	{
+		_csgObjectWindow->setVisible(enable);
+		_csgEditWindow->setVisible(enable);
 	}
 
 	void CSGModifier::addCSGModel()
@@ -57,12 +64,6 @@ namespace Editor
 		_hierarchyWindow->rebuild();
 		_csgObjectWindow->checkControls();
 		_csgEditWindow->checkControls();
-	}
-
-	void CSGModifier::enableWindows(bool enable)
-	{
-		_csgObjectWindow->setVisible(enable);
-		_csgEditWindow->setVisible(enable);
 	}
 
 	void CSGModifier::addCSGBrush()
