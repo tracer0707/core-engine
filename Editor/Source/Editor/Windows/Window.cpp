@@ -36,11 +36,17 @@ namespace Editor
 			default: dir = ImGuiDir_None; break;
 		}
 
-		if (dockDirection == DockDirection::None) return _dockArea;
-
-		if (relativeTo == 0) relativeTo = 1013603228;
-		_dockArea.area1 = ImGui::DockBuilderSplitNode(relativeTo, dir, splitSize, nullptr, &_dockArea.area2);
-		return _dockArea;
+		if (dockDirection == DockDirection::None)
+		{
+			_dockArea.area1 = relativeTo;
+			return _dockArea;
+		}
+		else
+		{
+			if (relativeTo == 0) relativeTo = 1013603228;
+			_dockArea.area1 = ImGui::DockBuilderSplitNode(relativeTo, dir, splitSize, nullptr, &_dockArea.area2);
+			return _dockArea;
+		}
 	}
 
 	void Window::update()

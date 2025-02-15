@@ -13,6 +13,7 @@
 #include <Components/Transform.h>
 
 #include "Editor/Windows/MainMenu.h"
+#include "Editor/Windows/SceneWindow.h"
 #include "Editor/Windows/WindowManager.h"
 #include "Editor/Windows/ObjectWindow.h"
 #include "Editor/Windows/CSGObjectWindow.h"
@@ -35,6 +36,7 @@ Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
 
 Editor::MainMenu* mainMenu = nullptr;
+Editor::SceneWindow* sceneWindow = nullptr;
 Editor::ObjectWindow* objectWindow = nullptr;
 Editor::CSGObjectWindow* csgObjectWindow = nullptr;
 Editor::InspectorWindow* inspectorWindow = nullptr;
@@ -71,6 +73,7 @@ int main(int argc, char* argv[])
     mainMenu = new Editor::MainMenu();
     Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
 
+    sceneWindow = new Editor::SceneWindow();
     inspectorWindow = new Editor::InspectorWindow();
     hierarchyWindow = new Editor::HierarchyWindow();
     assetsWindow = new Editor::AssetsWindow();
@@ -97,6 +100,7 @@ int main(int argc, char* argv[])
     csgEditWindow->setCanDock(false);
     csgEditWindow->setVisible(false);
 
+    Editor::WindowManager::singleton()->addWindow(sceneWindow);
     Editor::WindowManager::singleton()->addWindow(objectWindow);
     Editor::WindowManager::singleton()->addWindow(csgObjectWindow);
     Editor::WindowManager::singleton()->addWindow(gizmoWindow);
@@ -108,9 +112,10 @@ int main(int argc, char* argv[])
     Editor::ModifierManager::singleton()->init(scene);
 
     Editor::WindowManager::singleton()->setOnDock([] {
-        auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, 0, 0.25);
+        auto dockInspector = inspectorWindow->dock(Editor::DockDirection::Right, 0, 0.25f);
         auto dockHierarchy = hierarchyWindow->dock(Editor::DockDirection::Right, dockInspector.area2, 0.2f);
         auto dockAssets = assetsWindow->dock(Editor::DockDirection::Down, dockHierarchy.area2, 0.3f);
+        auto dockScene = sceneWindow->dock(Editor::DockDirection::None, dockAssets.area2, 0.7f);
     });
 
     bool isRunning = true;
