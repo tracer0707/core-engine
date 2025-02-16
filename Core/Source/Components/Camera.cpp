@@ -4,6 +4,7 @@
 #include "ComponentList.h"
 
 #include "../Renderer/Renderer.h"
+#include "../Assets/RenderTexture.h"
 #include "../Math/Mathf.h"
 #include "../Math/Plane.h"
 #include "../Scene/Object.h"
@@ -40,6 +41,12 @@ namespace Core
         int w = Renderer::singleton()->getWidth();
         int h = Renderer::singleton()->getHeight();
 
+        if (renderTexture != nullptr)
+        {
+            w = renderTexture->getWidth();
+            h = renderTexture->getHeight();
+        }
+
         float aspect = (float)w / (float)h;
 
         return glm::perspective(glm::radians(_fov), aspect, _near, _far);
@@ -49,6 +56,12 @@ namespace Core
     {
         float width = Renderer::singleton()->getWidth();
         float height = Renderer::singleton()->getHeight();
+
+        if (renderTexture != nullptr)
+        {
+            width = renderTexture->getWidth();
+            height = renderTexture->getHeight();
+        }
 
         glm::mat4x4 mViewProjInverse;
         mViewProjInverse = glm::inverse(getProjectionMatrix() * getViewMatrix());
@@ -72,6 +85,12 @@ namespace Core
 
         float width = Renderer::singleton()->getWidth();
         float height = Renderer::singleton()->getHeight();
+
+        if (renderTexture != nullptr)
+        {
+            width = renderTexture->getWidth();
+            height = renderTexture->getHeight();
+        }
 
         glm::vec4 spPoint = getProjectionMatrix() * (getViewMatrix() * glm::vec4(point, 1.0f));
 
@@ -100,6 +119,12 @@ namespace Core
     {
         float width = Renderer::singleton()->getWidth();
         float height = Renderer::singleton()->getHeight();
+
+        if (renderTexture != nullptr)
+        {
+            width = renderTexture->getWidth();
+            height = renderTexture->getHeight();
+        }
 
         float scrx = point.x / width;
         float scry = point.y / height;

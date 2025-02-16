@@ -6,11 +6,12 @@
 #include <System/Time.h>
 #include <Shared/String.h>
 #include <Shared/Path.h>
-#include <Renderer/RendererGL4.h>
+#include <Renderer/Renderer.h>
 #include <Scene/Scene.h>
 #include <Scene/Object.h>
 #include <Components/Camera.h>
 #include <Components/Transform.h>
+#include <Assets/RenderTexture.h>
 
 #include "Editor/Windows/MainMenu.h"
 #include "Editor/Windows/SceneWindow.h"
@@ -34,6 +35,7 @@ Core::Object* object = nullptr;
 Core::Camera* camera = nullptr;
 Core::Transform* transform = nullptr;
 Core::Scene* scene = nullptr;
+Core::RenderTexture* renderTexture = nullptr;
 
 Editor::MainMenu* mainMenu = nullptr;
 Editor::SceneWindow* sceneWindow = nullptr;
@@ -57,6 +59,9 @@ int main(int argc, char* argv[])
     transform = object->addComponent<Core::Transform*>();
     camera = object->addComponent<Core::Camera*>();
 
+    renderTexture = new Core::RenderTexture(512, 512);
+    camera->setRenderTexture(renderTexture);
+
     transform->setPosition(glm::vec3(0, 5, 5));
     transform->setRotation(glm::vec3(-10, 0, 0));
 
@@ -73,7 +78,12 @@ int main(int argc, char* argv[])
     mainMenu = new Editor::MainMenu();
     Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
 
-    sceneWindow = new Editor::SceneWindow();
+    sceneWindow = new Editor::SceneWindow(renderTexture->getNativeColorTextureId());
+    sceneWindow->setOnResize([=] (int w, int h)
+    {
+        renderTexture->setSize(w, h);
+    });
+
     inspectorWindow = new Editor::InspectorWindow();
     hierarchyWindow = new Editor::HierarchyWindow();
     assetsWindow = new Editor::AssetsWindow();
@@ -126,19 +136,34 @@ int main(int argc, char* argv[])
         Editor::CameraController::update();
         Editor::ModifierManager::singleton()->update();
         
-        int width = Core::Renderer::singleton()->getWidth();
-        int height = Core::Renderer::singleton()->getHeight();
+        //** Render scene begin **//
+        camera->getRenderTexture()->bind();
 
+        int viewportWidth = renderTexture->getWidth();
+        int viewportHeight = renderTexture->getHeight();
+
+        Core::Renderer::singleton()->setViewportSize(viewportWidth, viewportHeight);
         Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         Editor::Rendering::renderGrid(camera);
         Editor::ModifierManager::singleton()->render();
         scene->render();
 
+        Core::Renderer::singleton()->bindFrameBuffer(nullptr);
+        //** Render scene end **//
+
+        //** Render UI begin **//
+        int width = ctx->getWindowWidth();
+        int height = ctx->getWindowHeight();
+
+        Core::Renderer::singleton()->setViewportSize(width, height);
+        Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
         ctx->renderUiBegin();
         Editor::WindowManager::singleton()->update(width, height);
         Editor::Gizmo::singleton()->update(camera);
         ctx->renderUiEnd();
+        //** Render UI end **//
 
         ctx->swapWindow();
 

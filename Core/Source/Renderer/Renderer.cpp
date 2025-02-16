@@ -9,22 +9,6 @@ namespace Core
 {
 	Renderer* _singleton = nullptr;
 
-	const Program& Program::operator=(const Program& left)
-	{
-		program = left.program;
-		vertexShader = left.vertexShader;
-		fragmentShader = left.fragmentShader;
-		geometryShader = left.geometryShader;
-		computeShader = left.computeShader;
-
-		return *this;
-	}
-
-	const bool Program::operator==(const Program& left)
-	{
-		return program == left.program;
-	}
-
 	void Renderer::init(DeviceContext* ctx)
 	{
 #if CURRENT_RENDERER == GL4

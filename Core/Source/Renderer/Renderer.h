@@ -6,7 +6,9 @@
 #include <glm/mat4x4.hpp>
 
 #include "../Shared/String.h"
+#include "Program.h"
 #include "VertexBuffer.h"
+#include "FrameBuffer.h"
 #include "Color.h"
 
 #include <GL/glew.h>
@@ -30,19 +32,6 @@
 namespace Core
 {
 	class DeviceContext;
-
-	struct Program
-	{
-	public:
-		UInt32 program = 0;
-		UInt32 vertexShader = 0;
-		UInt32 fragmentShader = 0;
-		UInt32 geometryShader = 0;
-		UInt32 computeShader = 0;
-
-		const Program& operator =(const Program& left);
-		const bool operator ==(const Program& left);
-	};
 
 	class Renderer
 	{
@@ -79,6 +68,10 @@ namespace Core
 		virtual const void deleteBuffer(const VertexBuffer* buffer) = 0;
 		virtual const void bindBuffer(const VertexBuffer* buffer) = 0;
 		virtual const void drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
+
+		virtual const FrameBuffer* createFrameBuffer(UInt32 width, UInt32 height) = 0;
+		virtual const void deleteFrameBuffer(const FrameBuffer* buffer) = 0;
+		virtual const void bindFrameBuffer(const FrameBuffer* buffer) = 0;
 
 		virtual const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format) = 0;
 		virtual const void bindTexture(UInt32 id, const char* name, UInt32 slot) = 0;

@@ -76,7 +76,29 @@ namespace Editor
 		_wndClass.DockNodeFlagsOverrideSet = _dockFlags;
 		ImGui::SetNextWindowClass(&_wndClass);
 
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
 		ImGui::Begin(ToStdString(_name).c_str(), &_visible, _flags);
+		ImGui::PopStyleVar();
+
+		int cw = ImGui::GetContentRegionAvail().x;
+		int ch = ImGui::GetContentRegionAvail().y;
+
+		if (cw != _clientWidth || ch != _clientHeight)
+		{
+			EVENT(
+			{
+				onResize(cw, ch);
+
+				if (_onResize != nullptr)
+				{
+					_onResize(cw, ch);
+				}
+			}, =);
+		}
+
+		_clientWidth = cw;
+		_clientHeight = ch;
+
 		updateControls();
 		ImGui::End();
 	}

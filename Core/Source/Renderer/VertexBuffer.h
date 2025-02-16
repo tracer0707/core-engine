@@ -7,7 +7,7 @@
 
 namespace Core
 {
-	struct Vertex
+	class Vertex
 	{
 	public:
 		Real position[3];
@@ -20,7 +20,7 @@ namespace Core
 		void make(glm::vec3 pos, glm::vec2 uvs, Color col);
 	};
 
-	struct VertexBuffer
+	class VertexBuffer
 	{
 	public:
 		UInt32 vbo = 0;

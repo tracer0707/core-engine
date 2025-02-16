@@ -1,0 +1,39 @@
+#include "Image.h"
+
+#include <imgui.h>
+#include <imgui_internal.h>
+
+#include <Assets/Texture.h>
+
+namespace Editor
+{
+	Image::Image()
+	{
+	}
+
+	Image::Image(UInt32 width, UInt32 height)
+	{
+		this->width = width;
+		this->height = height;
+	}
+
+	Image::~Image()
+	{
+	}
+
+	void Image::update()
+	{
+		if (!_visible) return;
+
+		float w = width;
+		float h = height;
+
+		if (w == 0) w = ImGui::GetContentRegionAvail().x;
+		if (h == 0) h = ImGui::GetContentRegionAvail().y;
+
+		UInt32 texId = nativeTextureId;
+		if (texture != nullptr) texId = texture->getNativeId();
+
+		ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
+	}
+}

@@ -13,7 +13,7 @@ namespace Core
 
 namespace Editor
 {
-	class Button: public Control
+	class Button : public Control
 	{
 	private:
 		UString _text = "";

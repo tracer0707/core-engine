@@ -11,9 +11,7 @@
 
 namespace Core
 {
-    RendererGL4::RendererGL4(DeviceContext* ctx): Renderer(ctx)
-    {
-    }
+    RendererGL4::RendererGL4(DeviceContext* ctx) : Renderer(ctx) {}
 
     const void RendererGL4::setViewportSize(int w, int h)
     {
@@ -97,16 +95,16 @@ namespace Core
 
     const void RendererGL4::bindProgram(const Program* program)
     {
-        if (program != nullptr)
-        {
-            currentProgram = program;
-            glUseProgram(program->program);
-        }
-        else
+        if (program == nullptr)
         {
             currentProgram = defaultProgram;
             glUseProgram(defaultProgram->program);
+
+            return;
         }
+
+        currentProgram = program;
+        glUseProgram(program->program);
     }
 
     const char* RendererGL4::checkProgramErrors(UInt32 program)
@@ -167,6 +165,14 @@ namespace Core
 
     const void RendererGL4::bindBuffer(const VertexBuffer* buffer)
     {
+        if (buffer == nullptr)
+        {
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+            return;
+        }
+
         glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
      
         UInt32 position = glGetAttribLocation(currentProgram->program, "position");
@@ -237,6 +243,58 @@ namespace Core
         {
             glDrawArrays(primitiveType, 0, buffer->vertexArraySize);
         }
+    }
+
+    const FrameBuffer* RendererGL4::createFrameBuffer(UInt32 width, UInt32 height)
+    {
+        FrameBuffer* fb = new FrameBuffer();
+
+        glGenFramebuffers(1, &fb->frameBuffer);
+        glGenTextures(1, &fb->colorTexture);
+        glGenRenderbuffers(1, &fb->depthTexture);
+
+        glBindFramebuffer(GL_FRAMEBUFFER, fb->frameBuffer);
+
+        glBindTexture(GL_TEXTURE_2D, fb->colorTexture);
+        glTexImage2D(GL_TEXTURE_2D,
+            0,
+            GL_RGBA,
+            width, height,
+            0,
+            GL_RGBA,
+            GL_UNSIGNED_BYTE,
+            NULL);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->colorTexture, 0);
+
+        glBindRenderbuffer(GL_RENDERBUFFER, fb->depthTexture);
+        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+        glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb->depthTexture);
+
+        return fb;
+    }
+
+    const void RendererGL4::deleteFrameBuffer(const FrameBuffer* buffer)
+    {
+        glDeleteFramebuffers(1, &buffer->frameBuffer);
+        glDeleteTextures(1, &buffer->colorTexture);
+        glDeleteRenderbuffers(1, &buffer->depthTexture);
+
+        delete buffer;
+    }
+
+    const void RendererGL4::bindFrameBuffer(const FrameBuffer* buffer)
+    {
+        if (buffer == nullptr)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            return;
+        }
+
+        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
     }
 
     const UInt32 RendererGL4::createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format)

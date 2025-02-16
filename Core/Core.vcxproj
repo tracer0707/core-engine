@@ -30,6 +30,7 @@
     <ClCompile Include="Source\Assets\Asset.cpp" />
     <ClCompile Include="Source\Assets\Material.cpp" />
     <ClCompile Include="Source\Assets\Mesh.cpp" />
+    <ClCompile Include="Source\Assets\RenderTexture.cpp" />
     <ClCompile Include="Source\Assets\Shader.cpp" />
     <ClCompile Include="Source\Assets\Texture.cpp" />
     <ClCompile Include="Source\Classes\bc7compressor.cpp" />
@@ -41,7 +42,9 @@
     <ClCompile Include="Source\Math\Mathf.cpp" />
     <ClCompile Include="Source\Math\Plane.cpp" />
     <ClCompile Include="Source\Math\Ray.cpp" />
+    <ClCompile Include="Source\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="Source\Renderer\Primitives.cpp" />
+    <ClCompile Include="Source\Renderer\Program.cpp" />
     <ClCompile Include="Source\Renderer\Renderer.cpp" />
     <ClCompile Include="Source\Renderer\RendererGL4.cpp" />
     <ClCompile Include="Source\Renderer\VertexBuffer.cpp" />
@@ -70,6 +73,7 @@
     <ClInclude Include="Source\Assets\Asset.h" />
     <ClInclude Include="Source\Assets\Material.h" />
     <ClInclude Include="Source\Assets\Mesh.h" />
+    <ClInclude Include="Source\Assets\RenderTexture.h" />
     <ClInclude Include="Source\Assets\Shader.h" />
     <ClInclude Include="Source\Assets\Texture.h" />
     <ClInclude Include="Source\Classes\bc7compressor.h" />
@@ -86,7 +90,9 @@
     <ClInclude Include="Source\Math\Plane.h" />
     <ClInclude Include="Source\Math\Ray.h" />
     <ClInclude Include="Source\Renderer\Color.h" />
+    <ClInclude Include="Source\Renderer\FrameBuffer.h" />
     <ClInclude Include="Source\Renderer\Primitives.h" />
+    <ClInclude Include="Source\Renderer\Program.h" />
     <ClInclude Include="Source\Renderer\Renderer.h" />
     <ClInclude Include="Source\Renderer\RendererGL4.h" />
     <ClInclude Include="Source\Renderer\VertexBuffer.h" />

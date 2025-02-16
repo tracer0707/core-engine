@@ -11,10 +11,13 @@
 namespace Core
 {
 	class Object;
+	class RenderTexture;
 
 	class Camera: public Component
 	{
 	private:
+		RenderTexture* renderTexture = nullptr;
+
 		float _fov = 75.0f;
 		float _near = 0.01f;
 		float _far = 1000.0f;
@@ -41,5 +44,8 @@ namespace Core
 
 		const glm::vec3 worldToScreenPoint(glm::vec3 point);
 		const glm::vec3 screenToWorldPoint(glm::vec3 point);
+
+		void setRenderTexture(RenderTexture* value) { renderTexture = value; }
+		RenderTexture* getRenderTexture() { return renderTexture; }
 	};
 }

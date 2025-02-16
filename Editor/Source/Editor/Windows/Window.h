@@ -1,9 +1,11 @@
 #pragma once
 
+#include <functional>
 #include <Shared/String.h>
 
 #include "WindowManager.h"
 #include "../Controls/Container.h"
+#include "../Controls/Style.h"
 
 namespace Editor
 {
@@ -34,9 +36,13 @@ namespace Editor
 
 		DockArea _dockArea;
 
+		std::function<void(int, int)> _onResize = nullptr;
+
 		UString _name;
 		int _width = 400;
 		int _height = 300;
+		int _clientWidth = 0;
+		int _clientHeight = 0;
 
 		bool _visible = true;
 		bool _hasTitle = true;
@@ -44,6 +50,11 @@ namespace Editor
 		bool _canDock = true;
 
 		void update();
+
+	protected:
+		Style _style;
+
+		virtual void onResize(int newWidth, int newHeight) {}
 
 	public:
 		Window(UString name);
@@ -60,6 +71,9 @@ namespace Editor
 		int getHeight() { return _height; }
 		void setHeight(int value) { _height = value; }
 
+		int getClientWidth() { return _clientWidth; }
+		int getClientHeight() { return _clientHeight; }
+
 		void setHasTitle(bool value) { _hasTitle = value; }
 		bool getHasTitle() { return _hasTitle; }
 
@@ -68,6 +82,10 @@ namespace Editor
 
 		void setCanDock(bool value) { _canDock = value; }
 		bool getCanDock() { return _canDock; }
+
+		void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
+
+		Style& getStyle() { return _style; }
 
 		unsigned long long getId() { return _id; }
 

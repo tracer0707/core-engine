@@ -139,6 +139,7 @@
     <ClCompile Include="Source\Editor\Controls\Button.cpp" />
     <ClCompile Include="Source\Editor\Controls\Container.cpp" />
     <ClCompile Include="Source\Editor\Controls\Control.cpp" />
+    <ClCompile Include="Source\Editor\Controls\Image.cpp" />
     <ClCompile Include="Source\Editor\Controls\LinearLayout.cpp" />
     <ClCompile Include="Source\Editor\Controls\MenuBar.cpp" />
     <ClCompile Include="Source\Editor\Controls\MenuItem.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Source\Editor\Controls\Button.h" />
     <ClInclude Include="Source\Editor\Controls\Container.h" />
     <ClInclude Include="Source\Editor\Controls\Control.h" />
+    <ClInclude Include="Source\Editor\Controls\Image.h" />
     <ClInclude Include="Source\Editor\Controls\LinearLayout.h" />
     <ClInclude Include="Source\Editor\Controls\MenuBar.h" />
     <ClInclude Include="Source\Editor\Controls\MenuItem.h" />

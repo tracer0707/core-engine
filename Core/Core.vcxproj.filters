@@ -153,6 +153,15 @@
     <ClCompile Include="Source\System\Time.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Renderer\FrameBuffer.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Renderer\Program.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\RenderTexture.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -286,6 +295,15 @@
     </ClInclude>
     <ClInclude Include="Source\System\Time.h">
       <Filter>Исходные файлы\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\FrameBuffer.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Renderer\Program.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\RenderTexture.h">
+      <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

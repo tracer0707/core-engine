@@ -120,6 +120,9 @@
     <ClCompile Include="Source\Editor\Windows\SceneWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\Image.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\CameraController.h">
@@ -214,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\SceneWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Image.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,10 @@ namespace Core
 		const void bindBuffer(const VertexBuffer* buffer);
 		const void drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
 
+		const FrameBuffer* createFrameBuffer(UInt32 width, UInt32 height);
+		const void deleteFrameBuffer(const FrameBuffer* buffer);
+		const void bindFrameBuffer(const FrameBuffer* buffer);
+
 		const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format);
 		const void bindTexture(UInt32 id, const char* name, UInt32 slot);
 		const void deleteTexture(UInt32 id);
