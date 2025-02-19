@@ -16,7 +16,6 @@ namespace Editor
 		static Core::Camera* _camera;
 
 		static bool hovered;
-		static bool wasHovered;
 
 		static bool lButtonDown;
 		static bool rButtonDown;
@@ -37,6 +36,6 @@ namespace Editor
 
 	public:
 		static void init(Core::Camera* camera);
-		static void update();
+		static void update(bool isMouseInView);
 	};
 }

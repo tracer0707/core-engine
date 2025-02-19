@@ -4,6 +4,12 @@
 
 #include "Window.h"
 
+namespace Core
+{
+	class Camera;
+	class RenderTexture;
+}
+
 namespace Editor
 {
 	class LinearLayout;
@@ -15,12 +21,15 @@ namespace Editor
 	private:
 		Image* image = nullptr;
 
-		UInt32 renderTextureId = 0;
+		Core::Camera* camera = nullptr;
+		Core::RenderTexture* renderTexture = nullptr;
+
+	protected:
+		virtual void onResize(int newWidth, int newHeight);
+		virtual void onUpdate();
 
 	public:
-		SceneWindow(UInt32 renderTextureId);
+		SceneWindow(Core::Camera* camera, Core::RenderTexture* renderTexture);
 		virtual ~SceneWindow();
-
-		void setRenderTextureId(UInt32 value) { renderTextureId = value; }
 	};
 }

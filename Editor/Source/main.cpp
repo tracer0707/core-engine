@@ -27,7 +27,6 @@
 #include "Editor/Modifiers/ModifierManager.h"
 #include "Editor/Modifiers/CSGModifier.h"
 
-#include "Editor/CameraController.h"
 #include "Editor/Rendering.h"
 #include "Editor/Gizmo.h"
 
@@ -68,8 +67,6 @@ int main(int argc, char* argv[])
     scene = new Core::Scene();
     scene->setMainCamera(camera);
 
-    Editor::CameraController::init(camera);
-
     csgModifier = new Editor::CSGModifier();
     Editor::ModifierManager::singleton()->addModifier(csgModifier);
 
@@ -78,11 +75,7 @@ int main(int argc, char* argv[])
     mainMenu = new Editor::MainMenu();
     Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
 
-    sceneWindow = new Editor::SceneWindow(renderTexture->getNativeColorTextureId());
-    sceneWindow->setOnResize([=] (int w, int h)
-    {
-        renderTexture->setSize(w, h);
-    });
+    sceneWindow = new Editor::SceneWindow(camera, renderTexture);
 
     inspectorWindow = new Editor::InspectorWindow();
     hierarchyWindow = new Editor::HierarchyWindow();
@@ -133,7 +126,7 @@ int main(int argc, char* argv[])
     while (isRunning)
     {
         ctx->update(isRunning);
-        Editor::CameraController::update();
+
         Editor::ModifierManager::singleton()->update();
         
         //** Render scene begin **//
@@ -172,6 +165,7 @@ int main(int argc, char* argv[])
 
     Editor::ModifierManager::singleton()->destroy();
     Editor::WindowManager::singleton()->destroy();
+    delete renderTexture;
     delete scene;
 
     ctx->destroyWindow();

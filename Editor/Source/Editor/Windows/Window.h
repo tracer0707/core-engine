@@ -55,6 +55,7 @@ namespace Editor
 		Style _style;
 
 		virtual void onResize(int newWidth, int newHeight) {}
+		virtual void onUpdate() {}
 
 	public:
 		Window(UString name);

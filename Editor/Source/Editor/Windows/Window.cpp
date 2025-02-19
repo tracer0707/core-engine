@@ -99,7 +99,9 @@ namespace Editor
 		_clientWidth = cw;
 		_clientHeight = ch;
 
+		onUpdate();
 		updateControls();
+
 		ImGui::End();
 	}
 }
