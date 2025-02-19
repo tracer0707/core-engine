@@ -143,7 +143,7 @@ int main(int argc, char* argv[])
         int viewportHeight = renderTexture->getHeight();
 
         Core::Renderer::singleton()->setViewportSize(viewportWidth, viewportHeight);
-        Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
         Editor::Rendering::renderGrid(camera);
         Editor::ModifierManager::singleton()->render();
@@ -157,7 +157,7 @@ int main(int argc, char* argv[])
         int height = ctx->getWindowHeight();
 
         Core::Renderer::singleton()->setViewportSize(width, height);
-        Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
         ctx->renderUiBegin();
         Editor::WindowManager::singleton()->update(width, height);

@@ -24,7 +24,7 @@ namespace Editor
 		/* CSG tool */
 
 		Button* csgTool = new Button();
-		Core::Texture* csgToolImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/csg.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgToolImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/csg.png"), Core::TextureFormat::RGBA8);
 		csgTool->setSize(32, 32);
 		csgTool->setImage(csgToolImage);
 
@@ -41,7 +41,7 @@ namespace Editor
 		/* Light tool */
 
 		Button* lightTool = new Button();
-		Core::Texture* lightToolImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/gizmo/pointlight.png"), Core::TextureFormat::RGBA);
+		Core::Texture* lightToolImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/gizmo/pointlight.png"), Core::TextureFormat::RGBA8);
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
 
@@ -56,7 +56,7 @@ namespace Editor
 		/* Camera tool */
 
 		Button* cameraTool = new Button();
-		Core::Texture* cameraToolImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/gizmo/camera.png"), Core::TextureFormat::RGBA);
+		Core::Texture* cameraToolImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/gizmo/camera.png"), Core::TextureFormat::RGBA8);
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);
 

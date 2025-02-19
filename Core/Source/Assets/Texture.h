@@ -5,17 +5,12 @@
 #include "Asset.h"
 
 #include "../Renderer/Color.h"
+#include "../Renderer/TextureFormat.h"
 #include "../Classes/bc7compressor.h"
 #include "../Shared/String.h"
 
 namespace Core
 {
-	enum class TextureFormat
-	{
-		RGBA,
-		BC7
-	};
-
 	class Texture : public Asset
 	{
 	private:
@@ -26,7 +21,7 @@ namespace Core
 
 		int nativeId = 0;
 
-		TextureFormat format = TextureFormat::RGBA;
+		TextureFormat format = TextureFormat::RGBA8;
 
 		void makeSquare();
 		static void copyPixels(color_quad_u8_vec& dst, FIBITMAP* src, int width, int height);

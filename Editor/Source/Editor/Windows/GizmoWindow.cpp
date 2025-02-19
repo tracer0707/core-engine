@@ -20,7 +20,7 @@ namespace Editor
 		/* Undo */
 
 		Button* undoBtn = new Button();
-		Core::Texture* undoBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/undo.png"), Core::TextureFormat::RGBA);
+		Core::Texture* undoBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/undo.png"), Core::TextureFormat::RGBA8);
 		undoBtn->setSize(32, 32);
 		undoBtn->setImage(undoBtnImage);
 
@@ -29,7 +29,7 @@ namespace Editor
 		/* Redo */
 
 		Button* redoBtn = new Button();
-		Core::Texture* redoBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/redo.png"), Core::TextureFormat::RGBA);
+		Core::Texture* redoBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/redo.png"), Core::TextureFormat::RGBA8);
 		redoBtn->setSize(32, 32);
 		redoBtn->setImage(redoBtnImage);
 
@@ -38,7 +38,7 @@ namespace Editor
 		/* Select */
 
 		Button* selectBtn = new Button();
-		Core::Texture* selectBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA);
+		Core::Texture* selectBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA8);
 		selectBtn->setSize(32, 32);
 		selectBtn->setImage(selectBtnImage);
 
@@ -47,7 +47,7 @@ namespace Editor
 		/* Move */
 
 		Button* moveBtn = new Button();
-		Core::Texture* moveBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/move.png"), Core::TextureFormat::RGBA);
+		Core::Texture* moveBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/move.png"), Core::TextureFormat::RGBA8);
 		moveBtn->setSize(32, 32);
 		moveBtn->setImage(moveBtnImage);
 
@@ -56,7 +56,7 @@ namespace Editor
 		/* Rotate */
 
 		Button* rotateBtn = new Button();
-		Core::Texture* rotateBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/rotate.png"), Core::TextureFormat::RGBA);
+		Core::Texture* rotateBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/rotate.png"), Core::TextureFormat::RGBA8);
 		rotateBtn->setSize(32, 32);
 		rotateBtn->setImage(rotateBtnImage);
 
@@ -65,7 +65,7 @@ namespace Editor
 		/* Scale */
 
 		Button* scaleBtn = new Button();
-		Core::Texture* scaleBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/scale.png"), Core::TextureFormat::RGBA);
+		Core::Texture* scaleBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/scale.png"), Core::TextureFormat::RGBA8);
 		scaleBtn->setSize(32, 32);
 		scaleBtn->setImage(scaleBtnImage);
 
