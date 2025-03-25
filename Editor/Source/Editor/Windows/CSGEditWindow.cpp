@@ -28,7 +28,7 @@ namespace Editor
 		/* CSG select */
 
 		_csgSelectBtn = new Button();
-		Core::Texture* csgAddBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgAddBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA8);
 		_csgSelectBtn->setSize(32, 32);
 		_csgSelectBtn->setImage(csgAddBtnImage);
 		_csgSelectBtn->setOnClick([=] {
@@ -42,7 +42,7 @@ namespace Editor
 		/* CSG edit points */
 
 		Button* csgEditPointsBtn = new Button();
-		Core::Texture* csgEditPointsBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/points.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgEditPointsBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/points.png"), Core::TextureFormat::RGBA8);
 		csgEditPointsBtn->setSize(32, 32);
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
 		csgEditPointsBtn->setOnClick([=] {
@@ -56,7 +56,7 @@ namespace Editor
 		/* CSG edit edges */
 
 		Button* csgEditEdgesBtn = new Button();
-		Core::Texture* csgEditEdgesBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/edges.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgEditEdgesBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/edges.png"), Core::TextureFormat::RGBA8);
 		csgEditEdgesBtn->setSize(32, 32);
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
 		csgEditEdgesBtn->setOnClick([=] {
@@ -70,7 +70,7 @@ namespace Editor
 		/* CSG edit faces */
 
 		Button* csgEditFacesBtn = new Button();
-		Core::Texture* csgEditFacesBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/face.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgEditFacesBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/face.png"), Core::TextureFormat::RGBA8);
 		csgEditFacesBtn->setSize(32, 32);
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
 		csgEditFacesBtn->setOnClick([=] {

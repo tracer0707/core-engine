@@ -30,7 +30,7 @@ namespace Editor
 		/* CSG add model */
 
 		_csgAddModelBtn = new Button();
-		Core::Texture* csgAddModelBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgAddModelBtnImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA8);
 		_csgAddModelBtn->setSize(32, 32);
 		_csgAddModelBtn->setImage(csgAddModelBtnImage);
 		_csgAddModelBtn->setOnClick([=] {
@@ -42,7 +42,7 @@ namespace Editor
 		/* CSG cube */
 
 		Button* csgCube = new Button();
-		Core::Texture* csgCubeImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cube.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgCubeImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cube.png"), Core::TextureFormat::RGBA8);
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
 		csgCube->setOnClick([=] {
@@ -54,7 +54,7 @@ namespace Editor
 		/* CSG sphere */
 
 		Button* csgSphere = new Button();
-		Core::Texture* csgSphereImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/sphere.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgSphereImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/sphere.png"), Core::TextureFormat::RGBA8);
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
 		csgSphere->setOnClick([=] {
@@ -66,7 +66,7 @@ namespace Editor
 		/* CSG cylinder */
 
 		Button* csgCylinder = new Button();
-		Core::Texture* csgCylinderImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cylinder.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgCylinderImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cylinder.png"), Core::TextureFormat::RGBA8);
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
 		csgCylinder->setOnClick([=] {
@@ -78,7 +78,7 @@ namespace Editor
 		/* CSG cone */
 
 		Button* csgCone = new Button();
-		Core::Texture* csgConeImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cone.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgConeImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cone.png"), Core::TextureFormat::RGBA8);
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
 		csgCone->setOnClick([=] {
@@ -90,7 +90,7 @@ namespace Editor
 		/* CSG stair */
 
 		Button* csgStair = new Button();
-		Core::Texture* csgStairImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/stairs.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgStairImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/stairs.png"), Core::TextureFormat::RGBA8);
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
 		csgStair->setOnClick([=] {
@@ -102,7 +102,7 @@ namespace Editor
 		/* CSG polygon */
 
 		Button* csgPolygon = new Button();
-		Core::Texture* csgPolygonImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/polygon.png"), Core::TextureFormat::RGBA);
+		Core::Texture* csgPolygonImage = Core::Texture::loadFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/polygon.png"), Core::TextureFormat::RGBA8);
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);
 		csgPolygon->setOnClick([=] {

@@ -16,8 +16,7 @@ namespace Editor
 {
 	Core::Camera* CameraController::_camera = nullptr;
 
-	bool CameraController::hovered = true;
-	bool CameraController::wasHovered = true;
+	bool CameraController::hovered = false;
 
 	bool CameraController::lButtonDown = false;
 	bool CameraController::rButtonDown = false;
@@ -38,9 +37,6 @@ namespace Editor
 
 		Core::InputManager::singleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 			{
-				if (!hovered)
-					return;
-
 				mouseDown(x, y, static_cast<int>(mb));
 			}
 		);
@@ -59,16 +55,15 @@ namespace Editor
 
 		Core::InputManager::singleton()->subscribeMouseWheelEvent([=](int x, int y)
 			{
-				if (!hovered)
-					return;
-
 				mouseWheel(x, y);
 			}
 		);
 	}
 
-	void CameraController::update()
+	void CameraController::update(bool isMouseInView)
 	{
+		hovered = isMouseInView;
+
 		ctrlPressed = Core::InputManager::singleton()->getKey(SDL_SCANCODE_LCTRL);
 		shiftPressed = Core::InputManager::singleton()->getKey(SDL_SCANCODE_LSHIFT);
 
@@ -117,6 +112,9 @@ namespace Editor
 
 	void CameraController::mouseDown(int x, int y, int mb)
 	{
+		if (!hovered)
+			return;
+
 		Core::InputManager::MouseButton mbe = static_cast<Core::InputManager::MouseButton>(mb);
 
 		if (mbe == Core::InputManager::MouseButton::MBE_LEFT)
@@ -158,8 +156,6 @@ namespace Editor
 		{
 			mButtonDown = false;
 		}
-
-		wasHovered = false;
 	}
 
 	void CameraController::mouseMove(int x, int y)
@@ -196,6 +192,9 @@ namespace Editor
 
 	void CameraController::mouseWheel(int x, int y)
 	{
+		if (!hovered)
+			return;
+
 		if (!lButtonDown)
 		{
 			Core::Transform* t = _camera->getOwner()->findComponent<Core::Transform*>();

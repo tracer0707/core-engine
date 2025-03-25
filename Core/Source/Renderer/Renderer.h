@@ -10,9 +10,11 @@
 #include "VertexBuffer.h"
 #include "FrameBuffer.h"
 #include "Color.h"
+#include "TextureFormat.h"
 
 #include <GL/glew.h>
 
+//Render flags
 #define C_CW 1 << 0
 #define C_CCW 1 << 1
 #define C_CULL_BACK 1 << 2
@@ -28,6 +30,10 @@
 #define C_DEPTH_GREATER 1 << 12
 #define C_DEPTH_EQUAL 1 << 13
 #define C_DEPTH_NOTEQUAL 1 << 14
+
+//Clear flags
+#define C_CLEAR_COLOR 1 << 0
+#define C_CLEAR_DEPTH 1 << 1
 
 namespace Core
 {
@@ -73,10 +79,10 @@ namespace Core
 		virtual const void deleteFrameBuffer(const FrameBuffer* buffer) = 0;
 		virtual const void bindFrameBuffer(const FrameBuffer* buffer) = 0;
 
-		virtual const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format) = 0;
+		virtual const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, TextureFormat format) = 0;
 		virtual const void bindTexture(UInt32 id, const char* name, UInt32 slot) = 0;
 		virtual const void deleteTexture(UInt32 id) = 0;
 
-		virtual const void clear(UInt32 flags) = 0;
+		virtual const void clear(UInt32 flags, Color color) = 0;
 	};
 }

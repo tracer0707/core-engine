@@ -49,7 +49,12 @@ namespace Core
 
 		tex->makeSquare();
 
-		if (fmt == TextureFormat::BC7)
+		if (fmt == TextureFormat::RGBA8)
+		{
+			unsigned char* data = FreeImage_GetBits(tex->_bitmap);
+			tex->nativeId = Renderer::singleton()->createTexture(data, tex->getWidth(), tex->getHeight(), 0, fmt);
+		}
+		else if (fmt == TextureFormat::BC7)
 		{
 			color_quad_u8_vec pixels;
 			uint32_t imageSize = (((tex->width + 3) & ~3) * ((tex->height + 3) & ~3) * 8) >> 3;
@@ -59,14 +64,13 @@ namespace Core
 			bc7compress(pixels, tex->width, tex->height, newPixels, size, 1);
 			pixels.clear();
 
-			tex->nativeId = Renderer::singleton()->createTexture(newPixels, tex->getWidth(), tex->getHeight(), size, GL_COMPRESSED_RGBA_BPTC_UNORM);
+			tex->nativeId = Renderer::singleton()->createTexture(newPixels, tex->getWidth(), tex->getHeight(), size, fmt);
 
 			delete[] newPixels;
 		}
 		else
 		{
-			unsigned char* data = FreeImage_GetBits(tex->_bitmap);
-			tex->nativeId = Renderer::singleton()->createTexture(data, tex->getWidth(), tex->getHeight(), 0, GL_RGBA8);
+			throw "Texture format is unsupported";
 		}
 
 		FreeImage_Unload(tex->_bitmap);
@@ -102,7 +106,7 @@ namespace Core
 		tex->updateSize();
 
 		unsigned char* _data = FreeImage_GetBits(tex->_bitmap);
-		tex->nativeId = Renderer::singleton()->createTexture(_data, tex->getWidth(), tex->getHeight(), 0, GL_RGBA8);
+		tex->nativeId = Renderer::singleton()->createTexture(_data, tex->getWidth(), tex->getHeight(), 0, TextureFormat::RGBA8);
 
 		FreeImage_Unload(tex->_bitmap);
 

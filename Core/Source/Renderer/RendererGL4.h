@@ -30,10 +30,10 @@ namespace Core
 		const void deleteFrameBuffer(const FrameBuffer* buffer);
 		const void bindFrameBuffer(const FrameBuffer* buffer);
 
-		const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format);
+		const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, TextureFormat format);
 		const void bindTexture(UInt32 id, const char* name, UInt32 slot);
 		const void deleteTexture(UInt32 id);
 
-		const void clear(UInt32 flags);
+		const void clear(UInt32 flags, Color color);
 	};	
 }

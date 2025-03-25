@@ -297,7 +297,7 @@ namespace Core
         glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
     }
 
-    const UInt32 RendererGL4::createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, UInt32 format)
+    const UInt32 RendererGL4::createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, TextureFormat format)
     {
         GLuint tex;
         glGenTextures(1, &tex);
@@ -307,10 +307,18 @@ namespace Core
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
-        if (format == GL_RGBA8)
+        if (format == TextureFormat::RGBA8)
+        {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);
-        else if (format == GL_COMPRESSED_RGBA_BPTC_UNORM)
-            glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, size, data);
+        }
+        else if (format == TextureFormat::BC7)
+        {
+            glCompressedTexImage2D(GL_TEXTURE_2D, 0, GL_COMPRESSED_RGBA_BPTC_UNORM, width, height, 0, size, data);
+        }
+        else
+        {
+            throw "Texture format is unsupported";
+        }
 
         glGenerateMipmap(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -332,10 +340,22 @@ namespace Core
         glDeleteTextures(1, &id);
     }
 
-    const void RendererGL4::clear(UInt32 flags)
+    const void RendererGL4::clear(UInt32 flags, Color color)
     {
-        glClearDepth(1.0f);
-        glClearColor(0.4f, 0.4f, 0.4f, 1.0f);
-        glClear(flags);
+        UInt32 _flags = 0;
+
+        if (flags & C_CLEAR_DEPTH)
+        {
+            _flags |= GL_DEPTH_BUFFER_BIT;
+            glClearDepth(1.0f);
+        }
+
+        if (flags & C_CLEAR_COLOR)
+        {
+            _flags |= GL_COLOR_BUFFER_BIT;
+            glClearColor(color.r, color.g, color.b, color.a);
+        }
+
+        glClear(_flags);
     }
 }

@@ -305,5 +305,8 @@
     <ClInclude Include="Source\Assets\RenderTexture.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Renderer\TextureFormat.h">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

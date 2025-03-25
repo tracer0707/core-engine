@@ -27,7 +27,6 @@
 #include "Editor/Modifiers/ModifierManager.h"
 #include "Editor/Modifiers/CSGModifier.h"
 
-#include "Editor/CameraController.h"
 #include "Editor/Rendering.h"
 #include "Editor/Gizmo.h"
 
@@ -68,8 +67,6 @@ int main(int argc, char* argv[])
     scene = new Core::Scene();
     scene->setMainCamera(camera);
 
-    Editor::CameraController::init(camera);
-
     csgModifier = new Editor::CSGModifier();
     Editor::ModifierManager::singleton()->addModifier(csgModifier);
 
@@ -78,11 +75,7 @@ int main(int argc, char* argv[])
     mainMenu = new Editor::MainMenu();
     Editor::WindowManager::singleton()->setMenuBar(mainMenu->getMenuBar());
 
-    sceneWindow = new Editor::SceneWindow(renderTexture->getNativeColorTextureId());
-    sceneWindow->setOnResize([=] (int w, int h)
-    {
-        renderTexture->setSize(w, h);
-    });
+    sceneWindow = new Editor::SceneWindow(camera, renderTexture);
 
     inspectorWindow = new Editor::InspectorWindow();
     hierarchyWindow = new Editor::HierarchyWindow();
@@ -133,7 +126,7 @@ int main(int argc, char* argv[])
     while (isRunning)
     {
         ctx->update(isRunning);
-        Editor::CameraController::update();
+
         Editor::ModifierManager::singleton()->update();
         
         //** Render scene begin **//
@@ -143,7 +136,7 @@ int main(int argc, char* argv[])
         int viewportHeight = renderTexture->getHeight();
 
         Core::Renderer::singleton()->setViewportSize(viewportWidth, viewportHeight);
-        Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
         Editor::Rendering::renderGrid(camera);
         Editor::ModifierManager::singleton()->render();
@@ -157,7 +150,7 @@ int main(int argc, char* argv[])
         int height = ctx->getWindowHeight();
 
         Core::Renderer::singleton()->setViewportSize(width, height);
-        Core::Renderer::singleton()->clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
         ctx->renderUiBegin();
         Editor::WindowManager::singleton()->update(width, height);
@@ -172,6 +165,7 @@ int main(int argc, char* argv[])
 
     Editor::ModifierManager::singleton()->destroy();
     Editor::WindowManager::singleton()->destroy();
+    delete renderTexture;
     delete scene;
 
     ctx->destroyWindow();
