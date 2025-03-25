@@ -70,7 +70,7 @@ int main(int argc, char* argv[])
     scene->setMainCamera(camera);
 
     Editor::CameraController::init(camera);
-    Editor::ObjectPicker::init(camera);
+    Editor::ObjectPicker::init(scene, camera);
 
     csgModifier = new Editor::CSGModifier();
     Editor::ModifierManager::singleton()->addModifier(csgModifier);
