@@ -8,22 +8,18 @@ namespace Core
 
     void AxisAlignedBox::merge(const AxisAlignedBox& rhs)
     {
-        // Do nothing if rhs null, or this is infinite
         if ((rhs.mExtent == Extent::EXTENT_NULL) || (mExtent == Extent::EXTENT_INFINITE))
         {
             return;
         }
-        // Otherwise if rhs is infinite, make this infinite, too
         else if (rhs.mExtent == Extent::EXTENT_INFINITE)
         {
             mExtent = Extent::EXTENT_INFINITE;
         }
-        // Otherwise if current null, just take rhs
         else if (mExtent == Extent::EXTENT_NULL)
         {
             setExtents(rhs.mMinimum, rhs.mMaximum);
         }
-        // Otherwise merge
         else
         {
             glm::vec3 min = mMinimum;
@@ -39,7 +35,7 @@ namespace Core
     {
         switch (mExtent)
         {
-        case Extent::EXTENT_NULL: // if null, use this point
+        case Extent::EXTENT_NULL:
             setExtents(point, point);
             return;
 
@@ -48,7 +44,7 @@ namespace Core
             Mathf::makeFloor(mMinimum, point);
             return;
 
-        case Extent::EXTENT_INFINITE: // if infinite, makes no difference
+        case Extent::EXTENT_INFINITE:
             return;
         }
 
@@ -76,7 +72,6 @@ namespace Core
         Mathf::makeCeil(intMin, b2.getMinimum());
         Mathf::makeFloor(intMax, b2.getMaximum());
 
-        // Check intersection isn't null
         if (intMin.x < intMax.x &&
             intMin.y < intMax.y &&
             intMin.z < intMax.z)
@@ -103,7 +98,7 @@ namespace Core
         case Extent::EXTENT_INFINITE:
             return Mathf::POS_INFINITY;
 
-        default: // shut up compiler
+        default:
             assert(false && "Never reached");
             return 0.0f;
         }
@@ -125,7 +120,7 @@ namespace Core
                 Mathf::POS_INFINITY,
                 Mathf::POS_INFINITY);
 
-        default: // shut up compiler
+        default:
             assert(false && "Never reached");
             return glm::vec3(0, 0, 0);
         }
@@ -147,7 +142,7 @@ namespace Core
                 Mathf::POS_INFINITY,
                 Mathf::POS_INFINITY);
 
-        default: // shut up compiler
+        default:
             assert(false && "Never reached");
             return glm::vec3(0, 0, 0);
         }

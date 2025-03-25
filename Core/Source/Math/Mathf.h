@@ -66,6 +66,7 @@ namespace Core
 
 		//Intersects Sphere vs AAB
 		static bool intersects(glm::vec3 center, float radius, AxisAlignedBox box);
+
 		static bool intersects(AxisAlignedBox a, AxisAlignedBox b);
 
 		static glm::vec3 calculateBasicFaceNormalWithoutNormalize(const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3);

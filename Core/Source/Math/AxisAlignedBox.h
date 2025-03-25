@@ -39,7 +39,6 @@ namespace Core
 
         inline AxisAlignedBox() : mMinimum(glm::vec3(0, 0, 0)), mMaximum(glm::vec3(1, 1,1))
         {
-            // Default to a null box 
             setMinimum( -0.5, -0.5, -0.5 );
             setMaximum( 0.5, 0.5, 0.5 );
             mExtent = Extent::EXTENT_NULL;
@@ -76,7 +75,6 @@ namespace Core
 
         AxisAlignedBox& operator=(const AxisAlignedBox& rhs)
         {
-            // Specifically override to avoid copying mCorners
             if (rhs.isNull())
                 setNull();
             else if (rhs.isInfinite())
@@ -181,7 +179,6 @@ namespace Core
             mMaximum.x = Mx;
             mMaximum.y = My;
             mMaximum.z = Mz;
-
         }
 
         inline Corners getAllCorners(void) const
@@ -232,9 +229,8 @@ namespace Core
 
         void merge(const glm::vec3& point);
 
-        inline void transform( const glm::mat4x4& matrix )
+        inline void transform(const glm::mat4x4& matrix)
         {
-            // Do nothing if current null or infinite
             if (mExtent != Extent::EXTENT_FINITE)
                 return;
 
@@ -277,15 +273,12 @@ namespace Core
 
         inline bool intersects(const AxisAlignedBox& b2) const
         {
-            // Early-fail for nulls
             if (this->isNull() || b2.isNull())
                 return false;
 
-            // Early-success for infinites
             if (this->isInfinite() || b2.isInfinite())
                 return true;
 
-            // Use up to 6 separating planes
             if (mMaximum.x < b2.mMinimum.x)
                 return false;
             if (mMaximum.y < b2.mMinimum.y)
@@ -309,11 +302,9 @@ namespace Core
 
         inline void scale(const glm::vec3& s)
         {
-            // Do nothing if current null or infinite
             if (mExtent != Extent::EXTENT_FINITE)
                 return;
 
-            // NB assumes centered on origin
             glm::vec3 min = mMinimum * s;
             glm::vec3 max = mMaximum * s;
             setExtents(min, max);
@@ -354,19 +345,15 @@ namespace Core
             glm::vec3 rayorig = start;
             glm::vec3 raydir = dir;
 
-            // Check origin inside first
             if (intersects(rayorig))
             {
                 return std::pair<bool, float>(true, (float)0);
             }
 
-            // Check each face in turn, only check closest 3
-            // Min x
             if (rayorig.x <= min.x && raydir.x > 0)
             {
                 t = (min.x - rayorig.x) / raydir.x;
 
-                // Substitute t back into ray and check bounds and dist
                 hitpoint = rayorig + raydir * t;
                 if (hitpoint.y >= min.y && hitpoint.y <= max.y &&
                     hitpoint.z >= min.z && hitpoint.z <= max.z &&
@@ -376,12 +363,11 @@ namespace Core
                     lowt = t;
                 }
             }
-            // Max x
+            
             if (rayorig.x >= max.x && raydir.x < 0)
             {
                 t = (max.x - rayorig.x) / raydir.x;
 
-                // Substitute t back into ray and check bounds and dist
                 hitpoint = rayorig + raydir * t;
                 if (hitpoint.y >= min.y && hitpoint.y <= max.y &&
                     hitpoint.z >= min.z && hitpoint.z <= max.z &&
@@ -391,12 +377,11 @@ namespace Core
                     lowt = t;
                 }
             }
-            // Min y
+            
             if (rayorig.y <= min.y && raydir.y > 0)
             {
                 t = (min.y - rayorig.y) / raydir.y;
 
-                // Substitute t back into ray and check bounds and dist
                 hitpoint = rayorig + raydir * t;
                 if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
                     hitpoint.z >= min.z && hitpoint.z <= max.z &&
@@ -406,12 +391,11 @@ namespace Core
                     lowt = t;
                 }
             }
-            // Max y
+            
             if (rayorig.y >= max.y && raydir.y < 0)
             {
                 t = (max.y - rayorig.y) / raydir.y;
 
-                // Substitute t back into ray and check bounds and dist
                 hitpoint = rayorig + raydir * t;
                 if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
                     hitpoint.z >= min.z && hitpoint.z <= max.z &&
@@ -421,12 +405,11 @@ namespace Core
                     lowt = t;
                 }
             }
-            // Min z
+            
             if (rayorig.z <= min.z && raydir.z > 0)
             {
                 t = (min.z - rayorig.z) / raydir.z;
 
-                // Substitute t back into ray and check bounds and dist
                 hitpoint = rayorig + raydir * t;
                 if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
                     hitpoint.y >= min.y && hitpoint.y <= max.y &&
@@ -436,12 +419,11 @@ namespace Core
                     lowt = t;
                 }
             }
-            // Max z
+            
             if (rayorig.z >= max.z && raydir.z < 0)
             {
                 t = (max.z - rayorig.z) / raydir.z;
 
-                // Substitute t back into ray and check bounds and dist
                 hitpoint = rayorig + raydir * t;
                 if (hitpoint.x >= min.x && hitpoint.x <= max.x &&
                     hitpoint.y >= min.y && hitpoint.y <= max.y &&
@@ -464,6 +446,7 @@ namespace Core
                 (mMaximum.y + mMinimum.y) * 0.5f,
                 (mMaximum.z + mMinimum.z) * 0.5f);
         }
+
         glm::vec3 getSize(void) const;
 
         glm::vec3 getHalfSize(void) const;

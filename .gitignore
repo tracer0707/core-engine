@@ -34,3 +34,5 @@
 /Editor/imgui.ini
 /x64/Release/Core.lib
 /x64/Release/Editor.pdb
+/Core/x64/Debug
+/Editor/x64/Debug
