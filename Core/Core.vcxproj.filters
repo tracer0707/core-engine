@@ -162,6 +162,9 @@
     <ClCompile Include="Source\Assets\RenderTexture.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Shared\BitSet.cpp">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="Source\Renderer\TextureFormat.h">
       <Filter>Исходные файлы\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shared\BitSet.h">
+      <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

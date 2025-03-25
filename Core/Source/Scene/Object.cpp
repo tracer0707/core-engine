@@ -9,6 +9,7 @@ namespace Core
 {
 	Object::Object()
 	{
+		
 	}
 
 	Object::~Object()

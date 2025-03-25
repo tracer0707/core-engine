@@ -27,6 +27,8 @@
 #include "Editor/Modifiers/ModifierManager.h"
 #include "Editor/Modifiers/CSGModifier.h"
 
+#include "Editor/CameraController.h"
+#include "Editor/ObjectPicker.h"
 #include "Editor/Rendering.h"
 #include "Editor/Gizmo.h"
 
@@ -66,6 +68,9 @@ int main(int argc, char* argv[])
 
     scene = new Core::Scene();
     scene->setMainCamera(camera);
+
+    Editor::CameraController::init(camera);
+    Editor::ObjectPicker::init(camera);
 
     csgModifier = new Editor::CSGModifier();
     Editor::ModifierManager::singleton()->addModifier(csgModifier);

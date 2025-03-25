@@ -3,6 +3,7 @@
 #include "../Config.h"
 #include "../Shared/List.h"
 #include "../Shared/Hash.h"
+#include "../Shared/BitSet.h"
 #include "../Components/ComponentList.h"
 
 namespace Core
@@ -16,6 +17,7 @@ namespace Core
 	{
 	private:
 		List<Component*> components;
+		BitSet flags;
 
 	public:
 		Object();
@@ -36,6 +38,8 @@ namespace Core
 
 		Component* findComponent(UInt32 type);
 		Component* addComponent(UInt32 type);
+
+		BitSet& getFlags() { return flags; }
 	};
 
 	/* ADD */

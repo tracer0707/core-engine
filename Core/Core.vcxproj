@@ -50,6 +50,7 @@
     <ClCompile Include="Source\Renderer\VertexBuffer.cpp" />
     <ClCompile Include="Source\Scene\Object.cpp" />
     <ClCompile Include="Source\Scene\Scene.cpp" />
+    <ClCompile Include="Source\Shared\BitSet.cpp" />
     <ClCompile Include="Source\Shared\Guid.cpp" />
     <ClCompile Include="Source\Shared\IO.cpp" />
     <ClCompile Include="Source\Shared\List.cpp" />
@@ -99,6 +100,7 @@
     <ClInclude Include="Source\Renderer\VertexBuffer.h" />
     <ClInclude Include="Source\Scene\Object.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
+    <ClInclude Include="Source\Shared\BitSet.h" />
     <ClInclude Include="Source\Shared\Guid.h" />
     <ClInclude Include="Source\Shared\Hash.h" />
     <ClInclude Include="Source\Shared\IO.h" />

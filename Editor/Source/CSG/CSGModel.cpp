@@ -16,6 +16,8 @@
 #include <Renderer/VertexBuffer.h>
 #include <Renderer/Renderer.h>
 
+#include "../Shared/Layers.h"
+
 #include "CSGBrush.h"
 #include "CSGBrushCube.h"
 
@@ -34,6 +36,9 @@ namespace Editor
         object = new Core::Object();
         meshRenderer = object->addComponent<Core::MeshRenderer*>();
 		transform = object->addComponent<Core::Transform*>();
+
+        Core::BitSet& objectFlags = object->getFlags();
+        objectFlags.setBit(LAYER_CSG, true);
 
         nullBrush = new CSGBrush();
 

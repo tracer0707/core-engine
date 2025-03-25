@@ -28,6 +28,12 @@
     <Filter Include="Исходные файлы\Editor\Modifiers">
       <UniqueIdentifier>{4e292aeb-6545-4956-8849-f5663955fe8a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\SceneUtils">
+      <UniqueIdentifier>{c364b14d-e5b4-43bc-b213-23f7c0f199a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Исходные файлы\Shared">
+      <UniqueIdentifier>{aca67554-0aac-4a3c-8739-d022e6c7ee24}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor\CameraController.cpp">
@@ -122,6 +128,12 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\Controls\Image.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\ObjectPicker.cpp">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SceneUtils\Raycast.cpp">
+      <Filter>Исходные файлы\SceneUtils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +232,15 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Controls\Image.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\ObjectPicker.h">
+      <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\SceneUtils\Raycast.h">
+      <Filter>Исходные файлы\SceneUtils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shared\Layers.h">
+      <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
