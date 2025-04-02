@@ -265,7 +265,6 @@ namespace Core
 		}
 
 		// Check the intersection point is inside the triangle.
-		
 		float u1 = b[i0] - a[i0];
 		float v1 = b[i1] - a[i1];
 		float u2 = c[i0] - a[i0];

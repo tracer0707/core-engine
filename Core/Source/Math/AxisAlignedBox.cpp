@@ -3,7 +3,7 @@
 
 namespace Core
 {
-    const AxisAlignedBox AxisAlignedBox::BOX_NULL;
+    const AxisAlignedBox AxisAlignedBox::BOX_NULL(AxisAlignedBox::Extent::EXTENT_NULL);
     const AxisAlignedBox AxisAlignedBox::BOX_INFINITE(AxisAlignedBox::Extent::EXTENT_INFINITE);
 
     void AxisAlignedBox::merge(const AxisAlignedBox& rhs)

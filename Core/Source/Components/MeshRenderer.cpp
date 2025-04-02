@@ -23,6 +23,18 @@ namespace Core
         return COMPONENT_MESHRENDERER;
     }
 
+    AxisAlignedBox MeshRenderer::getWorldBoundingBox()
+    {
+        if (mesh == nullptr) return AxisAlignedBox::BOX_NULL;
+
+        Transform* transform = owner->findComponent<Transform*>();
+
+        AxisAlignedBox aab = mesh->getBoundingBox();
+        aab.transform(transform->getTransformMatrix());
+
+        return aab;
+    }
+
     void MeshRenderer::render(Camera* camera)
     {
         if (mesh == nullptr) return;

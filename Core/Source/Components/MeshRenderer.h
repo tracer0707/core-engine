@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "../Math/AxisAlignedBox.h"
 
 namespace Core
 {
@@ -18,6 +19,8 @@ namespace Core
 		virtual ~MeshRenderer();
 
 		virtual UInt32 getComponentType();
+
+		AxisAlignedBox getWorldBoundingBox();
 
 		Mesh* getMesh() { return mesh; }
 		void setMesh(Mesh* value) { mesh = value; }

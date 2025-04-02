@@ -16,8 +16,8 @@ namespace Core
             EXTENT_FINITE,
             EXTENT_INFINITE
         };
-    protected:
 
+    protected:
         glm::vec3 mMinimum;
         glm::vec3 mMaximum;
         Extent mExtent;
@@ -39,19 +39,18 @@ namespace Core
 
         inline AxisAlignedBox() : mMinimum(glm::vec3(0, 0, 0)), mMaximum(glm::vec3(1, 1,1))
         {
-            setMinimum( -0.5, -0.5, -0.5 );
-            setMaximum( 0.5, 0.5, 0.5 );
+            setMinimum(-0.5, -0.5, -0.5);
+            setMaximum(0.5, 0.5, 0.5);
             mExtent = Extent::EXTENT_NULL;
         }
         inline AxisAlignedBox(Extent e) : mMinimum(glm::vec3(0, 0, 0)), mMaximum(glm::vec3(1, 1, 1))
         {
-            setMinimum( -0.5, -0.5, -0.5 );
-            setMaximum( 0.5, 0.5, 0.5 );
+            setMinimum(-0.5, -0.5, -0.5);
+            setMaximum(0.5, 0.5, 0.5);
             mExtent = e;
         }
 
         inline AxisAlignedBox(const AxisAlignedBox & rkBox) : mMinimum(glm::vec3(0, 0, 0)), mMaximum(glm::vec3(1, 1, 1))
-
         {
             if (rkBox.isNull())
                 setNull();

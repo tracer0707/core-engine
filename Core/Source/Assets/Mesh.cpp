@@ -81,8 +81,10 @@ namespace Core
 
 		aiScene* _scene = const_cast<aiScene*>(importer->ReadFile(fileName, importFlags));
 
-		SubMesh** _subMeshes = new SubMesh * [_scene->mNumMeshes];
+		SubMesh** _subMeshes = new SubMesh*[_scene->mNumMeshes];
 		Mesh* _mesh = new Mesh(_subMeshes, _scene->mNumMeshes);
+
+		_mesh->aab = AxisAlignedBox();
 
 		for (int i = 0; i < _scene->mNumMeshes; ++i)
 		{
@@ -105,6 +107,8 @@ namespace Core
 				vtx.color[1] = mesh->mColors[0][j].g;
 				vtx.color[2] = mesh->mColors[0][j].b;
 				vtx.color[3] = mesh->mColors[0][j].a;
+
+				_mesh->aab.merge(vtx.getPosition());
 
 				verts.push_back(vtx);
 			}
