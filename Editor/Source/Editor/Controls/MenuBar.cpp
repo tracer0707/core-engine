@@ -22,6 +22,8 @@ namespace Editor
 
 		if (_menu)
 		{
+			_height = ImGui::GetWindowHeight();
+
 			for (auto it : _controls)
 			{
 				it->update();

@@ -1,4 +1,8 @@
 #include "Window.h"
+#include "WindowManager.h"
+
+#include "../Controls/MenuBar.h"
+#include "../Controls/Control.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -6,8 +10,6 @@
 #include <Shared/String.h>
 #include <System/EventHandler.h>
 #include <Shared/Hash.h>
-
-#include "../Controls/Control.h"
 
 namespace Editor
 {
@@ -94,6 +96,18 @@ namespace Editor
 					_onResize(cw, ch);
 				}
 			}, =);
+		}
+
+		_isHovered = ImGui::IsWindowHovered();
+
+		_positionX = ImGui::GetWindowPos().x;
+		_positionY = ImGui::GetWindowPos().y;
+
+		MenuBar* menuBar = WindowManager::singleton()->getMenuBar();
+
+		if (menuBar != nullptr)
+		{
+			_positionY += menuBar->getHeight();
 		}
 
 		_clientWidth = cw;

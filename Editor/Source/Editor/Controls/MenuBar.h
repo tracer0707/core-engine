@@ -10,6 +10,7 @@ namespace Editor
 	{
 	private:
 		bool _isMainMenu = false;
+		float _height = 0;
 
 	public:
 		MenuBar();
@@ -19,5 +20,7 @@ namespace Editor
 
 		void setIsMainMenu(bool value) { _isMainMenu = value; }
 		bool getIsMainMenu() { return _isMainMenu; }
+
+		float getHeight() { return _height; }
 	};
 }

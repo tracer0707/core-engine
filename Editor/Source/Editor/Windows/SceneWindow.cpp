@@ -2,39 +2,47 @@
 
 #include <imgui.h>
 #include <Assets/RenderTexture.h>
+#include <Scene/Scene.h>
 
+#include "../ObjectPicker.h"
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
 #include "../CameraController.h"
 
 namespace Editor
 {
-	SceneWindow::SceneWindow(Core::Camera* camera, Core::RenderTexture* renderTexture) : Window("Scene")
+	SceneWindow::SceneWindow(Core::Scene* scene, Core::RenderTexture* renderTexture) : Window("Scene")
 	{
-		this->camera = camera;
-		this->renderTexture = renderTexture;
+		_scene = scene;
+		_renderTexture = renderTexture;
+		_camera = _scene->getMainCamera();
 
 		_style.paddingX = 0;
 		_style.paddingY = 0;
 
-		image = new Image();
-		image->setNativeTextureId(renderTexture->getNativeColorTextureId());
+		_image = new Image();
+		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
 
-		addControl(image);
+		addControl(_image);
 
-		Editor::CameraController::init(camera);
+		Editor::CameraController::init(_camera);
+		Editor::ObjectPicker::init(_scene, _camera);
 	}
 
 	void SceneWindow::onResize(int newWidth, int newHeight)
 	{
-		renderTexture->setSize(newWidth, newHeight);
-		image->setNativeTextureId(renderTexture->getNativeColorTextureId());
+		_renderTexture->setSize(newWidth, newHeight);
+		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
 	}
 
 	void SceneWindow::onUpdate()
 	{
-		bool isHovered = ImGui::IsWindowHovered();
+		bool isHovered = getIsHovered();
+		float offsetX = getPositionX();
+		float offsetY = getPositionY();
+
 		Editor::CameraController::update(isHovered);
+		Editor::ObjectPicker::update(isHovered, offsetX, offsetY);
 	}
 
 	SceneWindow::~SceneWindow()

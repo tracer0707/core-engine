@@ -36,6 +36,7 @@ namespace Editor
 
 		bool isMouseCaptured();
 
+		MenuBar* getMenuBar() { return _menuBar; }
 		void setMenuBar(MenuBar* value) { _menuBar = value; }
 
 		void update(int width, int height);

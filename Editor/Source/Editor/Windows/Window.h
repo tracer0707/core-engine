@@ -3,7 +3,6 @@
 #include <functional>
 #include <Shared/String.h>
 
-#include "WindowManager.h"
 #include "../Controls/Container.h"
 #include "../Controls/Style.h"
 
@@ -39,15 +38,16 @@ namespace Editor
 		std::function<void(int, int)> _onResize = nullptr;
 
 		UString _name;
-		int _width = 400;
-		int _height = 300;
-		int _clientWidth = 0;
-		int _clientHeight = 0;
+		float _positionX = 0;
+		float _positionY = 0;
+		float _clientWidth = 0;
+		float _clientHeight = 0;
 
 		bool _visible = true;
 		bool _hasTitle = true;
 		bool _canAcceptDocking = true;
 		bool _canDock = true;
+		bool _isHovered = false;
 
 		void update();
 
@@ -66,14 +66,13 @@ namespace Editor
 		void setVisible(bool value) { _visible = value; }
 		bool getVisible() { return _visible; }
 
-		int getWidth() { return _width; }
-		void setWidth(int value) { _width = value; }
+		float getClientWidth() { return _clientWidth; }
+		float getClientHeight() { return _clientHeight; }
 
-		int getHeight() { return _height; }
-		void setHeight(int value) { _height = value; }
+		float getPositionX() { return _positionX; }
+		float getPositionY() { return _positionY; }
 
-		int getClientWidth() { return _clientWidth; }
-		int getClientHeight() { return _clientHeight; }
+		bool getIsHovered() { return _isHovered; }
 
 		void setHasTitle(bool value) { _hasTitle = value; }
 		bool getHasTitle() { return _hasTitle; }

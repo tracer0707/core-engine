@@ -7,6 +7,7 @@
 namespace Core
 {
 	class Camera;
+	class Scene;
 	class RenderTexture;
 }
 
@@ -19,17 +20,18 @@ namespace Editor
 	class SceneWindow : public Window
 	{
 	private:
-		Image* image = nullptr;
+		Image* _image = nullptr;
 
-		Core::Camera* camera = nullptr;
-		Core::RenderTexture* renderTexture = nullptr;
+		Core::Camera* _camera = nullptr;
+		Core::Scene* _scene = nullptr;
+		Core::RenderTexture* _renderTexture = nullptr;
 
 	protected:
 		virtual void onResize(int newWidth, int newHeight);
 		virtual void onUpdate();
 
 	public:
-		SceneWindow(Core::Camera* camera, Core::RenderTexture* renderTexture);
+		SceneWindow(Core::Scene* scene, Core::RenderTexture* renderTexture);
 		virtual ~SceneWindow();
 	};
 }
