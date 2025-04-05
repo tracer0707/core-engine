@@ -52,22 +52,25 @@ namespace Core
         return glm::perspective(glm::radians(_fov), aspect, _near, _far);
     }
 
-    const Ray Camera::getCameraToViewportRay(float screenX, float screenY)
+    const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY)
     {
-        float width = Renderer::singleton()->getWidth();
-        float height = Renderer::singleton()->getHeight();
+        float screenW = Renderer::singleton()->getWidth();
+        float screenH = Renderer::singleton()->getHeight();
 
         if (renderTexture != nullptr)
         {
-            width = renderTexture->getWidth();
-            height = renderTexture->getHeight();
+            screenW = renderTexture->getWidth();
+            screenH = renderTexture->getHeight();
         }
 
         glm::mat4x4 mViewProjInverse;
         mViewProjInverse = glm::inverse(getProjectionMatrix() * getViewMatrix());
 
-        float mox = screenX * 2.0f - 1.0f;
-        float moy = (1.0f - screenY) * 2.0f - 1.0f;
+        float mx = (x - offsetX);
+        float my = (y - offsetY);
+
+        float mox = (mx / screenW) * 2.0f - 1.0f;
+        float moy = (1.0f - (my / screenH)) * 2.0f - 1.0f;
 
         glm::vec4 rayOrigin = mViewProjInverse * glm::vec4(mox, moy, 0.0f, 1.0f);
         rayOrigin *= 1.0f / rayOrigin.w;
@@ -115,7 +118,7 @@ namespace Core
         return screenSpacePoint;
     }
 
-    const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point)
+    const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY)
     {
         float width = Renderer::singleton()->getWidth();
         float height = Renderer::singleton()->getHeight();
@@ -129,7 +132,7 @@ namespace Core
         float scrx = point.x / width;
         float scry = point.y / height;
 
-        Ray ray = getCameraToViewportRay((float)(scrx), (float)(scry));
+        Ray ray = getCameraToViewportRay(scrx, scry, offsetX, offsetY);
         glm::vec3 vect = ray.origin + ray.direction * point.z;
 
         return vect;

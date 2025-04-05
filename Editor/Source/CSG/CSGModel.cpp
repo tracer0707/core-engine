@@ -131,6 +131,8 @@ namespace Editor
         //Build meshes
         std::map<Core::Material*, SubMeshInfo*> subMeshes;
 
+        Core::AxisAlignedBox aab = Core::AxisAlignedBox();
+
         for (size_t i = 0; i < csgGeom->faces.size(); ++i)
         {
             auto* f = &csgGeom->faces[i];
@@ -197,6 +199,8 @@ namespace Editor
                 vtx.color[2] = 1.0f;
                 vtx.color[3] = 1.0f;
 
+                aab.merge(vtx.getPosition());
+
                 subMesh->vertices.add(vtx);
             }
         }
@@ -206,6 +210,7 @@ namespace Editor
 
         Core::SubMesh** _subMeshes = new Core::SubMesh*[subMeshes.size()];
         Core::Mesh* mesh = new Core::Mesh(_subMeshes, subMeshes.size());
+        mesh->setBoundingBox(aab);
         meshRenderer->setMesh(mesh);
 
         for (int i = 0; i < subMeshes.size(); ++i)

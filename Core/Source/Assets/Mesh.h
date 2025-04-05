@@ -44,5 +44,6 @@ namespace Core
 		const int getSubMeshesCount() { return _count; }
 
 		AxisAlignedBox& getBoundingBox() { return aab; }
+		void setBoundingBox(AxisAlignedBox value) { aab = value; }
 	};
 }
