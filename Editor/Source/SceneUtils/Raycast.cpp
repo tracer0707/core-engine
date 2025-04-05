@@ -1,5 +1,7 @@
 #include "Raycast.h"
 
+#include <iostream>
+
 #include <Math/Mathf.h>
 #include <Scene/Scene.h>
 #include <Scene/Object.h>
@@ -30,25 +32,30 @@ namespace Editor
 
 	bool Raycast::csgTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit)
 	{
-		outHit = nullptr;
-		Core::List<Core::Object*> boundsIntersected;
+		Core::List<std::pair<Core::Object*, float>> boundsIntersected;
 		Core::List<Core::Object*>& objects = scene->getObjects();
 
-		for (auto obj : objects)
+		for (auto* obj : objects)
 		{
 			if (!obj->getFlags().getBit(LAYER_CSG)) continue;
 
 			Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
-			auto boundsHit = meshRenderer->getWorldBoundingBox().intersects(ray.origin, ray.direction);
+			auto aab = meshRenderer->getWorldBoundingBox();
+			auto boundsHit = aab.intersects(ray.origin, ray.direction);
 
 			if (boundsHit.first)
 			{
-				boundsIntersected.add(obj);
+				boundsIntersected.add(std::make_pair(obj, boundsHit.second));
 			}
 		}
 
-		for (auto obj : boundsIntersected)
+		boundsIntersected.sort([=](std::pair<Core::Object*, float>& a, std::pair<Core::Object*, float>& b) -> bool {
+			return a.second < b.second;
+		});
+
+		for (auto& b : boundsIntersected)
 		{
+			Core::Object* obj = b.first;
 			Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
 			Core::Transform* transform = obj->findComponent<Core::Transform*>();
 			Core::Mesh* mesh = meshRenderer->getMesh();
@@ -73,6 +80,12 @@ namespace Editor
 						glm::vec3 p3 = mtx * glm::vec4(v3.getPosition(), 1.0f);
 
 						std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, true);
+
+						if (hit.first)
+						{
+							outHit->object = obj;
+							return true;
+						}
 					}
 				}
 			}
