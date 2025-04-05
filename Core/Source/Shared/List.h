@@ -3,6 +3,7 @@
 #include <cassert>
 #include <vector>
 #include <functional>
+#include <algorithm>
 
 namespace Core
 {
@@ -25,8 +26,9 @@ namespace Core
 		T* ptr();
 		std::vector<T>::iterator begin() { return list.begin(); }
 		std::vector<T>::iterator end() { return list.end(); }
-		bool tryFind(T& out, std::function<bool(T)>);
-		bool tryFind(T search);
+		bool tryFind(T& out, std::function<bool(T&)> func);
+		bool tryFind(T& search);
+		void sort(std::function<bool(T&, T&)> func);
 
 		List& operator = (std::vector<T> other);
 	};
@@ -92,7 +94,7 @@ namespace Core
 	}
 
 	template<typename T>
-	inline bool List<T>::tryFind(T& out, std::function<bool(T)> func)
+	inline bool List<T>::tryFind(T& out, std::function<bool(T&)> func)
 	{
 		auto it = std::find_if(list.begin(), list.end(), func);
 		if (it == list.end()) return false;
@@ -102,12 +104,18 @@ namespace Core
 	}
 
 	template<typename T>
-	inline bool List<T>::tryFind(T search)
+	inline bool List<T>::tryFind(T& search)
 	{
 		auto it = std::find(list.begin(), list.end(), search);
 		if (it == list.end()) return false;
 
 		return true;
+	}
+
+	template<typename T>
+	inline void List<T>::sort(std::function<bool(T&, T&)> func)
+	{
+		std::sort(list.begin(), list.end(), func);
 	}
 
 	template<typename T>
