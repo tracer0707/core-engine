@@ -5,7 +5,7 @@
 
 namespace Core
 {
-	struct VertexBuffer;
+	class VertexBuffer;
 	class Material;
 
 	class SubMesh

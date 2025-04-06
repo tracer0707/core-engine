@@ -9,6 +9,7 @@ namespace Core
 {
 	class Object;
 	class Scene;
+	class Mesh;
 }
 
 namespace Editor
@@ -17,12 +18,13 @@ namespace Editor
 	{
 	public:
 		Core::Object* object = nullptr;
+		unsigned long long brushId = -1;
 	};
 
 	class Raycast
 	{
 	private:
-		bool csgTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit);
+		bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, unsigned long long* brushId);
 
 	public:
 		bool hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit);

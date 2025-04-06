@@ -94,7 +94,7 @@ namespace Core
 
 			for (int j = 0; j < mesh->mNumVertices; ++j)
 			{
-				Vertex vtx;
+				Vertex vtx {};
 
 				vtx.position[0] = mesh->mVertices[j].x;
 				vtx.position[1] = mesh->mVertices[j].y;

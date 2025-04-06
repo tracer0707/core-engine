@@ -7,9 +7,8 @@
 
 namespace Core
 {
-	class Vertex
+	struct Vertex
 	{
-	public:
 		Real position[3];
 		Real uv[2];
 		Real color[4];
@@ -29,8 +28,10 @@ namespace Core
 	public:
 		UInt32 vbo = 0;
 		UInt32 ibo = 0;
+		
 		Vertex* vertexArray = nullptr;
 		UInt32 vertexArraySize = 0;
+
 		UInt32* indexArray = nullptr;
 		UInt32 indexArraySize = 0;
 

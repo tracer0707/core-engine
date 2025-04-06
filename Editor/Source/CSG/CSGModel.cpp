@@ -25,12 +25,6 @@ namespace Editor
 {
     Core::Material* CSGModel::defaultMaterial = nullptr;
 
-    struct SubMeshInfo
-    {
-        Core::List<Core::Vertex> vertices;
-        Core::List<UInt32> indices;
-    };
-
 	CSGModel::CSGModel()
 	{
         object = new Core::Object();
@@ -59,8 +53,17 @@ namespace Editor
         nullBrush = nullptr;
 	}
 
-	void CSGModel::rebuild()
+    void CSGModel::rebuild()
 	{
+        for (auto& sm : _subMeshes)
+        {
+            sm.second->brushIds.clear();
+            sm.second->vertices.clear();
+            delete sm.second;
+        }
+
+        _subMeshes.clear();
+
         Core::Mesh* currentMesh = meshRenderer->getMesh();
         if (currentMesh != nullptr) delete currentMesh;
 
@@ -96,7 +99,7 @@ namespace Editor
         csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
         //Compute CSG
-        for (auto brush : _csgBrushes)
+        for (auto* brush : _csgBrushes)
         {
             glm::mat4x4 mtx = brush->getTransform()->getTransformMatrix();
             glm::quat nrmMtx = brush->getTransform()->getRotation();
@@ -118,7 +121,6 @@ namespace Editor
             catch (carve::exception e)
             {
                 prevCSG = nullptr;
-                //Debug::log("CSG build error", Debug::DbgColorRed);
             }
 
             if (prevCSG != nullptr && prevCSG != nullBrush->getBrushPtr())
@@ -129,11 +131,9 @@ namespace Editor
             return;
 
         //Build meshes
-        std::map<Core::Material*, SubMeshInfo*> subMeshes;
-
         Core::AxisAlignedBox aab = Core::AxisAlignedBox();
 
-        for (size_t i = 0; i < csgGeom->faces.size(); ++i)
+        for (unsigned long long i = 0; i < csgGeom->faces.size(); ++i)
         {
             auto* f = &csgGeom->faces[i];
 
@@ -141,7 +141,7 @@ namespace Editor
             int layer = 0;
             bool castShadows = true;
             bool smoothNormals = false;
-            size_t brushId = 0;
+            unsigned long long brushId = 0;
 
             if (f_material.hasAttribute(f))
             {
@@ -164,21 +164,18 @@ namespace Editor
 
             SubMeshInfo* subMesh = nullptr;
 
-            auto it = subMeshes.find(mat);
-            if (it != subMeshes.end())
+            auto it = _subMeshes.find(mat);
+            if (it != _subMeshes.end())
             {
                 subMesh = it->second;
             }
             else
             {
                 subMesh = new SubMeshInfo();
-                subMeshes[mat] = subMesh;
+                _subMeshes[mat] = subMesh;
             }
 
-            std::vector<Core::Vertex> verts;
-            std::vector<UInt32> inds;
-
-            for (size_t j = 0; j < 3; ++j)
+            for (unsigned long long j = 0; j < 3; ++j)
             {
                 carve::geom3d::Vector v = f->vertex(j)->v;
                 CSGBrush::uv_t uv = CSGBrush::uv_t(0, 0);
@@ -186,7 +183,8 @@ namespace Editor
                 if (fv_uv.hasAttribute(f, j))
                     uv = fv_uv.getAttribute(f, j);
 
-                Core::Vertex vtx;
+                Core::Vertex vtx{};
+
                 vtx.position[0] = (float)v.x;
                 vtx.position[1] = (float)v.y;
                 vtx.position[2] = (float)v.z;
@@ -202,27 +200,48 @@ namespace Editor
                 aab.merge(vtx.getPosition());
 
                 subMesh->vertices.add(vtx);
+                subMesh->brushIds.add(brushId);
             }
         }
 
         if (csgGeom != nullptr && csgGeom != nullBrush->getBrushPtr())
             delete csgGeom;
 
-        Core::SubMesh** _subMeshes = new Core::SubMesh*[subMeshes.size()];
-        Core::Mesh* mesh = new Core::Mesh(_subMeshes, subMeshes.size());
+        Core::SubMesh** subMeshes = new Core::SubMesh*[_subMeshes.size()];
+        Core::Mesh* mesh = new Core::Mesh(subMeshes, _subMeshes.size());
         mesh->setBoundingBox(aab);
         meshRenderer->setMesh(mesh);
 
-        for (int i = 0; i < subMeshes.size(); ++i)
+        for (int i = 0; i < _subMeshes.size(); ++i)
         {
-            auto it = subMeshes.begin();
+            auto it = _subMeshes.begin();
             std::advance(it, i);
 
             const Core::VertexBuffer* _vertexBuffer = Core::Renderer::singleton()->createBuffer(it->second->vertices.ptr(), it->second->vertices.count(), nullptr, 0);
+
             Core::SubMesh* subMesh = new Core::SubMesh(_vertexBuffer);
             subMesh->setMaterial(it->first);
 
-            _subMeshes[i] = subMesh;
+            subMeshes[i] = subMesh;
+
+            it->second->vertices.clear();
+            it->second->subMesh = subMesh;
         }
 	}
+
+    unsigned long long CSGModel::getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId)
+    {
+        for (auto& sm : _subMeshes)
+        {
+            if (subMesh == sm.second->subMesh)
+            {
+                if (sm.second->brushIds.count() > vertexId)
+                {
+                    return sm.second->brushIds.get(vertexId);
+                }
+            }
+        }
+
+        return -1;
+    }
 }
