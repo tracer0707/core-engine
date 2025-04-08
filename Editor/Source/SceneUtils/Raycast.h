@@ -24,9 +24,9 @@ namespace Editor
 	class Raycast
 	{
 	private:
-		bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, unsigned long long* brushId);
+		static bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, unsigned long long* brushId);
 
 	public:
-		bool hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit);
+		static bool hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit);
 	};
 }

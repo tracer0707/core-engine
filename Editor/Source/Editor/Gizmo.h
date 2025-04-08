@@ -45,6 +45,6 @@ namespace Editor
 		TransformMode getTransformMode() { return transformMode; }
 		void setTransformMode(TransformMode value) { transformMode = value; }
 
-		void update(Core::Camera* camera);
+		void update(Core::Camera* camera, float viewX, float viewY, float viewW, float viewH);
 	};
 }

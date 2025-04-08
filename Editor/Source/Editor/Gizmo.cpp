@@ -11,7 +11,7 @@ namespace Editor
 {
 	Gizmo Gizmo::_singleton;
 
-	void Gizmo::update(Core::Camera* camera)
+	void Gizmo::update(Core::Camera* camera, float viewX, float viewY, float viewW, float viewH)
 	{
 		if (_model == nullptr) return;
 
@@ -34,10 +34,7 @@ namespace Editor
 
 		ImGuiIO& io = ImGui::GetIO();
 		
-		ImGuizmo::SetRect(0, 0, io.DisplaySize.x, io.DisplaySize.y);
-
-		int viewManipulateRight = io.DisplaySize.x;
-		int viewManipulateTop = io.DisplaySize.y;
+		ImGuizmo::SetRect(viewX, viewY, viewW, viewH);
 
 		float* mtx = glm::value_ptr(*_model);
 
@@ -45,6 +42,5 @@ namespace Editor
 		glm::mat4 proj = camera->getProjectionMatrix();
 
 		ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, mtx, NULL, useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
-		ImGuizmo::ViewManipulate(glm::value_ptr(view), camDistance, ImVec2(viewManipulateRight - 128, 0), ImVec2(128, 128), 0x10101010);
 	}
 }

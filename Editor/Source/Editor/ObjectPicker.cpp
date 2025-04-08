@@ -1,11 +1,14 @@
 #include "ObjectPicker.h"
 
 #include <imgui.h>
+#include <Scene/Object.h>
 #include <Components/Camera.h>
+#include <Components/Transform.h>
 #include <System/InputManager.h>
 
-#include "../SceneUtils/Raycast.h"
+#include "Gizmo.h"
 #include "Windows/WindowManager.h"
+#include "../SceneUtils/Raycast.h"
 
 namespace Editor
 {
@@ -41,9 +44,15 @@ namespace Editor
 	{
 		Core::Ray ray = _camera->getCameraToViewportRay(x, y, _offsetX, _offsetY);
 
-		Raycast raycast;
 		RaycastHit hit;
+		Raycast::hitTest(_scene, ray, &hit);
 
-		raycast.hitTest(_scene, ray, &hit);
+		if (hit.object != nullptr)
+		{
+			Core::Transform* transform = (Core::Transform*)hit.object->findComponent<Core::Transform*>();
+			glm::mat4 mtx = transform->getLocalTransformMatrix();
+
+			Gizmo::singleton()->setModelMatrix(&mtx);
+		}
 	}
 }

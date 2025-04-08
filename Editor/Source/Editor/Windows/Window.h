@@ -40,6 +40,8 @@ namespace Editor
 		UString _name;
 		float _positionX = 0;
 		float _positionY = 0;
+		float _width = 0;
+		float _height = 0;
 		float _clientWidth = 0;
 		float _clientHeight = 0;
 
@@ -65,6 +67,9 @@ namespace Editor
 
 		void setVisible(bool value) { _visible = value; }
 		bool getVisible() { return _visible; }
+
+		float getWidth() { return _width; }
+		float getHeight() { return _height; }
 
 		float getClientWidth() { return _clientWidth; }
 		float getClientHeight() { return _clientHeight; }

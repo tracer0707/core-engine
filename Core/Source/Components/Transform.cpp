@@ -45,7 +45,7 @@ namespace Core
 		updateTransform();
 	}
 
-	void Transform::setRotation(glm::highp_quat value, bool updateChildren)
+	void Transform::setRotation(glm::quat value, bool updateChildren)
 	{
 		rotation = value;
 
@@ -55,7 +55,7 @@ namespace Core
 			localRotation = glm::inverse(parent->rotation) * rotation;
 	}
 
-	void Transform::setLocalRotation(glm::highp_quat value, bool updateChildren)
+	void Transform::setLocalRotation(glm::quat value, bool updateChildren)
 	{
 		localRotation = value;
 
@@ -148,7 +148,7 @@ namespace Core
 	{
 		glm::vec3 pos = glm::vec3(0, 0, 0);
 		glm::vec3 scl = glm::vec3(1, 1, 1);
-		glm::highp_quat rot = glm::identity<glm::highp_quat>();
+		glm::quat rot = glm::identity<glm::quat>();
 
 		glm::vec3 scew = glm::vec3(0, 0, 0);
 		glm::vec4 persp = glm::vec4(0, 0, 0, 0);
@@ -185,11 +185,11 @@ namespace Core
 
 	void Transform::rotate(glm::vec3 axis, float degree, bool world)
 	{
-		glm::highp_quat q = glm::angleAxis(degree * Mathf::fDeg2Rad, axis);
+		glm::quat q = glm::angleAxis(degree * Mathf::fDeg2Rad, axis);
 		rotate(q, world);
 	}
 
-	void Transform::rotate(glm::highp_quat q, bool world)
+	void Transform::rotate(glm::quat q, bool world)
 	{
 		if (world)
 		{
@@ -221,7 +221,7 @@ namespace Core
 		return glm::inverse(rotation) * (worldPos - position) / scale;
 	}
 
-	glm::highp_quat Transform::worldToLocalRotation(glm::highp_quat worldRot)
+	glm::quat Transform::worldToLocalRotation(glm::quat worldRot)
 	{
 		return glm::inverse(rotation) * worldRot;
 	}
@@ -231,12 +231,12 @@ namespace Core
 		return getTransformMatrix() * glm::vec4(localPos, 1.0f);
 	}
 
-	glm::highp_quat Transform::localToWorldRotation(glm::highp_quat localRot)
+	glm::quat Transform::localToWorldRotation(glm::quat localRot)
 	{
 		return rotation * localRot;
 	}
 
-	glm::mat4 Transform::makeTransformMatrix(glm::vec3 position, glm::highp_quat rotation, glm::vec3 scale)
+	glm::mat4 Transform::makeTransformMatrix(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
 	{
 		glm::mat4 trans = glm::identity<glm::mat4>();
 		glm::mat4 rotMat = glm::mat4_cast(rotation);
@@ -254,7 +254,7 @@ namespace Core
 	{
 		if (parent != nullptr)
 		{
-			glm::highp_quat parentOrientation = parent->getRotation();
+			glm::quat parentOrientation = parent->getRotation();
 			rotation = parentOrientation * localRotation;
 			glm::vec3 parentScale = parent->getScale();
 			scale = parentScale * localScale;

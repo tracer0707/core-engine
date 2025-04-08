@@ -110,6 +110,9 @@ namespace Editor
 			_positionY += menuBar->getHeight();
 		}
 
+		_width = ImGui::GetWindowWidth();
+		_height = ImGui::GetWindowHeight();
+
 		_clientWidth = cw;
 		_clientHeight = ch;
 

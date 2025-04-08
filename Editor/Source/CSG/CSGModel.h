@@ -12,6 +12,7 @@ namespace Core
 	class Transform;
 	class Material;
 	class SubMesh;
+	struct Vertex;
 }
 
 namespace Editor

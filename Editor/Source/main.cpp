@@ -155,7 +155,7 @@ int main(int argc, char* argv[])
 
         ctx->renderUiBegin();
         Editor::WindowManager::singleton()->update(width, height);
-        Editor::Gizmo::singleton()->update(camera);
+        Editor::Gizmo::singleton()->update(camera, sceneWindow->getPositionX(), sceneWindow->getPositionY(), sceneWindow->getWidth(), sceneWindow->getHeight());
         ctx->renderUiEnd();
         //** Render UI end **//
 
