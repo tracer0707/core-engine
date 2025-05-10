@@ -50,9 +50,13 @@ namespace Editor
 		if (hit.object != nullptr)
 		{
 			Core::Transform* transform = (Core::Transform*)hit.object->findComponent<Core::Transform*>();
-			glm::mat4 mtx = transform->getLocalTransformMatrix();
+			glm::mat4& mtx = transform->getTransformMatrix();
 
 			Gizmo::singleton()->setModelMatrix(&mtx);
+		}
+		else
+		{
+			Gizmo::singleton()->setModelMatrix(nullptr);
 		}
 	}
 }

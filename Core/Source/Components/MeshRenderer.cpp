@@ -54,7 +54,7 @@ namespace Core
 
             Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
 
-            glm::mat4 model = transform->getTransformMatrix();
+            glm::mat4& model = transform->getTransformMatrix();
 
             Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
                 C_CCW

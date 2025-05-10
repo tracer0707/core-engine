@@ -8,7 +8,11 @@
 
 namespace Core
 {
-	Transform::Transform(Object* owner) : Component(owner) {}
+	Transform::Transform(Object* owner) : Component(owner)
+	{
+		worldMtx = glm::identity<glm::mat4>();
+	}
+
 	Transform::~Transform() {}
 
 	UInt32 Transform::getComponentType()
@@ -18,88 +22,131 @@ namespace Core
 
 	void Transform::setParent(Transform* value)
 	{
-		if (parent == value)
-			return;
-
 		parent = value;
-
-		setPosition(position, false);
-		setRotation(rotation, false);
-		setScale(scale, false);
 	}
 
-	void Transform::setPosition(glm::vec3 value, bool updateChildren)
+	glm::vec3 Transform::getPosition()
 	{
-		position = value;
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
 
-		if (parent == nullptr)
-			localPosition = position;
-		else
-			localPosition = glm::inverse(parent->rotation) * (position - parent->position) / parent->scale;
+		glm::decompose(worldMtx, scale, rotation, translation, skew, perspective);
+
+		return translation;
 	}
 
-	void Transform::setLocalPosition(glm::vec3 value, bool updateChildren)
+	glm::vec3 Transform::getLocalPosition()
 	{
-		localPosition = value;
-
-		updateTransform();
+		if (parent == nullptr) return getPosition();
+		return parent->getTransformMatrixInverse() * glm::vec4(getPosition(), 1.0f);
 	}
 
-	void Transform::setRotation(glm::quat value, bool updateChildren)
+	glm::quat Transform::getRotation()
 	{
-		rotation = value;
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
 
-		if (parent == nullptr)
-			localRotation = rotation;
-		else
-			localRotation = glm::inverse(parent->rotation) * rotation;
+		rotation = glm::conjugate(rotation);
+
+		glm::decompose(worldMtx, scale, rotation, translation, skew, perspective);
+
+		return rotation;
 	}
 
-	void Transform::setLocalRotation(glm::quat value, bool updateChildren)
+	glm::quat Transform::getRotationInverse()
 	{
-		localRotation = value;
-
-		updateTransform();
+		return glm::inverse(getRotation());
 	}
 
-	void Transform::setScale(glm::vec3 value, bool updateChildren)
+	glm::quat Transform::getLocalRotation()
 	{
-		scale = value;
-
-		if (scale.x == 0) scale.x = 0.0001f;
-		if (scale.y == 0) scale.y = 0.0001f;
-		if (scale.z == 0) scale.z = 0.0001f;
-
-		if (parent == nullptr)
-			localScale = scale;
-		else
-			localScale = scale / parent->getScale();
+		if (parent == nullptr) return getRotation();
+		return parent->getRotationInverse() * getRotation();
 	}
 
-	void Transform::setLocalScale(glm::vec3 value, bool updateChildren)
+	glm::vec3 Transform::getScale()
 	{
-		localScale = value;
+		glm::vec3 scale;
+		glm::quat rotation;
+		glm::vec3 translation;
+		glm::vec3 skew;
+		glm::vec4 perspective;
 
-		if (localScale.x == 0) localScale.x = 0.0001f;
-		if (localScale.y == 0) localScale.y = 0.0001f;
-		if (localScale.z == 0) localScale.z = 0.0001f;
+		glm::decompose(worldMtx, scale, rotation, translation, skew, perspective);
 
-		updateTransform();
+		return scale;
+	}
+
+	glm::vec3 Transform::getLocalScale()
+	{
+		if (parent == nullptr) return getScale();
+		return getScale() / parent->getScale();
+	}
+
+	void Transform::setPosition(glm::vec3 value)
+	{
+		worldMtx = makeTransformMatrix(value, getRotation(), getScale());
+	}
+
+	void Transform::setLocalPosition(glm::vec3 value)
+	{
+		if (parent != nullptr)
+		{
+			value = parent->getTransformMatrix() * glm::vec4(value, 1.0f);
+		}
+
+		worldMtx = makeTransformMatrix(value, getRotation(), getScale());
+	}
+
+	void Transform::setRotation(glm::quat value)
+	{
+		worldMtx = makeTransformMatrix(getPosition(), value, getScale());
+	}
+
+	void Transform::setLocalRotation(glm::quat value)
+	{
+		if (parent != nullptr)
+		{
+			value = parent->getRotation() * value;
+		}
+
+		worldMtx = makeTransformMatrix(getPosition(), value, getScale());
+	}
+
+	void Transform::setScale(glm::vec3 value)
+	{
+		worldMtx = makeTransformMatrix(getPosition(), getRotation(), value);
+	}
+
+	void Transform::setLocalScale(glm::vec3 value)
+	{
+		if (parent != nullptr)
+		{
+			value = parent->getScale() * value;
+		}
+
+		worldMtx = makeTransformMatrix(getPosition(), getRotation(), value);
 	}
 
 	glm::vec3 Transform::getForward()
 	{
-		return glm::normalize(rotation * glm::vec3(0, 0, 1));
+		return glm::normalize(getRotation() * glm::vec3(0, 0, 1));
 	}
 
 	glm::vec3 Transform::getUp()
 	{
-		return glm::normalize(rotation * glm::vec3(0, 1, 0));
+		return glm::normalize(getRotation() * glm::vec3(0, 1, 0));
 	}
 
 	glm::vec3 Transform::getRight()
 	{
-		return glm::normalize(rotation * glm::vec3(1, 0, 0));
+		return glm::normalize(getRotation() * glm::vec3(1, 0, 0));
 	}
 
 	glm::mat3 Transform::getLocalAxes()
@@ -108,27 +155,20 @@ namespace Core
 		glm::vec3 axisY = glm::vec3(0, 1, 0);
 		glm::vec3 axisZ = glm::vec3(0, 0, 1);
 
-		axisX = getLocalRotation() * axisX;
-		axisY = getLocalRotation() * axisY;
-		axisZ = getLocalRotation() * axisZ;
+		glm::quat lr = getLocalRotation();
+
+		axisX = lr * axisX;
+		axisY = lr * axisY;
+		axisZ = lr * axisZ;
 
 		return glm::mat3(axisX.x, axisY.x, axisZ.x,
 			axisX.y, axisY.y, axisZ.y,
 			axisX.z, axisY.z, axisZ.z);
 	}
 
-	glm::mat4 Transform::getTransformMatrix()
+	glm::mat4& Transform::getTransformMatrix()
 	{
-		glm::mat4 trans = glm::identity<glm::mat4>();
-		glm::mat4 rotMat = glm::mat4_cast(rotation);
-
-		glm::vec3 pos = glm::inverse(rotMat) * (glm::vec4(position, 1.0f));
-
-		trans = glm::translate(trans, pos);
-		trans = rotMat * trans;
-		trans = glm::scale(trans, scale);
-
-		return trans;
+		return worldMtx;
 	}
 
 	glm::mat4 Transform::getTransformMatrixInverse()
@@ -139,25 +179,14 @@ namespace Core
 	glm::mat4 Transform::getLocalTransformMatrix()
 	{
 		if (parent != nullptr)
-			return glm::inverse(parent->getTransformMatrix()) * getTransformMatrix();
+			return parent->getTransformMatrixInverse() * getTransformMatrix();
 		else
 			return getTransformMatrix();
 	}
 
 	void Transform::setTransformMatrix(glm::mat4 value)
 	{
-		glm::vec3 pos = glm::vec3(0, 0, 0);
-		glm::vec3 scl = glm::vec3(1, 1, 1);
-		glm::quat rot = glm::identity<glm::quat>();
-
-		glm::vec3 scew = glm::vec3(0, 0, 0);
-		glm::vec4 persp = glm::vec4(0, 0, 0, 0);
-
-		glm::decompose(value, scl, rot, pos, scew, persp);
-
-		setPosition(pos, false);
-		setRotation(rot, false);
-		setScale(scl, false);
+		worldMtx = value;
 	}
 
 	void Transform::setLocalTransformMatrix(glm::mat4 value)
@@ -218,12 +247,12 @@ namespace Core
 
 	glm::vec3 Transform::worldToLocalPosition(glm::vec3 worldPos)
 	{
-		return glm::inverse(rotation) * (worldPos - position) / scale;
+		return getRotationInverse() * (worldPos - getPosition()) / getScale();
 	}
 
 	glm::quat Transform::worldToLocalRotation(glm::quat worldRot)
 	{
-		return glm::inverse(rotation) * worldRot;
+		return getRotationInverse() * worldRot;
 	}
 
 	glm::vec3 Transform::localToWorldPosition(glm::vec3 localPos)
@@ -233,7 +262,7 @@ namespace Core
 
 	glm::quat Transform::localToWorldRotation(glm::quat localRot)
 	{
-		return rotation * localRot;
+		return getRotation() * localRot;
 	}
 
 	glm::mat4 Transform::makeTransformMatrix(glm::vec3 position, glm::quat rotation, glm::vec3 scale)
@@ -248,24 +277,5 @@ namespace Core
 		trans = glm::scale(trans, scale);
 
 		return trans;
-	}
-
-	void Transform::updateTransform()
-	{
-		if (parent != nullptr)
-		{
-			glm::quat parentOrientation = parent->getRotation();
-			rotation = parentOrientation * localRotation;
-			glm::vec3 parentScale = parent->getScale();
-			scale = parentScale * localScale;
-			position = parentOrientation * (parentScale * localPosition);
-			position += parent->getPosition();
-		}
-		else
-		{
-			position = localPosition;
-			rotation = localRotation;
-			scale = localScale;
-		}
 	}
 }

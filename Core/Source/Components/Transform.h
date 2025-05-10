@@ -14,15 +14,9 @@ namespace Core
 	class Transform: public Component
 	{
 	private:
-		glm::vec3 position = glm::vec3(0, 0, 0);
-		glm::quat rotation = glm::identity<glm::quat>();
-		glm::vec3 scale = glm::vec3(1, 1, 1);
-
-		glm::vec3 localPosition = glm::vec3(0, 0, 0);
-		glm::quat localRotation = glm::identity<glm::quat>();
-		glm::vec3 localScale = glm::vec3(1, 1, 1);
-
 		Transform* parent = nullptr;
+
+		glm::mat4 worldMtx;
 
 	public:
 		Transform(Object* owner);
@@ -33,30 +27,30 @@ namespace Core
 		Transform* getParent() { return parent; }
 		void setParent(Transform* value);
 
-		void updateTransform();
-
-		glm::vec3 getPosition() { return position; }
-		glm::vec3 getLocalPosition() { return localPosition; }
-		glm::quat getRotation() { return rotation; }
-		glm::quat getLocalRotation() { return localRotation; }
-		glm::vec3 getScale() { return scale; }
-		glm::vec3 getLocalScale() { return localScale; }
+		glm::vec3 getPosition();
+		glm::vec3 getLocalPosition();
+		glm::quat getRotation();
+		glm::quat getRotationInverse();
+		glm::quat getLocalRotation();
+		glm::vec3 getScale();
+		glm::vec3 getLocalScale();
 		glm::vec3 getForward();
 		glm::vec3 getUp();
 		glm::vec3 getRight();
-		glm::mat4 getTransformMatrix();
+
+		glm::mat4& getTransformMatrix();
 		glm::mat4 getTransformMatrixInverse();
 		glm::mat4 getLocalTransformMatrix();
 		glm::mat3 getLocalAxes();
 
 		static glm::mat4 makeTransformMatrix(glm::vec3 position, glm::quat rotation, glm::vec3 scale);
 
-		void setPosition(glm::vec3 value, bool updateChildren = true);
-		void setLocalPosition(glm::vec3 value, bool updateChildren = true);
-		void setRotation(glm::quat value, bool updateChildren = true);
-		void setLocalRotation(glm::quat value, bool updateChildren = true);
-		void setScale(glm::vec3 value, bool updateChildren = true);
-		void setLocalScale(glm::vec3 value, bool updateChildren = true);
+		void setPosition(glm::vec3 value);
+		void setLocalPosition(glm::vec3 value);
+		void setRotation(glm::quat value);
+		void setLocalRotation(glm::quat value);
+		void setScale(glm::vec3 value);
+		void setLocalScale(glm::vec3 value);
 		void setTransformMatrix(glm::mat4 value);
 		void setLocalTransformMatrix(glm::mat4 value);
 
