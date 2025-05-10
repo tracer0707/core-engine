@@ -33,6 +33,8 @@ namespace Editor
 
 		glm::mat4* _model = nullptr;
 
+		bool _isUsing = false;
+
 	public:
 		static Gizmo* singleton() { return &_singleton; }
 
@@ -45,6 +47,6 @@ namespace Editor
 		TransformMode getTransformMode() { return transformMode; }
 		void setTransformMode(TransformMode value) { transformMode = value; }
 
-		void update(Core::Camera* camera, float viewX, float viewY, float viewW, float viewH);
+		void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
 	};
 }

@@ -4,6 +4,7 @@
 #include <Assets/RenderTexture.h>
 #include <Scene/Scene.h>
 
+#include "../Gizmo.h"
 #include "../ObjectPicker.h"
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
@@ -38,11 +39,14 @@ namespace Editor
 	void SceneWindow::onUpdate()
 	{
 		bool isHovered = getIsHovered();
+		bool isGizmoWasUsed = false;
+
 		float offsetX = getPositionX();
 		float offsetY = getPositionY();
 
 		Editor::CameraController::update(isHovered);
-		Editor::ObjectPicker::update(isHovered, offsetX, offsetY);
+		Editor::Gizmo::singleton()->update(_camera, isHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
+		Editor::ObjectPicker::update(isHovered, isGizmoWasUsed, offsetX, offsetY);
 	}
 
 	SceneWindow::~SceneWindow()

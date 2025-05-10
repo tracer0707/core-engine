@@ -38,6 +38,7 @@ namespace Editor
 		std::function<void(int, int)> _onResize = nullptr;
 
 		UString _name;
+
 		float _positionX = 0;
 		float _positionY = 0;
 		float _width = 0;

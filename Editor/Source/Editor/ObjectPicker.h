@@ -14,7 +14,14 @@ namespace Editor
 		static Core::Scene* _scene;
 		static Core::Camera* _camera;
 
+		static bool _isGizmoWasUsed;
 		static bool _isMouseInView;
+		static bool _isMouseWasMoved;
+
+		static bool _isMouseLPressed;
+		static bool _isMouseRPressed;
+		static bool _isMouseMPressed;
+
 		static float _offsetX;
 		static float _offsetY;
 
@@ -22,6 +29,6 @@ namespace Editor
 
 	public:
 		static void init(Core::Scene* scene, Core::Camera* camera);
-		static void update(bool isMouseInView, float offsetX, float offsetY);
+		static void update(bool& isMouseInView, bool& isGizmoWasUsed, float& offsetX, float& offsetY);
 	};
 }
