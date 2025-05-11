@@ -15,7 +15,7 @@
 
 namespace Editor
 {
-	UString CSGObjectWindow::NAME = "CSGObject";
+	const char* CSGObjectWindow::NAME = "CSGObject";
 
 	CSGObjectWindow::CSGObjectWindow() : Window(NAME)
 	{

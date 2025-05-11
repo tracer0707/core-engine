@@ -138,6 +138,8 @@ namespace Editor
 
 		bool getSmoothNormals(int faceIndex);
 		void setSmoothNormals(int faceIndex, bool value);
+
+		size_t getId() { return hash; }
 	};
 
 	CSGBrush::uv_t operator*(double s, const CSGBrush::uv_t & t);

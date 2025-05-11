@@ -242,6 +242,9 @@
     <ClInclude Include="Source\Shared\Layers.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\Modifiers\ModifierList.h">
+      <Filter>Исходные файлы\Editor\Modifiers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc">

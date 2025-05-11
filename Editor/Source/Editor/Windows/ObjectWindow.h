@@ -12,7 +12,7 @@ namespace Editor
 	private:
 		LinearLayout* layoutMain = nullptr;
 
-		bool setModifier(UString name);
+		bool setModifier(uint32_t name);
 		void disableAll();
 
 	public:

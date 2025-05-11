@@ -23,7 +23,7 @@ namespace Editor
 		CSGObjectWindow();
 		virtual ~CSGObjectWindow();
 
-		static UString NAME;
+		static const char* NAME;
 
 		void checkControls();
 	};

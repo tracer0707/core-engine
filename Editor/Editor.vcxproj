@@ -188,6 +188,7 @@
     <ClInclude Include="Source\Editor\Gizmo.h" />
     <ClInclude Include="Source\Editor\Modifiers\CSGModifier.h" />
     <ClInclude Include="Source\Editor\Modifiers\Modifier.h" />
+    <ClInclude Include="Source\Editor\Modifiers\ModifierList.h" />
     <ClInclude Include="Source\Editor\Modifiers\ModifierManager.h" />
     <ClInclude Include="Source\Editor\ObjectPicker.h" />
     <ClInclude Include="Source\Editor\Rendering.h" />

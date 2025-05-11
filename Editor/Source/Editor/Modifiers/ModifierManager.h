@@ -28,11 +28,11 @@ namespace Editor
 
 		void addModifier(Modifier* value) { _modifiers.add(value); }
 		
-		void setCurrentModifier(UString name);
+		void setCurrentModifier(uint32_t name);
 		void unsetCurrentModifier();
-		Modifier* getModifier(UString name);
+		Modifier* getModifier(uint32_t name);
 		Modifier* getCurrentModifier() { return _currentModifier; }
-		UString getCurrentModifierName();
+		uint32_t getCurrentModifierName();
 
 		void init(Core::Scene* scene);
 		void destroy();

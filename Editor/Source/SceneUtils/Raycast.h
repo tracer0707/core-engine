@@ -18,7 +18,7 @@ namespace Editor
 	{
 	public:
 		Core::Object* object = nullptr;
-		unsigned long long brushId = -1;
+		unsigned long long brushId = ULONG_MAX;
 	};
 
 	class Raycast

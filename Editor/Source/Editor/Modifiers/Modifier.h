@@ -20,15 +20,15 @@ namespace Editor
 		virtual void enableWindows(bool enable) = 0;
 
 	protected:
-		UString _name = "";
+		uint32_t _name = 0;
 
 		Core::Scene* _scene = nullptr;
 
 	public:
-		Modifier(UString name);
+		Modifier(uint32_t name);
 		virtual ~Modifier();
 
-		UString getName() { return _name; }
+		uint32_t getName() { return _name; }
 
 		virtual void init(Core::Scene* scene) = 0 { _scene = scene; }
 		virtual void update() = 0;

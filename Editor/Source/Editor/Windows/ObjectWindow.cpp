@@ -86,7 +86,7 @@ namespace Editor
 		}
 	}
 
-	bool ObjectWindow::setModifier(UString name)
+	bool ObjectWindow::setModifier(uint32_t name)
 	{
 		if (ModifierManager::singleton()->getCurrentModifierName() == name)
 		{

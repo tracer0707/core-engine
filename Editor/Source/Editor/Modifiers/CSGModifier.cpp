@@ -13,13 +13,15 @@
 #include "../Windows/CSGObjectWindow.h"
 #include "../Windows/CSGEditWindow.h"
 
+#include "ModifierList.h"
+
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
 #include "../../CSG/CSGBrushCube.h"
 
 namespace Editor
 {
-	UString CSGModifier::NAME = "CSG";
+	uint32_t CSGModifier::NAME = CSG_MODIFIER;
 
 	CSGModifier::CSGModifier() : Modifier(NAME)
 	{

@@ -37,7 +37,7 @@ namespace Editor
 
 		std::function<void(int, int)> _onResize = nullptr;
 
-		UString _name;
+		const char* _name = nullptr;
 
 		float _positionX = 0;
 		float _positionY = 0;
@@ -61,10 +61,10 @@ namespace Editor
 		virtual void onUpdate() {}
 
 	public:
-		Window(UString name);
+		Window(const char* name);
 		virtual ~Window();
 
-		UString getName() { return _name; };
+		const char* getName() { return _name; };
 
 		void setVisible(bool value) { _visible = value; }
 		bool getVisible() { return _visible; }

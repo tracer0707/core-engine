@@ -55,6 +55,7 @@ namespace Editor
 		void addCsgBrush(CSGBrush* value) { _csgBrushes.add(value); }
 		int getNumCsgBrushes() { return _csgBrushes.count(); }
 		CSGBrush* getCsgBrush(int index) { return _csgBrushes.get(index); }
+		CSGBrush* findCsgBrush(size_t brushId);
 		void removeCsgBrush(CSGBrush* value) { _csgBrushes.remove(value); }
 
 		unsigned long long getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);

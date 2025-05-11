@@ -13,7 +13,7 @@
 
 namespace Editor
 {
-	UString CSGEditWindow::NAME = "Edit";
+	const char* CSGEditWindow::NAME = "Edit";
 
 	CSGEditWindow::CSGEditWindow() : Window(NAME)
 	{

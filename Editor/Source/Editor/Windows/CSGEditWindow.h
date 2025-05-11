@@ -23,7 +23,7 @@ namespace Editor
 		CSGEditWindow();
 		virtual ~CSGEditWindow();
 
-		static UString NAME;
+		static const char* NAME;
 
 		void checkControls();
 	};

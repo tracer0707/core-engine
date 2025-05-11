@@ -13,10 +13,10 @@
 
 namespace Editor
 {
-	Window::Window(UString name)
+	Window::Window(const char* name)
 	{
 		_name = name;
-		_id = Core::Hash::getHash(ToStdString(name));
+		_id = Core::Hash::getHash(name);
 	}
 
 	Window::~Window()
@@ -79,7 +79,7 @@ namespace Editor
 		ImGui::SetNextWindowClass(&_wndClass);
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
-		ImGui::Begin(ToStdString(_name).c_str(), &_visible, _flags);
+		ImGui::Begin(_name, &_visible, _flags);
 		ImGui::PopStyleVar();
 
 		int cw = ImGui::GetContentRegionAvail().x;

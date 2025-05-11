@@ -60,7 +60,7 @@ namespace Editor
 		CSGModifier();
 		virtual ~CSGModifier();
 
-		static UString NAME;
+		static uint32_t NAME;
 
 		void setEditMode(EditMode value) { _editMode = value; }
 		EditMode getEditMode() { return _editMode; }
@@ -73,7 +73,10 @@ namespace Editor
 		void removeCsgModel(CSGModel* value) { _csgModels.remove(value); }
 
 		CSGModel* getCurrentCsgModel() { return _currentCSGModel; }
+		void setCurrentCsgModel(CSGModel* value) { _currentCSGModel = value; }
+
 		CSGBrush* getCurrentCsgBrush() { return _currentCSGBrush; }
+		void setCurrentCsgBrush(CSGBrush* value) { _currentCSGBrush = value; }
 
 		virtual void init(Core::Scene* scene);
 		virtual void update();

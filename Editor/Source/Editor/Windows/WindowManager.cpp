@@ -46,7 +46,7 @@ namespace Editor
 		_windows.add(value);
 	}
 
-	Window* WindowManager::getWindow(UString name)
+	Window* WindowManager::getWindow(const char* name)
 	{
 		for (int i = 0; i < _windows.count(); ++i)
 		{

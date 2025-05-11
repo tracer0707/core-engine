@@ -9,6 +9,9 @@
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
 #include "../CameraController.h"
+#include "../Modifiers/ModifierManager.h"
+#include "../Modifiers/CSGModifier.h"
+#include "../../CSG/CSGModel.h"
 
 namespace Editor
 {
@@ -28,6 +31,21 @@ namespace Editor
 
 		Editor::CameraController::init(_camera);
 		Editor::ObjectPicker::init(_scene, _camera);
+		Editor::Gizmo::singleton()->init();
+
+		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=] ()
+		{
+			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
+			{
+				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+				CSGModel* model = mod->getCurrentCsgModel();
+
+				if (model != nullptr)
+				{
+					model->rebuild();
+				}
+			}
+		});
 	}
 
 	void SceneWindow::onResize(int newWidth, int newHeight)

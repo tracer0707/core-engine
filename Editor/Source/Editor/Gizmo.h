@@ -1,10 +1,14 @@
 #pragma once
 
+#include <string>
+#include <functional>
+
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Core
 {
 	class Camera;
+	class Transform;
 }
 
 namespace Editor
@@ -25,21 +29,27 @@ namespace Editor
 			Scale
 		};
 
+		typedef std::function<void()> GizmoEvent;
+
 	private:
 		TransformSpace transformSpace = TransformSpace::World;
 		TransformMode transformMode = TransformMode::Translate;
 
 		static Gizmo _singleton;
 
-		glm::mat4* _model = nullptr;
+		Core::Transform* _transform = nullptr;
 
 		bool _isUsing = false;
+		bool _lmbDown = false;
+		bool _wasMoved = false;
+
+		std::vector<std::pair<std::string, GizmoEvent>> manipulateEndEvents;
 
 	public:
 		static Gizmo* singleton() { return &_singleton; }
 
-		void setModelMatrix(glm::mat4* value) { _model = value; }
-		glm::mat4* getModelMatrix() { return _model; }
+		void setTransform(Core::Transform* value) { _transform = value; }
+		Core::Transform* getTransform() { return _transform; }
 
 		TransformSpace getTransformSpace() { return transformSpace; }
 		void setTransformSpace(TransformSpace value) { transformSpace = value; }
@@ -47,6 +57,10 @@ namespace Editor
 		TransformMode getTransformMode() { return transformMode; }
 		void setTransformMode(TransformMode value) { transformMode = value; }
 
+		std::string subscribeManipulateEndEvent(GizmoEvent callback);
+		void unsubscribeManipulateEndEvent(std::string id);
+
+		void init();
 		void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
 	};
 }

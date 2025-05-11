@@ -13,7 +13,7 @@
 
 namespace Editor
 {
-	UString HierarchyWindow::NAME = "Hierarchy";
+	const char* HierarchyWindow::NAME = "Hierarchy";
 
 	HierarchyWindow::HierarchyWindow() : Window(NAME)
 	{

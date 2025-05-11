@@ -8,7 +8,7 @@ namespace Editor
 {
     ModifierManager ModifierManager::_singleton;
 
-    void ModifierManager::setCurrentModifier(UString name)
+    void ModifierManager::setCurrentModifier(uint32_t name)
     {
         Modifier* mod = nullptr;
 
@@ -33,7 +33,7 @@ namespace Editor
         _currentModifier = nullptr;
     }
 
-    Modifier* ModifierManager::getModifier(UString name)
+    Modifier* ModifierManager::getModifier(uint32_t name)
     {
         Modifier* mod = nullptr;
 
@@ -45,9 +45,9 @@ namespace Editor
         return nullptr;
     }
 
-    UString ModifierManager::getCurrentModifierName()
+    uint32_t ModifierManager::getCurrentModifierName()
     {
-        if (_currentModifier == nullptr) return "";
+        if (_currentModifier == nullptr) return UINT32_MAX;
         return _currentModifier->getName();
     }
 

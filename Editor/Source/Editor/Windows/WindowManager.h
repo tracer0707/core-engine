@@ -31,7 +31,7 @@ namespace Editor
 		void destroy();
 
 		void addWindow(Window* value);
-		Window* getWindow(UString name);
+		Window* getWindow(const char* name);
 		void setOnDock(std::function<void()> value) { _onDock = value; }
 
 		bool isMouseCaptured();

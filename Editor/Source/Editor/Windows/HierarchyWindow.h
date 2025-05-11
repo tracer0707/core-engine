@@ -17,7 +17,7 @@ namespace Editor
 		HierarchyWindow();
 		virtual ~HierarchyWindow();
 
-		static UString NAME;
+		static const char* NAME;
 
 		TreeView* getTreeView() { return _objectTree; }
 

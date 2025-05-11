@@ -2,7 +2,7 @@
 
 namespace Editor
 {
-	Modifier::Modifier(UString name)
+	Modifier::Modifier(uint32_t name)
 	{
 		_name = name;
 	}

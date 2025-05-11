@@ -229,6 +229,17 @@ namespace Editor
         }
 	}
 
+    CSGBrush* CSGModel::findCsgBrush(size_t brushId)
+    {
+        for (auto it : _csgBrushes)
+        {
+            if (it->getId() == brushId)
+                return it;
+        }
+
+        return nullptr;
+    }
+
     unsigned long long CSGModel::getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId)
     {
         for (auto& sm : _subMeshes)

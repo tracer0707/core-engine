@@ -8,7 +8,12 @@
 
 #include "Gizmo.h"
 #include "Windows/WindowManager.h"
+#include "Modifiers/ModifierManager.h"
+#include "Modifiers/CSGModifier.h"
+
 #include "../SceneUtils/Raycast.h"
+#include "../CSG/CSGModel.h"
+#include "../CSG/CSGBrush.h"
 
 namespace Editor
 {
@@ -101,14 +106,29 @@ namespace Editor
 
 		if (hit.object != nullptr)
 		{
-			Core::Transform* transform = (Core::Transform*)hit.object->findComponent<Core::Transform*>();
-			glm::mat4& mtx = transform->getTransformMatrix();
+			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && hit.brushId != ULONG_MAX)
+			{
+				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
 
-			Gizmo::singleton()->setModelMatrix(&mtx);
+				for (int i = 0; i < mod->getNumCsgModels(); ++i)
+				{
+					CSGModel* model = mod->getCsgModel(i);
+					CSGBrush* brush = model->findCsgBrush(hit.brushId);
+
+					if (brush != nullptr)
+					{
+						mod->setCurrentCsgModel(model);
+						mod->setCurrentCsgBrush(brush);
+
+						Gizmo::singleton()->setTransform(brush->getTransform());
+						break;
+					}
+				}
+			}
 		}
 		else
 		{
-			Gizmo::singleton()->setModelMatrix(nullptr);
+			Gizmo::singleton()->setTransform(nullptr);
 		}
 	}
 }
