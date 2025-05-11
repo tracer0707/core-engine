@@ -19,6 +19,7 @@ namespace Editor
 	private:
 		UString _text = "";
 		Core::Uuid _id;
+		std::string _idStr = "";
 
 		Core::Texture* _image = nullptr;
 		

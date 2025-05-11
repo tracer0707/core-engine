@@ -12,12 +12,14 @@ namespace Editor
 	Button::Button() : Control()
 	{
 		_id = Core::Uuid::create();
+		_idStr = _id.to_string();
 	}
 
 	Button::Button(UString text) : Control()
 	{
 		_text = text;
 		_id = Core::Uuid::create();
+		_idStr = _id.to_string();
 	}
 
 	Button::~Button() {}
@@ -38,7 +40,7 @@ namespace Editor
 
 		if (_image != nullptr)
 		{
-			hasClick = ImGui::ImageButton(_id.to_string().c_str(), (ImTextureID)_image->getNativeId(), ImVec2(_width, _height), ImVec2(0, 1), ImVec2(1, 0));
+			hasClick = ImGui::ImageButton(_idStr.c_str(), (ImTextureID)_image->getNativeId(), ImVec2(_width, _height), ImVec2(0, 1), ImVec2(1, 0));
 		}
 		else
 		{
