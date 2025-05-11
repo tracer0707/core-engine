@@ -76,7 +76,7 @@ namespace Editor
         carve::interpolate::FaceAttr<int> f_layer;
         carve::interpolate::FaceAttr<bool> f_castShadows;
         carve::interpolate::FaceAttr<bool> f_smoothNormals;
-        carve::interpolate::FaceAttr<size_t> f_brushId;
+        carve::interpolate::FaceAttr<Core::Uuid> f_brushId;
 
         carve::poly::Polyhedron* csgGeom = nullptr;
 
@@ -141,7 +141,7 @@ namespace Editor
             int layer = 0;
             bool castShadows = true;
             bool smoothNormals = false;
-            unsigned long long brushId = 0;
+            Core::Uuid brushId = Core::Uuid::empty;
 
             if (f_material.hasAttribute(f))
             {
@@ -229,7 +229,7 @@ namespace Editor
         }
 	}
 
-    CSGBrush* CSGModel::findCsgBrush(size_t brushId)
+    CSGBrush* CSGModel::findCsgBrush(Core::Uuid brushId)
     {
         for (auto it : _csgBrushes)
         {
@@ -240,7 +240,7 @@ namespace Editor
         return nullptr;
     }
 
-    unsigned long long CSGModel::getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId)
+    Core::Uuid CSGModel::getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId)
     {
         for (auto& sm : _subMeshes)
         {
@@ -253,6 +253,6 @@ namespace Editor
             }
         }
 
-        return -1;
+        return Core::Uuid::empty;
     }
 }

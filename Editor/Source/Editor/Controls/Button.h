@@ -3,6 +3,7 @@
 #include <functional>
 
 #include <Shared/String.h>
+#include <Shared/Uuid.h>
 
 #include "Control.h"
 
@@ -17,7 +18,7 @@ namespace Editor
 	{
 	private:
 		UString _text = "";
-		UString _id = "";
+		Core::Uuid _id;
 
 		Core::Texture* _image = nullptr;
 		

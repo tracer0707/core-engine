@@ -4,7 +4,6 @@
 #include <imgui_internal.h>
 
 #include <Shared/String.h>
-#include <Shared/Hash.h>
 
 #include "Window.h"
 

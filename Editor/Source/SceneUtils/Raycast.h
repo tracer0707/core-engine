@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Math/Ray.h>
+#include <Shared/Uuid.h>
 
 namespace Core
 {
@@ -18,13 +19,13 @@ namespace Editor
 	{
 	public:
 		Core::Object* object = nullptr;
-		unsigned long long brushId = ULONG_MAX;
+		Core::Uuid brushId;
 	};
 
 	class Raycast
 	{
 	private:
-		static bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, unsigned long long* brushId);
+		static bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, Core::Uuid* brushId);
 
 	public:
 		static bool hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit);

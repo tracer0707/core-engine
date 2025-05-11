@@ -2,7 +2,6 @@
 
 #include "../Config.h"
 #include "../Shared/List.h"
-#include "../Shared/Hash.h"
 #include "../Shared/BitSet.h"
 #include "../Components/ComponentList.h"
 

@@ -8,23 +8,22 @@
 #include <Components/Camera.h>
 #include <Components/Transform.h>
 #include <System/InputManager.h>
-#include <Shared/Guid.h>
 
 namespace Editor
 {
 	Gizmo Gizmo::_singleton;
 
-	std::string Gizmo::subscribeManipulateEndEvent(GizmoEvent callback)
+	Core::Uuid Gizmo::subscribeManipulateEndEvent(GizmoEvent callback)
 	{
-		std::string guid = Core::Guid::genGuid();
-		manipulateEndEvents.push_back(std::make_pair(guid, callback));
+		Core::Uuid uuid = Core::Uuid::create();
+		manipulateEndEvents.push_back(std::make_pair(uuid, callback));
 
-		return guid;
+		return uuid;
 	}
 
-	void Gizmo::unsubscribeManipulateEndEvent(std::string id)
+	void Gizmo::unsubscribeManipulateEndEvent(Core::Uuid id)
 	{
-		auto it = std::find_if(manipulateEndEvents.begin(), manipulateEndEvents.end(), [=] (std::pair<std::string, GizmoEvent>& evt) -> bool
+		auto it = std::find_if(manipulateEndEvents.begin(), manipulateEndEvents.end(), [=] (std::pair<Core::Uuid, GizmoEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}

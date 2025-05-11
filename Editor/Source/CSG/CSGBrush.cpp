@@ -90,7 +90,7 @@ namespace Editor
 		carve::interpolate::FaceAttr<int>* f_layer,
 		carve::interpolate::FaceAttr<bool>* f_castShadows,
 		carve::interpolate::FaceAttr<bool>* f_smoothNormals,
-		carve::interpolate::FaceAttr<size_t>* f_brushId)
+		carve::interpolate::FaceAttr<Core::Uuid>* f_brushId)
 	{
 		for (int i = 0; i < faces.count(); ++i)
 		{
@@ -112,7 +112,7 @@ namespace Editor
 			f_layer->setAttribute(&brushPtr->faces[i], 0);
 			f_castShadows->setAttribute(&brushPtr->faces[i], castShadows);
 			f_smoothNormals->setAttribute(&brushPtr->faces[i], faces.get(i).smoothNormals);
-			f_brushId->setAttribute(&brushPtr->faces[i], hash);
+			f_brushId->setAttribute(&brushPtr->faces[i], uuid);
 		}
 	}
 

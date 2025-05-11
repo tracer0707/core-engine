@@ -54,7 +54,7 @@ namespace Editor
 			Core::Mesh* mesh = meshRenderer->getMesh();
 
 			glm::mat4 mtx = transform->getTransformMatrix();
-			unsigned long long brushId = -1;
+			Core::Uuid brushId;
 
 			if (meshTest(ray, mesh, mtx, &brushId))
 			{
@@ -67,7 +67,7 @@ namespace Editor
 		return false;
 	}
 
-	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, unsigned long long* brushId)
+	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, Core::Uuid* brushId)
 	{
 		CSGModel* csgModel = nullptr;
 

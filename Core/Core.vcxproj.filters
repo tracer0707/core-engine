@@ -138,9 +138,6 @@
     <ClCompile Include="Source\System\InputManager.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shared\Guid.cpp">
-      <Filter>Исходные файлы\Shared</Filter>
-    </ClCompile>
     <ClCompile Include="Source\System\DeviceContext.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
@@ -163,6 +160,9 @@
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
     <ClCompile Include="Source\Shared\BitSet.cpp">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Shared\Uuid.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
   </ItemGroup>
@@ -275,19 +275,10 @@
     <ClInclude Include="Source\System\InputManager.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Classes\uuid.h">
-      <Filter>Исходные файлы\Classes</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Shared\Guid.h">
-      <Filter>Исходные файлы\Shared</Filter>
-    </ClInclude>
     <ClInclude Include="Source\System\DeviceContext.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
     <ClInclude Include="Source\Shared\List.h">
-      <Filter>Исходные файлы\Shared</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Shared\Hash.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
     <ClInclude Include="Source\Components\ComponentList.h">
@@ -312,6 +303,9 @@
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="Source\Shared\BitSet.h">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Shared\Uuid.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
   </ItemGroup>

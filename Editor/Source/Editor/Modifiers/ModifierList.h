@@ -3,6 +3,6 @@
 namespace Editor
 {
 #ifndef CSG_MODIFIER
-#define CSG_MODIFIER 1
+	#define CSG_MODIFIER 1
 #endif
 }

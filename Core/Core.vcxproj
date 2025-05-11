@@ -51,11 +51,11 @@
     <ClCompile Include="Source\Scene\Object.cpp" />
     <ClCompile Include="Source\Scene\Scene.cpp" />
     <ClCompile Include="Source\Shared\BitSet.cpp" />
-    <ClCompile Include="Source\Shared\Guid.cpp" />
     <ClCompile Include="Source\Shared\IO.cpp" />
     <ClCompile Include="Source\Shared\List.cpp" />
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
+    <ClCompile Include="Source\Shared\Uuid.cpp" />
     <ClCompile Include="Source\System\DeviceContext.cpp" />
     <ClCompile Include="Source\System\EventHandler.cpp" />
     <ClCompile Include="Source\System\InputManager.cpp" />
@@ -79,7 +79,6 @@
     <ClInclude Include="Source\Assets\Texture.h" />
     <ClInclude Include="Source\Classes\bc7compressor.h" />
     <ClInclude Include="Source\Classes\dirent.h" />
-    <ClInclude Include="Source\Classes\uuid.h" />
     <ClInclude Include="Source\Components\Camera.h" />
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\ComponentList.h" />
@@ -101,12 +100,11 @@
     <ClInclude Include="Source\Scene\Object.h" />
     <ClInclude Include="Source\Scene\Scene.h" />
     <ClInclude Include="Source\Shared\BitSet.h" />
-    <ClInclude Include="Source\Shared\Guid.h" />
-    <ClInclude Include="Source\Shared\Hash.h" />
     <ClInclude Include="Source\Shared\IO.h" />
     <ClInclude Include="Source\Shared\List.h" />
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
+    <ClInclude Include="Source\Shared\Uuid.h" />
     <ClInclude Include="Source\System\DeviceContext.h" />
     <ClInclude Include="Source\System\EventHandler.h" />
     <ClInclude Include="Source\System\InputManager.h" />

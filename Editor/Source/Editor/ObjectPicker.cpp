@@ -106,7 +106,7 @@ namespace Editor
 
 		if (hit.object != nullptr)
 		{
-			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && hit.brushId != ULONG_MAX)
+			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.is_nil())
 			{
 				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
 

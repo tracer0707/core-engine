@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 
+#include "../Shared/Uuid.h"
+
 namespace Core
 {
 	class InputManager
@@ -40,13 +42,13 @@ namespace Core
 		int prevMouseX = 0;
 		int prevMouseY = 0;
 
-		std::vector<std::pair<std::string, MouseEvent>> mouseMoveEvents;
-		std::vector<std::pair<std::string, MouseButtonEvent>> mouseDownEvents;
-		std::vector<std::pair<std::string, MouseButtonEvent>> mouseUpEvents;
-		std::vector<std::pair<std::string, MouseEvent>> mouseWheelEvents;
+		std::vector<std::pair<Uuid, MouseEvent>> mouseMoveEvents;
+		std::vector<std::pair<Uuid, MouseButtonEvent>> mouseDownEvents;
+		std::vector<std::pair<Uuid, MouseButtonEvent>> mouseUpEvents;
+		std::vector<std::pair<Uuid, MouseEvent>> mouseWheelEvents;
 
-		std::vector<std::pair<std::string, KeyboardEvent>> keyDownEvents;
-		std::vector<std::pair<std::string, KeyboardEvent>> keyUpEvents;
+		std::vector<std::pair<Uuid, KeyboardEvent>> keyDownEvents;
+		std::vector<std::pair<Uuid, KeyboardEvent>> keyUpEvents;
 
 		void mouseMoveEvent(int x, int y);
 		void mouseDownEvent(MouseButton mb, int x, int y);
@@ -72,20 +74,20 @@ namespace Core
 
 		static InputManager* singleton() { return &_singleton; }
 
-		std::string subscribeMouseMoveEvent(MouseEvent callback);
-		std::string subscribeMouseDownEvent(MouseButtonEvent callback);
-		std::string subscribeMouseUpEvent(MouseButtonEvent callback);
-		std::string subscribeMouseWheelEvent(MouseEvent callback);
+		Uuid subscribeMouseMoveEvent(MouseEvent callback);
+		Uuid subscribeMouseDownEvent(MouseButtonEvent callback);
+		Uuid subscribeMouseUpEvent(MouseButtonEvent callback);
+		Uuid subscribeMouseWheelEvent(MouseEvent callback);
 
-		void unsubscribeMouseMoveEvent(std::string id);
-		void unsubscribeMouseDownEvent(std::string id);
-		void unsubscribeMouseUpEvent(std::string id);
-		void unsubscribeMouseWheelEvent(std::string id);
+		void unsubscribeMouseMoveEvent(Uuid id);
+		void unsubscribeMouseDownEvent(Uuid id);
+		void unsubscribeMouseUpEvent(Uuid id);
+		void unsubscribeMouseWheelEvent(Uuid id);
 
-		std::string subscribeKeyDownEvent(KeyboardEvent callback);
-		std::string subscribeKeyUpEvent(KeyboardEvent callback);
-		void unsubscribeKeyDownEvent(std::string id);
-		void unsubscribeKeyUpEvent(std::string id);
+		Uuid subscribeKeyDownEvent(KeyboardEvent callback);
+		Uuid subscribeKeyUpEvent(KeyboardEvent callback);
+		void unsubscribeKeyDownEvent(Uuid id);
+		void unsubscribeKeyUpEvent(Uuid id);
 
 		void updateKeys(void* event); //SDL_event
 		void updateMouse(void* window);

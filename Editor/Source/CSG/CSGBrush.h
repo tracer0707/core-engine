@@ -2,8 +2,7 @@
 
 #include <Shared/String.h>
 #include <Shared/List.h>
-#include <Shared/Guid.h>
-#include <Shared/Hash.h>
+#include <Shared/Uuid.h>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -79,8 +78,7 @@ namespace Editor
 		Core::List<glm::vec3> vertices;
 		Core::List<FaceInfo> faces;
 
-		UString guid = FromStdString(Core::Guid::genGuid());
-		size_t hash = Core::Hash::getHash(ToStdString(guid).c_str());
+		Core::Uuid uuid = Core::Uuid::create();
 
 		void destroy();
 
@@ -109,7 +107,7 @@ namespace Editor
 			carve::interpolate::FaceAttr<int>* f_layer,
 			carve::interpolate::FaceAttr<bool>* f_castShadows,
 			carve::interpolate::FaceAttr<bool>* f_smoothNormals,
-			carve::interpolate::FaceAttr<size_t>* f_brushId
+			carve::interpolate::FaceAttr<Core::Uuid>* f_brushId
 		);
 
 		Core::Object* getObject() { return object; }
@@ -139,7 +137,7 @@ namespace Editor
 		bool getSmoothNormals(int faceIndex);
 		void setSmoothNormals(int faceIndex, bool value);
 
-		size_t getId() { return hash; }
+		Core::Uuid getId() { return uuid; }
 	};
 
 	CSGBrush::uv_t operator*(double s, const CSGBrush::uv_t & t);

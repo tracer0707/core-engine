@@ -4,7 +4,6 @@
 #include <imgui_internal.h>
 
 #include <System/EventHandler.h>
-#include <Shared/Guid.h>
 
 #include <Assets/Texture.h>
 
@@ -12,13 +11,13 @@ namespace Editor
 {
 	Button::Button() : Control()
 	{
-		_id = FromStdString(Core::Guid::genGuid());
+		_id = Core::Uuid::create();
 	}
 
 	Button::Button(UString text) : Control()
 	{
 		_text = text;
-		_id = FromStdString(Core::Guid::genGuid());
+		_id = Core::Uuid::create();
 	}
 
 	Button::~Button() {}
@@ -39,7 +38,7 @@ namespace Editor
 
 		if (_image != nullptr)
 		{
-			hasClick = ImGui::ImageButton(ToStdString(_id).c_str(), (ImTextureID)_image->getNativeId(), ImVec2(_width, _height), ImVec2(0, 1), ImVec2(1, 0));
+			hasClick = ImGui::ImageButton(_id.to_string().c_str(), (ImTextureID)_image->getNativeId(), ImVec2(_width, _height), ImVec2(0, 1), ImVec2(1, 0));
 		}
 		else
 		{

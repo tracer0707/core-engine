@@ -4,8 +4,6 @@
 #include <iostream>
 #include <imgui.h>
 
-#include "../Shared/Guid.h"
-
 #include <sdl/SDL_events.h>
 
 namespace Core
@@ -25,41 +23,41 @@ namespace Core
 		
 	}
 
-	std::string InputManager::subscribeMouseMoveEvent(MouseEvent callback)
+	Uuid InputManager::subscribeMouseMoveEvent(MouseEvent callback)
 	{
-		std::string guid = Guid::genGuid();
-		mouseMoveEvents.push_back(std::make_pair(guid, callback));
+		Uuid uuid = Uuid::create();
+		mouseMoveEvents.push_back(std::make_pair(uuid, callback));
 
-		return guid;
+		return uuid;
 	}
 
-	std::string InputManager::subscribeMouseDownEvent(MouseButtonEvent callback)
+	Uuid InputManager::subscribeMouseDownEvent(MouseButtonEvent callback)
 	{
-		std::string guid = Guid::genGuid();
-		mouseDownEvents.push_back(std::make_pair(guid, callback));
+		Uuid uuid = Uuid::create();
+		mouseDownEvents.push_back(std::make_pair(uuid, callback));
 
-		return guid;
+		return uuid;
 	}
 
-	std::string InputManager::subscribeMouseUpEvent(MouseButtonEvent callback)
+	Uuid InputManager::subscribeMouseUpEvent(MouseButtonEvent callback)
 	{
-		std::string guid = Guid::genGuid();
-		mouseUpEvents.push_back(std::make_pair(guid, callback));
+		Uuid uuid = Uuid::create();
+		mouseUpEvents.push_back(std::make_pair(uuid, callback));
 		
-		return guid;
+		return uuid;
 	}
 
-	std::string InputManager::subscribeMouseWheelEvent(MouseEvent callback)
+	Uuid InputManager::subscribeMouseWheelEvent(MouseEvent callback)
 	{
-		std::string guid = Guid::genGuid();
-		mouseWheelEvents.push_back(std::make_pair(guid, callback));
+		Uuid uuid = Uuid::create();
+		mouseWheelEvents.push_back(std::make_pair(uuid, callback));
 		
-		return guid;
+		return uuid;
 	}
 
-	void InputManager::unsubscribeMouseMoveEvent(std::string id)
+	void InputManager::unsubscribeMouseMoveEvent(Uuid id)
 	{
-		auto it = std::find_if(mouseMoveEvents.begin(), mouseMoveEvents.end(), [=](std::pair<std::string, MouseEvent>& evt) -> bool
+		auto it = std::find_if(mouseMoveEvents.begin(), mouseMoveEvents.end(), [=](std::pair<Uuid, MouseEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}
@@ -69,9 +67,9 @@ namespace Core
 			mouseMoveEvents.erase(it);
 	}
 
-	void InputManager::unsubscribeMouseDownEvent(std::string id)
+	void InputManager::unsubscribeMouseDownEvent(Uuid id)
 	{
-		auto it = std::find_if(mouseDownEvents.begin(), mouseDownEvents.end(), [=](std::pair<std::string, MouseButtonEvent>& evt) -> bool
+		auto it = std::find_if(mouseDownEvents.begin(), mouseDownEvents.end(), [=](std::pair<Uuid, MouseButtonEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}
@@ -81,9 +79,9 @@ namespace Core
 			mouseDownEvents.erase(it);
 	}
 
-	void InputManager::unsubscribeMouseUpEvent(std::string id)
+	void InputManager::unsubscribeMouseUpEvent(Uuid id)
 	{
-		auto it = std::find_if(mouseUpEvents.begin(), mouseUpEvents.end(), [=](std::pair<std::string, MouseButtonEvent>& evt) -> bool
+		auto it = std::find_if(mouseUpEvents.begin(), mouseUpEvents.end(), [=](std::pair<Uuid, MouseButtonEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}
@@ -93,9 +91,9 @@ namespace Core
 			mouseUpEvents.erase(it);
 	}
 
-	void InputManager::unsubscribeMouseWheelEvent(std::string id)
+	void InputManager::unsubscribeMouseWheelEvent(Uuid id)
 	{
-		auto it = std::find_if(mouseWheelEvents.begin(), mouseWheelEvents.end(), [=](std::pair<std::string, MouseEvent>& evt) -> bool
+		auto it = std::find_if(mouseWheelEvents.begin(), mouseWheelEvents.end(), [=](std::pair<Uuid, MouseEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}
@@ -105,25 +103,25 @@ namespace Core
 			mouseWheelEvents.erase(it);
 	}
 
-	std::string InputManager::subscribeKeyDownEvent(KeyboardEvent callback)
+	Uuid InputManager::subscribeKeyDownEvent(KeyboardEvent callback)
 	{
-		std::string guid = Guid::genGuid();
-		keyDownEvents.push_back(std::make_pair(guid, callback));
+		Uuid uuid = Uuid::create();
+		keyDownEvents.push_back(std::make_pair(uuid, callback));
 		
-		return guid;
+		return uuid;
 	}
 
-	std::string InputManager::subscribeKeyUpEvent(KeyboardEvent callback)
+	Uuid InputManager::subscribeKeyUpEvent(KeyboardEvent callback)
 	{
-		std::string guid = Guid::genGuid();
-		keyUpEvents.push_back(std::make_pair(guid, callback));
+		Uuid uuid = Uuid::create();
+		keyUpEvents.push_back(std::make_pair(uuid, callback));
 		
-		return guid;
+		return uuid;
 	}
 
-	void InputManager::unsubscribeKeyDownEvent(std::string id)
+	void InputManager::unsubscribeKeyDownEvent(Uuid id)
 	{
-		auto it = std::find_if(keyDownEvents.begin(), keyDownEvents.end(), [=](std::pair<std::string, KeyboardEvent>& evt) -> bool
+		auto it = std::find_if(keyDownEvents.begin(), keyDownEvents.end(), [=](std::pair<Uuid, KeyboardEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}
@@ -133,9 +131,9 @@ namespace Core
 			keyDownEvents.erase(it);
 	}
 
-	void InputManager::unsubscribeKeyUpEvent(std::string id)
+	void InputManager::unsubscribeKeyUpEvent(Uuid id)
 	{
-		auto it = std::find_if(keyUpEvents.begin(), keyUpEvents.end(), [=](std::pair<std::string, KeyboardEvent>& evt) -> bool
+		auto it = std::find_if(keyUpEvents.begin(), keyUpEvents.end(), [=](std::pair<Uuid, KeyboardEvent>& evt) -> bool
 			{
 				return evt.first == id;
 			}

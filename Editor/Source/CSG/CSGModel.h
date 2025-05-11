@@ -4,6 +4,7 @@
 #include <map>
 #include <Shared/String.h>
 #include <Shared/List.h>
+#include <Shared/Uuid.h>
 
 namespace Core
 {
@@ -26,7 +27,7 @@ namespace Editor
 		{
 			Core::SubMesh* subMesh = nullptr;
 			Core::List<Core::Vertex> vertices;
-			Core::List<unsigned long long> brushIds;
+			Core::List<Core::Uuid> brushIds;
 		};
 
 		UString name = "";
@@ -55,10 +56,10 @@ namespace Editor
 		void addCsgBrush(CSGBrush* value) { _csgBrushes.add(value); }
 		int getNumCsgBrushes() { return _csgBrushes.count(); }
 		CSGBrush* getCsgBrush(int index) { return _csgBrushes.get(index); }
-		CSGBrush* findCsgBrush(size_t brushId);
+		CSGBrush* findCsgBrush(Core::Uuid brushId);
 		void removeCsgBrush(CSGBrush* value) { _csgBrushes.remove(value); }
 
-		unsigned long long getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
+		Core::Uuid getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
 
 		void rebuild();
 	};

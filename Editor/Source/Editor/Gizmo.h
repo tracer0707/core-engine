@@ -5,6 +5,8 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <Shared/Uuid.h>
+
 namespace Core
 {
 	class Camera;
@@ -43,7 +45,7 @@ namespace Editor
 		bool _lmbDown = false;
 		bool _wasMoved = false;
 
-		std::vector<std::pair<std::string, GizmoEvent>> manipulateEndEvents;
+		std::vector<std::pair<Core::Uuid, GizmoEvent>> manipulateEndEvents;
 
 	public:
 		static Gizmo* singleton() { return &_singleton; }
@@ -57,8 +59,8 @@ namespace Editor
 		TransformMode getTransformMode() { return transformMode; }
 		void setTransformMode(TransformMode value) { transformMode = value; }
 
-		std::string subscribeManipulateEndEvent(GizmoEvent callback);
-		void unsubscribeManipulateEndEvent(std::string id);
+		Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
+		void unsubscribeManipulateEndEvent(Core::Uuid id);
 
 		void init();
 		void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
