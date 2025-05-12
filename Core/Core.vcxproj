@@ -42,6 +42,7 @@
     <ClCompile Include="Source\Math\Mathf.cpp" />
     <ClCompile Include="Source\Math\Plane.cpp" />
     <ClCompile Include="Source\Math\Ray.cpp" />
+    <ClCompile Include="Source\Renderer\Color.cpp" />
     <ClCompile Include="Source\Renderer\FrameBuffer.cpp" />
     <ClCompile Include="Source\Renderer\Primitives.cpp" />
     <ClCompile Include="Source\Renderer\Program.cpp" />

@@ -9,14 +9,13 @@
 
 #include <Shared/String.h>
 #include <System/EventHandler.h>
-#include <Shared/Hash.h>
 
 namespace Editor
 {
 	Window::Window(const char* name)
 	{
 		_name = name;
-		_id = Core::Hash::getHash(name);
+		_id = Core::Uuid::create();
 	}
 
 	Window::~Window()

@@ -34,7 +34,7 @@ namespace Editor
 		_csgAddModelBtn->setSize(32, 32);
 		_csgAddModelBtn->setImage(csgAddModelBtnImage);
 		_csgAddModelBtn->setOnClick([=] {
-			_modifier->addCSGModel();
+			_modifier->addModel();
 		});
 
 		_layoutMain->addControl(_csgAddModelBtn);
@@ -46,7 +46,7 @@ namespace Editor
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
 		csgCube->setOnClick([=] {
-			_modifier->addCSGBrush(CSGModifier::BrushType::Cube);
+			_modifier->addBrush(CSGModifier::BrushType::Cube);
 		});
 
 		_layoutMain->addControl(csgCube);
@@ -58,7 +58,7 @@ namespace Editor
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
 		csgSphere->setOnClick([=] {
-			_modifier->addCSGBrush(CSGModifier::BrushType::Sphere);
+			_modifier->addBrush(CSGModifier::BrushType::Sphere);
 		});
 
 		_layoutMain->addControl(csgSphere);
@@ -70,7 +70,7 @@ namespace Editor
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
 		csgCylinder->setOnClick([=] {
-			_modifier->addCSGBrush(CSGModifier::BrushType::Cylinder);
+			_modifier->addBrush(CSGModifier::BrushType::Cylinder);
 		});
 
 		_layoutMain->addControl(csgCylinder);
@@ -82,7 +82,7 @@ namespace Editor
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
 		csgCone->setOnClick([=] {
-			_modifier->addCSGBrush(CSGModifier::BrushType::Cone);
+			_modifier->addBrush(CSGModifier::BrushType::Cone);
 		});
 
 		_layoutMain->addControl(csgCone);
@@ -94,7 +94,7 @@ namespace Editor
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
 		csgStair->setOnClick([=] {
-			_modifier->addCSGBrush(CSGModifier::BrushType::Stair);
+			_modifier->addBrush(CSGModifier::BrushType::Stair);
 		});
 
 		_layoutMain->addControl(csgStair);
@@ -106,7 +106,7 @@ namespace Editor
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);
 		csgPolygon->setOnClick([=] {
-			_modifier->addCSGBrush(CSGModifier::BrushType::Polygon);
+			_modifier->addBrush(CSGModifier::BrushType::Polygon);
 		});
 
 		_layoutMain->addControl(csgPolygon);
@@ -124,7 +124,7 @@ namespace Editor
 	{
 		enableAll(false);
 
-		if (_modifier->getCurrentCsgModel() != nullptr)
+		if (_modifier->getCurrentModel() != nullptr)
 		{
 			enableAll(true);
 		}

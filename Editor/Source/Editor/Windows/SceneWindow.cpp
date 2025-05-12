@@ -38,7 +38,7 @@ namespace Editor
 			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
 			{
 				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
-				CSGModel* model = mod->getCurrentCsgModel();
+				CSGModel* model = mod->getCurrentModel();
 
 				if (model != nullptr)
 				{

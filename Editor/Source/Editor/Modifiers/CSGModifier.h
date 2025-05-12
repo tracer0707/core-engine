@@ -1,15 +1,8 @@
 #pragma once
 
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <Shared/List.h>
 
 #include "Modifier.h"
-
-namespace Core
-{
-	class Camera;
-}
 
 namespace Editor
 {
@@ -47,12 +40,10 @@ namespace Editor
 		CSGObjectWindow* _csgObjectWindow = nullptr;
 		CSGEditWindow* _csgEditWindow = nullptr;
 
-		Core::List<CSGModel*> _csgModels;
+		Core::List<CSGModel*> _models;
 
-		CSGModel* _currentCSGModel = nullptr;
-		CSGBrush* _currentCSGBrush = nullptr;
-
-		glm::mat4 _brushMtx = glm::identity<glm::mat4>();
+		CSGModel* _currentModel = nullptr;
+		CSGBrush* _currentBrush = nullptr;
 
 		virtual void enableWindows(bool enable);
 
@@ -65,18 +56,18 @@ namespace Editor
 		void setEditMode(EditMode value) { _editMode = value; }
 		EditMode getEditMode() { return _editMode; }
 
-		void addCSGModel();
-		void addCSGBrush(BrushType brushType);
+		void addModel();
+		void addBrush(BrushType brushType);
 
-		int getNumCsgModels() { return _csgModels.count(); }
-		CSGModel* getCsgModel(int index) { return _csgModels.get(index); }
-		void removeCsgModel(CSGModel* value) { _csgModels.remove(value); }
+		int getNumModels() { return _models.count(); }
+		CSGModel* getModel(int index) { return _models.get(index); }
+		void removeModel(CSGModel* value) { _models.remove(value); }
 
-		CSGModel* getCurrentCsgModel() { return _currentCSGModel; }
-		void setCurrentCsgModel(CSGModel* value) { _currentCSGModel = value; }
+		CSGModel* getCurrentModel() { return _currentModel; }
+		void setCurrentModel(CSGModel* value) { _currentModel = value; }
 
-		CSGBrush* getCurrentCsgBrush() { return _currentCSGBrush; }
-		void setCurrentCsgBrush(CSGBrush* value) { _currentCSGBrush = value; }
+		CSGBrush* getCurrentBrush() { return _currentBrush; }
+		void setCurrentBrush(CSGBrush* value) { _currentBrush = value; }
 
 		virtual void init(Core::Scene* scene);
 		virtual void update();

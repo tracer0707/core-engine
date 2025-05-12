@@ -96,11 +96,11 @@ namespace Editor
 	{
 		enableAll(false);
 
-		if (_modifier->getCurrentCsgModel() != nullptr)
+		if (_modifier->getCurrentModel() != nullptr)
 		{
 			_csgSelectBtn->setEnabled(true);
 
-			if (_modifier->getCurrentCsgBrush() != nullptr)
+			if (_modifier->getCurrentBrush() != nullptr)
 			{
 				enableAll(true);
 			}

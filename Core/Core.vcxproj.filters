@@ -165,6 +165,9 @@
     <ClCompile Include="Source\Shared\Uuid.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Renderer\Color.cpp">
+      <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">

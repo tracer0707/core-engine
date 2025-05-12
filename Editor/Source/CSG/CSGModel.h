@@ -31,7 +31,7 @@ namespace Editor
 		};
 
 		UString name = "";
-		Core::List<CSGBrush*> _csgBrushes;
+		Core::List<CSGBrush*> _brushes;
 		std::map<Core::Material*, SubMeshInfo*> _subMeshes;
 
 		Core::Object* object = nullptr;
@@ -53,11 +53,11 @@ namespace Editor
 		Core::Transform* getTransform() { return transform; }
 		Core::MeshRenderer* getMeshRenderer() { return meshRenderer; }
 
-		void addCsgBrush(CSGBrush* value) { _csgBrushes.add(value); }
-		int getNumCsgBrushes() { return _csgBrushes.count(); }
-		CSGBrush* getCsgBrush(int index) { return _csgBrushes.get(index); }
-		CSGBrush* findCsgBrush(Core::Uuid brushId);
-		void removeCsgBrush(CSGBrush* value) { _csgBrushes.remove(value); }
+		void addBrush(CSGBrush* value) { _brushes.add(value); }
+		int getNumBrushes() { return _brushes.count(); }
+		CSGBrush* getBrush(int index) { return _brushes.get(index); }
+		CSGBrush* findBrush(Core::Uuid brushId);
+		void removeBrush(CSGBrush* value) { _brushes.remove(value); }
 
 		Core::Uuid getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
 

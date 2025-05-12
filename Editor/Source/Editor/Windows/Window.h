@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <Shared/String.h>
+#include <Shared/Uuid.h>
 
 #include "../Controls/Container.h"
 #include "../Controls/Style.h"
@@ -31,7 +31,7 @@ namespace Editor
 		friend class WindowManager;
 
 	private:
-		unsigned long long _id = -1;
+		Core::Uuid _id;
 
 		DockArea _dockArea;
 
@@ -93,7 +93,7 @@ namespace Editor
 
 		Style& getStyle() { return _style; }
 
-		unsigned long long getId() { return _id; }
+		Core::Uuid getId() { return _id; }
 
 		DockArea dock(DockDirection dockDirection, unsigned int relativeTo, float splitSize);
 	};

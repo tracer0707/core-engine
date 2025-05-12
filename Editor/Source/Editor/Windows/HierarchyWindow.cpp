@@ -38,18 +38,18 @@ namespace Editor
 
 		if (mod == nullptr) return;
 
-		for (int i = 0; i < mod->getNumCsgModels(); ++i)
+		for (int i = 0; i < mod->getNumModels(); ++i)
 		{
-			CSGModel* model = mod->getCsgModel(i);
+			CSGModel* model = mod->getModel(i);
 
 			TreeNode* modelNode = new TreeNode(model->getName());
 			modelNode->setUserObject(model);
 
 			_objectTree->addControl(modelNode);
 
-			for (int j = 0; j < model->getNumCsgBrushes(); j++)
+			for (int j = 0; j < model->getNumBrushes(); j++)
 			{
-				CSGBrush* brush = model->getCsgBrush(j);
+				CSGBrush* brush = model->getBrush(j);
 
 				TreeNode* brushNode = new TreeNode(brush->getName());
 				brushNode->setUserObject(brush);

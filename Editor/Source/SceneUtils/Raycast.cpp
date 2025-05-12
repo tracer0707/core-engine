@@ -74,9 +74,9 @@ namespace Editor
 		if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
 		{
 			CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
-			for (int i = 0; i < mod->getNumCsgModels(); ++i)
+			for (int i = 0; i < mod->getNumModels(); ++i)
 			{
-				CSGModel* mdl = mod->getCsgModel(i);
+				CSGModel* mdl = mod->getModel(i);
 				if (mdl->getMeshRenderer()->getMesh() == mesh)
 				{
 					csgModel = mdl;

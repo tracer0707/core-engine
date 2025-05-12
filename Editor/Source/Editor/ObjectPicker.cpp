@@ -110,15 +110,15 @@ namespace Editor
 			{
 				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
 
-				for (int i = 0; i < mod->getNumCsgModels(); ++i)
+				for (int i = 0; i < mod->getNumModels(); ++i)
 				{
-					CSGModel* model = mod->getCsgModel(i);
-					CSGBrush* brush = model->findCsgBrush(hit.brushId);
+					CSGModel* model = mod->getModel(i);
+					CSGBrush* brush = model->findBrush(hit.brushId);
 
 					if (brush != nullptr)
 					{
-						mod->setCurrentCsgModel(model);
-						mod->setCurrentCsgBrush(brush);
+						mod->setCurrentModel(model);
+						mod->setCurrentBrush(brush);
 
 						Gizmo::singleton()->setTransform(brush->getTransform());
 						break;
@@ -129,6 +129,14 @@ namespace Editor
 		else
 		{
 			Gizmo::singleton()->setTransform(nullptr);
+
+			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
+			{
+				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+
+				mod->setCurrentModel(nullptr);
+				mod->setCurrentBrush(nullptr);
+			}
 		}
 	}
 }

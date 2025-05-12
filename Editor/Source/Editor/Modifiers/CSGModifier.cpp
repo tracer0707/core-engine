@@ -1,5 +1,7 @@
 #include "CSGModifier.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <Scene/Scene.h>
 #include <System/InputManager.h>
 #include <Components/Camera.h>
@@ -15,6 +17,7 @@
 
 #include "ModifierList.h"
 
+#include "../Gizmo.h"
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
 #include "../../CSG/CSGBrushCube.h"
@@ -46,19 +49,19 @@ namespace Editor
 		_csgEditWindow->setVisible(enable);
 	}
 
-	void CSGModifier::addCSGModel()
+	void CSGModifier::addModel()
 	{
-		_currentCSGModel = new CSGModel();
-		_currentCSGModel->setName("CSG Model");
-		_scene->addObject(_currentCSGModel->getObject());
-		_csgModels.add(_currentCSGModel);
+		_currentModel = new CSGModel();
+		_currentModel->setName("CSG Model");
+		_scene->addObject(_currentModel->getObject());
+		_models.add(_currentModel);
 
 		_hierarchyWindow->rebuild();
 		_csgObjectWindow->checkControls();
 		_csgEditWindow->checkControls();
 	}
 
-	void CSGModifier::addCSGBrush(BrushType brushType)
+	void CSGModifier::addBrush(BrushType brushType)
 	{
 		CSGBrush* newBrush = nullptr;
 
@@ -73,18 +76,17 @@ namespace Editor
 
 		if (newBrush == nullptr) return;
 
-		_brushMtx = glm::identity<glm::mat4>();
-		
-		_currentCSGBrush = newBrush;
-		_currentCSGBrush->setName("CSG Brush");
-		_currentCSGBrush->getTransform()->setTransformMatrix(_brushMtx);
-		_currentCSGBrush->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
-		_currentCSGModel->addCsgBrush(_currentCSGBrush);
-		_currentCSGModel->rebuild();
+		_currentBrush = newBrush;
+		_currentBrush->setName("CSG Brush");
+		_currentBrush->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
+		_currentModel->addBrush(_currentBrush);
+		_currentModel->rebuild();
 
 		_hierarchyWindow->rebuild();
 		_csgObjectWindow->checkControls();
 		_csgEditWindow->checkControls();
+
+		Gizmo::singleton()->setTransform(_currentBrush->getTransform());
 	}
 
 	void CSGModifier::update()
@@ -94,6 +96,18 @@ namespace Editor
 
 	void CSGModifier::render()
 	{
-		
+		if (_currentBrush == nullptr) return;
+
+		glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
+		glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
+		glm::mat4& model = _currentBrush->getTransform()->getTransformMatrix();
+
+		Core::Primitives::wireCube(view, proj, model, glm::vec3(1.0f), glm::vec3(0.5f, -0.5f, 0.5f), Core::Color::RED,
+			C_CCW
+			| C_CULL_BACK
+			| C_ENABLE_DEPTH_TEST
+			| C_ENABLE_DEPTH_WRITE
+			| C_ENABLE_CULL_FACE
+			| C_DEPTH_LEQUAL);
 	}
 }
