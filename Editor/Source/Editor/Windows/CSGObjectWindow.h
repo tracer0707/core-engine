@@ -25,6 +25,6 @@ namespace Editor
 
 		static const char* NAME;
 
-		void checkControls();
+		virtual void invalidate();
 	};
 }

@@ -15,6 +15,9 @@
 #include "../Windows/CSGObjectWindow.h"
 #include "../Windows/CSGEditWindow.h"
 
+#include "../Controls/TreeView.h"
+#include "../Controls/TreeNode.h"
+
 #include "ModifierList.h"
 
 #include "../Gizmo.h"
@@ -51,14 +54,23 @@ namespace Editor
 
 	void CSGModifier::addModel()
 	{
+		_currentBrush = nullptr;
 		_currentModel = new CSGModel();
 		_currentModel->setName("CSG Model");
 		_scene->addObject(_currentModel->getObject());
 		_models.add(_currentModel);
 
-		_hierarchyWindow->rebuild();
-		_csgObjectWindow->checkControls();
-		_csgEditWindow->checkControls();
+		auto* tree = _hierarchyWindow->getTreeView();
+
+		TreeNode* modelNode = new TreeNode(_currentModel->getName(), tree);
+		modelNode->setUserObject(_currentModel->getObject());
+		tree->addControl(modelNode);
+
+		tree->selectNode(modelNode);
+
+		WindowManager::singleton()->invalidateAll();
+
+		Gizmo::singleton()->setTransform(nullptr);
 	}
 
 	void CSGModifier::addBrush(BrushType brushType)
@@ -82,9 +94,19 @@ namespace Editor
 		_currentModel->addBrush(_currentBrush);
 		_currentModel->rebuild();
 
-		_hierarchyWindow->rebuild();
-		_csgObjectWindow->checkControls();
-		_csgEditWindow->checkControls();
+		auto* tree = _hierarchyWindow->getTreeView();
+
+		TreeNode* brushNode = new TreeNode(_currentBrush->getName(), tree);
+		brushNode->setUserObject(_currentBrush->getObject());
+
+		TreeNode* modelNode = tree->findNodeByUserObject(_currentModel->getObject());
+		assert(modelNode != nullptr && "TreeNode of CSG model not found");
+		
+		modelNode->addControl(brushNode);
+
+		tree->selectNode(brushNode);
+
+		WindowManager::singleton()->invalidateAll();
 
 		Gizmo::singleton()->setTransform(_currentBrush->getTransform());
 	}

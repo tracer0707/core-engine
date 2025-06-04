@@ -96,5 +96,7 @@ namespace Editor
 		Core::Uuid getId() { return _id; }
 
 		DockArea dock(DockDirection dockDirection, unsigned int relativeTo, float splitSize);
+
+		virtual void invalidate() {}
 	};
 }

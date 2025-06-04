@@ -18,9 +18,10 @@ namespace Editor
 		std::function<void()> _onClick = nullptr;
 
 		void* _userObj = nullptr;
+		TreeView* _tree = nullptr;
 
 	public:
-		TreeNode(UString text);
+		TreeNode(UString text, TreeView* treeView);
 		~TreeNode();
 
 		virtual void update();

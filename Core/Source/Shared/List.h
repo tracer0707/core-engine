@@ -27,7 +27,7 @@ namespace Core
 		std::vector<T>::iterator begin() { return list.begin(); }
 		std::vector<T>::iterator end() { return list.end(); }
 		bool tryFind(T& out, std::function<bool(T&)> func);
-		bool tryFind(T& search);
+		bool contains(T& value);
 		void sort(std::function<bool(T&, T&)> func);
 
 		List& operator = (std::vector<T> other);
@@ -104,9 +104,9 @@ namespace Core
 	}
 
 	template<typename T>
-	inline bool List<T>::tryFind(T& search)
+	inline bool List<T>::contains(T& value)
 	{
-		auto it = std::find(list.begin(), list.end(), search);
+		auto it = std::find(list.begin(), list.end(), value);
 		if (it == list.end()) return false;
 
 		return true;

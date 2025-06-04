@@ -83,7 +83,7 @@ namespace Editor
 
 		EVENT({
 			activateAll(false);
-			checkControls();
+			invalidate();
 			_csgSelectBtn->setActive(true);
 		}, =);
 	}
@@ -92,7 +92,7 @@ namespace Editor
 	{
 	}
 
-	void Editor::CSGEditWindow::checkControls()
+	void Editor::CSGEditWindow::invalidate()
 	{
 		enableAll(false);
 

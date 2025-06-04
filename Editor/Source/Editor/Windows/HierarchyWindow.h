@@ -20,7 +20,5 @@ namespace Editor
 		static const char* NAME;
 
 		TreeView* getTreeView() { return _objectTree; }
-
-		void rebuild();
 	};
 }

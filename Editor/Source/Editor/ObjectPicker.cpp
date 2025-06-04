@@ -8,8 +8,10 @@
 
 #include "Gizmo.h"
 #include "Windows/WindowManager.h"
+#include "Windows/HierarchyWindow.h"
 #include "Modifiers/ModifierManager.h"
 #include "Modifiers/CSGModifier.h"
+#include "Controls/TreeView.h"
 
 #include "../SceneUtils/Raycast.h"
 #include "../CSG/CSGModel.h"
@@ -104,6 +106,8 @@ namespace Editor
 		RaycastHit hit;
 		Raycast::hitTest(_scene, ray, &hit);
 
+		HierarchyWindow* wnd = (HierarchyWindow*)WindowManager::singleton()->getWindow(HierarchyWindow::NAME);
+
 		if (hit.object != nullptr)
 		{
 			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.is_nil())
@@ -121,6 +125,8 @@ namespace Editor
 						mod->setCurrentBrush(brush);
 
 						Gizmo::singleton()->setTransform(brush->getTransform());
+						wnd->getTreeView()->selectNodeByUserObject(brush->getObject());
+
 						break;
 					}
 				}
@@ -136,7 +142,10 @@ namespace Editor
 
 				mod->setCurrentModel(nullptr);
 				mod->setCurrentBrush(nullptr);
+				wnd->getTreeView()->clearSelection();
 			}
 		}
+
+		WindowManager::singleton()->invalidateAll();
 	}
 }

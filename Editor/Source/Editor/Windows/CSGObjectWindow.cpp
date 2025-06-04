@@ -112,7 +112,7 @@ namespace Editor
 		_layoutMain->addControl(csgPolygon);
 
 		EVENT({
-			checkControls();
+			invalidate();
 		}, =);
 	}
 
@@ -120,7 +120,7 @@ namespace Editor
 	{
 	}
 
-	void Editor::CSGObjectWindow::checkControls()
+	void Editor::CSGObjectWindow::invalidate()
 	{
 		enableAll(false);
 

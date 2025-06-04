@@ -4,6 +4,7 @@
 #include <imgui_internal.h>
 
 #include <Shared/String.h>
+#include <System/EventHandler.h>
 
 #include "Window.h"
 
@@ -38,6 +39,17 @@ namespace Editor
 		}
 
 		_windows.clear();
+	}
+
+	void WindowManager::invalidateAll()
+	{
+		EVENT({
+			for (int i = 0; i < _windows.count(); ++i)
+			{
+				Window* window = _windows.get(i);
+				window->invalidate();
+			}
+		}, =);
 	}
 
 	void WindowManager::addWindow(Window* value)

@@ -30,6 +30,8 @@ namespace Editor
 		void init();
 		void destroy();
 
+		void invalidateAll();
+
 		void addWindow(Window* value);
 		Window* getWindow(const char* name);
 		void setOnDock(std::function<void()> value) { _onDock = value; }
