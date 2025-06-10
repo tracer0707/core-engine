@@ -107,6 +107,7 @@ namespace Editor
 		Raycast::hitTest(_scene, ray, &hit);
 
 		HierarchyWindow* wnd = (HierarchyWindow*)WindowManager::singleton()->getWindow(HierarchyWindow::NAME);
+		TreeView* treeView = wnd->getTreeView();
 
 		if (hit.object != nullptr)
 		{
@@ -125,7 +126,8 @@ namespace Editor
 						mod->setCurrentBrush(brush);
 
 						Gizmo::singleton()->setTransform(brush->getTransform());
-						wnd->getTreeView()->selectNodeByUserObject(brush->getObject());
+						TreeNode* node = treeView->findNodeByUserObject(brush->getObject());
+						treeView->selectNode(node, false);
 
 						break;
 					}
@@ -142,7 +144,7 @@ namespace Editor
 
 				mod->setCurrentModel(nullptr);
 				mod->setCurrentBrush(nullptr);
-				wnd->getTreeView()->clearSelection();
+				treeView->clearSelection(false);
 			}
 		}
 

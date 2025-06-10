@@ -11,6 +11,10 @@
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
 
+#include "../Gizmo.h"
+
+#include <Scene/Object.h>
+
 namespace Editor
 {
 	const char* HierarchyWindow::NAME = "Hierarchy";
@@ -20,6 +24,21 @@ namespace Editor
 		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
 		
 		_objectTree = new TreeView();
+
+		_objectTree->setOnSelectionChanged([=] (Core::List<TreeNode*>& selected) {
+			if (selected.count() == 0)
+			{
+				Gizmo::singleton()->setTransform(nullptr);
+			}
+			else if (selected.count() == 1)
+			{
+				TreeNode* node = selected.get(0);
+				Core::Object* obj = (Core::Object*)node->getUserObject();
+				Core::Transform* transform = obj->findComponent<Core::Transform*>();
+
+				Gizmo::singleton()->setTransform(transform);
+			}
+		});
 
 		layoutMain->addControl(_objectTree);
 

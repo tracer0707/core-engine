@@ -21,6 +21,7 @@
 #include "ModifierList.h"
 
 #include "../Gizmo.h"
+#include "../../Shared/Tags.h"
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
 #include "../../CSG/CSGBrushCube.h"
@@ -64,13 +65,11 @@ namespace Editor
 
 		TreeNode* modelNode = new TreeNode(_currentModel->getName(), tree);
 		modelNode->setUserObject(_currentModel->getObject());
+		modelNode->setUserTag(TAG_CSG_MODEL);
 		tree->addControl(modelNode);
-
 		tree->selectNode(modelNode);
 
 		WindowManager::singleton()->invalidateAll();
-
-		Gizmo::singleton()->setTransform(nullptr);
 	}
 
 	void CSGModifier::addBrush(BrushType brushType)
@@ -98,17 +97,15 @@ namespace Editor
 
 		TreeNode* brushNode = new TreeNode(_currentBrush->getName(), tree);
 		brushNode->setUserObject(_currentBrush->getObject());
+		brushNode->setUserTag(TAG_CSG_BRUSH);
 
 		TreeNode* modelNode = tree->findNodeByUserObject(_currentModel->getObject());
 		assert(modelNode != nullptr && "TreeNode of CSG model not found");
 		
 		modelNode->addControl(brushNode);
-
 		tree->selectNode(brushNode);
 
 		WindowManager::singleton()->invalidateAll();
-
-		Gizmo::singleton()->setTransform(_currentBrush->getTransform());
 	}
 
 	void CSGModifier::update()

@@ -18,6 +18,8 @@ namespace Editor
 		std::function<void()> _onClick = nullptr;
 
 		void* _userObj = nullptr;
+		int _userTag = 0;
+
 		TreeView* _tree = nullptr;
 
 	public:
@@ -33,5 +35,8 @@ namespace Editor
 
 		void setUserObject(void* value) { _userObj = value; }
 		void* getUserObject() { return _userObj; }
+
+		void setUserTag(int value) { _userTag = value; }
+		int getUserTag() { return _userTag; }
 	};
 }

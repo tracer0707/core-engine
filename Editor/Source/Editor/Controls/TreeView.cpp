@@ -18,7 +18,7 @@ namespace Editor
 		}
 	}
 
-	void findNodeByUserObjectRecursive(void* value, TreeNode* root, TreeNode** out)
+	static void findNodeByUserObjectRecursive(void* value, TreeNode* root, TreeNode** out)
 	{
 		if (root->getUserObject() == value)
 		{
@@ -47,31 +47,28 @@ namespace Editor
 		return node;
 	}
 
-	void TreeView::selectNode(TreeNode* value)
+	void TreeView::selectNode(TreeNode* value, bool byUser)
 	{
 		selectedNodes.clear();
 		if (value != nullptr)
 		{
 			selectedNodes.add(value);
 		}
-	}
 
-	void TreeView::selectNodeByUserObject(void* value)
-	{
-		selectedNodes.clear();
-
-		if (value == nullptr) return;
-
-		Control* node = findNodeByUserObject(value);
-		if (node != nullptr)
+		if (byUser && _onSelectionChanged != nullptr)
 		{
-			selectedNodes.add((TreeNode*)node);
+			_onSelectionChanged(selectedNodes);
 		}
 	}
 
-	void TreeView::clearSelection()
+	void TreeView::clearSelection(bool byUser)
 	{
 		selectedNodes.clear();
+
+		if (byUser && _onSelectionChanged != nullptr)
+		{
+			_onSelectionChanged(selectedNodes);
+		}
 	}
 
 	bool TreeView::isNodeSelected(TreeNode* node)

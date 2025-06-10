@@ -25,8 +25,9 @@ namespace Editor
 
 		if (ImGui::TreeNodeEx(ToStdString(_text).c_str(), flags))
 		{
-			if (ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 			{
+				_tree->selectNode(this, true);
 				if (_onClick != nullptr) _onClick();
 			}
 

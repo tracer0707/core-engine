@@ -245,6 +245,9 @@
     <ClInclude Include="Source\Editor\Modifiers\ModifierList.h">
       <Filter>Исходные файлы\Editor\Modifiers</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Shared\Tags.h">
+      <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc">

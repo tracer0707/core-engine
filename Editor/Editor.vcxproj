@@ -205,6 +205,7 @@
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
     <ClInclude Include="Source\SceneUtils\Raycast.h" />
     <ClInclude Include="Source\Shared\Layers.h" />
+    <ClInclude Include="Source\Shared\Tags.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc" />

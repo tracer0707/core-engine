@@ -13,20 +13,22 @@ namespace Editor
 	private:
 		Core::List<TreeNode*> selectedNodes;
 
+		std::function<void(Core::List<TreeNode*>&)> _onSelectionChanged = nullptr;
+
 	public:
 		TreeView();
 		virtual ~TreeView();
 
 		virtual void update();
 
+		void setOnSelectionChanged(std::function<void(Core::List<TreeNode*>&)> callback) { _onSelectionChanged = callback; }
+
 		Core::List<TreeNode*>& getSelectedNodes() { return selectedNodes; }
 		bool isNodeSelected(TreeNode* node);
 
 		TreeNode* findNodeByUserObject(void* value);
 
-		void selectNode(TreeNode* value);
-		void selectNodeByUserObject(void* value);
-
-		void clearSelection();
+		void selectNode(TreeNode* value, bool byUser = true);
+		void clearSelection(bool byUser = true);
 	};
 }
