@@ -23,14 +23,16 @@ namespace Editor
 		if (_tree->isNodeSelected(this)) flags |= ImGuiTreeNodeFlags_Selected;
 		if (_controls.count() == 0) flags |= ImGuiTreeNodeFlags_Leaf;
 
-		if (ImGui::TreeNodeEx(ToStdString(_text).c_str(), flags))
-		{
-			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
-			{
-				_tree->selectNode(this, true);
-				if (_onClick != nullptr) _onClick();
-			}
+		bool isNodeOpened = ImGui::TreeNodeEx(ToStdString(_text).c_str(), flags);
 
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+		{
+			_tree->selectNode(this, true);
+			if (_onClick != nullptr) _onClick();
+		}
+		
+		if (isNodeOpened)
+		{
 			for (auto it : _controls)
 			{
 				it->update();
