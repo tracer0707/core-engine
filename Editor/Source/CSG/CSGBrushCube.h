@@ -6,10 +6,13 @@ namespace Editor
 {
 	class CSGBrushCube : public CSGBrush
 	{
-	public:
-		CSGBrushCube();
+		friend class CSGModel;
+
+	protected:
+		CSGBrushCube(CSGModel* parent);
 		virtual ~CSGBrushCube();
 
+	public:
 		void make() override;
 	};
 }

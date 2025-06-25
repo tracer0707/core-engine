@@ -65,7 +65,7 @@ namespace Editor
 
 		TreeNode* modelNode = new TreeNode(_currentModel->getName(), tree);
 		modelNode->setUserObject(_currentModel->getObject());
-		modelNode->setUserTag(TAG_CSG_MODEL);
+		modelNode->setUserTag(TAG_CSG_MODEL, _currentModel);
 		tree->addControl(modelNode);
 		tree->selectNode(modelNode);
 
@@ -79,7 +79,7 @@ namespace Editor
 		switch (brushType)
 		{
 		case BrushType::Cube:
-			newBrush = new CSGBrushCube();
+			newBrush = _currentModel->createCubeBrush();
 			break;
 		default:
 			break;
@@ -90,14 +90,13 @@ namespace Editor
 		_currentBrush = newBrush;
 		_currentBrush->setName("CSG Brush");
 		_currentBrush->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
-		_currentModel->addBrush(_currentBrush);
 		_currentModel->rebuild();
 
 		auto* tree = _hierarchyWindow->getTreeView();
 
 		TreeNode* brushNode = new TreeNode(_currentBrush->getName(), tree);
 		brushNode->setUserObject(_currentBrush->getObject());
-		brushNode->setUserTag(TAG_CSG_BRUSH);
+		brushNode->setUserTag(TAG_CSG_BRUSH, _currentBrush);
 
 		TreeNode* modelNode = tree->findNodeByUserObject(_currentModel->getObject());
 		assert(modelNode != nullptr && "TreeNode of CSG model not found");

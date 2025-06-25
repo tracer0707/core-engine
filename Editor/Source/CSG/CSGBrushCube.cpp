@@ -2,13 +2,15 @@
 
 namespace Editor
 {
-	CSGBrushCube::CSGBrushCube() : CSGBrush()
+	CSGBrushCube::CSGBrushCube(CSGModel* parent) : CSGBrush(parent)
 	{
 		make();
 	}
 
 	CSGBrushCube::~CSGBrushCube()
 	{
+		vertices.clear();
+		faces.clear();
 	}
 
 	void CSGBrushCube::make()

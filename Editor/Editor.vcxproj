@@ -131,6 +131,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>opengl32.lib;../Core/Dependencies/glew/lib/x64/glew32.lib;../Core/Dependencies/glew/lib/x64/glew32s.lib;../Core/Dependencies/assimp/lib/x64/assimp-vc143-mt.lib;../Core/Dependencies/glm/lib/x64/glm_static.lib;../Core/Dependencies/icu/lib/x64/icudt.lib;../Core/Dependencies/icu/lib/x64/icuin.lib;../Core/Dependencies/icu/lib/x64/icuio.lib;../Core/Dependencies/icu/lib/x64/icutest.lib;../Core/Dependencies/icu/lib/x64/icutu.lib;../Core/Dependencies/icu/lib/x64/icuuc.lib;../Core/Dependencies/sdl/lib/x64/SDL2.lib;../Core/Dependencies/sdl/lib/x64/SDL2main.lib;../Core/Dependencies/FreeImage/lib/x64/FreeImage.lib;../Core/Dependencies/bc7enc/lib/bc7enc.lib;../x64/Release/Core.lib;Dependencies/Carve/lib/x64/carve.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

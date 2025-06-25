@@ -34,7 +34,7 @@ namespace Editor
         Core::BitSet& objectFlags = object->getFlags();
         objectFlags.setBit(LAYER_CSG, true);
 
-        nullBrush = new CSGBrush();
+        nullBrush = new CSGBrush(this);
 
         if (defaultMaterial == nullptr)
             defaultMaterial = new Core::Material();
@@ -229,6 +229,14 @@ namespace Editor
         }
 	}
 
+    CSGBrushCube* CSGModel::createCubeBrush()
+    {
+        CSGBrushCube* brush = new CSGBrushCube(this);
+        _brushes.add(brush);
+
+        return brush;
+    }
+
     CSGBrush* CSGModel::findBrush(Core::Uuid brushId)
     {
         for (auto it : _brushes)
@@ -238,6 +246,19 @@ namespace Editor
         }
 
         return nullptr;
+    }
+
+    bool CSGModel::removeBrush(CSGBrush* value)
+    {
+        if (_brushes.contains(value))
+        {
+            _brushes.remove(value);
+            delete value;
+
+            return true;
+        }
+
+        return false;
     }
 
     Core::Uuid CSGModel::getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId)

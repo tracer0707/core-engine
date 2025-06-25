@@ -11,11 +11,19 @@
 #include <Scene/Object.h>
 #include <Components/Transform.h>
 
+#include "../Shared/Layers.h"
+
 namespace Editor
 {
-	CSGBrush::CSGBrush()
+	CSGBrush::CSGBrush(CSGModel* parent)
 	{
+		this->parent = parent;
+
 		object = new Core::Object();
+
+		Core::BitSet& objectFlags = object->getFlags();
+		objectFlags.setBit(LAYER_CSG, true);
+
 		transform = object->addComponent<Core::Transform*>();
 	}
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <map>
 
 #include "Control.h"
 
@@ -18,7 +19,7 @@ namespace Editor
 		std::function<void()> _onClick = nullptr;
 
 		void* _userObj = nullptr;
-		int _userTag = 0;
+		std::map<int, void*> _userTags;
 
 		TreeView* _tree = nullptr;
 
@@ -36,7 +37,7 @@ namespace Editor
 		void setUserObject(void* value) { _userObj = value; }
 		void* getUserObject() { return _userObj; }
 
-		void setUserTag(int value) { _userTag = value; }
-		int getUserTag() { return _userTag; }
+		void setUserTag(int key, void* value);
+		void* getUserTag(int key);
 	};
 }

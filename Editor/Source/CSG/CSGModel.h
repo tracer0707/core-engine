@@ -19,6 +19,7 @@ namespace Core
 namespace Editor
 {
 	class CSGBrush;
+	class CSGBrushCube;
 
 	class CSGModel
 	{
@@ -53,11 +54,12 @@ namespace Editor
 		Core::Transform* getTransform() { return transform; }
 		Core::MeshRenderer* getMeshRenderer() { return meshRenderer; }
 
-		void addBrush(CSGBrush* value) { _brushes.add(value); }
+		CSGBrushCube* createCubeBrush();
+
 		int getNumBrushes() { return _brushes.count(); }
 		CSGBrush* getBrush(int index) { return _brushes.get(index); }
 		CSGBrush* findBrush(Core::Uuid brushId);
-		void removeBrush(CSGBrush* value) { _brushes.remove(value); }
+		bool removeBrush(CSGBrush* value);
 
 		Core::Uuid getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
 

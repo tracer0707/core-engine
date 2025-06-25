@@ -38,6 +38,8 @@ namespace Editor
 
 	class CSGBrush
 	{
+		friend class CSGModel;
+
 	public:
 		enum class BrushOperation
 		{
@@ -67,6 +69,9 @@ namespace Editor
 			Core::Material* material = nullptr;
 		};
 
+		CSGBrush(CSGModel* parent);
+		virtual ~CSGBrush();
+
 		UString name = "";
 		CSGModel* parent = nullptr;
 		bool castShadows = true;
@@ -83,9 +88,6 @@ namespace Editor
 		void destroy();
 
 	public:
-		CSGBrush();
-		virtual ~CSGBrush();
-
 		void rebuild();
 		virtual void make() {};
 
@@ -93,7 +95,6 @@ namespace Editor
 		void setName(UString value) { name = value; }
 
 		CSGModel* getParent() { return parent; }
-		void setParent(CSGModel* value) { parent = value; }
 
 		carve::poly::Polyhedron* getBrushPtr() { return brushPtr; }
 

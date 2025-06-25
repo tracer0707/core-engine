@@ -41,4 +41,19 @@ namespace Editor
 			ImGui::TreePop();
 		}
 	}
+
+	void TreeNode::setUserTag(int key, void* value)
+	{
+		_userTags[key] = value;
+	}
+
+	void* TreeNode::getUserTag(int key)
+	{
+		if (_userTags.find(key) == _userTags.end())
+		{
+			return nullptr;
+		}
+
+		return _userTags[key];
+	}
 }

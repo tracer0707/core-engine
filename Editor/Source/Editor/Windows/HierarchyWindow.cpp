@@ -8,8 +8,12 @@
 #include "../Modifiers/ModifierManager.h"
 #include "../Modifiers/CSGModifier.h"
 
+#include "../Windows/WindowManager.h"
+
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
+#include "../../Shared/Layers.h"
+#include "../../Shared/Tags.h"
 
 #include "../Gizmo.h"
 
@@ -37,6 +41,26 @@ namespace Editor
 				Core::Transform* transform = obj->findComponent<Core::Transform*>();
 
 				Gizmo::singleton()->setTransform(transform);
+
+				if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && obj->getFlags().getBit(LAYER_CSG))
+				{
+					CSGBrush* brush = (CSGBrush*)node->getUserTag(TAG_CSG_BRUSH);
+					CSGModel* model = (CSGModel*)node->getUserTag(TAG_CSG_MODEL);
+
+					CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+
+					if (brush != nullptr)
+					{
+						mod->setCurrentModel(brush->getParent());
+						mod->setCurrentBrush(brush);
+					}
+					else if (model != nullptr)
+					{
+						mod->setCurrentModel(model);
+					}
+
+					WindowManager::singleton()->invalidateAll();
+				}
 			}
 		});
 
