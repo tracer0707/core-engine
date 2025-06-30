@@ -114,6 +114,7 @@ namespace Editor
 		Core::Object* getObject() { return object; }
 		Core::Transform* getTransform() { return transform; }
 
+		Core::List<int> getFlatIndices();
 		Core::List<glm::vec3>& getVertices() { return vertices; }
 		Core::List<FaceInfo>& getFaces() { return faces; }
 

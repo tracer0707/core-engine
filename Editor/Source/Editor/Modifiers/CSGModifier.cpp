@@ -120,7 +120,10 @@ namespace Editor
 		glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
 		glm::mat4& model = _currentBrush->getTransform()->getTransformMatrix();
 
-		Core::Primitives::wireCube(view, proj, model, glm::vec3(1.0f), glm::vec3(0.5f, -0.5f, 0.5f), Core::Color::RED,
+		Core::List<int> inds = _currentBrush->getFlatIndices();
+		Core::List<glm::vec3>& verts = _currentBrush->getVertices();
+
+		Core::Primitives::wireMesh(view, proj, model, verts, inds, Core::Color::RED, Core::Primitives::WireframeMode::Polygon,
 			C_CCW
 			| C_CULL_BACK
 			| C_ENABLE_DEPTH_TEST

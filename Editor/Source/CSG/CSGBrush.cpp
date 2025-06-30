@@ -124,6 +124,21 @@ namespace Editor
 		}
 	}
 
+	Core::List<int> CSGBrush::getFlatIndices()
+	{
+		Core::List<int> inds;
+
+		for (int i = 0; i < faces.count(); ++i)
+		{
+			for (int j = 0; j < faces.get(i).indices.count(); ++j)
+			{
+				inds.add(faces.get(i).indices.get(j));
+			}
+		}
+
+		return inds;
+	}
+
 	void CSGBrush::setCastShadows(bool value)
 	{
 		castShadows = value;
