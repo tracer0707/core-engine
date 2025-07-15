@@ -37,12 +37,15 @@
 
 namespace Core
 {
-	class DeviceContext;
-
 	class Renderer
 	{
+		friend class DeviceContext;
+
 	private:
 		DeviceContext* context = nullptr;
+
+		static void init(DeviceContext* ctx);
+		static void destroy();
 
 	protected:
 		Renderer(DeviceContext* ctx);
@@ -58,9 +61,6 @@ namespace Core
 
 	public:
 		static Renderer* singleton();
-
-		static void init(DeviceContext* ctx);
-		static void destroy();
 
 		const UInt32& getWidth() { return width; }
 		const UInt32& getHeight() { return height; }

@@ -14,7 +14,7 @@ namespace Core
 		std::vector<T> list;
 
 	public:
-		int count() { return list.size(); }
+		size_t count() { return list.size(); }
 
 		void add(T value);
 		void remove(T value);
