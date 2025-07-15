@@ -10,11 +10,20 @@ namespace Core
 	{
 	friend class Renderer;
 
+	private:
+		void* window = nullptr;
+		void* rendererContext = nullptr;
+
 	protected:
 		RendererGL4(DeviceContext* ctx);
+		virtual ~RendererGL4();
 
 	public:
-		virtual const void setViewportSize(int w, int h);
+		const void processEvents(void* event);
+		const void setViewportSize(int w, int h);
+		const void beginUI();
+		const void endUI();
+		const void swapBuffers();
 
 		const Program* createProgram(UString vertexSrc, UString fragmentSrc);
 		const void deleteProgram(const Program* programId);

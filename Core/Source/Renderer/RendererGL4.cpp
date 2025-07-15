@@ -1,17 +1,62 @@
 #include "RendererGL4.h"
 
+#include <sdl/SDL.h>
 #include <GL/glew.h>
+
 #include <cassert>
 #include <iostream>
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_opengl3.h>
+
 #include "../Components/Camera.h"
+#include "../System/DeviceContext.h"
 
 namespace Core
 {
-    RendererGL4::RendererGL4(DeviceContext* ctx) : Renderer(ctx) {}
+    RendererGL4::RendererGL4(DeviceContext* ctx) : Renderer(ctx)
+    {
+        window = ctx->getWindow();
+        rendererContext = SDL_GL_CreateContext((SDL_Window*)window);
+
+        SDL_GL_SetSwapInterval(1);
+        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
+        SDL_GL_SwapWindow((SDL_Window*)window);
+
+        GLenum err = glewInit();
+        if (err != GLEW_OK)
+        {
+            fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        }
+
+        ImGui::CreateContext();
+        ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)window, (SDL_GLContext)rendererContext);
+        ImGui_ImplOpenGL3_Init("#version 130");
+
+        glEnable(GL_MULTISAMPLE);
+    }
+
+    RendererGL4::~RendererGL4()
+    {
+        glDisable(GL_MULTISAMPLE);
+
+        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
+        SDL_GL_DeleteContext(rendererContext);
+
+        window = nullptr;
+        rendererContext = nullptr;
+    }
+
+    const void RendererGL4::processEvents(void* event)
+    {
+        ImGui_ImplSDL2_ProcessEvent((SDL_Event*)event);
+    }
 
     const void RendererGL4::setViewportSize(int w, int h)
     {
@@ -19,6 +64,25 @@ namespace Core
         height = h;
 
         glViewport(0, 0, w, h);
+    }
+
+    const void RendererGL4::beginUI()
+    {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplSDL2_NewFrame();
+        ImGui::NewFrame();
+    }
+
+    const void RendererGL4::endUI()
+    {
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    }
+
+    const void RendererGL4::swapBuffers()
+    {
+        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
+        SDL_GL_SwapWindow((SDL_Window*)window);
     }
 
     const Program* RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)

@@ -167,6 +167,8 @@
     <ClCompile Include="Source\Editor\Windows\Window.cpp" />
     <ClCompile Include="Source\Editor\Windows\WindowManager.cpp" />
     <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\Main\EditorBase.cpp" />
+    <ClCompile Include="Source\Main\ProjectManager.cpp" />
     <ClCompile Include="Source\SceneUtils\Raycast.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -204,6 +206,8 @@
     <ClInclude Include="Source\Editor\Windows\SceneWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
+    <ClInclude Include="Source\Main\EditorBase.h" />
+    <ClInclude Include="Source\Main\ProjectManager.h" />
     <ClInclude Include="Source\SceneUtils\Raycast.h" />
     <ClInclude Include="Source\Shared\Layers.h" />
     <ClInclude Include="Source\Shared\Tags.h" />

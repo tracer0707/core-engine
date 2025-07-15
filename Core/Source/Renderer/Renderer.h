@@ -46,6 +46,7 @@ namespace Core
 
 	protected:
 		Renderer(DeviceContext* ctx);
+		virtual ~Renderer();
 
 		Program* defaultProgram = new Program();
 		std::vector<Program*> shaderPrograms;
@@ -59,11 +60,16 @@ namespace Core
 		static Renderer* singleton();
 
 		static void init(DeviceContext* ctx);
+		static void destroy();
 
 		const UInt32& getWidth() { return width; }
 		const UInt32& getHeight() { return height; }
 
+		virtual const void processEvents(void* event) = 0;
 		virtual const void setViewportSize(int w, int h) = 0;
+		virtual const void beginUI() = 0;
+		virtual const void endUI() = 0;
+		virtual const void swapBuffers() = 0;
 
 		virtual const Program* createProgram(UString vertexSrc, UString fragmentSrc) = 0;
 		virtual const void deleteProgram(const Program* program) = 0;

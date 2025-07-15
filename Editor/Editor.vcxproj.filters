@@ -34,6 +34,9 @@
     <Filter Include="Исходные файлы\Shared">
       <UniqueIdentifier>{aca67554-0aac-4a3c-8739-d022e6c7ee24}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Main">
+      <UniqueIdentifier>{b2e9387a-79ee-4fff-806c-73c577bbd99f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor\CameraController.cpp">
@@ -134,6 +137,12 @@
     </ClCompile>
     <ClCompile Include="Source\SceneUtils\Raycast.cpp">
       <Filter>Исходные файлы\SceneUtils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main\ProjectManager.cpp">
+      <Filter>Исходные файлы\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main\EditorBase.cpp">
+      <Filter>Исходные файлы\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +256,12 @@
     </ClInclude>
     <ClInclude Include="Source\Shared\Tags.h">
       <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Main\ProjectManager.h">
+      <Filter>Исходные файлы\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Main\EditorBase.h">
+      <Filter>Исходные файлы\Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

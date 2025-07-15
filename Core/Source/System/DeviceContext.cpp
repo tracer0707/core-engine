@@ -1,10 +1,6 @@
 #include "DeviceContext.h"
 
 #include <sdl/SDL.h>
-#include <GL/glew.h>
-
-#include <imgui_impl_sdl2.h>
-#include <imgui_impl_opengl3.h>
 
 #include "../Renderer/Renderer.h"
 #include "../System/EventHandler.h"
@@ -16,15 +12,14 @@ namespace Core
     int DeviceContext::createWindow(UString title, int width, int height)
     {
         if (window != nullptr)
-            return 0;
+        {
+            return -1;
+        }
 
         windowWidth = width;
         windowHeight = height;
 
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
-
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-        SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 8);
 
         window = SDL_CreateWindow(ToStdString(title).c_str(),
             SDL_WINDOWPOS_UNDEFINED,
@@ -33,25 +28,12 @@ namespace Core
             height,
             SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-        if (window == NULL) {
+        if (window == NULL)
+        {
             return -1;
         }
 
-        rendererContext = SDL_GL_CreateContext((SDL_Window*)window);
-
-        SDL_GL_SetSwapInterval(1);
-        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
-        SDL_GL_SwapWindow((SDL_Window*)window);
-
-        glewInit();
-
         Core::Renderer::init(this);
-
-        ImGui::CreateContext();
-        ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)window, (SDL_GLContext)rendererContext);
-        ImGui_ImplOpenGL3_Init("#version 130");
-
-        glEnable(GL_MULTISAMPLE);
 
         return 0;
     }
@@ -61,7 +43,7 @@ namespace Core
         SDL_SetWindowTitle((SDL_Window*)window, ToStdString(title).c_str());
     }
 
-    void DeviceContext::update(bool& isRunning)
+    void DeviceContext::updateWindow(bool& isRunning)
     {
         SDL_Event event;
 
@@ -104,45 +86,27 @@ namespace Core
             }
 
             InputManager::singleton()->updateKeys(&event);
-            ImGui_ImplSDL2_ProcessEvent(&event);
+            Renderer::singleton()->processEvents(&event);
         }
 
         InputManager::singleton()->updateMouse(window);
         EventHandler::singleton()->processEvents();
     }
 
-    void DeviceContext::renderUiBegin()
-    {
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
-    }
-
-    void DeviceContext::renderUiEnd()
-    {
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    }
-
     void DeviceContext::swapWindow()
     {
         InputManager::singleton()->reset();
-        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
-        SDL_GL_SwapWindow((SDL_Window*)window);
-
+        Renderer::singleton()->swapBuffers();
         Time::endTimer();
     }
 
     void DeviceContext::destroyWindow()
     {
-        ImGui_ImplOpenGL3_Shutdown();
-        ImGui_ImplSDL2_Shutdown();
-        ImGui::DestroyContext();
+        Core::Renderer::destroy();
 
         SDL_DestroyWindow((SDL_Window*)window);
 
         window = nullptr;
-        rendererContext = nullptr;
 
         SDL_Quit();
     }

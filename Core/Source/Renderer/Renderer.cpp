@@ -18,9 +18,26 @@ namespace Core
 		Material::defaultMaterial = new Material();
 	}
 
+	void Renderer::destroy()
+	{
+		delete Material::defaultMaterial;
+		Material::defaultMaterial = nullptr;
+
+		if (_singleton != nullptr)
+		{
+			delete _singleton;
+			_singleton = nullptr;
+		}
+	}
+
 	Renderer::Renderer(DeviceContext* ctx)
 	{
 		context = ctx;
+	}
+
+	Renderer::~Renderer()
+	{
+		context = nullptr;
 	}
 
 	Renderer* Renderer::singleton()
