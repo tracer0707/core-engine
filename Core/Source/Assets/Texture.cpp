@@ -12,12 +12,6 @@ namespace Core
 
 	Texture::~Texture()
 	{
-		if (isLoaded())
-			unload();
-	}
-
-	const void Texture::unload()
-	{
 		if (_bitmap != nullptr)
 			delete _bitmap;
 
@@ -25,8 +19,6 @@ namespace Core
 
 		Renderer::singleton()->deleteTexture(nativeId);
 		nativeId = 0;
-
-		Asset::unload();
 	}
 
 	Texture* Texture::loadFromFile(UString fileName, TextureFormat fmt)
@@ -75,8 +67,6 @@ namespace Core
 
 		FreeImage_Unload(tex->_bitmap);
 
-		tex->load();
-
 		return tex;
 	}
 
@@ -109,8 +99,6 @@ namespace Core
 		tex->nativeId = Renderer::singleton()->createTexture(_data, tex->getWidth(), tex->getHeight(), 0, TextureFormat::RGBA8);
 
 		FreeImage_Unload(tex->_bitmap);
-
-		tex->load();
 
 		return tex;
 	}

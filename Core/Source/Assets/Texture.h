@@ -30,8 +30,6 @@ namespace Core
 		Texture();
 		~Texture();
 
-		virtual const void unload();
-
 		int getNativeId() { return nativeId; }
 
 		static Texture* loadFromFile(UString fileName, TextureFormat fmt);

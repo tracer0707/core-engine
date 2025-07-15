@@ -35,8 +35,6 @@ namespace Core
 		Mesh(SubMesh** subMeshes, int count);
 		~Mesh();
 
-		virtual const void unload();
-
 		static Mesh* loadFromFile(const char* fileName);
 
 		SubMesh** getSubMeshes() { return _subMeshes; }

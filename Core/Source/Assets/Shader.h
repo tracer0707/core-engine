@@ -14,7 +14,6 @@ namespace Core
 	public:
 		~Shader();
 
-		virtual const void unload();
 		virtual const void loadFromString(UString vertexSrc, UString fragmentSrc);
 		virtual const void bind();
 	};

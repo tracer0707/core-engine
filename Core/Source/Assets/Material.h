@@ -11,7 +11,7 @@ namespace Core
 	{
 	private:
 		Texture* _texture = nullptr;
-		static Shader* _shader;
+		Shader* _shader = nullptr;
 
 	public:
 		Material();

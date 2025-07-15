@@ -5,15 +5,10 @@
 
 namespace Core
 {
-	Shader* Material::_shader = nullptr;
-
 	Material* Material::defaultMaterial = nullptr;
 
 	Material::Material()
 	{
-		if (_shader != nullptr)
-			return;
-
 		_shader = new Shader();
 		_shader->loadFromString("#version 400\n"
 			"in vec3 position;"
@@ -45,8 +40,11 @@ namespace Core
 
 	Material::~Material()
 	{
-		if (isLoaded())
-			unload();
+		if (_shader != nullptr)
+		{
+			delete _shader;
+			_shader = nullptr;
+		}
 	}
 
 	void Material::bind()
