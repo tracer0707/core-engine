@@ -3,9 +3,9 @@
 #include <System/DeviceContext.h>
 #include <Renderer/Renderer.h>
 
-int ProjectManager::run(Core::DeviceContext* context)
+int ProjectManager::run()
 {
-    ctx = context;
+    ctx = new Core::DeviceContext();
 
     bool result = init();
     if (result != 0)
@@ -15,6 +15,8 @@ int ProjectManager::run(Core::DeviceContext* context)
 
     loop();
     destroy();
+
+    delete ctx;
 
     return 0;
 }
@@ -39,12 +41,12 @@ void ProjectManager::loop()
         int width = ctx->getWindowWidth();
         int height = ctx->getWindowHeight();
 
-        Core::Renderer::singleton()->setViewportSize(width, height);
-        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
+        Core::Renderer::current()->setViewportSize(width, height);
+        Core::Renderer::current()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
-        Core::Renderer::singleton()->beginUI();
+        Core::Renderer::current()->beginUI();
         //Editor::WindowManager::singleton()->update(width, height);
-        Core::Renderer::singleton()->endUI();
+        Core::Renderer::current()->endUI();
         //** Render UI end **//
 
         ctx->swapWindow();

@@ -16,23 +16,19 @@ static const char* getErrorString(int error)
 
 int main(int argc, char* argv[])
 {
-    Core::DeviceContext* ctx = new Core::DeviceContext();
-
     ProjectManager projectManager;
-    int result = projectManager.run(ctx);
+    int result = projectManager.run();
     if (result != 0)
     {
         fprintf(stderr, "Error: %s\n", getErrorString(result));
     }
     
     EditorBase editorBase;
-    result = editorBase.run(ctx);
+    result = editorBase.run();
     if (result != 0)
     {
         fprintf(stderr, "Error: %s\n", getErrorString(result));
     }
-
-    delete ctx;
 
     return 0;
 }

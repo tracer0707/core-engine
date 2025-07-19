@@ -7,41 +7,44 @@
 
 namespace Core
 {
-	Renderer* _singleton = nullptr;
+	Renderer* Renderer::_current = nullptr;
 
-	void Renderer::init(DeviceContext* ctx)
+	Renderer* Renderer::init(DeviceContext* ctx)
 	{
+		Renderer* renderer = nullptr;
+
 #if CURRENT_RENDERER == GL4
-		_singleton = new RendererGL4(ctx);
+		renderer = new RendererGL4(ctx);
 #endif
 
-		Material::defaultMaterial = new Material();
+		return renderer;
 	}
 
-	void Renderer::destroy()
+	void Renderer::destroy(Renderer* renderer)
 	{
-		delete Material::defaultMaterial;
-		Material::defaultMaterial = nullptr;
+		Material::destroyDefaultMaterial(renderer);
 
-		if (_singleton != nullptr)
-		{
-			delete _singleton;
-			_singleton = nullptr;
-		}
+		delete renderer;
+		renderer = nullptr;
 	}
 
 	Renderer::Renderer(DeviceContext* ctx)
 	{
-		context = ctx;
+		_context = ctx;
 	}
 
 	Renderer::~Renderer()
 	{
-		context = nullptr;
+		_context = nullptr;
 	}
 
-	Renderer* Renderer::singleton()
+	const void Renderer::makeCurrent()
 	{
-		return _singleton;
+		_current = this;
+	}
+
+	Renderer* Renderer::current()
+	{
+		return _current;
 	}
 }

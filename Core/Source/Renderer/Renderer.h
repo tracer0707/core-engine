@@ -37,19 +37,27 @@
 
 namespace Core
 {
+	class DeviceContext;
+
 	class Renderer
 	{
 		friend class DeviceContext;
 
 	private:
-		DeviceContext* context = nullptr;
+		static Renderer* _current;
 
-		static void init(DeviceContext* ctx);
-		static void destroy();
+		DeviceContext* _context = nullptr;
+
+		static Renderer* init(DeviceContext* ctx);
+		static void destroy(Renderer* renderer);
 
 	protected:
 		Renderer(DeviceContext* ctx);
 		virtual ~Renderer();
+
+		virtual const void makeCurrent() = 0;
+		virtual const void swapBuffers() = 0;
+		virtual const void processEvents(void* event) = 0;
 
 		Program* defaultProgram = new Program();
 		std::vector<Program*> shaderPrograms;
@@ -60,17 +68,16 @@ namespace Core
 		int height = 0;
 
 	public:
-		static Renderer* singleton();
 
+		static Renderer* current();
+		
 		const UInt32& getWidth() { return width; }
 		const UInt32& getHeight() { return height; }
 
-		virtual const void processEvents(void* event) = 0;
 		virtual const void setViewportSize(int w, int h) = 0;
 		virtual const void beginUI() = 0;
 		virtual const void endUI() = 0;
-		virtual const void swapBuffers() = 0;
-
+		
 		virtual const Program* createProgram(UString vertexSrc, UString fragmentSrc) = 0;
 		virtual const void deleteProgram(const Program* program) = 0;
 		virtual const void bindProgram(const Program* program) = 0;

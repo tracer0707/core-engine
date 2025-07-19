@@ -33,7 +33,7 @@ namespace Core
             return -1;
         }
 
-        Core::Renderer::init(this);
+        renderer = Core::Renderer::init(this);
 
         return 0;
     }
@@ -46,47 +46,56 @@ namespace Core
     void DeviceContext::updateWindow(bool& isRunning)
     {
         SDL_Event event;
-
         Time::beginTimer();
+        renderer->makeCurrent();
 
         while (SDL_PollEvent(&event))
         {
             switch (event.type)
             {
-            case SDL_QUIT:
-            {
-                isRunning = false;
-            }
-            break;
-
-            case SDL_WINDOWEVENT:
-            {
-                const SDL_WindowEvent& wev = event.window;
-                switch (wev.event)
+                case SDL_QUIT:
                 {
-                case SDL_WINDOWEVENT_RESIZED:
-                case SDL_WINDOWEVENT_SIZE_CHANGED:
-                {
-                    SDL_GetWindowSize((SDL_Window*)window, &windowWidth, &windowHeight);
-                }
-                break;
-                case SDL_WINDOWEVENT_RESTORED:
-                case SDL_WINDOWEVENT_FOCUS_GAINED:
-                {
-                    //TODO
-                }
-                break;
-
-                case SDL_WINDOWEVENT_CLOSE:
                     isRunning = false;
+                    break;
                 }
-                break;
-            }
-            break;
+
+                case SDL_WINDOWEVENT:
+                {
+                    const SDL_WindowEvent& wev = event.window;
+                    switch (wev.event)
+                    {
+                        case SDL_WINDOWEVENT_RESIZED:
+                        case SDL_WINDOWEVENT_SIZE_CHANGED:
+                        {
+                            SDL_GetWindowSize((SDL_Window*)window, &windowWidth, &windowHeight);
+                            break;
+                        }
+                        case SDL_WINDOWEVENT_RESTORED:
+                        case SDL_WINDOWEVENT_FOCUS_GAINED:
+                        {
+                            //TODO
+                            break;
+                        }
+
+                        case SDL_WINDOWEVENT_CLOSE:
+                        {
+                            isRunning = false;
+                            break;
+                        }
+
+                        default:
+                            break;
+                    }
+
+                    break;
+                }
+
+                default:
+                    break;
             }
 
             InputManager::singleton()->updateKeys(&event);
-            Renderer::singleton()->processEvents(&event);
+            renderer->processEvents(&event);
         }
 
         InputManager::singleton()->updateMouse(window);
@@ -96,18 +105,17 @@ namespace Core
     void DeviceContext::swapWindow()
     {
         InputManager::singleton()->reset();
-        Renderer::singleton()->swapBuffers();
+        renderer->makeCurrent();
+        renderer->swapBuffers();
         Time::endTimer();
     }
 
     void DeviceContext::destroyWindow()
     {
-        Core::Renderer::destroy();
-
+        renderer->makeCurrent();
+        Core::Renderer::destroy(renderer);
         SDL_DestroyWindow((SDL_Window*)window);
-
         window = nullptr;
-
         SDL_Quit();
     }
 }

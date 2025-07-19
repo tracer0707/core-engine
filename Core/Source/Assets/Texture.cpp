@@ -17,7 +17,7 @@ namespace Core
 
 		_bitmap = nullptr;
 
-		Renderer::singleton()->deleteTexture(nativeId);
+		Renderer::current()->deleteTexture(nativeId);
 		nativeId = 0;
 	}
 
@@ -44,7 +44,7 @@ namespace Core
 		if (fmt == TextureFormat::RGBA8)
 		{
 			unsigned char* data = FreeImage_GetBits(tex->_bitmap);
-			tex->nativeId = Renderer::singleton()->createTexture(data, tex->getWidth(), tex->getHeight(), 0, fmt);
+			tex->nativeId = Renderer::current()->createTexture(data, tex->getWidth(), tex->getHeight(), 0, fmt);
 		}
 		else if (fmt == TextureFormat::BC7)
 		{
@@ -56,7 +56,7 @@ namespace Core
 			bc7compress(pixels, tex->width, tex->height, newPixels, size, 1);
 			pixels.clear();
 
-			tex->nativeId = Renderer::singleton()->createTexture(newPixels, tex->getWidth(), tex->getHeight(), size, fmt);
+			tex->nativeId = Renderer::current()->createTexture(newPixels, tex->getWidth(), tex->getHeight(), size, fmt);
 
 			delete[] newPixels;
 		}
@@ -96,7 +96,7 @@ namespace Core
 		tex->updateSize();
 
 		unsigned char* _data = FreeImage_GetBits(tex->_bitmap);
-		tex->nativeId = Renderer::singleton()->createTexture(_data, tex->getWidth(), tex->getHeight(), 0, TextureFormat::RGBA8);
+		tex->nativeId = Renderer::current()->createTexture(_data, tex->getWidth(), tex->getHeight(), 0, TextureFormat::RGBA8);
 
 		FreeImage_Unload(tex->_bitmap);
 
@@ -185,6 +185,6 @@ namespace Core
 
 	void Texture::bind(const char* name, int slot)
 	{
-		Renderer::singleton()->bindTexture(nativeId, name, slot);
+		Renderer::current()->bindTexture(nativeId, name, slot);
 	}
 }

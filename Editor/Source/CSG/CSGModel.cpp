@@ -217,7 +217,7 @@ namespace Editor
             auto it = _subMeshes.begin();
             std::advance(it, i);
 
-            const Core::VertexBuffer* _vertexBuffer = Core::Renderer::singleton()->createBuffer(it->second->vertices.ptr(), it->second->vertices.count(), nullptr, 0);
+            const Core::VertexBuffer* _vertexBuffer = Core::Renderer::current()->createBuffer(it->second->vertices.ptr(), it->second->vertices.count(), nullptr, 0);
 
             Core::SubMesh* subMesh = new Core::SubMesh(_vertexBuffer);
             subMesh->setMaterial(it->first);

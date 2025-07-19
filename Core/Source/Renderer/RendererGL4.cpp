@@ -23,8 +23,9 @@ namespace Core
         rendererContext = SDL_GL_CreateContext((SDL_Window*)window);
 
         SDL_GL_SetSwapInterval(1);
-        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
-        SDL_GL_SwapWindow((SDL_Window*)window);
+
+        makeCurrent();
+        swapBuffers();
 
         GLenum err = glewInit();
         if (err != GLEW_OK)
@@ -41,9 +42,10 @@ namespace Core
 
     RendererGL4::~RendererGL4()
     {
+        makeCurrent();
+
         glDisable(GL_MULTISAMPLE);
 
-        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
@@ -79,9 +81,14 @@ namespace Core
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
+    const void RendererGL4::makeCurrent()
+    {
+        Renderer::makeCurrent();
+        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
+    }
+
     const void RendererGL4::swapBuffers()
     {
-        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
         SDL_GL_SwapWindow((SDL_Window*)window);
     }
 

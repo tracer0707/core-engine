@@ -17,5 +17,5 @@ private:
 	void destroy();
 
 public:
-	int run(Core::DeviceContext* context);
+	int run();
 };

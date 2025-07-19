@@ -6,10 +6,13 @@
 
 namespace Core
 {
+	class Renderer;
+
 	class DeviceContext
 	{
 	private:
 		void* window = nullptr;
+		Renderer* renderer = nullptr;
 		
 		int windowWidth = 0;
 		int windowHeight = 0;

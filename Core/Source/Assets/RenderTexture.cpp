@@ -10,21 +10,21 @@ namespace Core
 		this->width = width;
 		this->height = height;
 
-		frameBuffer = Renderer::singleton()->createFrameBuffer(width, height);
+		frameBuffer = Renderer::current()->createFrameBuffer(width, height);
 	}
 
 	Core::RenderTexture::~RenderTexture()
 	{
 		if (frameBuffer != nullptr)
 		{
-			Renderer::singleton()->deleteFrameBuffer(frameBuffer);
+			Renderer::current()->deleteFrameBuffer(frameBuffer);
 			frameBuffer = nullptr;
 		}
 	}
 
 	void RenderTexture::bind()
 	{
-		Renderer::singleton()->bindFrameBuffer(frameBuffer);
+		Renderer::current()->bindFrameBuffer(frameBuffer);
 	}
 
 	UInt32 RenderTexture::getNativeFrameBufferId()
@@ -47,7 +47,7 @@ namespace Core
 		this->width = width;
 		this->height = height;
 
-		Renderer::singleton()->deleteFrameBuffer(frameBuffer);
-		frameBuffer = Renderer::singleton()->createFrameBuffer(width, height);
+		Renderer::current()->deleteFrameBuffer(frameBuffer);
+		frameBuffer = Renderer::current()->createFrameBuffer(width, height);
 	}
 }

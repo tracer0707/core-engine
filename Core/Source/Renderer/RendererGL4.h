@@ -18,13 +18,15 @@ namespace Core
 		RendererGL4(DeviceContext* ctx);
 		virtual ~RendererGL4();
 
+		virtual const void makeCurrent();
+		virtual const void swapBuffers();
+		virtual const void processEvents(void* event);
+
 	public:
-		const void processEvents(void* event);
 		const void setViewportSize(int w, int h);
 		const void beginUI();
 		const void endUI();
-		const void swapBuffers();
-
+		
 		const Program* createProgram(UString vertexSrc, UString fragmentSrc);
 		const void deleteProgram(const Program* programId);
 		const void bindProgram(const Program* programId);

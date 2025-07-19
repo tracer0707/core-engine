@@ -38,8 +38,8 @@ namespace Core
 
     const glm::mat4 Camera::getProjectionMatrix()
     {
-        int w = Renderer::singleton()->getWidth();
-        int h = Renderer::singleton()->getHeight();
+        int w = Renderer::current()->getWidth();
+        int h = Renderer::current()->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -54,8 +54,8 @@ namespace Core
 
     const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY)
     {
-        float screenW = Renderer::singleton()->getWidth();
-        float screenH = Renderer::singleton()->getHeight();
+        float screenW = Renderer::current()->getWidth();
+        float screenH = Renderer::current()->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -86,8 +86,8 @@ namespace Core
         Transform* transform = owner->findComponent<Transform*>();
         if (transform == nullptr) return glm::vec3(0.0f);
 
-        float width = Renderer::singleton()->getWidth();
-        float height = Renderer::singleton()->getHeight();
+        float width = Renderer::current()->getWidth();
+        float height = Renderer::current()->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -120,8 +120,8 @@ namespace Core
 
     const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY)
     {
-        float width = Renderer::singleton()->getWidth();
-        float height = Renderer::singleton()->getHeight();
+        float width = Renderer::current()->getWidth();
+        float height = Renderer::current()->getHeight();
 
         if (renderTexture != nullptr)
         {

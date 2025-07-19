@@ -11,13 +11,13 @@ namespace Core
 	//TODO: make dynamic update buffer instead of create/destroy every frame
 	void Primitives::lines(glm::mat4& view, glm::mat4& proj, glm::mat4& model, Vertex* points, int pointsCount, UInt32 flags)
 	{
-		const Core::VertexBuffer* vb = Renderer::singleton()->createBuffer(points, pointsCount, nullptr, 0);
+		const Core::VertexBuffer* vb = Renderer::current()->createBuffer(points, pointsCount, nullptr, 0);
 		
-		Material::defaultMaterial->bind();
+		Material::getDefaultMaterial()->bind();
 
-		Renderer::singleton()->bindBuffer(vb);
-		Renderer::singleton()->drawBuffer(vb, GL_LINES, flags, view, proj, model);
-		Renderer::singleton()->deleteBuffer(vb);
+		Renderer::current()->bindBuffer(vb);
+		Renderer::current()->drawBuffer(vb, GL_LINES, flags, view, proj, model);
+		Renderer::current()->deleteBuffer(vb);
 	}
 
 	void Primitives::wireCube(glm::mat4& view, glm::mat4& proj, glm::mat4& model, glm::vec3 size, glm::vec3 center, Color color, UInt32 flags)

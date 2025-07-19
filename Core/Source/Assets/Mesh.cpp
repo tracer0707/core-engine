@@ -25,7 +25,7 @@ namespace Core
 	{
 		if (_vertexBuffer != nullptr)
 		{
-			Renderer::singleton()->deleteBuffer(_vertexBuffer);
+			Renderer::current()->deleteBuffer(_vertexBuffer);
 			_vertexBuffer = nullptr;
 		}
 
@@ -113,7 +113,7 @@ namespace Core
 				inds.push_back(face.mIndices[2]);
 			}
 
-			const VertexBuffer* _vertexBuffer = Renderer::singleton()->createBuffer(&verts[0], verts.size(), &inds[0], inds.size());
+			const VertexBuffer* _vertexBuffer = Renderer::current()->createBuffer(&verts[0], verts.size(), &inds[0], inds.size());
 			Material* material = new Material();
 			Texture* texture = Texture::loadFromFile("D:/Dev/C++/core-engine/x64/Release/Test Project/diffuse.jpg", TextureFormat::BC7);
 			material->setTexture(texture);

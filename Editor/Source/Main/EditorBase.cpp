@@ -32,9 +32,9 @@
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
 
-int EditorBase::run(Core::DeviceContext* context)
+int EditorBase::run()
 {
-    ctx = context;
+    ctx = new Core::DeviceContext();
     
     bool result = init();
     if (result != 0)
@@ -44,6 +44,8 @@ int EditorBase::run(Core::DeviceContext* context)
 
     loop();
     destroy();
+
+    delete ctx;
 
     return 0;
 }
@@ -139,26 +141,26 @@ void EditorBase::loop()
         int viewportWidth = renderTexture->getWidth();
         int viewportHeight = renderTexture->getHeight();
 
-        Core::Renderer::singleton()->setViewportSize(viewportWidth, viewportHeight);
-        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
+        Core::Renderer::current()->setViewportSize(viewportWidth, viewportHeight);
+        Core::Renderer::current()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
         Editor::Rendering::renderGrid(camera);
         Editor::ModifierManager::singleton()->render();
         scene->render();
 
-        Core::Renderer::singleton()->bindFrameBuffer(nullptr);
+        Core::Renderer::current()->bindFrameBuffer(nullptr);
         //** Render scene end **//
 
         //** Render UI begin **//
         int width = ctx->getWindowWidth();
         int height = ctx->getWindowHeight();
 
-        Core::Renderer::singleton()->setViewportSize(width, height);
-        Core::Renderer::singleton()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
+        Core::Renderer::current()->setViewportSize(width, height);
+        Core::Renderer::current()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
-        Core::Renderer::singleton()->beginUI();
+        Core::Renderer::current()->beginUI();
         Editor::WindowManager::singleton()->update(width, height);
-        Core::Renderer::singleton()->endUI();
+        Core::Renderer::current()->endUI();
         //** Render UI end **//
 
         ctx->swapWindow();

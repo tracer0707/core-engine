@@ -6,18 +6,18 @@ namespace Core
     {
         if (nativeId != nullptr)
         {
-            Renderer::singleton()->deleteProgram(nativeId);
+            Renderer::current()->deleteProgram(nativeId);
             nativeId = nullptr;
         }
     }
 
     const void Shader::loadFromString(UString vertexSrc, UString fragmentSrc)
     {
-        nativeId = Renderer::singleton()->createProgram(vertexSrc, fragmentSrc);
+        nativeId = Renderer::current()->createProgram(vertexSrc, fragmentSrc);
     }
 
     const void Shader::bind()
     {
-        Renderer::singleton()->bindProgram(nativeId);
+        Renderer::current()->bindProgram(nativeId);
     }
 }

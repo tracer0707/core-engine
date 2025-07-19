@@ -52,11 +52,11 @@ namespace Core
             if (material != nullptr)
                 material->bind();
 
-            Renderer::singleton()->bindBuffer(subMesh->getVertexBuffer());
+            Renderer::current()->bindBuffer(subMesh->getVertexBuffer());
 
             glm::mat4& model = transform->getTransformMatrix();
 
-            Renderer::singleton()->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
+            Renderer::current()->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
                 C_CCW
                 | C_CULL_BACK
                 | C_ENABLE_DEPTH_TEST

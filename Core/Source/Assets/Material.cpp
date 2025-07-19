@@ -5,7 +5,7 @@
 
 namespace Core
 {
-	Material* Material::defaultMaterial = nullptr;
+	std::map<Renderer*, Material*> Material::defaultMaterials;
 
 	Material::Material()
 	{
@@ -44,6 +44,32 @@ namespace Core
 		{
 			delete _shader;
 			_shader = nullptr;
+		}
+	}
+
+	Material* Material::getDefaultMaterial()
+	{
+		Renderer* renderer = Renderer::current();
+		if (renderer == nullptr) return nullptr;
+
+		auto it = defaultMaterials.find(renderer);
+		if (it != defaultMaterials.end())
+		{
+			return it->second;
+		}
+
+		Material* defaultMaterial = new Material();
+		defaultMaterials[renderer] = defaultMaterial;
+		return defaultMaterial;
+	}
+
+	void Material::destroyDefaultMaterial(Renderer* renderer)
+	{
+		auto it = defaultMaterials.find(renderer);
+		if (it != defaultMaterials.end())
+		{
+			delete it->second;
+			defaultMaterials.erase(it);
 		}
 	}
 
