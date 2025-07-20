@@ -57,12 +57,16 @@ namespace Editor
 	protected:
 		Style _style;
 
+		WindowManager* _parent = nullptr;
+
 		virtual void onResize(int newWidth, int newHeight) {}
 		virtual void onUpdate() {}
 
 	public:
-		Window(const char* name);
+		Window(WindowManager* parent, const char* name);
 		virtual ~Window();
+
+		WindowManager* getParent() { return _parent; }
 
 		const char* getName() { return _name; };
 

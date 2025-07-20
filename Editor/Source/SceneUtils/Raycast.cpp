@@ -22,12 +22,14 @@ namespace Editor
 	{
 		bool hit = false;
 
+		ModifierManager* modMgr = ModifierManager::singleton();
+
 		Core::List<std::pair<Core::Object*, float>> boundsIntersected;
 		Core::List<Core::Object*>& objects = scene->getObjects();
 
 		for (auto* obj : objects)
 		{
-			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
+			if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
 			{
 				if (!obj->getFlags().getBit(LAYER_CSG)) continue;
 			}
@@ -71,9 +73,11 @@ namespace Editor
 	{
 		CSGModel* csgModel = nullptr;
 
-		if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
+		ModifierManager* modMgr = ModifierManager::singleton();
+
+		if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
 		{
-			CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+			CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 			for (int i = 0; i < mod->getNumModels(); ++i)
 			{
 				CSGModel* mdl = mod->getModel(i);

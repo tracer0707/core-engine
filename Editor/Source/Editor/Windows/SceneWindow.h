@@ -31,7 +31,12 @@ namespace Editor
 		virtual void onUpdate();
 
 	public:
-		SceneWindow(Core::Scene* scene, Core::RenderTexture* renderTexture);
+		SceneWindow(WindowManager* parent);
 		virtual ~SceneWindow();
+
+		static const char* NAME;
+
+		void setScene(Core::Scene* scene);
+		void setRenderTexture(Core::RenderTexture* renderTexture);
 	};
 }

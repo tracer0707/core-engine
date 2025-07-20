@@ -9,7 +9,9 @@
 
 namespace Editor
 {
-	GizmoWindow::GizmoWindow() : Window("Gizmo")
+	const char* GizmoWindow::NAME = "Gizmo";
+
+	GizmoWindow::GizmoWindow(WindowManager* parent) : Window(parent, NAME)
 	{
 		/* Layout */
 		

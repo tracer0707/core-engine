@@ -12,6 +12,7 @@ namespace Core
 
 namespace Editor
 {
+	class WindowManager;
 	class MainMenu;
 	class SceneWindow;
 	class ObjectWindow;
@@ -22,37 +23,39 @@ namespace Editor
 	class GizmoWindow;
 	class CSGEditWindow;
 	class CSGModifier;
+
+	class EditorBase
+	{
+	private:
+		bool isRunning = false;
+
+		Core::DeviceContext* ctx = nullptr;
+
+		Core::Object* object = nullptr;
+		Core::Camera* camera = nullptr;
+		Core::Transform* transform = nullptr;
+		Core::Scene* scene = nullptr;
+		Core::RenderTexture* renderTexture = nullptr;
+
+		WindowManager* windowManager = nullptr;
+
+		MainMenu* mainMenu = nullptr;
+		SceneWindow* sceneWindow = nullptr;
+		ObjectWindow* objectWindow = nullptr;
+		CSGObjectWindow* csgObjectWindow = nullptr;
+		InspectorWindow* inspectorWindow = nullptr;
+		HierarchyWindow* hierarchyWindow = nullptr;
+		AssetsWindow* assetsWindow = nullptr;
+		GizmoWindow* gizmoWindow = nullptr;
+		CSGEditWindow* csgEditWindow = nullptr;
+
+		CSGModifier* csgModifier = nullptr;
+
+		int init();
+		void loop();
+		void destroy();
+
+	public:
+		int run();
+	};
 }
-
-class EditorBase
-{
-private:
-	bool isRunning = false;
-
-	Core::DeviceContext* ctx = nullptr;
-
-	Core::Object* object = nullptr;
-	Core::Camera* camera = nullptr;
-	Core::Transform* transform = nullptr;
-	Core::Scene* scene = nullptr;
-	Core::RenderTexture* renderTexture = nullptr;
-
-	Editor::MainMenu* mainMenu = nullptr;
-	Editor::SceneWindow* sceneWindow = nullptr;
-	Editor::ObjectWindow* objectWindow = nullptr;
-	Editor::CSGObjectWindow* csgObjectWindow = nullptr;
-	Editor::InspectorWindow* inspectorWindow = nullptr;
-	Editor::HierarchyWindow* hierarchyWindow = nullptr;
-	Editor::AssetsWindow* assetsWindow = nullptr;
-	Editor::GizmoWindow* gizmoWindow = nullptr;
-	Editor::CSGEditWindow* csgEditWindow = nullptr;
-
-	Editor::CSGModifier* csgModifier = nullptr;
-
-	int init();
-	void loop();
-	void destroy();
-
-public:
-	int run();
-};

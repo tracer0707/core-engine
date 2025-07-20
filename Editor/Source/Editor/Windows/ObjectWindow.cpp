@@ -5,6 +5,8 @@
 #include <Shared/String.h>
 #include <System/EventHandler.h>
 
+#include "WindowManager.h"
+
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
@@ -13,8 +15,12 @@
 
 namespace Editor
 {
-	ObjectWindow::ObjectWindow() : Window("Objects")
+	const char* ObjectWindow::NAME = "Objects";
+
+	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, NAME)
 	{
+		ModifierManager* modMgr = ModifierManager::singleton();
+
 		/* Layout */
 
 		layoutMain = new LinearLayout(LayoutDirection::Horizontal);
@@ -47,7 +53,7 @@ namespace Editor
 
 		lightTool->setOnClick([=] {
 			disableAll();
-			ModifierManager::singleton()->unsetCurrentModifier();
+			modMgr->unsetCurrentModifier();
 			lightTool->setActive(true);
 			});
 
@@ -62,7 +68,7 @@ namespace Editor
 
 		cameraTool->setOnClick([=] {
 			disableAll();
-			ModifierManager::singleton()->unsetCurrentModifier();
+			modMgr->unsetCurrentModifier();
 			cameraTool->setActive(true);
 			});
 
@@ -88,13 +94,15 @@ namespace Editor
 
 	bool ObjectWindow::setModifier(uint32_t name)
 	{
-		if (ModifierManager::singleton()->getCurrentModifierName() == name)
+		ModifierManager* modMgr = ModifierManager::singleton();
+
+		if (modMgr->getCurrentModifierName() == name)
 		{
-			ModifierManager::singleton()->unsetCurrentModifier();
+			modMgr->unsetCurrentModifier();
 			return false;
 		}
 
-		ModifierManager::singleton()->setCurrentModifier(name);
+		modMgr->setCurrentModifier(name);
 		return true;
 	}
 }

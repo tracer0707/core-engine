@@ -8,7 +8,9 @@ namespace Editor
 	{
 	private:
 	public:
-		AssetsWindow();
+		AssetsWindow(WindowManager* parent);
 		virtual ~AssetsWindow() = default;
+
+		static const char* NAME;
 	};
 }

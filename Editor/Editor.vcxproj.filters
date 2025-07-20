@@ -263,6 +263,9 @@
     <ClInclude Include="Source\Main\EditorBase.h">
       <Filter>Исходные файлы\Main</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\WindowList.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc">

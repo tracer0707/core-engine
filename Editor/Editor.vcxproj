@@ -205,6 +205,7 @@
     <ClInclude Include="Source\Editor\Windows\CSGObjectWindow.h" />
     <ClInclude Include="Source\Editor\Windows\SceneWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
+    <ClInclude Include="Source\Editor\Windows\WindowList.h" />
     <ClInclude Include="Source\Editor\Windows\WindowManager.h" />
     <ClInclude Include="Source\Main\EditorBase.h" />
     <ClInclude Include="Source\Main\ProjectManager.h" />

@@ -16,14 +16,14 @@ static const char* getErrorString(int error)
 
 int main(int argc, char* argv[])
 {
-    ProjectManager projectManager;
+    Editor::ProjectManager projectManager;
     int result = projectManager.run();
     if (result != 0)
     {
         fprintf(stderr, "Error: %s\n", getErrorString(result));
     }
     
-    EditorBase editorBase;
+    Editor::EditorBase editorBase;
     result = editorBase.run();
     if (result != 0)
     {

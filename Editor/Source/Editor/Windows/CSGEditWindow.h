@@ -20,7 +20,7 @@ namespace Editor
 		void enableAll(bool enable);
 
 	public:
-		CSGEditWindow();
+		CSGEditWindow(WindowManager* parent);
 		virtual ~CSGEditWindow();
 
 		static const char* NAME;

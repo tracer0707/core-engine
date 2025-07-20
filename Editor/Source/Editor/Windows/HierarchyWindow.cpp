@@ -10,12 +10,12 @@
 
 #include "../Windows/WindowManager.h"
 
+#include "../Gizmo.h"
+
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
 #include "../../Shared/Layers.h"
 #include "../../Shared/Tags.h"
-
-#include "../Gizmo.h"
 
 #include <Scene/Object.h>
 
@@ -23,8 +23,9 @@ namespace Editor
 {
 	const char* HierarchyWindow::NAME = "Hierarchy";
 
-	HierarchyWindow::HierarchyWindow() : Window(NAME)
+	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, NAME)
 	{
+		ModifierManager* modMgr = ModifierManager::singleton();
 		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
 		
 		_objectTree = new TreeView();
@@ -42,12 +43,12 @@ namespace Editor
 
 				Gizmo::singleton()->setTransform(transform);
 
-				if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && obj->getFlags().getBit(LAYER_CSG))
+				if (modMgr->getCurrentModifierName() == CSGModifier::NAME && obj->getFlags().getBit(LAYER_CSG))
 				{
 					CSGBrush* brush = (CSGBrush*)node->getUserTag(TAG_CSG_BRUSH);
 					CSGModel* model = (CSGModel*)node->getUserTag(TAG_CSG_MODEL);
 
-					CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+					CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 
 					if (brush != nullptr)
 					{
@@ -59,7 +60,7 @@ namespace Editor
 						mod->setCurrentModel(model);
 					}
 
-					WindowManager::singleton()->invalidateAll();
+					_parent->invalidateAll();
 				}
 			}
 		});

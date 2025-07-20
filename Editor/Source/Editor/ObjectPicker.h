@@ -8,9 +8,13 @@ namespace Core
 
 namespace Editor
 {
+	class WindowManager;
+
 	class ObjectPicker
 	{
 	private:
+		static WindowManager* _windowManager;
+
 		static Core::Scene* _scene;
 		static Core::Camera* _camera;
 
@@ -28,7 +32,7 @@ namespace Editor
 		static void pickObject(int x, int y);
 
 	public:
-		static void init(Core::Scene* scene, Core::Camera* camera);
+		static void init(WindowManager* windowManager, Core::Scene* scene, Core::Camera* camera);
 		static void update(bool& isMouseInView, bool& isGizmoWasUsed, float& offsetX, float& offsetY);
 	};
 }

@@ -8,7 +8,9 @@ namespace Editor
 	{
 	private:
 	public:
-		InspectorWindow();
+		InspectorWindow(WindowManager* parent);
 		virtual ~InspectorWindow() = default;
+
+		static const char* NAME;
 	};
 }

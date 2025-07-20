@@ -12,10 +12,11 @@
 
 namespace Editor
 {
-	Window::Window(const char* name)
+	Window::Window(WindowManager* parent, const char* name)
 	{
 		_name = name;
 		_id = Core::Uuid::create();
+		_parent = parent;
 	}
 
 	Window::~Window()
@@ -102,7 +103,7 @@ namespace Editor
 		_positionX = ImGui::GetWindowPos().x;
 		_positionY = ImGui::GetWindowPos().y;
 
-		MenuBar* menuBar = WindowManager::singleton()->getMenuBar();
+		MenuBar* menuBar = _parent->getMenuBar();
 
 		if (menuBar != nullptr)
 		{

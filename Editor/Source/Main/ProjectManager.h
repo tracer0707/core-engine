@@ -5,17 +5,20 @@ namespace Core
 	class DeviceContext;
 }
 
-class ProjectManager
+namespace Editor
 {
-private:
-	bool isRunning = false;
+	class ProjectManager
+	{
+	private:
+		bool isRunning = false;
 
-	Core::DeviceContext* ctx = nullptr;
+		Core::DeviceContext* ctx = nullptr;
 
-	int init();
-	void loop();
-	void destroy();
+		int init();
+		void loop();
+		void destroy();
 
-public:
-	int run();
-};
+	public:
+		int run();
+	};
+}

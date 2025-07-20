@@ -14,7 +14,7 @@ namespace Editor
 		TreeView* _objectTree = nullptr;
 
 	public:
-		HierarchyWindow();
+		HierarchyWindow(WindowManager* parent);
 		virtual ~HierarchyWindow();
 
 		static const char* NAME;

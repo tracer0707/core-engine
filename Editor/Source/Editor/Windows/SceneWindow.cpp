@@ -11,33 +11,26 @@
 #include "../CameraController.h"
 #include "../Modifiers/ModifierManager.h"
 #include "../Modifiers/CSGModifier.h"
+
 #include "../../CSG/CSGModel.h"
+
+#include "WindowManager.h"
 
 namespace Editor
 {
-	SceneWindow::SceneWindow(Core::Scene* scene, Core::RenderTexture* renderTexture) : Window("Scene")
-	{
-		_scene = scene;
-		_renderTexture = renderTexture;
-		_camera = _scene->getMainCamera();
+	const char* SceneWindow::NAME = "Scene";
 
+	SceneWindow::SceneWindow(WindowManager* parent) : Window(parent, NAME)
+	{
 		_style.paddingX = 0;
 		_style.paddingY = 0;
 
-		_image = new Image();
-		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
-
-		addControl(_image);
-
-		Editor::CameraController::init(_camera);
-		Editor::ObjectPicker::init(_scene, _camera);
-		Editor::Gizmo::singleton()->init();
-
 		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=] ()
 		{
-			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
+			ModifierManager* modMgr = ModifierManager::singleton();
+			if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
 			{
-				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 				CSGModel* model = mod->getCurrentModel();
 
 				if (model != nullptr)
@@ -46,6 +39,28 @@ namespace Editor
 				}
 			}
 		});
+	}
+
+	SceneWindow::~SceneWindow() {}
+
+	void SceneWindow::setScene(Core::Scene* scene)
+	{
+		_scene = scene;
+		_camera = _scene->getMainCamera();
+
+		Editor::CameraController::init(_camera);
+		Editor::ObjectPicker::init(_parent, _scene, _camera);
+		Editor::Gizmo::singleton()->init();
+	}
+
+	void SceneWindow::setRenderTexture(Core::RenderTexture* renderTexture)
+	{
+		_renderTexture = renderTexture;
+
+		_image = new Image();
+		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
+
+		addControl(_image);
 	}
 
 	void SceneWindow::onResize(int newWidth, int newHeight)
@@ -65,9 +80,5 @@ namespace Editor
 		Editor::CameraController::update(isHovered);
 		Editor::Gizmo::singleton()->update(_camera, isHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
 		Editor::ObjectPicker::update(isHovered, isGizmoWasUsed, offsetX, offsetY);
-	}
-
-	SceneWindow::~SceneWindow()
-	{
 	}
 }

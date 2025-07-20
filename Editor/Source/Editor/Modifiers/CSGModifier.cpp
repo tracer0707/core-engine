@@ -18,9 +18,11 @@
 #include "../Controls/TreeView.h"
 #include "../Controls/TreeNode.h"
 
+#include "ModifierManager.h"
 #include "ModifierList.h"
 
 #include "../Gizmo.h"
+
 #include "../../Shared/Tags.h"
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
@@ -42,9 +44,11 @@ namespace Editor
 	{
 		Modifier::init(scene);
 
-		_hierarchyWindow = (HierarchyWindow*)Editor::WindowManager::singleton()->getWindow(HierarchyWindow::NAME);
-		_csgObjectWindow = (CSGObjectWindow*)Editor::WindowManager::singleton()->getWindow(CSGObjectWindow::NAME);
-		_csgEditWindow = (CSGEditWindow*)Editor::WindowManager::singleton()->getWindow(CSGEditWindow::NAME);
+		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
+
+		_hierarchyWindow = (HierarchyWindow*)winMgr->getWindow(HierarchyWindow::NAME);
+		_csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSGObjectWindow::NAME);
+		_csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSGEditWindow::NAME);
 	}
 
 	void CSGModifier::enableWindows(bool enable)
@@ -69,7 +73,8 @@ namespace Editor
 		tree->addControl(modelNode);
 		tree->selectNode(modelNode);
 
-		WindowManager::singleton()->invalidateAll();
+		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
+		winMgr->invalidateAll();
 	}
 
 	void CSGModifier::addBrush(BrushType brushType)
@@ -104,7 +109,8 @@ namespace Editor
 		modelNode->addControl(brushNode);
 		tree->selectNode(brushNode);
 
-		WindowManager::singleton()->invalidateAll();
+		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
+		winMgr->invalidateAll();
 	}
 
 	void CSGModifier::update()

@@ -6,7 +6,9 @@
 
 namespace Editor
 {
-	AssetsWindow::AssetsWindow() : Window("Assets")
+	const char* AssetsWindow::NAME = "Assets";
+
+	AssetsWindow::AssetsWindow(WindowManager* parent) : Window(parent, NAME)
 	{
 		
 	}

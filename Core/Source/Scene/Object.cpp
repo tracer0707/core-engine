@@ -59,16 +59,21 @@ namespace Core
 		Component* newComponent = nullptr;
 
 		if (type == COMPONENT_CAMERA)
+		{
 			newComponent = new Camera(this);
-
+		}
 		else if (type == COMPONENT_MESHRENDERER)
+		{
 			newComponent = new MeshRenderer(this);
-
+		}
 		else if (type == COMPONENT_TRANSFORM)
+		{
 			newComponent = new Transform(this);
+		}
 
-		if (newComponent != nullptr)
-			components.add(newComponent);
+		assert(newComponent != nullptr && "Unknown component");
+
+		components.add(newComponent);
 
 		return newComponent;
 	}

@@ -7,20 +7,22 @@
 #include <System/EventHandler.h>
 
 #include "Window.h"
+#include "AssetsWindow.h"
+#include "CSGEditWindow.h"
+#include "CSGObjectWindow.h"
+#include "GizmoWindow.h"
+#include "HierarchyWindow.h"
+#include "InspectorWindow.h"
+#include "ObjectWindow.h"
+#include "SceneWindow.h"
 
 #include "../Controls/MenuBar.h"
 
 namespace Editor
 {
-	WindowManager WindowManager::_singleton;
-
 	const int MAIN_MENU_SIZE = 19;
 
-	WindowManager::WindowManager() { }
-
-	WindowManager::~WindowManager() { }
-
-	void WindowManager::init()
+	WindowManager::WindowManager()
 	{
 		ImGuiIO& io = ImGui::GetIO();
 
@@ -30,7 +32,7 @@ namespace Editor
 		ImGui::GetStyle().ItemSpacing = ImVec2(4, 4);
 	}
 
-	void WindowManager::destroy()
+	WindowManager::~WindowManager()
 	{
 		for (int i = 0; i < _windows.count(); ++i)
 		{
@@ -52,9 +54,48 @@ namespace Editor
 		}, =);
 	}
 
-	void WindowManager::addWindow(Window* value)
+	Window* WindowManager::addWindow(const char* name)
 	{
-		_windows.add(value);
+		Window* window = nullptr;
+
+		if (name == ASSETS_WINDOW)
+		{
+			window = new AssetsWindow(this);
+		}
+		else if (name == CSG_EDIT_WINDOW)
+		{
+			window = new CSGEditWindow(this);
+		}
+		else if (name == CSG_OBJECT_WINDOW)
+		{
+			window = new CSGObjectWindow(this);
+		}
+		else if (name == GIZMO_WINDOW)
+		{
+			window = new GizmoWindow(this);
+		}
+		else if (name == HIERARCHY_WINDOW)
+		{
+			window = new HierarchyWindow(this);
+		}
+		else if (name == INSPECTOR_WINDOW)
+		{
+			window = new InspectorWindow(this);
+		}
+		else if (name == OBJECT_WINDOW)
+		{
+			window = new ObjectWindow(this);
+		}
+		else if (name == SCENE_WINDOW)
+		{
+			window = new SceneWindow(this);
+		}
+
+		assert(window != null && "Unknown window");
+
+		_windows.add(window);
+
+		return window;
 	}
 
 	Window* WindowManager::getWindow(const char* name)

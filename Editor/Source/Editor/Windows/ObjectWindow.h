@@ -16,7 +16,9 @@ namespace Editor
 		void disableAll();
 
 	public:
-		ObjectWindow();
+		ObjectWindow(WindowManager* parent);
 		virtual ~ObjectWindow();
+
+		static const char* NAME;
 	};
 }

@@ -9,7 +9,9 @@ namespace Editor
 	private:
 
 	public:
-		GizmoWindow();
+		GizmoWindow(WindowManager* parent);
 		virtual ~GizmoWindow();
+
+		static const char* NAME;
 	};
 }

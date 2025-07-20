@@ -19,6 +19,8 @@
 
 namespace Editor
 {
+	WindowManager* ObjectPicker::_windowManager = nullptr;
+
 	Core::Scene* ObjectPicker::_scene = nullptr;
 	Core::Camera* ObjectPicker::_camera = nullptr;
 
@@ -32,10 +34,11 @@ namespace Editor
 	float ObjectPicker::_offsetX = 0;
 	float ObjectPicker::_offsetY = 0;
 
-	void ObjectPicker::init(Core::Scene* scene, Core::Camera* camera)
+	void ObjectPicker::init(WindowManager* windowManager, Core::Scene* scene, Core::Camera* camera)
 	{
 		_scene = scene;
 		_camera = camera;
+		_windowManager = windowManager;
 
 		Core::InputManager::singleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 		{
@@ -106,14 +109,16 @@ namespace Editor
 		RaycastHit hit;
 		Raycast::hitTest(_scene, ray, &hit);
 
-		HierarchyWindow* wnd = (HierarchyWindow*)WindowManager::singleton()->getWindow(HierarchyWindow::NAME);
+		HierarchyWindow* wnd = (HierarchyWindow*)_windowManager->getWindow(HierarchyWindow::NAME);
 		TreeView* treeView = wnd->getTreeView();
+
+		ModifierManager* modMgr = ModifierManager::singleton();
 
 		if (hit.object != nullptr)
 		{
-			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.is_nil())
+			if (modMgr->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.is_nil())
 			{
-				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 
 				for (int i = 0; i < mod->getNumModels(); ++i)
 				{
@@ -138,9 +143,9 @@ namespace Editor
 		{
 			Gizmo::singleton()->setTransform(nullptr);
 
-			if (ModifierManager::singleton()->getCurrentModifierName() == CSGModifier::NAME)
+			if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
 			{
-				CSGModifier* mod = (CSGModifier*)ModifierManager::singleton()->getCurrentModifier();
+				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 
 				mod->setCurrentModel(nullptr);
 				mod->setCurrentBrush(nullptr);
@@ -148,6 +153,6 @@ namespace Editor
 			}
 		}
 
-		WindowManager::singleton()->invalidateAll();
+		_windowManager->invalidateAll();
 	}
 }

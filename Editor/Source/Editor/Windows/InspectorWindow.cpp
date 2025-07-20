@@ -6,7 +6,9 @@
 
 namespace Editor
 {
-	InspectorWindow::InspectorWindow() : Window("Inspector")
+	const char* InspectorWindow::NAME = "Inspector";
+
+	InspectorWindow::InspectorWindow(WindowManager* parent) : Window(parent, NAME)
 	{
 		Button* btn = new Button();
 		btn->setText("Test button");

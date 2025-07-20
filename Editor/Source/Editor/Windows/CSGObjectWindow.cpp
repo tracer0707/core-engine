@@ -5,21 +5,23 @@
 #include <Shared/String.h>
 #include <System/EventHandler.h>
 
+#include "WindowManager.h"
+
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
 #include "../Modifiers/ModifierManager.h"
 #include "../Modifiers/CSGModifier.h"
 
-#include "../Modifiers/CSGModifier.h"
-
 namespace Editor
 {
-	const char* CSGObjectWindow::NAME = "CSGObject";
+	const char* CSGObjectWindow::NAME = "CSG Object";
 
-	CSGObjectWindow::CSGObjectWindow() : Window(NAME)
+	CSGObjectWindow::CSGObjectWindow(WindowManager* parent) : Window(parent, NAME)
 	{
-		_modifier = (CSGModifier*)ModifierManager::singleton()->getModifier(CSGModifier::NAME);
+		ModifierManager* modMgr = ModifierManager::singleton();
+
+		_modifier = (CSGModifier*)modMgr->getModifier(CSGModifier::NAME);
 
 		/* Layout */
 

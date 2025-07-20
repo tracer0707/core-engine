@@ -1,12 +1,40 @@
 #include "ModifierManager.h"
 
 #include "Modifier.h"
+#include "CSGModifier.h"
 
 #include "../Windows/Window.h"
 
 namespace Editor
 {
     ModifierManager ModifierManager::_singleton;
+
+    void ModifierManager::init(WindowManager* windowManager, Core::Scene* scene)
+    {
+        _scene = scene;
+        _windowManager = windowManager;
+
+        for (auto it : _modifiers)
+        {
+            it->init(_scene);
+        }
+    }
+
+    Modifier* ModifierManager::addModifier(uint32_t type)
+    {
+        Modifier* modifier = nullptr;
+
+        if (type == CSG_MODIFIER)
+        {
+            modifier = new CSGModifier();
+        }
+
+        assert(modifier != null && "Unknown modifier");
+
+        _modifiers.add(modifier);
+
+        return modifier;
+    }
 
     void ModifierManager::setCurrentModifier(uint32_t name)
     {
@@ -55,16 +83,6 @@ namespace Editor
     {
         if (_currentModifier == nullptr) return;
         _currentModifier->enableWindows(enable);
-    }
-
-    void ModifierManager::init(Core::Scene* scene)
-    {
-        _scene = scene;
-
-        for (auto it : _modifiers)
-        {
-            it->init(_scene);
-        }
     }
 
     void ModifierManager::destroy()

@@ -18,6 +18,8 @@ namespace Core
 		List<Component*> components;
 		BitSet flags;
 
+		Component* addComponent(UInt32 type);
+
 	public:
 		Object();
 		~Object();
@@ -36,7 +38,6 @@ namespace Core
 		T findComponent() {}
 
 		Component* findComponent(UInt32 type);
-		Component* addComponent(UInt32 type);
 
 		BitSet& getFlags() { return flags; }
 	};

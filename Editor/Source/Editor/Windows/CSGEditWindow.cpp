@@ -5,6 +5,8 @@
 #include <Shared/String.h>
 #include <System/EventHandler.h>
 
+#include "WindowManager.h"
+
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
@@ -13,11 +15,13 @@
 
 namespace Editor
 {
-	const char* CSGEditWindow::NAME = "Edit";
+	const char* CSGEditWindow::NAME = "CSG Edit";
 
-	CSGEditWindow::CSGEditWindow() : Window(NAME)
+	CSGEditWindow::CSGEditWindow(WindowManager* parent) : Window(parent, NAME)
 	{
-		_modifier = (CSGModifier*)ModifierManager::singleton()->getModifier(CSGModifier::NAME);
+		ModifierManager* modMgr = ModifierManager::singleton();
+
+		_modifier = (CSGModifier*)modMgr->getModifier(CSGModifier::NAME);
 
 		/* Layout */
 
