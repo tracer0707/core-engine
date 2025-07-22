@@ -109,7 +109,7 @@ namespace Editor
 		RaycastHit hit;
 		Raycast::hitTest(_scene, ray, &hit);
 
-		HierarchyWindow* wnd = (HierarchyWindow*)_windowManager->getWindow(HierarchyWindow::NAME);
+		HierarchyWindow* wnd = (HierarchyWindow*)_windowManager->getWindow(HIERARCHY_WINDOW);
 		TreeView* treeView = wnd->getTreeView();
 
 		ModifierManager* modMgr = ModifierManager::singleton();

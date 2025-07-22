@@ -144,6 +144,9 @@
     <ClCompile Include="Source\Main\EditorBase.cpp">
       <Filter>Исходные файлы\Main</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\ProjectManagerWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\CameraController.h">
@@ -264,6 +267,9 @@
       <Filter>Исходные файлы\Main</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\WindowList.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\ProjectManagerWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>

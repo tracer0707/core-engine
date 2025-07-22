@@ -15,9 +15,7 @@
 
 namespace Editor
 {
-	const char* CSGEditWindow::NAME = "CSG Edit";
-
-	CSGEditWindow::CSGEditWindow(WindowManager* parent) : Window(parent, NAME)
+	CSGEditWindow::CSGEditWindow(WindowManager* parent) : Window(parent, CSG_EDIT_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
 

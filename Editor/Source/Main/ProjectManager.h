@@ -7,12 +7,15 @@ namespace Core
 
 namespace Editor
 {
+	class WindowManager;
+
 	class ProjectManager
 	{
 	private:
 		bool isRunning = false;
 
 		Core::DeviceContext* ctx = nullptr;
+		WindowManager* windowManager = nullptr;
 
 		int init();
 		void loop();

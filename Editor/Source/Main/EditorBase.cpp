@@ -13,9 +13,9 @@
 #include <Components/Transform.h>
 #include <Assets/RenderTexture.h>
 
+#include "../Editor/Windows/WindowManager.h"
 #include "../Editor/Windows/MainMenu.h"
 #include "../Editor/Windows/SceneWindow.h"
-#include "../Editor/Windows/WindowManager.h"
 #include "../Editor/Windows/ObjectWindow.h"
 #include "../Editor/Windows/CSGObjectWindow.h"
 #include "../Editor/Windows/InspectorWindow.h"

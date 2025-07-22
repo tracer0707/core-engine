@@ -4,6 +4,7 @@
 
 namespace Editor
 {
+	class WindowManager;
 	class LinearLayout;
 	class Control;
 
@@ -18,7 +19,5 @@ namespace Editor
 	public:
 		ObjectWindow(WindowManager* parent);
 		virtual ~ObjectWindow();
-
-		static const char* NAME;
 	};
 }

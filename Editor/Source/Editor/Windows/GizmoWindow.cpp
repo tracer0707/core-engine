@@ -4,14 +4,14 @@
 #include <Shared/Path.h>
 #include <Shared/String.h>
 
+#include "WindowList.h"
+
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
 namespace Editor
 {
-	const char* GizmoWindow::NAME = "Gizmo";
-
-	GizmoWindow::GizmoWindow(WindowManager* parent) : Window(parent, NAME)
+	GizmoWindow::GizmoWindow(WindowManager* parent) : Window(parent, GIZMO_WINDOW)
 	{
 		/* Layout */
 		

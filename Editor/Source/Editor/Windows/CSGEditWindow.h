@@ -23,8 +23,6 @@ namespace Editor
 		CSGEditWindow(WindowManager* parent);
 		virtual ~CSGEditWindow();
 
-		static const char* NAME;
-
 		virtual void invalidate();
 	};
 }

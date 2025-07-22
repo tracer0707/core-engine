@@ -46,9 +46,9 @@ namespace Editor
 
 		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
 
-		_hierarchyWindow = (HierarchyWindow*)winMgr->getWindow(HierarchyWindow::NAME);
-		_csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSGObjectWindow::NAME);
-		_csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSGEditWindow::NAME);
+		_hierarchyWindow = (HierarchyWindow*)winMgr->getWindow(HIERARCHY_WINDOW);
+		_csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSG_OBJECT_WINDOW);
+		_csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSG_EDIT_WINDOW);
 	}
 
 	void CSGModifier::enableWindows(bool enable)

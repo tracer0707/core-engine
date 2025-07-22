@@ -11,7 +11,5 @@ namespace Editor
 	public:
 		GizmoWindow(WindowManager* parent);
 		virtual ~GizmoWindow();
-
-		static const char* NAME;
 	};
 }

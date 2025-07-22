@@ -18,9 +18,7 @@
 
 namespace Editor
 {
-	const char* SceneWindow::NAME = "Scene";
-
-	SceneWindow::SceneWindow(WindowManager* parent) : Window(parent, NAME)
+	SceneWindow::SceneWindow(WindowManager* parent) : Window(parent, SCENE_WINDOW)
 	{
 		_style.paddingX = 0;
 		_style.paddingY = 0;

@@ -163,6 +163,7 @@
     <ClCompile Include="Source\Editor\Windows\MainMenu.cpp" />
     <ClCompile Include="Source\Editor\Windows\ObjectWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\CSGObjectWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\ProjectManagerWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\SceneWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\Window.cpp" />
     <ClCompile Include="Source\Editor\Windows\WindowManager.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Source\Editor\Windows\MainMenu.h" />
     <ClInclude Include="Source\Editor\Windows\ObjectWindow.h" />
     <ClInclude Include="Source\Editor\Windows\CSGObjectWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\ProjectManagerWindow.h" />
     <ClInclude Include="Source\Editor\Windows\SceneWindow.h" />
     <ClInclude Include="Source\Editor\Windows\Window.h" />
     <ClInclude Include="Source\Editor\Windows\WindowList.h" />

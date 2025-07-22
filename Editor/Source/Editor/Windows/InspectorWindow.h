@@ -10,7 +10,5 @@ namespace Editor
 	public:
 		InspectorWindow(WindowManager* parent);
 		virtual ~InspectorWindow() = default;
-
-		static const char* NAME;
 	};
 }

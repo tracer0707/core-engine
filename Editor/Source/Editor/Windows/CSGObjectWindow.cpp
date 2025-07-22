@@ -15,9 +15,7 @@
 
 namespace Editor
 {
-	const char* CSGObjectWindow::NAME = "CSG Object";
-
-	CSGObjectWindow::CSGObjectWindow(WindowManager* parent) : Window(parent, NAME)
+	CSGObjectWindow::CSGObjectWindow(WindowManager* parent) : Window(parent, CSG_OBJECT_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
 

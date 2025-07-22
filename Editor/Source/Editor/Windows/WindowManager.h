@@ -19,6 +19,7 @@ namespace Editor
 	class InspectorWindow;
 	class ObjectWindow;
 	class SceneWindow;
+	class ProjectManagerWindow;
 
 	class WindowManager
 	{
@@ -95,5 +96,11 @@ namespace Editor
 	inline SceneWindow* WindowManager::addWindow<SceneWindow*>()
 	{
 		return (SceneWindow*)addWindow(SCENE_WINDOW);
+	}
+
+	template <>
+	inline ProjectManagerWindow* WindowManager::addWindow<ProjectManagerWindow*>()
+	{
+		return (ProjectManagerWindow*)addWindow(PROJECT_MANAGER_WINDOW);
 	}
 }

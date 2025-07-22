@@ -21,9 +21,7 @@
 
 namespace Editor
 {
-	const char* HierarchyWindow::NAME = "Hierarchy";
-
-	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, NAME)
+	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
 		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);

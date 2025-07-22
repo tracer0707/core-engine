@@ -34,8 +34,6 @@ namespace Editor
 		SceneWindow(WindowManager* parent);
 		virtual ~SceneWindow();
 
-		static const char* NAME;
-
 		void setScene(Core::Scene* scene);
 		void setRenderTexture(Core::RenderTexture* renderTexture);
 	};

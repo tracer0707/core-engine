@@ -15,9 +15,7 @@
 
 namespace Editor
 {
-	const char* ObjectWindow::NAME = "Objects";
-
-	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, NAME)
+	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, OBJECT_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
 

@@ -17,8 +17,6 @@ namespace Editor
 		HierarchyWindow(WindowManager* parent);
 		virtual ~HierarchyWindow();
 
-		static const char* NAME;
-
 		TreeView* getTreeView() { return _objectTree; }
 	};
 }

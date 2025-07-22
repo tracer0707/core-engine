@@ -2,13 +2,13 @@
 
 #include <imgui.h>
 
+#include "WindowList.h"
+
 #include "../Controls/Button.h"
 
 namespace Editor
 {
-	const char* InspectorWindow::NAME = "Inspector";
-
-	InspectorWindow::InspectorWindow(WindowManager* parent) : Window(parent, NAME)
+	InspectorWindow::InspectorWindow(WindowManager* parent) : Window(parent, INSPECTOR_WINDOW)
 	{
 		Button* btn = new Button();
 		btn->setText("Test button");

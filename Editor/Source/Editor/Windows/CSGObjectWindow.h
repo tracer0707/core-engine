@@ -23,8 +23,6 @@ namespace Editor
 		CSGObjectWindow(WindowManager* parent);
 		virtual ~CSGObjectWindow();
 
-		static const char* NAME;
-
 		virtual void invalidate();
 	};
 }

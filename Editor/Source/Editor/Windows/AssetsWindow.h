@@ -10,7 +10,5 @@ namespace Editor
 	public:
 		AssetsWindow(WindowManager* parent);
 		virtual ~AssetsWindow() = default;
-
-		static const char* NAME;
 	};
 }
