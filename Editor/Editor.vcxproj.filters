@@ -147,6 +147,12 @@
     <ClCompile Include="Source\Editor\Windows\ProjectManagerWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\FileInput.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\TextInput.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\CameraController.h">
@@ -271,6 +277,12 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\ProjectManagerWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\FileInput.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\TextInput.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
