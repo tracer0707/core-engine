@@ -1,6 +1,6 @@
 #include "DeviceContext.h"
 
-#include <sdl/SDL.h>
+#include <SDL/SDL.h>
 
 #include "../Renderer/Renderer.h"
 #include "../System/EventHandler.h"

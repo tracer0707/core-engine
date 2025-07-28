@@ -16,7 +16,7 @@
 
 namespace Core
 {
-    Uuid Uuid::empty = Uuid::Uuid();
+    Uuid Uuid::empty = Uuid();
     char Uuid::empty_guid[37] = "00000000-0000-0000-0000-000000000000";
     char Uuid::guid_encoder[17] = "0123456789abcdef";
 
@@ -110,14 +110,14 @@ namespace Core
               id[15]
            } };
 
-        return Uuid{ std::begin(bytes), std::end(bytes) };
+        return Uuid{ bytes };
 
 #elif defined(__APPLE__)
         auto newId = CFUUIDCreate(NULL);
         auto bytes = CFUUIDGetUUIDBytes(newId);
         CFRelease(newId);
 
-        std::array<uint8_t, 16> arrbytes =
+        std::array<uint8_t, 16> bytes =
         { {
               bytes.byte0,
               bytes.byte1,
@@ -136,7 +136,7 @@ namespace Core
               bytes.byte14,
               bytes.byte15
            } };
-        return Uuid{ std::begin(arrbytes), std::end(arrbytes) };
+        return Uuid{ bytes };
 #else
         return Uuid{};
 #endif

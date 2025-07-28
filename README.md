@@ -8,5 +8,5 @@
 - ICU - 72.1
 - FreeImage - 3.18.0
 - ImGui - 1.90.3
+- carve - 1.4.0
 - bc7enc
-- carve

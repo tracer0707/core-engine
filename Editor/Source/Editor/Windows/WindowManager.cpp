@@ -96,7 +96,7 @@ namespace Editor
 			window = new ProjectManagerWindow(this);
 		}
 
-		assert(window != null && "Unknown window");
+		assert(window != nullptr && "Unknown window");
 
 		_windows.add(window);
 

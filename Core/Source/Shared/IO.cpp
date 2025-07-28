@@ -2,11 +2,12 @@
 
 #ifdef _WIN32
 #include "../Classes/dirent.h"
-#include <filesystem>
 #else
 #include <dirent.h>
 #include <sys/stat.h>
 #endif
+
+#include <filesystem>
 
 #include <fstream>
 #include <stdio.h>
@@ -45,7 +46,7 @@ namespace Core
 		const std::string path_str = String::toStdString(path);
 		const std::string text_str = String::toStdString(text);
 
-		const std::ios_base::openmode open_mode = append ? (std::ios::out | std::ios::app) : 2;
+		const std::ios_base::openmode open_mode = append ? (std::ios::out | std::ios::app) : std::ios::out;
 
 		std::ofstream text_file;
 		text_file.open(path_str, open_mode);
@@ -107,7 +108,7 @@ namespace Core
 		std::error_code err;
 		std::filesystem::rename(from_str, to_str, err);
 
-		//TODO: обработка ошибок
+		//TODO: РѕР±СЂР°Р±РѕС‚РєР° РѕС€РёР±РѕРє
 	}
 
 	void IO::createDir(const UString& path, const bool& recursive)

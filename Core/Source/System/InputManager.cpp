@@ -4,7 +4,7 @@
 #include <iostream>
 #include <imgui.h>
 
-#include <sdl/SDL_events.h>
+#include <SDL/SDL_events.h>
 
 namespace Core
 {

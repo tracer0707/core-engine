@@ -25,6 +25,7 @@ namespace Editor
 	};
 
 	class Control;
+	class WindowManager;
 
 	class Window: public Container
 	{

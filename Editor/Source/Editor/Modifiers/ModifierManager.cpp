@@ -29,7 +29,7 @@ namespace Editor
             modifier = new CSGModifier();
         }
 
-        assert(modifier != null && "Unknown modifier");
+        assert(modifier != nullptr && "Unknown modifier");
 
         _modifiers.add(modifier);
 

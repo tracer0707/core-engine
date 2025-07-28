@@ -1,6 +1,6 @@
 #include "RendererGL4.h"
 
-#include <sdl/SDL.h>
+#include <SDL/SDL.h>
 #include <GL/glew.h>
 
 #include <cassert>
@@ -145,7 +145,7 @@ namespace Core
         );
 
         if (it == shaderPrograms.end())
-            throw std::invalid_argument("Ïîïûòêà óäàëèòü íåñóùåñòâóþùóþ ïðîãðàììó");
+            throw std::invalid_argument("ÐŸÐ¾Ð¿Ñ‹Ñ‚ÐºÐ° ÑƒÐ´Ð°Ð»Ð¸Ñ‚ÑŒ Ð½ÐµÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÑŽÑ‰ÑƒÑŽ Ð¿Ñ€Ð¾Ð³Ñ€Ð°Ð¼Ð¼Ñƒ");
 
         if ((*it)->vertexShader > 0)
             glDeleteShader((*it)->vertexShader);

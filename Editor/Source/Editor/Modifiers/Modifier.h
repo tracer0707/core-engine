@@ -30,7 +30,7 @@ namespace Editor
 
 		uint32_t getName() { return _name; }
 
-		virtual void init(Core::Scene* scene) = 0 { _scene = scene; }
+		virtual void init(Core::Scene* scene) { _scene = scene; }
 		virtual void update() = 0;
 		virtual void render() = 0;
 	};

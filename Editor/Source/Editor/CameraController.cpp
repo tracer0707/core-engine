@@ -1,6 +1,6 @@
 #include "CameraController.h"
 
-#include <../sdl/include/sdl/SDL.h>
+#include <../sdl/include/SDL/SDL.h>
 #include <string>
 #include <glm/gtc/type_ptr.hpp>
 

@@ -19,12 +19,12 @@ namespace Core
 
 	void Time::beginTimer()
 	{
-		now = std::chrono::high_resolution_clock::now();
+		now = std::chrono::steady_clock::now();
 	}
 
 	void Time::endTimer()
 	{
-		last = std::chrono::high_resolution_clock::now();
+		last = std::chrono::steady_clock::now();
 
 		auto elapsed = last - now;
 

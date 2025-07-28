@@ -1,5 +1,7 @@
 #include "Primitives.h"
 
+#include <stdexcept>
+
 #include "Renderer.h"
 #include "VertexBuffer.h"
 #include "../Shared/List.h"
@@ -91,7 +93,7 @@ namespace Core
 		{
 			if (indices.count() % 3 != 0)
 			{
-				throw std::exception("Indices count is not multiple of 3!");
+				throw std::runtime_error("Indices count is not multiple of 3!");
 			}
 
 			for (int i = 0; i < indices.count(); i += 3)
@@ -135,7 +137,7 @@ namespace Core
 			}
 			else
 			{
-				throw std::exception("Indices count is not multiple of 3 or 4!");
+				throw std::runtime_error("Indices count is not multiple of 3 or 4!");
 			}
 		}
 

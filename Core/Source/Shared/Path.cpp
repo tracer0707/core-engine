@@ -2,6 +2,7 @@
 
 #include <filesystem>
 
+#ifdef _WIN32
 #ifndef _WINDOWS_
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -10,6 +11,11 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#endif
+#elif defined(__linux__) || defined(__unix__)
+#include <libgen.h>
+#include <unistd.h>
+#include <linux/limits.h>
 #endif
 
 namespace Core
@@ -81,16 +87,26 @@ namespace Core
 
 	const UString Path::getExePath()
 	{
-		HMODULE hmod = GetModuleHandle(NULL);
+		#ifdef _WIN32
+			HMODULE hmod = GetModuleHandle(NULL);
 
-		wchar_t fullPath[MAX_PATH];
-		DWORD pathLen = ::GetModuleFileNameW(hmod, fullPath, MAX_PATH);
-		std::wstring _fullPath(fullPath);
-		UString path = _fullPath.data();
-		path = path.findAndReplace('\\', '/');
-		path = Core::Path::getFilePath(path);
+			wchar_t fullPath[MAX_PATH];
+			DWORD pathLen = ::GetModuleFileNameW(hmod, fullPath, MAX_PATH);
+			std::wstring _fullPath(fullPath);
+			UString path = _fullPath.data();
+			path = path.findAndReplace('\\', '/');
+			path = Core::Path::getFilePath(path);
 
-		return path;
+			return path;
+		#else
+			char result[PATH_MAX];
+			ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+			UString path = "/";
+			UString str = result;
+			path = Core::Path::getFilePath(str);
+			
+			return path;
+		#endif
 	}
 
 	const UString Path::combine(const UString& part0, const UString& part1)
