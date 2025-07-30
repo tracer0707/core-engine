@@ -13,7 +13,7 @@ namespace Editor
 
 	LinearLayout::~LinearLayout() {}
 
-	void AlignItems(float width, float height, float halignment = 0.0f, float valignment = 0.0f)
+	static void AlignItems(float width, float height, float halignment = 0.0f, float valignment = 0.0f)
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
 
@@ -33,44 +33,13 @@ namespace Editor
 
 		if (_hAlignment != LayoutAlignment::Start || _vAlignment != LayoutAlignment::Start)
 		{
-			float prevX = ImGui::GetCursorPosX();
-			float prevY = ImGui::GetCursorPosY();
-
-			float width = 0;
-			float height = 0;
-
-			ImGui::SetCursorPosX(-10000);
-			ImGui::SetCursorPosY(-10000);
-
-			int idx = 1;
-
-			for (auto it : _controls)
-			{
-				ImGui::PushID("null");
-				it->update();
-				ImGui::PopID();
-				ImVec2 sz = ImGui::GetItemRectSize();
-				width += sz.x;
-				height += sz.y;
-
-				if (idx < _controls.count())
-				{
-					width += ImGui::GetStyle().ItemSpacing.x;
-					height += ImGui::GetStyle().ItemSpacing.y;
-				}
-
-				++idx;
-			}
-
-			ImGui::SetCursorPosX(prevX);
-			ImGui::SetCursorPosY(prevY);
-
 			float alignH = _hAlignment == LayoutAlignment::Start ? 0.0f : _hAlignment == LayoutAlignment::Center ? 0.5f : 1.0f;
 			float alignV = _vAlignment == LayoutAlignment::Start ? 0.0f : _vAlignment == LayoutAlignment::Center ? 0.5f : 1.0f;
 
-			AlignItems(width, height, alignH, alignV);
+			AlignItems(_totalWidth, _totalHeight, alignH, alignV);
 		}
 
+		ImGui::BeginGroup();
 		for (auto it : _controls)
 		{
 			it->update();
@@ -85,5 +54,10 @@ namespace Editor
 				ImGui::NewLine();
 			}
 		}
+		ImGui::EndGroup();
+
+		ImVec2 groupSize = ImGui::GetItemRectSize();
+		_totalWidth = groupSize.x;
+		_totalHeight = groupSize.y;
 	}
 }

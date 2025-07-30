@@ -24,6 +24,9 @@ namespace Editor
 		LayoutAlignment _hAlignment = LayoutAlignment::Start;
 		LayoutAlignment _vAlignment = LayoutAlignment::Start;
 
+		float _totalWidth = FLT_MAX;
+		float _totalHeight = FLT_MAX;
+
 	public:
 		LinearLayout();
 		LinearLayout(LayoutDirection direction);
