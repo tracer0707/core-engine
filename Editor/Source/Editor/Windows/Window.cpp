@@ -74,14 +74,44 @@ namespace Editor
 			_dockFlags |= ImGuiDockNodeFlags_NoDocking;
 		}
 
+		if (!_canResize)
+		{
+			_flags |= ImGuiWindowFlags_NoResize;
+		}
+
+		if (!_canMove)
+		{
+			_flags |= ImGuiWindowFlags_NoMove;
+		}
+
 		ImGuiWindowClass _wndClass;
 		_wndClass.DockNodeFlagsOverrideSet = _dockFlags;
 		ImGui::SetNextWindowClass(&_wndClass);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
-		ImGui::Begin(_name, &_visible, _flags);
-		ImGui::PopStyleVar();
+		if (_fixedWidth != FLT_MAX || _fixedHeight != FLT_MAX)
+		{
+			float w = _fixedWidth != FLT_MAX ? _fixedWidth : _width;
+			float h = _fixedHeight != FLT_MAX ? _fixedHeight : _height;
+			_fixedWidth = FLT_MAX;
+			_fixedHeight = FLT_MAX;
 
+			ImGui::SetNextWindowSize(ImVec2(w, h), ImGuiCond_Always);
+		}
+
+		if (_fixedPositionX != FLT_MAX || _fixedPositionY != FLT_MAX)
+		{
+			float x = _fixedPositionX != FLT_MAX ? _fixedPositionX : _positionX;
+			float y = _fixedPositionY != FLT_MAX ? _fixedPositionY : _positionY;
+			_fixedPositionX = FLT_MAX;
+			_fixedPositionY = FLT_MAX;
+
+			ImGui::SetNextWindowPos(ImVec2(x, y), ImGuiCond_Always);
+		}
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, _style.borderSize);
+		ImGui::Begin(_name, &_visible, _flags);
+		
 		int cw = ImGui::GetContentRegionAvail().x;
 		int ch = ImGui::GetContentRegionAvail().y;
 
@@ -120,5 +150,6 @@ namespace Editor
 		updateControls();
 
 		ImGui::End();
+		ImGui::PopStyleVar(2);
 	}
 }

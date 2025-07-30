@@ -33,13 +33,16 @@ namespace Editor
 
 		if (_hAlignment != LayoutAlignment::Start || _vAlignment != LayoutAlignment::Start)
 		{
-			float alignH = _hAlignment == LayoutAlignment::Start ? 0.0f : _hAlignment == LayoutAlignment::Center ? 0.5f : 1.0f;
-			float alignV = _vAlignment == LayoutAlignment::Start ? 0.0f : _vAlignment == LayoutAlignment::Center ? 0.5f : 1.0f;
+			if (_totalWidth != FLT_MAX && _totalHeight != FLT_MAX)
+			{
+				float alignH = _hAlignment == LayoutAlignment::Start ? 0.0f : _hAlignment == LayoutAlignment::Center ? 0.5f : 1.0f;
+				float alignV = _vAlignment == LayoutAlignment::Start ? 0.0f : _vAlignment == LayoutAlignment::Center ? 0.5f : 1.0f;
 
-			AlignItems(_totalWidth, _totalHeight, alignH, alignV);
+				AlignItems(_totalWidth, _totalHeight, alignH, alignV);
+			}
 		}
 
-		ImGui::BeginGroup();
+		ImGui::BeginChild(_id.c_str(), ImVec2(0, 0), ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY);
 		for (auto it : _controls)
 		{
 			it->update();
@@ -54,7 +57,7 @@ namespace Editor
 				ImGui::NewLine();
 			}
 		}
-		ImGui::EndGroup();
+		ImGui::EndChild();
 
 		ImVec2 groupSize = ImGui::GetItemRectSize();
 		_totalWidth = groupSize.x;

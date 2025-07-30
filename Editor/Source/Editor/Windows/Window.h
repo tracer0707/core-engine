@@ -42,8 +42,12 @@ namespace Editor
 
 		float _positionX = 0;
 		float _positionY = 0;
+		float _fixedPositionX = FLT_MAX;
+		float _fixedPositionY = FLT_MAX;
 		float _width = 0;
 		float _height = 0;
+		float _fixedWidth = FLT_MAX;
+		float _fixedHeight = FLT_MAX;
 		float _clientWidth = 0;
 		float _clientHeight = 0;
 
@@ -52,6 +56,8 @@ namespace Editor
 		bool _canAcceptDocking = true;
 		bool _canDock = true;
 		bool _isHovered = false;
+		bool _canResize = true;
+		bool _canMove = true;
 
 		void update();
 
@@ -77,11 +83,17 @@ namespace Editor
 		float getWidth() { return _width; }
 		float getHeight() { return _height; }
 
+		void setWidth(float value) { _fixedWidth = value; }
+		void setHeight(float value) { _fixedHeight = value; }
+
 		float getClientWidth() { return _clientWidth; }
 		float getClientHeight() { return _clientHeight; }
 
 		float getPositionX() { return _positionX; }
 		float getPositionY() { return _positionY; }
+
+		void setPositionX(float value) { _fixedPositionX = value; }
+		void setPositionY(float value) { _fixedPositionY = value; }
 
 		bool getIsHovered() { return _isHovered; }
 
@@ -93,6 +105,12 @@ namespace Editor
 
 		void setCanDock(bool value) { _canDock = value; }
 		bool getCanDock() { return _canDock; }
+
+		void setCanResize(bool value) { _canResize = value; }
+		bool getCanResize() { return _canResize; }
+
+		void setCanMove(bool value) { _canMove = value; }
+		bool getCanMove() { return _canMove; }
 
 		void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
 

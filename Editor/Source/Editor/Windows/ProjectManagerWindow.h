@@ -11,5 +11,7 @@ namespace Editor
 	public:
 		ProjectManagerWindow(WindowManager* parent);
 		virtual ~ProjectManagerWindow();
+
+		virtual void onUpdate();
 	};
 }
