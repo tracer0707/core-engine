@@ -1,8 +1,13 @@
 #include "Control.h"
 
+#include <Shared/Uuid.h>
+
 namespace Editor
 {
-	Control::Control() : Container() {}
+	Control::Control() : Container()
+	{
+		_id = Core::Uuid::create().to_string();
+	}
 
 	Control::~Control()
 	{

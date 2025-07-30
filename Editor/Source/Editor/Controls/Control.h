@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Container.h"
 #include "Style.h"
 
@@ -13,10 +15,9 @@ namespace Editor
 		friend class Container;
 
 	protected:
+		std::string _id = "";
 		Container* _parent = nullptr;
-
 		Style _style;
-
 		bool _visible = true;
 
 	public:

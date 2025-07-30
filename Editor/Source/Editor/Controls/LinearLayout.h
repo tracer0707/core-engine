@@ -37,10 +37,10 @@ namespace Editor
 		void setDirection(LayoutDirection value) { _direction = value; }
 		LayoutDirection getDirection() { return _direction; }
 
-		void setAlignmentHorizontal(LayoutAlignment value) { _hAlignment = value; }
-		LayoutAlignment getAlignmentHorizontal() { return _hAlignment; }
+		void setHorizontalAlignment(LayoutAlignment value) { _hAlignment = value; }
+		LayoutAlignment getHorizontalAlignment() { return _hAlignment; }
 
-		void setAlignmentVertical(LayoutAlignment value) { _vAlignment = value; }
-		LayoutAlignment getAlignmentVertical() { return _vAlignment; }
+		void setVerticalAlignment(LayoutAlignment value) { _vAlignment = value; }
+		LayoutAlignment getVerticalAlignment() { return _vAlignment; }
 	};
 }

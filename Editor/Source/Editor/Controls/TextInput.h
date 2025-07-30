@@ -12,7 +12,6 @@ namespace Editor
 	class TextInput : public Control
 	{
 	private:
-		std::string _id = "";
 		UString _text = "";
 
 		char _buffer[256] = "";

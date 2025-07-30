@@ -153,6 +153,9 @@
     <ClCompile Include="Source\Editor\Controls\TextInput.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\Label.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\CameraController.h">
@@ -282,6 +285,9 @@
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Controls\TextInput.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\Label.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
   </ItemGroup>

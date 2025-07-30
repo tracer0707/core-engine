@@ -3,14 +3,12 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include <Shared/Uuid.h>
 #include <System/EventHandler.h>
 
 namespace Editor
 {
 	TextInput::TextInput()
 	{
-		_id = Core::Uuid::create().to_string();
 	}
 
 	TextInput::~TextInput()
