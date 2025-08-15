@@ -1,8 +1,7 @@
-#include "EditorBase.h"
+#include "Editor.h"
 
 #include <iostream>
 
-#include <System/DeviceContext.h>
 #include <System/Time.h>
 #include <Shared/String.h>
 #include <Shared/Path.h>
@@ -12,6 +11,7 @@
 #include <Components/Camera.h>
 #include <Components/Transform.h>
 #include <Assets/RenderTexture.h>
+#include <Assets/AssetManager.h>
 
 #include "../Editor/Windows/WindowManager.h"
 #include "../Editor/Windows/MainMenu.h"
@@ -32,43 +32,29 @@
 
 namespace Editor
 {
-    int EditorBase::run()
+    /* WINDOW */
+
+    Editor::MainWindow::MainWindow() : Window("Project Manager", 1366, 768)
     {
-        ctx = new Core::DeviceContext();
+        scene = new Core::Scene(_renderer);
+        
+        cameraObject = scene->createObject();
+        camera = cameraObject->addComponent<Core::Camera*>();
+        Core::Transform* cameraTransform = (Core::Transform*)cameraObject->findComponent<Core::Transform*>();
 
-        bool result = init();
-        if (result != 0)
-        {
-            return result;
-        }
-
-        loop();
-        destroy();
-
-        delete ctx;
-
-        return 0;
-    }
-
-    int EditorBase::init()
-    {
-        if (ctx->createWindow("Core Engine", 1366, 768) != 0)
-            return -1;
-
-        object = new Core::Object();
-        transform = object->addComponent<Core::Transform*>();
-        camera = object->addComponent<Core::Camera*>();
-
-        renderTexture = new Core::RenderTexture(512, 512);
+        renderTexture = _assetManager->createRenderTexture(512, 512);
         camera->setRenderTexture(renderTexture);
 
-        transform->setPosition(glm::vec3(0, 5, 5));
-        transform->setRotation(glm::vec3(-10, 0, 0));
-
-        scene = new Core::Scene();
         scene->setMainCamera(camera);
 
+        cameraTransform->setPosition(glm::vec3(0, 5, 5));
+        cameraTransform->setRotation(glm::vec3(-10, 0, 0));
+
         windowManager = new WindowManager();
+        windowManager->setTime(_time);
+        windowManager->setRenderer(_renderer);
+        windowManager->setAssetManager(_assetManager);
+        windowManager->setInputManager(_inputManager);
 
         csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
 
@@ -76,6 +62,7 @@ namespace Editor
         windowManager->setMenuBar(mainMenu->getMenuBar());
 
         sceneWindow = windowManager->addWindow<SceneWindow*>();
+        sceneWindow->setTime(_time);
         sceneWindow->setScene(scene);
         sceneWindow->setRenderTexture(renderTexture);
 
@@ -112,63 +99,62 @@ namespace Editor
             auto dockHierarchy = hierarchyWindow->dock(DockDirection::Right, dockInspector.area2, 0.2f);
             auto dockAssets = assetsWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
             auto dockScene = sceneWindow->dock(DockDirection::None, dockAssets.area2, 0.7f);
-            });
-
-        isRunning = true;
-
-        return 0;
+        });
     }
 
-    void EditorBase::loop()
-    {
-        while (isRunning)
-        {
-            ctx->updateWindow(isRunning);
-
-            ModifierManager::singleton()->update();
-
-            //** Render scene begin **//
-            camera->getRenderTexture()->bind();
-
-            int viewportWidth = renderTexture->getWidth();
-            int viewportHeight = renderTexture->getHeight();
-
-            Core::Renderer::current()->setViewportSize(viewportWidth, viewportHeight);
-            Core::Renderer::current()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
-
-            Rendering::renderGrid(camera);
-            ModifierManager::singleton()->render();
-            scene->render();
-
-            Core::Renderer::current()->bindFrameBuffer(nullptr);
-            //** Render scene end **//
-
-            //** Render UI begin **//
-            int width = ctx->getWindowWidth();
-            int height = ctx->getWindowHeight();
-
-            Core::Renderer::current()->setViewportSize(width, height);
-            Core::Renderer::current()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
-
-            Core::Renderer::current()->beginUI();
-            windowManager->update(width, height);
-            Core::Renderer::current()->endUI();
-            //** Render UI end **//
-
-            ctx->swapWindow();
-
-            ctx->setWindowTitle(("Core Engine: " + std::to_string(Core::Time::getFramesPerSecond()) + "fps").c_str());
-        }
-    }
-
-    void EditorBase::destroy()
+    Editor::MainWindow::~MainWindow()
     {
         ModifierManager::singleton()->destroy();
-        
-        delete windowManager;
-        delete renderTexture;
-        delete scene;
 
-        ctx->destroyWindow();
+        delete windowManager;
+        delete scene;
+    }
+
+    void Editor::MainWindow::update()
+    {
+        ModifierManager::singleton()->update();
+    }
+
+    void Editor::MainWindow::render()
+    {
+        //** Render scene begin **//
+        camera->getRenderTexture()->bind();
+
+        int viewportWidth = renderTexture->getWidth();
+        int viewportHeight = renderTexture->getHeight();
+
+        _renderer->setViewportSize(viewportWidth, viewportHeight);
+        _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
+
+        Rendering::renderGrid(_renderer, _assetManager->getDefaultMaterial(), camera);
+        ModifierManager::singleton()->render();
+        scene->render();
+
+        _renderer->bindFrameBuffer(nullptr);
+        //** Render scene end **//
+
+        //** Render UI begin **//
+        _renderer->setViewportSize(_width, _height);
+        _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
+
+        _renderer->beginUI();
+        windowManager->update(_width, _height);
+        _renderer->endUI();
+        //** Render UI end **//
+
+        setTitle(("Core Engine: " + std::to_string(_time->getFramesPerSecond()) + "fps").c_str());
+    }
+
+    /* EDITOR */
+
+    void Editor::init()
+    {
+        wnd = new MainWindow();
+        addWindow(wnd);
+    }
+
+    void Editor::destroy()
+    {
+        wnd = nullptr;
     }
 }

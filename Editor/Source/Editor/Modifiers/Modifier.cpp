@@ -9,5 +9,14 @@ namespace Editor
 
 	Modifier::~Modifier()
 	{
+		_renderer = nullptr;
+		_scene = nullptr;
+	}
+
+	void Modifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
+	{
+		_renderer = renderer;
+		_scene = scene;
+		_assetManager = assetManager;
 	}
 }

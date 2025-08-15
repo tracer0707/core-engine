@@ -3,6 +3,7 @@
 #include <Renderer/Renderer.h>
 
 #include "WindowList.h"
+#include "WindowManager.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/FileInput.h"
@@ -42,7 +43,7 @@ namespace Editor
 
 	void ProjectManagerWindow::onUpdate()
 	{
-		setWidth(Core::Renderer::current()->getWidth());
-		setHeight(Core::Renderer::current()->getHeight());
+		setWidth(_parent->getRenderer()->getWidth());
+		setHeight(_parent->getRenderer()->getHeight());
 	}
 }

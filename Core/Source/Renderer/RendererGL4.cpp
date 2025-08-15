@@ -12,15 +12,14 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
 
+#include "Program.h"
 #include "../Components/Camera.h"
-#include "../System/DeviceContext.h"
 
 namespace Core
 {
-    RendererGL4::RendererGL4(DeviceContext* ctx) : Renderer(ctx)
+    RendererGL4::RendererGL4(void* windowCtx) : Renderer(windowCtx)
     {
-        window = ctx->getWindow();
-        rendererContext = SDL_GL_CreateContext((SDL_Window*)window);
+        _renderCtx = SDL_GL_CreateContext((SDL_Window*)_windowCtx);
 
         SDL_GL_SetSwapInterval(1);
 
@@ -34,7 +33,7 @@ namespace Core
         }
 
         ImGui::CreateContext();
-        ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)window, (SDL_GLContext)rendererContext);
+        ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)_windowCtx, (SDL_GLContext)_renderCtx);
         ImGui_ImplOpenGL3_Init("#version 130");
 
         glEnable(GL_MULTISAMPLE);
@@ -49,10 +48,7 @@ namespace Core
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
-        SDL_GL_DeleteContext(rendererContext);
-
-        window = nullptr;
-        rendererContext = nullptr;
+        SDL_GL_DeleteContext(_renderCtx);
     }
 
     const void RendererGL4::processEvents(void* event)
@@ -62,8 +58,8 @@ namespace Core
 
     const void RendererGL4::setViewportSize(int w, int h)
     {
-        width = w;
-        height = h;
+        _width = w;
+        _height = h;
 
         glViewport(0, 0, w, h);
     }
@@ -83,13 +79,12 @@ namespace Core
 
     const void RendererGL4::makeCurrent()
     {
-        Renderer::makeCurrent();
-        SDL_GL_MakeCurrent((SDL_Window*)window, (SDL_GLContext)rendererContext);
+        SDL_GL_MakeCurrent((SDL_Window*)_windowCtx, (SDL_GLContext)_renderCtx);
     }
 
     const void RendererGL4::swapBuffers()
     {
-        SDL_GL_SwapWindow((SDL_Window*)window);
+        SDL_GL_SwapWindow((SDL_Window*)_windowCtx);
     }
 
     const Program* RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)
@@ -129,7 +124,7 @@ namespace Core
         program->vertexShader = vs;
         program->fragmentShader = fs;
 
-        shaderPrograms.push_back(program);
+        _shaderPrograms.push_back(program);
 
         return program;
     }
@@ -137,14 +132,14 @@ namespace Core
     const void RendererGL4::deleteProgram(const Program* program)
     {
         const auto& it = std::find_if(
-            shaderPrograms.begin(),
-            shaderPrograms.end(),
+            _shaderPrograms.begin(),
+            _shaderPrograms.end(),
             [=](Program* a) -> bool {
                 return program->program == a->program;
             }
         );
 
-        if (it == shaderPrograms.end())
+        if (it == _shaderPrograms.end())
             throw std::invalid_argument("Попытка удалить несуществующую программу");
 
         if ((*it)->vertexShader > 0)
@@ -159,7 +154,7 @@ namespace Core
         if ((*it)->computeShader > 0)
             glDeleteShader((*it)->computeShader);
 
-        shaderPrograms.erase(it);
+        _shaderPrograms.erase(it);
 
         delete program;
     }
@@ -168,17 +163,17 @@ namespace Core
     {
         if (program == nullptr)
         {
-            currentProgram = defaultProgram;
-            glUseProgram(defaultProgram->program);
+            _currentProgram = _defaultProgram;
+            glUseProgram(_defaultProgram->program);
 
             return;
         }
 
-        currentProgram = program;
+        _currentProgram = program;
         glUseProgram(program->program);
     }
 
-    const char* RendererGL4::checkProgramErrors(UInt32 program)
+    const char* RendererGL4::checkProgramErrors(unsigned int program)
     {
         GLint isCompiled = 0;
         glGetShaderiv(program, GL_COMPILE_STATUS, &isCompiled);
@@ -197,7 +192,7 @@ namespace Core
         return nullptr;
     }
 
-    const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize)
+    const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
     {
         assert(vertexArray != nullptr && vertexArraySize > 0);
 
@@ -213,7 +208,7 @@ namespace Core
 
             glGenBuffers(1, &ibo);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(UInt32), indexArray, GL_STATIC_DRAW);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(unsigned int), indexArray, GL_STATIC_DRAW);
         }
 
         VertexBuffer* buffer = new VertexBuffer { vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize };
@@ -246,33 +241,27 @@ namespace Core
 
         glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
      
-        UInt32 position = glGetAttribLocation(currentProgram->program, "position");
-        UInt32 uv0 = glGetAttribLocation(currentProgram->program, "uv0");
-        UInt32 color0 = glGetAttribLocation(currentProgram->program, "color0");
+        unsigned int position = glGetAttribLocation(_currentProgram->program, "position");
+        unsigned int uv0 = glGetAttribLocation(_currentProgram->program, "uv0");
+        unsigned int color0 = glGetAttribLocation(_currentProgram->program, "color0");
 
         glEnableVertexAttribArray(position);
         glEnableVertexAttribArray(uv0);
         glEnableVertexAttribArray(color0);
 
-#if DOUBLE_PRECISION == 1
-        glVertexAttribPointer(position, 3, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (void*)(0));
-        glVertexAttribPointer(uv0, 2, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(Real)));
-        glVertexAttribPointer(color0, 4, GL_DOUBLE, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(Real)));
-#else
         glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
-        glVertexAttribPointer(uv0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(Real)));
-        glVertexAttribPointer(color0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(Real)));
-#endif
+        glVertexAttribPointer(uv0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(color0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
 
         if (buffer->indexArray != nullptr)
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
     }
 
-    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
+    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, int primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
     {
-        GLuint viewMtxId = glGetUniformLocation(currentProgram->program, "u_viewMtx");
-        GLuint projMtxId = glGetUniformLocation(currentProgram->program, "u_projMtx");
-        GLuint modelMtxId = glGetUniformLocation(currentProgram->program, "u_modelMtx");
+        GLuint viewMtxId = glGetUniformLocation(_currentProgram->program, "u_viewMtx");
+        GLuint projMtxId = glGetUniformLocation(_currentProgram->program, "u_projMtx");
+        GLuint modelMtxId = glGetUniformLocation(_currentProgram->program, "u_modelMtx");
 
         glUniformMatrix4fv(viewMtxId, 1, false, glm::value_ptr(view));
         glUniformMatrix4fv(projMtxId, 1, false, glm::value_ptr(proj));
@@ -316,7 +305,7 @@ namespace Core
         }
     }
 
-    const FrameBuffer* RendererGL4::createFrameBuffer(UInt32 width, UInt32 height)
+    const FrameBuffer* RendererGL4::createFrameBuffer(unsigned int width, unsigned int height)
     {
         FrameBuffer* fb = new FrameBuffer();
 
@@ -368,7 +357,7 @@ namespace Core
         glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
     }
 
-    const UInt32 RendererGL4::createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, TextureFormat format)
+    const unsigned int RendererGL4::createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format)
     {
         GLuint tex;
         glGenTextures(1, &tex);
@@ -397,23 +386,23 @@ namespace Core
         return tex;
     }
 
-    const void RendererGL4::bindTexture(UInt32 id, const char* name, UInt32 slot)
+    const void RendererGL4::bindTexture(unsigned int id, const char* name, unsigned int slot)
     {
-        GLuint texId = glGetUniformLocation(currentProgram->program, name);
+        GLuint texId = glGetUniformLocation(_currentProgram->program, name);
 
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, id);
         glUniform1i(texId, slot);
     }
 
-    const void RendererGL4::deleteTexture(UInt32 id)
+    const void RendererGL4::deleteTexture(unsigned int id)
     {
         glDeleteTextures(1, &id);
     }
 
-    const void RendererGL4::clear(UInt32 flags, Color color)
+    const void RendererGL4::clear(unsigned int flags, Color color)
     {
-        UInt32 _flags = 0;
+        unsigned int _flags = 0;
 
         if (flags & C_CLEAR_DEPTH)
         {

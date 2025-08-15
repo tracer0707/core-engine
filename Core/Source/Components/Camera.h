@@ -12,10 +12,12 @@ namespace Core
 {
 	class Object;
 	class RenderTexture;
+	class Renderer;
 
 	class Camera: public Component
 	{
 	private:
+		Renderer* _renderer = nullptr;
 		RenderTexture* renderTexture = nullptr;
 
 		float _fov = 75.0f;
@@ -23,10 +25,10 @@ namespace Core
 		float _far = 1000.0f;
 
 	public:
-		Camera(Object* owner);
+		Camera(Object* owner, Renderer* renderer);
 		virtual ~Camera();
 
-		virtual UInt32 getComponentType();
+		virtual unsigned int getComponentType();
 
 		float getFov() { return _fov; }
 		void setFov(float value) { _fov = value; }

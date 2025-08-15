@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../Config.h"
-
 namespace Core
 {
 #ifndef COMPONENT_TRANSFORM

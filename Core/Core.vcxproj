@@ -28,16 +28,19 @@
     <ClCompile Include="Dependencies\imgui\imgui_tables.cpp" />
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp" />
     <ClCompile Include="Source\Assets\Asset.cpp" />
+    <ClCompile Include="Source\Assets\AssetManager.cpp" />
     <ClCompile Include="Source\Assets\Material.cpp" />
     <ClCompile Include="Source\Assets\Mesh.cpp" />
     <ClCompile Include="Source\Assets\RenderTexture.cpp" />
     <ClCompile Include="Source\Assets\Shader.cpp" />
     <ClCompile Include="Source\Assets\Texture.cpp" />
     <ClCompile Include="Source\Classes\bc7compressor.cpp" />
+    <ClCompile Include="Source\Classes\TextureUtils.cpp" />
     <ClCompile Include="Source\Components\Camera.cpp" />
     <ClCompile Include="Source\Components\Component.cpp" />
     <ClCompile Include="Source\Components\MeshRenderer.cpp" />
     <ClCompile Include="Source\Components\Transform.cpp" />
+    <ClCompile Include="Source\Interface\Transformable.cpp" />
     <ClCompile Include="Source\Math\AxisAlignedBox.cpp" />
     <ClCompile Include="Source\Math\Mathf.cpp" />
     <ClCompile Include="Source\Math\Plane.cpp" />
@@ -57,10 +60,11 @@
     <ClCompile Include="Source\Shared\Path.cpp" />
     <ClCompile Include="Source\Shared\String.cpp" />
     <ClCompile Include="Source\Shared\Uuid.cpp" />
-    <ClCompile Include="Source\System\DeviceContext.cpp" />
+    <ClCompile Include="Source\System\Application.cpp" />
     <ClCompile Include="Source\System\EventHandler.cpp" />
     <ClCompile Include="Source\System\InputManager.cpp" />
     <ClCompile Include="Source\System\Time.cpp" />
+    <ClCompile Include="Source\System\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\imgui\imconfig.h" />
@@ -73,6 +77,7 @@
     <ClInclude Include="Dependencies\imgui\imstb_textedit.h" />
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h" />
     <ClInclude Include="Source\Assets\Asset.h" />
+    <ClInclude Include="Source\Assets\AssetManager.h" />
     <ClInclude Include="Source\Assets\Material.h" />
     <ClInclude Include="Source\Assets\Mesh.h" />
     <ClInclude Include="Source\Assets\RenderTexture.h" />
@@ -80,12 +85,14 @@
     <ClInclude Include="Source\Assets\Texture.h" />
     <ClInclude Include="Source\Classes\bc7compressor.h" />
     <ClInclude Include="Source\Classes\dirent.h" />
+    <ClInclude Include="Source\Classes\TextureUtils.h" />
     <ClInclude Include="Source\Components\Camera.h" />
     <ClInclude Include="Source\Components\Component.h" />
     <ClInclude Include="Source\Components\ComponentList.h" />
     <ClInclude Include="Source\Components\MeshRenderer.h" />
     <ClInclude Include="Source\Components\Transform.h" />
     <ClInclude Include="Source\Config.h" />
+    <ClInclude Include="Source\Interface\Transformable.h" />
     <ClInclude Include="Source\Math\AxisAlignedBox.h" />
     <ClInclude Include="Source\Math\Mathf.h" />
     <ClInclude Include="Source\Math\Plane.h" />
@@ -106,10 +113,11 @@
     <ClInclude Include="Source\Shared\Path.h" />
     <ClInclude Include="Source\Shared\String.h" />
     <ClInclude Include="Source\Shared\Uuid.h" />
-    <ClInclude Include="Source\System\DeviceContext.h" />
+    <ClInclude Include="Source\System\Application.h" />
     <ClInclude Include="Source\System\EventHandler.h" />
     <ClInclude Include="Source\System\InputManager.h" />
     <ClInclude Include="Source\System\Time.h" />
+    <ClInclude Include="Source\System\Window.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

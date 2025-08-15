@@ -1,20 +1,18 @@
 #include "Renderer.h"
 #include "RendererGL4.h"
 
-#include "../System/DeviceContext.h"
+#include "Program.h"
+#include "../Config.h"
 #include "../Components/Camera.h"
-#include "../Assets/Material.h"
 
 namespace Core
 {
-	Renderer* Renderer::_current = nullptr;
-
-	Renderer* Renderer::init(DeviceContext* ctx)
+	Renderer* Renderer::init(void* windowCtx)
 	{
 		Renderer* renderer = nullptr;
 
 #if CURRENT_RENDERER == GL4
-		renderer = new RendererGL4(ctx);
+		renderer = new RendererGL4(windowCtx);
 #endif
 
 		return renderer;
@@ -22,29 +20,21 @@ namespace Core
 
 	void Renderer::destroy(Renderer* renderer)
 	{
-		Material::destroyDefaultMaterial(renderer);
-
 		delete renderer;
-		renderer = nullptr;
 	}
 
-	Renderer::Renderer(DeviceContext* ctx)
+	Renderer::Renderer(void* windowCtx)
 	{
-		_context = ctx;
+		_windowCtx = windowCtx;
+		_defaultProgram = new Program();
 	}
 
 	Renderer::~Renderer()
 	{
-		_context = nullptr;
-	}
+		delete _defaultProgram;
 
-	const void Renderer::makeCurrent()
-	{
-		_current = this;
-	}
-
-	Renderer* Renderer::current()
-	{
-		return _current;
+		_windowCtx = nullptr;
+		_renderCtx = nullptr;
+		_defaultProgram = nullptr;
 	}
 }

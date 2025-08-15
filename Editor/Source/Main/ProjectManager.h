@@ -1,27 +1,32 @@
 #pragma once
 
-namespace Core
-{
-	class DeviceContext;
-}
+#include <System/Application.h>
+#include <System/Window.h>
 
 namespace Editor
 {
 	class WindowManager;
 
-	class ProjectManager
+	class ProjectManager : public Core::Application
 	{
 	private:
-		bool isRunning = false;
+		class MainWindow : public Core::Window
+		{
+			friend class ProjectManager;
 
-		Core::DeviceContext* ctx = nullptr;
-		WindowManager* windowManager = nullptr;
+		private:
+			MainWindow();
+			virtual ~MainWindow();
 
-		int init();
-		void loop();
-		void destroy();
+			virtual void update();
+			virtual void render();
 
-	public:
-		int run();
+			WindowManager* windowManager = nullptr;
+		};
+
+		MainWindow* wnd = nullptr;
+		
+		virtual void init();
+		virtual void destroy();
 	};
 }

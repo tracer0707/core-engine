@@ -9,13 +9,8 @@ namespace Core
 	class RendererGL4 : public Renderer
 	{
 	friend class Renderer;
-
-	private:
-		void* window = nullptr;
-		void* rendererContext = nullptr;
-
 	protected:
-		RendererGL4(DeviceContext* ctx);
+		RendererGL4(void* windowCtx);
 		virtual ~RendererGL4();
 
 		virtual const void makeCurrent();
@@ -30,21 +25,21 @@ namespace Core
 		const Program* createProgram(UString vertexSrc, UString fragmentSrc);
 		const void deleteProgram(const Program* programId);
 		const void bindProgram(const Program* programId);
-		const char* checkProgramErrors(UInt32 program);
+		const char* checkProgramErrors(unsigned int program);
 
-		const VertexBuffer* createBuffer(Vertex* vertexArray, UInt32 vertexArraySize, UInt32* indexArray, UInt32 indexArraySize);
+		const VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 		const void deleteBuffer(const VertexBuffer* buffer);
 		const void bindBuffer(const VertexBuffer* buffer);
-		const void drawBuffer(const VertexBuffer* buffer, int primitiveType, UInt32 flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
+		const void drawBuffer(const VertexBuffer* buffer, int primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
 
-		const FrameBuffer* createFrameBuffer(UInt32 width, UInt32 height);
+		const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
 		const void deleteFrameBuffer(const FrameBuffer* buffer);
 		const void bindFrameBuffer(const FrameBuffer* buffer);
 
-		const UInt32 createTexture(unsigned char* data, UInt32 width, UInt32 height, UInt32 size, TextureFormat format);
-		const void bindTexture(UInt32 id, const char* name, UInt32 slot);
-		const void deleteTexture(UInt32 id);
+		const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format);
+		const void bindTexture(unsigned int id, const char* name, unsigned int slot);
+		const void deleteTexture(unsigned int id);
 
-		const void clear(UInt32 flags, Color color);
+		const void clear(unsigned int flags, Color color);
 	};	
 }

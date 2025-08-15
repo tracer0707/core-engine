@@ -8,17 +8,19 @@ namespace Core
 	class Object;
 	class Mesh;
 	class Camera;
+	class Renderer;
 
 	class MeshRenderer : public Component
 	{
 	private:
+		Renderer* _renderer = nullptr;
 		Mesh* mesh = nullptr;
 
 	public:
-		MeshRenderer(Object* owner);
+		MeshRenderer(Object* owner, Renderer* renderer);
 		virtual ~MeshRenderer();
 
-		virtual UInt32 getComponentType();
+		virtual unsigned int getComponentType();
 
 		AxisAlignedBox getWorldBoundingBox();
 

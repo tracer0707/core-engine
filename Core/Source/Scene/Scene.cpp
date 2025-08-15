@@ -14,46 +14,41 @@
 
 namespace Core
 {
-	Scene::Scene()
+	Scene::Scene(Renderer* renderer)
 	{
-		
+        _renderer = renderer;
 	}
 
 	Scene::~Scene()
 	{
-
+        _renderer = nullptr;
 	}
 
     Object* Scene::createObject()
     {
-        Object* object = new Object();
-        objects.add(object);
+        Object* object = new Object(_renderer);
+        _objects.add(object);
 
         return object;
     }
 
-    void Scene::addObject(Object* object)
-    {
-        if (object != nullptr)
-            objects.add(object);
-    }
-
     void Scene::removeObject(Object* object)
     {
-        objects.remove(object);
+        _objects.remove(object);
+        delete object;
     }
 
     void Scene::render()
 	{
-        if (mainCamera == nullptr) return;
+        if (_mainCamera == nullptr) return;
 
         float dt = 0.0f;
 
-        for (int i = 0; i < objects.count(); ++i)
+        for (int i = 0; i < _objects.count(); ++i)
         {
-            Object* object = objects.get(i);
+            Object* object = _objects.get(i);
             object->update(dt);
-            object->render(mainCamera);
+            object->render(_mainCamera);
         }
 	}
 }

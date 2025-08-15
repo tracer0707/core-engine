@@ -2,16 +2,15 @@
 
 #include <glm/glm.hpp>
 
-#include "../Config.h"
 #include "Color.h"
 
 namespace Core
 {
 	struct Vertex
 	{
-		Real position[3];
-		Real uv[2];
-		Real color[4];
+		float position[3];
+		float uv[2];
+		float color[4];
 
 		Vertex() = default;
 		Vertex(glm::vec3 pos, glm::vec2 uvs, Color col);
@@ -26,14 +25,14 @@ namespace Core
 	class VertexBuffer
 	{
 	public:
-		UInt32 vbo = 0;
-		UInt32 ibo = 0;
+		unsigned int vbo = 0;
+		unsigned int ibo = 0;
 		
 		Vertex* vertexArray = nullptr;
-		UInt32 vertexArraySize = 0;
+		unsigned int vertexArraySize = 0;
 
-		UInt32* indexArray = nullptr;
-		UInt32 indexArraySize = 0;
+		unsigned int* indexArray = nullptr;
+		unsigned int indexArraySize = 0;
 
 		const VertexBuffer& operator =(const VertexBuffer& left);
 		const bool operator ==(const VertexBuffer& left);

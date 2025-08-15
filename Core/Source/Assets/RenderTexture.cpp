@@ -5,49 +5,53 @@
 
 namespace Core
 {
-	RenderTexture::RenderTexture(UInt32 width, UInt32 height)
+	RenderTexture::RenderTexture(Renderer* renderer, unsigned int width, unsigned int height)
 	{
+		_renderer = renderer;
+
 		this->width = width;
 		this->height = height;
 
-		frameBuffer = Renderer::current()->createFrameBuffer(width, height);
+		frameBuffer = _renderer->createFrameBuffer(width, height);
 	}
 
 	Core::RenderTexture::~RenderTexture()
 	{
 		if (frameBuffer != nullptr)
 		{
-			Renderer::current()->deleteFrameBuffer(frameBuffer);
+			_renderer->deleteFrameBuffer(frameBuffer);
 			frameBuffer = nullptr;
 		}
+
+		_renderer = nullptr;
 	}
 
 	void RenderTexture::bind()
 	{
-		Renderer::current()->bindFrameBuffer(frameBuffer);
+		_renderer->bindFrameBuffer(frameBuffer);
 	}
 
-	UInt32 RenderTexture::getNativeFrameBufferId()
+	unsigned int RenderTexture::getNativeFrameBufferId()
 	{
 		return frameBuffer->frameBuffer;
 	}
 
-	UInt32 RenderTexture::getNativeColorTextureId()
+	unsigned int RenderTexture::getNativeColorTextureId()
 	{
 		return frameBuffer->colorTexture;
 	}
 
-	UInt32 RenderTexture::getNativeDepthTextureId()
+	unsigned int RenderTexture::getNativeDepthTextureId()
 	{
 		return frameBuffer->depthTexture;
 	}
 
-	void RenderTexture::setSize(UInt32 width, UInt32 height)
+	void RenderTexture::setSize(unsigned int width, unsigned int height)
 	{
 		this->width = width;
 		this->height = height;
 
-		Renderer::current()->deleteFrameBuffer(frameBuffer);
-		frameBuffer = Renderer::current()->createFrameBuffer(width, height);
+		_renderer->deleteFrameBuffer(frameBuffer);
+		frameBuffer = _renderer->createFrameBuffer(width, height);
 	}
 }

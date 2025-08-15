@@ -14,7 +14,6 @@
 
 #include "../../CSG/CSGModel.h"
 #include "../../CSG/CSGBrush.h"
-#include "../../Shared/Layers.h"
 #include "../../Shared/Tags.h"
 
 #include <Scene/Object.h>
@@ -36,15 +35,15 @@ namespace Editor
 			else if (selected.count() == 1)
 			{
 				TreeNode* node = selected.get(0);
-				Core::Object* obj = (Core::Object*)node->getUserObject();
+				/*Core::Object* obj = (Core::Object*)node->getObject();
 				Core::Transform* transform = obj->findComponent<Core::Transform*>();
 
-				Gizmo::singleton()->setTransform(transform);
+				Gizmo::singleton()->setTransform((Core::Transformable*)transform);*/
 
-				if (modMgr->getCurrentModifierName() == CSGModifier::NAME && obj->getFlags().getBit(LAYER_CSG))
+				/*if (modMgr->getCurrentModifierName() == CSGModifier::NAME && obj->getFlags().getBit(LAYER_CSG))
 				{
-					CSGBrush* brush = (CSGBrush*)node->getUserTag(TAG_CSG_BRUSH);
-					CSGModel* model = (CSGModel*)node->getUserTag(TAG_CSG_MODEL);
+					CSGBrush* brush = (CSGBrush*)node->getTag(TAG_CSG_BRUSH);
+					CSGModel* model = (CSGModel*)node->getTag(TAG_CSG_MODEL);
 
 					CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 
@@ -59,7 +58,7 @@ namespace Editor
 					}
 
 					_parent->invalidateAll();
-				}
+				}*/
 			}
 		});
 

@@ -7,22 +7,22 @@ namespace Core
 	class Time
 	{
 	private:
-		static float timeScale;
-		static float deltaTime;
-		static int fpsInterval;
-		static int fpsTicks;
-		static int frameRate;
-		static std::chrono::steady_clock::time_point now;
-		static std::chrono::steady_clock::time_point last;
+		float timeScale = 1.0f;
+		float deltaTime = 0.0f;
+		int fpsInterval = 100;
+		int fpsTicks = 0;
+		int frameRate = 0;
+		std::chrono::steady_clock::time_point now;
+		std::chrono::steady_clock::time_point last;
 
 	public:
-		static float getTimeScale() { return timeScale; }
-		static void setTimeScale(float value) { timeScale = value; }
+		float getTimeScale() { return timeScale; }
+		void setTimeScale(float value) { timeScale = value; }
 
-		static float getDeltaTime() { return deltaTime; }
-		static int getFramesPerSecond();
+		float getDeltaTime() { return deltaTime; }
+		int getFramesPerSecond();
 
-		static void beginTimer();
-		static void endTimer();
+		void beginTimer();
+		void endTimer();
 	};
 }

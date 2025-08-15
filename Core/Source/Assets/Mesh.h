@@ -7,18 +7,26 @@ namespace Core
 {
 	class VertexBuffer;
 	class Material;
+	class Mesh;
+	class Renderer;
+	class Vertex;
 
 	class SubMesh
 	{
-	private:
-		const VertexBuffer* _vertexBuffer = nullptr;
-		Material* _material = nullptr;
+		friend class Mesh;
+		friend class AssetManager;
 
-	public:
-		SubMesh(const VertexBuffer* vertexBuffer);
+	private:
+		SubMesh(Renderer* renderer);
 		~SubMesh();
 
+		const VertexBuffer* _vertexBuffer = nullptr;
+		Material* _material = nullptr;
+		Renderer* _renderer = nullptr;
+
+	public:
 		const VertexBuffer* getVertexBuffer() { return _vertexBuffer; }
+		void updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 
 		Material* getMaterial() { return _material; }
 		void setMaterial(Material* value) { _material = value; }
@@ -26,20 +34,20 @@ namespace Core
 
 	class Mesh : public Asset
 	{
+		friend class AssetManager;
+
 	private:
 		SubMesh** _subMeshes = nullptr;
-		int _count = 0;
+		int _subMeshesCount = 0;
 		AxisAlignedBox aab = AxisAlignedBox::BOX_NULL;
 
-	public:
-		Mesh(SubMesh** subMeshes, int count);
+		Mesh(SubMesh** subMeshes, int subMeshesCount);
 		~Mesh();
 
-		static Mesh* loadFromFile(const char* fileName);
-
+	public:
 		SubMesh** getSubMeshes() { return _subMeshes; }
 		SubMesh* getSubMesh(int index) { return _subMeshes[index]; }
-		const int getSubMeshesCount() { return _count; }
+		const int getSubMeshesCount() { return _subMeshesCount; }
 
 		AxisAlignedBox& getBoundingBox() { return aab; }
 		void setBoundingBox(AxisAlignedBox value) { aab = value; }

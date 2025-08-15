@@ -33,9 +33,11 @@ namespace Editor
 			manipulateEndEvents.erase(it);
 	}
 
-	void Gizmo::init()
+	void Gizmo::init(Core::InputManager* inputManager)
 	{
-		Core::InputManager::singleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		_inputManager = inputManager;
+
+		_inputManager->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 		{
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
@@ -43,7 +45,7 @@ namespace Editor
 			}
 		});
 
-		Core::InputManager::singleton()->subscribeMouseMoveEvent([=](int x, int y)
+		_inputManager->subscribeMouseMoveEvent([=](int x, int y)
 		{
 			if (_lmbDown)
 			{
@@ -51,7 +53,7 @@ namespace Editor
 			}
 		});
 
-		Core::InputManager::singleton()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		_inputManager->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 		{
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
@@ -77,8 +79,8 @@ namespace Editor
 		}
 
 		ImGuizmo::Enable((_isUsing || isMouseInView)
-			&& !Core::InputManager::singleton()->getMouseButton(1)
-			&& !Core::InputManager::singleton()->getMouseButton(2));
+			&& !_inputManager->getMouseButton(1)
+			&& !_inputManager->getMouseButton(2));
 
 		ImGuizmo::BeginFrame();
 		

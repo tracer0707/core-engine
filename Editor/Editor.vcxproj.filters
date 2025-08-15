@@ -141,9 +141,6 @@
     <ClCompile Include="Source\Main\ProjectManager.cpp">
       <Filter>Исходные файлы\Main</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Main\EditorBase.cpp">
-      <Filter>Исходные файлы\Main</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\Windows\ProjectManagerWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
@@ -155,6 +152,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\Controls\Label.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main\Editor.cpp">
+      <Filter>Исходные файлы\Main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +260,6 @@
     <ClInclude Include="Source\SceneUtils\Raycast.h">
       <Filter>Исходные файлы\SceneUtils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shared\Layers.h">
-      <Filter>Исходные файлы\Shared</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\Modifiers\ModifierList.h">
       <Filter>Исходные файлы\Editor\Modifiers</Filter>
     </ClInclude>
@@ -270,9 +267,6 @@
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
     <ClInclude Include="Source\Main\ProjectManager.h">
-      <Filter>Исходные файлы\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Main\EditorBase.h">
       <Filter>Исходные файлы\Main</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\WindowList.h">
@@ -289,6 +283,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Controls\Label.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Main\Editor.h">
+      <Filter>Исходные файлы\Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../Config.h"
-
 namespace Core
 {
 	class Object;
@@ -18,7 +16,7 @@ namespace Core
 		Component(Object* owner);
 		virtual ~Component();
 
-		virtual UInt32 getComponentType() = 0;
+		virtual unsigned int getComponentType() = 0;
 
 		virtual void update(float& dt);
 		virtual void render(Camera* camera);

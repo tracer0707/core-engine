@@ -9,9 +9,7 @@
 
 #include <Math/Mathf.h>
 #include <Scene/Object.h>
-#include <Components/Transform.h>
-
-#include "../Shared/Layers.h"
+#include <Interface/Transformable.h>
 
 namespace Editor
 {
@@ -19,18 +17,12 @@ namespace Editor
 	{
 		this->parent = parent;
 
-		object = new Core::Object();
-
-		Core::BitSet& objectFlags = object->getFlags();
-		objectFlags.setBit(LAYER_CSG, true);
-
-		transform = object->addComponent<Core::Transform*>();
+		transform = new Core::Transformable();
 	}
 
 	CSGBrush::~CSGBrush()
 	{
-		delete object;
-		object = nullptr;
+		delete transform;
 		transform = nullptr;
 
 		destroy();

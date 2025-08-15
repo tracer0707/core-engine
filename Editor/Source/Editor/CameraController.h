@@ -6,6 +6,8 @@
 namespace Core
 {
 	class Camera;
+	class Time;
+	class InputManager;
 }
 
 namespace Editor
@@ -14,6 +16,8 @@ namespace Editor
 	{
 	private:
 		static Core::Camera* _camera;
+		static Core::Time* _time;
+		static Core::InputManager* _inputManager;
 
 		static bool hovered;
 
@@ -35,7 +39,7 @@ namespace Editor
 		static void mouseWheel(int x, int y);
 
 	public:
-		static void init(Core::Camera* camera);
+		static void init(Core::InputManager* inputManager, Core::Time* time, Core::Camera* camera);
 		static void update(bool isMouseInView);
 	};
 }

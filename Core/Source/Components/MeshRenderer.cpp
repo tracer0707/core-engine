@@ -12,13 +12,17 @@
 
 namespace Core
 {
-    MeshRenderer::MeshRenderer(Object* owner) : Component(owner) {}
+    MeshRenderer::MeshRenderer(Object* owner, Renderer* renderer) : Component(owner)
+    {
+        _renderer = renderer;
+    }
+
     MeshRenderer::~MeshRenderer()
     {
         mesh = nullptr;
     }
 
-    UInt32 MeshRenderer::getComponentType()
+    unsigned int MeshRenderer::getComponentType()
     {
         return COMPONENT_MESHRENDERER;
     }
@@ -52,11 +56,11 @@ namespace Core
             if (material != nullptr)
                 material->bind();
 
-            Renderer::current()->bindBuffer(subMesh->getVertexBuffer());
+            _renderer->bindBuffer(subMesh->getVertexBuffer());
 
             glm::mat4& model = transform->getTransformMatrix();
 
-            Renderer::current()->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
+            _renderer->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
                 C_CCW
                 | C_CULL_BACK
                 | C_ENABLE_DEPTH_TEST

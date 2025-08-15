@@ -15,6 +15,8 @@
 namespace Editor
 {
 	Core::Camera* CameraController::_camera = nullptr;
+	Core::Time* CameraController::_time = nullptr;
+	Core::InputManager* CameraController::_inputManager = nullptr;
 
 	bool CameraController::hovered = false;
 
@@ -31,29 +33,31 @@ namespace Editor
 
 	glm::vec2 CameraController::prevMousePos = glm::vec2(0, 0);
 
-	void CameraController::init(Core::Camera* camera)
+	void CameraController::init(Core::InputManager* inputManager, Core::Time* time, Core::Camera* camera)
 	{
+		_time = time;
 		_camera = camera;
+		_inputManager = inputManager;
 
-		Core::InputManager::singleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		_inputManager->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 			{
 				mouseDown(x, y, static_cast<int>(mb));
 			}
 		);
 
-		Core::InputManager::singleton()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		_inputManager->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 			{
 				mouseUp(x, y, static_cast<int>(mb));
 			}
 		);
 
-		Core::InputManager::singleton()->subscribeMouseMoveEvent([=](int x, int y)
+		_inputManager->subscribeMouseMoveEvent([=](int x, int y)
 			{
 				mouseMove(x, y);
 			}
 		);
 
-		Core::InputManager::singleton()->subscribeMouseWheelEvent([=](int x, int y)
+		_inputManager->subscribeMouseWheelEvent([=](int x, int y)
 			{
 				mouseWheel(x, y);
 			}
@@ -64,8 +68,8 @@ namespace Editor
 	{
 		hovered = isMouseInView;
 
-		ctrlPressed = Core::InputManager::singleton()->getKey(SDL_SCANCODE_LCTRL);
-		shiftPressed = Core::InputManager::singleton()->getKey(SDL_SCANCODE_LSHIFT);
+		ctrlPressed = _inputManager->getKey(SDL_SCANCODE_LCTRL);
+		shiftPressed = _inputManager->getKey(SDL_SCANCODE_LSHIFT);
 
 		if (shiftPressed)
 			cameraSpeed = cameraSpeedFast;
@@ -74,36 +78,36 @@ namespace Editor
 
 		if (rButtonDown)
 		{
-			float dt = Core::Time::getDeltaTime();
+			float dt = _time->getDeltaTime();
 
 			Core::Transform* t = _camera->getOwner()->findComponent<Core::Transform*>();
 
-			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_W))
+			if (_inputManager->getKey(SDL_SCANCODE_W))
 			{
 				t->translate(glm::vec3(0, 0, 1) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_S))
+			if (_inputManager->getKey(SDL_SCANCODE_S))
 			{
 				t->translate(glm::vec3(0, 0, -1) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_A))
+			if (_inputManager->getKey(SDL_SCANCODE_A))
 			{
 				t->translate(glm::vec3(-1, 0, 0) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_D))
+			if (_inputManager->getKey(SDL_SCANCODE_D))
 			{
 				t->translate(glm::vec3(1, 0, 0) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_Q))
+			if (_inputManager->getKey(SDL_SCANCODE_Q))
 			{
 				t->translate(glm::vec3(0, 1, 0) * cameraSpeed * dt);
 			}
 
-			if (Core::InputManager::singleton()->getKey(SDL_SCANCODE_E))
+			if (_inputManager->getKey(SDL_SCANCODE_E))
 			{
 				t->translate(glm::vec3(0, -1, 0) * cameraSpeed * dt);
 			}

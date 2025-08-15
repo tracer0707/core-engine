@@ -1,46 +1,44 @@
 #pragma once
 
-#include <FreeImage.h>
-
 #include "Asset.h"
 
 #include "../Renderer/Color.h"
 #include "../Renderer/TextureFormat.h"
-#include "../Classes/bc7compressor.h"
 #include "../Shared/String.h"
+
+struct FIBITMAP;
 
 namespace Core
 {
+	class Renderer;
+
 	class Texture : public Asset
 	{
+		friend class AssetManager;
+
 	private:
-		FIBITMAP* _bitmap = nullptr;
-		
-		int width = 0;
-		int height = 0;
-
-		int nativeId = 0;
-
-		TextureFormat format = TextureFormat::RGBA8;
-
-		void makeSquare();
-		static void copyPixels(color_quad_u8_vec& dst, FIBITMAP* src, int width, int height);
-
-	public:
-		Texture();
+		Texture(Renderer* renderer, FIBITMAP* bitmap, TextureFormat format);
 		~Texture();
 
-		int getNativeId() { return nativeId; }
+		Renderer* _renderer = nullptr;
+		FIBITMAP* _bitmap = nullptr;
+		
+		int _width = 0;
+		int _height = 0;
 
-		static Texture* loadFromFile(UString fileName, TextureFormat fmt);
-		static Texture* loadFromBytes(unsigned char* data, int w, int h, int bpp, TextureFormat fmt);
+		int _nativeId = 0;
 
+		TextureFormat _format = TextureFormat::RGBA8;
+
+		void makeSquare();
+		void updateSize();
 		void rescale(int newW, int newH);
 
-		void updateSize();
+	public:
+		int getNativeId() { return _nativeId; }
 
-		int getWidth() { return width; }
-		int getHeight() { return height; }
+		int getWidth() { return _width; }
+		int getHeight() { return _height; }
 
 		void bind(const char* name, int slot);
 	};

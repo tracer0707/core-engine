@@ -72,8 +72,6 @@ namespace Core
 		InputManager();
 		~InputManager();
 
-		static InputManager* singleton() { return &_singleton; }
-
 		Uuid subscribeMouseMoveEvent(MouseEvent callback);
 		Uuid subscribeMouseDownEvent(MouseButtonEvent callback);
 		Uuid subscribeMouseUpEvent(MouseButtonEvent callback);

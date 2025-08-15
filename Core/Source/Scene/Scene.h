@@ -6,25 +6,26 @@ namespace Core
 {
 	class Object;
 	class Camera;
+	class Renderer;
 
 	class Scene
 	{
 	private:
-		List<Object*> objects;
-		Camera* mainCamera = nullptr;
+		Renderer* _renderer = nullptr;
+		List<Object*> _objects;
+		Camera* _mainCamera = nullptr;
 
 	public:
-		Scene();
+		Scene(Renderer* renderer);
 		~Scene();
 
-		List<Object*>& getObjects() { return objects; }
+		List<Object*>& getObjects() { return _objects; }
 
 		Object* createObject();
-		void addObject(Object* object);
 		void removeObject(Object* object);
 
-		Camera* getMainCamera() { return mainCamera; }
-		void setMainCamera(Camera* value) { mainCamera = value; }
+		Camera* getMainCamera() { return _mainCamera; }
+		void setMainCamera(Camera* value) { _mainCamera = value; }
 
 		void render();
 	};

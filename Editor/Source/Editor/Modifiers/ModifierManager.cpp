@@ -3,6 +3,7 @@
 #include "Modifier.h"
 #include "CSGModifier.h"
 
+#include "../Windows/WindowManager.h"
 #include "../Windows/Window.h"
 
 namespace Editor
@@ -16,7 +17,7 @@ namespace Editor
 
         for (auto it : _modifiers)
         {
-            it->init(_scene);
+            it->init(_windowManager->getRenderer(), _scene, _windowManager->getAssetManager());
         }
     }
 

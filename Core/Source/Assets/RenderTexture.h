@@ -1,33 +1,36 @@
 #pragma once
 
-#include "../Config.h"
 #include "Asset.h"
 
 namespace Core
 {
 	class FrameBuffer;
+	class Renderer;
 
 	class RenderTexture : public Asset
 	{
+		friend class AssetManager;
+
 	private:
-		const FrameBuffer* frameBuffer = nullptr;
-
-		UInt32 width = 0;
-		UInt32 height = 0;
-
-	public:
-		RenderTexture(UInt32 width, UInt32 height);
+		RenderTexture(Renderer* renderer, unsigned int width, unsigned int height);
 		~RenderTexture();
 
+		Renderer* _renderer = nullptr;
+		const FrameBuffer* frameBuffer = nullptr;
+
+		unsigned int width = 0;
+		unsigned int height = 0;
+
+	public:
 		void bind();
 
-		UInt32 getNativeFrameBufferId();
-		UInt32 getNativeColorTextureId();
-		UInt32 getNativeDepthTextureId();
+		unsigned int getNativeFrameBufferId();
+		unsigned int getNativeColorTextureId();
+		unsigned int getNativeDepthTextureId();
 
-		UInt32 getWidth() { return width; }
-		UInt32 getHeight() { return height; }
+		unsigned int getWidth() { return width; }
+		unsigned int getHeight() { return height; }
 
-		void setSize(UInt32 width, UInt32 height);
+		void setSize(unsigned int width, unsigned int height);
 	};
 }

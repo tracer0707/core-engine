@@ -7,6 +7,14 @@
 
 #include "WindowList.h"
 
+namespace Core
+{
+	class Time;
+	class Renderer;
+	class AssetManager;
+	class InputManager;
+}
+
 namespace Editor
 {
 	class MenuBar;
@@ -24,15 +32,30 @@ namespace Editor
 	class WindowManager
 	{
 	private:
-		MenuBar* _menuBar = nullptr;
+		Core::Time* _time = nullptr;
+		Core::Renderer* _renderer = nullptr;
+		Core::AssetManager* _assetManager = nullptr;
+		Core::InputManager* _inputManager = nullptr;
 		Core::List<Window*> _windows;
 		std::function<void()> _onDock = nullptr;
+
+		MenuBar* _menuBar = nullptr;
 
 		Window* addWindow(const char* name);
 
 	public:
 		WindowManager();
 		~WindowManager();
+
+		void setTime(Core::Time* value) { _time = value; }
+		void setRenderer(Core::Renderer* value) { _renderer = value; }
+		void setAssetManager(Core::AssetManager* value) { _assetManager = value; }
+		void setInputManager(Core::InputManager* value) { _inputManager = value; }
+
+		Core::Time* getTime() { return _time; }
+		Core::Renderer* getRenderer() { return _renderer; }
+		Core::AssetManager* getAssetManager() { return _assetManager; }
+		Core::InputManager* getInputManager() { return _inputManager; }
 
 		void invalidateAll();
 

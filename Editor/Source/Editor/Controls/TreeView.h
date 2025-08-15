@@ -26,7 +26,8 @@ namespace Editor
 		Core::List<TreeNode*>& getSelectedNodes() { return selectedNodes; }
 		bool isNodeSelected(TreeNode* node);
 
-		TreeNode* findNodeByUserObject(void* value);
+		TreeNode* findNodeByTag(int key, void* value);
+		TreeNode* findNodeByObject(void* value);
 
 		void selectNode(TreeNode* value, bool byUser = true);
 		void clearSelection(bool byUser = true);

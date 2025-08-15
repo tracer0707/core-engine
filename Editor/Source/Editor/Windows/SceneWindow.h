@@ -9,6 +9,7 @@ namespace Core
 	class Camera;
 	class Scene;
 	class RenderTexture;
+	class Time;
 }
 
 namespace Editor
@@ -22,6 +23,7 @@ namespace Editor
 	private:
 		Image* _image = nullptr;
 
+		Core::Time* _time = nullptr;
 		Core::Camera* _camera = nullptr;
 		Core::Scene* _scene = nullptr;
 		Core::RenderTexture* _renderTexture = nullptr;
@@ -34,6 +36,7 @@ namespace Editor
 		SceneWindow(WindowManager* parent);
 		virtual ~SceneWindow();
 
+		void setTime(Core::Time* time) { _time = time; }
 		void setScene(Core::Scene* scene);
 		void setRenderTexture(Core::RenderTexture* renderTexture);
 	};

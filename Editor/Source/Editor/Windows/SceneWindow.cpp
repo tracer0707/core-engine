@@ -46,9 +46,9 @@ namespace Editor
 		_scene = scene;
 		_camera = _scene->getMainCamera();
 
-		Editor::CameraController::init(_camera);
+		Editor::CameraController::init(_parent->getInputManager(), _parent->getTime(), _camera);
 		Editor::ObjectPicker::init(_parent, _scene, _camera);
-		Editor::Gizmo::singleton()->init();
+		Editor::Gizmo::singleton()->init(_parent->getInputManager());
 	}
 
 	void SceneWindow::setRenderTexture(Core::RenderTexture* renderTexture)

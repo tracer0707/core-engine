@@ -9,6 +9,7 @@
 #include <Renderer/Renderer.h>
 #include <Renderer/Primitives.h>
 #include <Renderer/Color.h>
+#include <Assets/AssetManager.h>
 
 #include "../Windows/WindowManager.h"
 #include "../Windows/HierarchyWindow.h"
@@ -40,9 +41,9 @@ namespace Editor
 	{
 	}
 
-	void CSGModifier::init(Core::Scene* scene)
+	void CSGModifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
 	{
-		Modifier::init(scene);
+		Modifier::init(renderer, scene, assetManager);
 
 		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
 
@@ -60,16 +61,14 @@ namespace Editor
 	void CSGModifier::addModel()
 	{
 		_currentBrush = nullptr;
-		_currentModel = new CSGModel();
+		_currentModel = new CSGModel(_renderer, _scene, _assetManager);
 		_currentModel->setName("CSG Model");
-		_scene->addObject(_currentModel->getObject());
 		_models.add(_currentModel);
 
 		auto* tree = _hierarchyWindow->getTreeView();
 
 		TreeNode* modelNode = new TreeNode(_currentModel->getName(), tree);
-		modelNode->setUserObject(_currentModel->getObject());
-		modelNode->setUserTag(TAG_CSG_MODEL, _currentModel);
+		modelNode->setTag(TAG_CSG_MODEL, _currentModel);
 		tree->addControl(modelNode);
 		tree->selectNode(modelNode);
 
@@ -100,10 +99,9 @@ namespace Editor
 		auto* tree = _hierarchyWindow->getTreeView();
 
 		TreeNode* brushNode = new TreeNode(_currentBrush->getName(), tree);
-		brushNode->setUserObject(_currentBrush->getObject());
-		brushNode->setUserTag(TAG_CSG_BRUSH, _currentBrush);
+		brushNode->setTag(TAG_CSG_BRUSH, _currentBrush);
 
-		TreeNode* modelNode = tree->findNodeByUserObject(_currentModel->getObject());
+		TreeNode* modelNode = tree->findNodeByTag(TAG_CSG_MODEL, _currentModel);
 		assert(modelNode != nullptr && "TreeNode of CSG model not found");
 		
 		modelNode->addControl(brushNode);
@@ -129,7 +127,7 @@ namespace Editor
 		Core::List<int> inds = _currentBrush->getFlatIndices();
 		Core::List<glm::vec3>& verts = _currentBrush->getVertices();
 
-		Core::Primitives::wireMesh(view, proj, model, verts, inds, Core::Color::RED, Core::Primitives::WireframeMode::Polygon,
+		Core::Primitives::wireMesh(_renderer, _assetManager->getDefaultMaterial(), view, proj, model, verts, inds, Core::Color::RED, Core::Primitives::WireframeMode::Polygon,
 			C_CCW
 			| C_CULL_BACK
 			| C_ENABLE_DEPTH_TEST

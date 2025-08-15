@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../Config.h"
 #include "../Shared/List.h"
 #include "../Shared/BitSet.h"
 #include "../Components/ComponentList.h"
@@ -11,20 +10,24 @@ namespace Core
 	class Camera;
 	class MeshRenderer;
 	class Transform;
+	class Renderer;
 
 	class Object
 	{
+		friend class Scene;
+
 	private:
-		List<Component*> components;
-		BitSet flags;
-
-		Component* addComponent(UInt32 type);
-
-	public:
-		Object();
+		Object(Renderer* renderer);
 		~Object();
 
-		List<Component*>& getComponents() { return components; }
+		Renderer* _renderer = nullptr;
+		List<Component*> _components;
+		BitSet _flags;
+
+		Component* addComponent(unsigned int type);
+
+	public:
+		List<Component*>& getComponents() { return _components; }
 
 		void update(float& dt);
 		void render(Camera* camera);
@@ -37,9 +40,9 @@ namespace Core
 		template <typename T>
 		T findComponent() {}
 
-		Component* findComponent(UInt32 type);
+		Component* findComponent(unsigned int type);
 
-		BitSet& getFlags() { return flags; }
+		BitSet& getFlags() { return _flags; }
 	};
 
 	/* ADD */

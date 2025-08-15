@@ -18,8 +18,8 @@ namespace Editor
 
 		std::function<void()> _onClick = nullptr;
 
-		void* _userObj = nullptr;
-		std::map<int, void*> _userTags;
+		void* _obj = nullptr;
+		std::map<int, void*> _tags;
 
 		TreeView* _tree = nullptr;
 
@@ -34,10 +34,10 @@ namespace Editor
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 
-		void setUserObject(void* value) { _userObj = value; }
-		void* getUserObject() { return _userObj; }
+		void setObject(void* value) { _obj = value; }
+		void* getObject() { return _obj; }
 
-		void setUserTag(int key, void* value);
-		void* getUserTag(int key);
+		void setTag(int key, void* value);
+		void* getTag(int key);
 	};
 }

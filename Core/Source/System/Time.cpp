@@ -4,14 +4,6 @@
 
 namespace Core
 {
-	float Time::timeScale = 1.0f;
-	float Time::deltaTime = 0.0f;
-	int Time::frameRate = 0;
-	int Time::fpsInterval = 100;
-	int Time::fpsTicks = 0;
-	std::chrono::steady_clock::time_point Time::now;
-	std::chrono::steady_clock::time_point Time::last;
-
 	int Time::getFramesPerSecond()
 	{
 		return frameRate;

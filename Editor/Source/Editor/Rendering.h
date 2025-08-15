@@ -3,6 +3,8 @@
 namespace Core
 {
 	class Camera;
+	class Renderer;
+	class Material;
 }
 
 namespace Editor
@@ -10,6 +12,6 @@ namespace Editor
 	class Rendering
 	{
 	public:
-		static void renderGrid(Core::Camera* camera);
+		static void renderGrid(Core::Renderer* renderer, Core::Material* material, Core::Camera* camera);
 	};
 }

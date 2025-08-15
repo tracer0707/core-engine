@@ -11,18 +11,18 @@
 namespace Core
 {
 	//TODO: make dynamic update buffer instead of create/destroy every frame
-	void Primitives::lines(glm::mat4& view, glm::mat4& proj, glm::mat4& model, Vertex* points, int pointsCount, UInt32 flags)
+	void Primitives::lines(Renderer* renderer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model, Vertex* points, int pointsCount, unsigned int flags)
 	{
-		const Core::VertexBuffer* vb = Renderer::current()->createBuffer(points, pointsCount, nullptr, 0);
+		const Core::VertexBuffer* vb = renderer->createBuffer(points, pointsCount, nullptr, 0);
 		
-		Material::getDefaultMaterial()->bind();
+		material->bind();
 
-		Renderer::current()->bindBuffer(vb);
-		Renderer::current()->drawBuffer(vb, GL_LINES, flags, view, proj, model);
-		Renderer::current()->deleteBuffer(vb);
+		renderer->bindBuffer(vb);
+		renderer->drawBuffer(vb, GL_LINES, flags, view, proj, model);
+		renderer->deleteBuffer(vb);
 	}
 
-	void Primitives::wireCube(glm::mat4& view, glm::mat4& proj, glm::mat4& model, glm::vec3 size, glm::vec3 center, Color color, UInt32 flags)
+	void Primitives::wireCube(Renderer* renderer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model, glm::vec3 size, glm::vec3 center, Color color, unsigned int flags)
 	{
 		Core::List<Core::Vertex> verts;
 
@@ -80,10 +80,10 @@ namespace Core
 		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), { 0, 0 }, color));
 		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), { 0, 0 }, color));
 
-		Core::Primitives::lines(view, proj, model, verts.ptr(), verts.count(), flags);
+		Core::Primitives::lines(renderer, material, view, proj, model, verts.ptr(), verts.count(), flags);
 	}
 
-	void Primitives::wireMesh(glm::mat4& view, glm::mat4& proj, glm::mat4& model, List<glm::vec3>& vertices, List<int>& indices, Color color, WireframeMode mode, UInt32 flags)
+	void Primitives::wireMesh(Renderer* renderer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model, List<glm::vec3>& vertices, List<int>& indices, Color color, WireframeMode mode, unsigned int flags)
 	{
 		if (indices.count() == 0) return;
 
@@ -141,6 +141,6 @@ namespace Core
 			}
 		}
 
-		Core::Primitives::lines(view, proj, model, verts.ptr(), verts.count(), flags);
+		Core::Primitives::lines(renderer, material, view, proj, model, verts.ptr(), verts.count(), flags);
 	}
 }

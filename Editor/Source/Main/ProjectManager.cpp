@@ -1,6 +1,5 @@
 #include "ProjectManager.h"
 
-#include <System/DeviceContext.h>
 #include <Renderer/Renderer.h>
 
 #include "../Editor/Windows/WindowManager.h"
@@ -8,64 +7,49 @@
 
 namespace Editor
 {
-    int ProjectManager::run()
+    /* WINDOW */
+
+    ProjectManager::MainWindow::MainWindow() : Window("Project Manager", 800, 400)
     {
-        ctx = new Core::DeviceContext();
-
-        bool result = init();
-        if (result != 0)
-        {
-            return result;
-        }
-
-        loop();
-        destroy();
-
-        delete ctx;
-
-        return 0;
-    }
-
-    int ProjectManager::init()
-    {
-        if (ctx->createWindow("Project Manager", 800, 400) != 0)
-            return -1;
-
         windowManager = new WindowManager();
+        windowManager->setTime(_time);
+        windowManager->setRenderer(_renderer);
+        windowManager->setAssetManager(_assetManager);
+        windowManager->setInputManager(_inputManager);
 
         ProjectManagerWindow* projectManagerWindow = windowManager->addWindow<ProjectManagerWindow*>();
         projectManagerWindow->setCanAcceptDocking(false);
         projectManagerWindow->setCanDock(false);
-
-        isRunning = true;
-
-        return 0;
     }
 
-    void ProjectManager::loop()
+    ProjectManager::MainWindow::~MainWindow()
     {
-        while (isRunning)
-        {
-            ctx->updateWindow(isRunning);
+        delete windowManager;
+        windowManager = nullptr;
+    }
 
-            //** Render UI begin **//
-            int width = ctx->getWindowWidth();
-            int height = ctx->getWindowHeight();
+    void ProjectManager::MainWindow::update() {}
 
-            Core::Renderer::current()->setViewportSize(width, height);
-            Core::Renderer::current()->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
+    void ProjectManager::MainWindow::render()
+    {
+        _renderer->setViewportSize(_width, _height);
+        _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
-            Core::Renderer::current()->beginUI();
-            windowManager->update(width, height);
-            Core::Renderer::current()->endUI();
-            //** Render UI end **//
+        _renderer->beginUI();
+        windowManager->update(_width, _height);
+        _renderer->endUI();
+    }
 
-            ctx->swapWindow();
-        }
+    /* PROJECT MANAGER */
+
+    void ProjectManager::init()
+    {
+        wnd = new MainWindow();
+        addWindow(wnd);
     }
 
     void ProjectManager::destroy()
     {
-        ctx->destroyWindow();
+        wnd = nullptr;
     }
 }

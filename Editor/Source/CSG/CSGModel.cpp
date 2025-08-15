@@ -8,49 +8,48 @@
 #include <carve/csg.hpp>
 #include <carve/input.hpp>
 
+#include <Scene/Scene.h>
 #include <Scene/Object.h>
 #include <Components/Transform.h>
 #include <Components/MeshRenderer.h>
 #include <Assets/Material.h>
 #include <Assets/Mesh.h>
+#include <Assets/AssetManager.h>
 #include <Renderer/VertexBuffer.h>
 #include <Renderer/Renderer.h>
-
-#include "../Shared/Layers.h"
 
 #include "CSGBrush.h"
 #include "CSGBrushCube.h"
 
 namespace Editor
 {
-    Core::Material* CSGModel::defaultMaterial = nullptr;
+    Core::Material* CSGModel::_defaultMaterial = nullptr;
 
-	CSGModel::CSGModel()
+	CSGModel::CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
 	{
-        object = new Core::Object();
-        meshRenderer = object->addComponent<Core::MeshRenderer*>();
-		transform = object->addComponent<Core::Transform*>();
+        _renderer = renderer;
+        _scene = scene;
+        _assetManager = assetManager;
+        _object = _scene->createObject();
+        _meshRenderer = _object->addComponent<Core::MeshRenderer*>();
 
-        Core::BitSet& objectFlags = object->getFlags();
-        objectFlags.setBit(LAYER_CSG, true);
+        _nullBrush = new CSGBrush(this);
 
-        nullBrush = new CSGBrush(this);
-
-        if (defaultMaterial == nullptr)
-            defaultMaterial = new Core::Material();
+        if (_defaultMaterial == nullptr)
+            _defaultMaterial = _assetManager->createMaterial();
 	}
 
 	CSGModel::~CSGModel()
 	{
-		delete object;
-        object = nullptr;
-		transform = nullptr;
-        meshRenderer = nullptr;
+		_scene->removeObject(_object);
 
-        if (nullBrush != nullptr)
-            delete nullBrush;
+        _object = nullptr;
+        _meshRenderer = nullptr;
 
-        nullBrush = nullptr;
+        if (_nullBrush != nullptr)
+            delete _nullBrush;
+
+        _nullBrush = nullptr;
 	}
 
     void CSGModel::rebuild()
@@ -64,10 +63,13 @@ namespace Editor
 
         _subMeshes.clear();
 
-        Core::Mesh* currentMesh = meshRenderer->getMesh();
-        if (currentMesh != nullptr) delete currentMesh;
+        Core::Mesh* currentMesh = _meshRenderer->getMesh();
+        if (currentMesh != nullptr)
+        {
+            _assetManager->destroy(currentMesh);
+        }
 
-        meshRenderer->setMesh(nullptr);
+        _meshRenderer->setMesh(nullptr);
 
         carve::csg::CSG csg;
 
@@ -80,7 +82,7 @@ namespace Editor
 
         carve::poly::Polyhedron* csgGeom = nullptr;
 
-        nullBrush->rebuild();
+        _nullBrush->rebuild();
 
         //Bind attributes
         for (auto brush : _brushes)
@@ -114,7 +116,7 @@ namespace Editor
             try
             {
                 if (csgGeom == nullptr)
-                    csgGeom = csg.compute(nullBrush->getBrushPtr(), brushPtr, op);
+                    csgGeom = csg.compute(_nullBrush->getBrushPtr(), brushPtr, op);
                 else
                     csgGeom = csg.compute(csgGeom, brushPtr, op);
             }
@@ -123,7 +125,7 @@ namespace Editor
                 prevCSG = nullptr;
             }
 
-            if (prevCSG != nullptr && prevCSG != nullBrush->getBrushPtr())
+            if (prevCSG != nullptr && prevCSG != _nullBrush->getBrushPtr())
                 delete prevCSG;
         }
 
@@ -137,7 +139,7 @@ namespace Editor
         {
             auto* f = &csgGeom->faces[i];
 
-            Core::Material* mat = defaultMaterial;
+            Core::Material* mat = _defaultMaterial;
             int layer = 0;
             bool castShadows = true;
             bool smoothNormals = false;
@@ -204,28 +206,24 @@ namespace Editor
             }
         }
 
-        if (csgGeom != nullptr && csgGeom != nullBrush->getBrushPtr())
+        if (csgGeom != nullptr && csgGeom != _nullBrush->getBrushPtr())
             delete csgGeom;
 
-        Core::SubMesh** subMeshes = new Core::SubMesh*[_subMeshes.size()];
-        Core::Mesh* mesh = new Core::Mesh(subMeshes, _subMeshes.size());
+        Core::Mesh* mesh = _assetManager->createMesh(_subMeshes.size());
+        Core::SubMesh** subMeshes = mesh->getSubMeshes();
         mesh->setBoundingBox(aab);
-        meshRenderer->setMesh(mesh);
+        _meshRenderer->setMesh(mesh);
 
         for (int i = 0; i < _subMeshes.size(); ++i)
         {
             auto it = _subMeshes.begin();
             std::advance(it, i);
 
-            const Core::VertexBuffer* _vertexBuffer = Core::Renderer::current()->createBuffer(it->second->vertices.ptr(), it->second->vertices.count(), nullptr, 0);
-
-            Core::SubMesh* subMesh = new Core::SubMesh(_vertexBuffer);
-            subMesh->setMaterial(it->first);
-
-            subMeshes[i] = subMesh;
+            subMeshes[i]->setMaterial(it->first);
+            subMeshes[i]->updateVertexBuffer(it->second->vertices.ptr(), it->second->vertices.count(), nullptr, 0);
 
             it->second->vertices.clear();
-            it->second->subMesh = subMesh;
+            it->second->subMesh = subMeshes[i];
         }
 	}
 

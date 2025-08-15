@@ -42,18 +42,18 @@ namespace Editor
 		}
 	}
 
-	void TreeNode::setUserTag(int key, void* value)
+	void TreeNode::setTag(int key, void* value)
 	{
-		_userTags[key] = value;
+		_tags[key] = value;
 	}
 
-	void* TreeNode::getUserTag(int key)
+	void* TreeNode::getTag(int key)
 	{
-		if (_userTags.find(key) == _userTags.end())
+		if (_tags.find(key) == _tags.end())
 		{
 			return nullptr;
 		}
 
-		return _userTags[key];
+		return _tags[key];
 	}
 }

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <Config.h>
-
 #include "Control.h"
 
 namespace Core
@@ -15,28 +13,28 @@ namespace Editor
 	{
 	private:
 		Core::Texture* texture = nullptr;
-		UInt32 nativeTextureId = 0;
+		unsigned int nativeTextureId = 0;
 
-		UInt32 width = 0;
-		UInt32 height = 0;
+		unsigned int width = 0;
+		unsigned int height = 0;
 
 	public:
 		Image();
-		Image(UInt32 width, UInt32 height);
+		Image(unsigned int width, unsigned int height);
 		virtual ~Image();
 
 		virtual void update();
 
-		void setWidth(UInt32 value) { width = value; }
-		UInt32 getWidth() { return width; }
+		void setWidth(unsigned int value) { width = value; }
+		unsigned int getWidth() { return width; }
 
-		void setHeight(UInt32 value) { height = value; }
-		UInt32 getHeight() { return height; }
+		void setHeight(unsigned int value) { height = value; }
+		unsigned int getHeight() { return height; }
 
 		void setTexture(Core::Texture* value) { texture = value; }
 		Core::Texture* getTexture() { return texture; }
 
-		void setNativeTextureId(UInt32 value) { nativeTextureId = value; }
-		UInt32 getNativeTextureId() { return nativeTextureId; }
+		void setNativeTextureId(unsigned int value) { nativeTextureId = value; }
+		unsigned int getNativeTextureId() { return nativeTextureId; }
 	};
 }

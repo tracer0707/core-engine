@@ -1,34 +1,13 @@
-#include <System/DeviceContext.h>
-
-#include "Main/EditorBase.h"
+#include "Main/Editor.h"
 #include "Main/ProjectManager.h"
-
-static const char* getErrorString(int error)
-{
-    switch (error)
-    {
-    case -1:
-        return "Create window failed";
-    default:
-        return "Unknown error";
-    }
-}
 
 int main(int argc, char* argv[])
 {
     Editor::ProjectManager projectManager;
-    int result = projectManager.run();
-    if (result != 0)
-    {
-        fprintf(stderr, "Error: %s\n", getErrorString(result));
-    }
+    projectManager.run();
     
-    Editor::EditorBase editorBase;
-    result = editorBase.run();
-    if (result != 0)
-    {
-        fprintf(stderr, "Error: %s\n", getErrorString(result));
-    }
+    Editor::Editor editor;
+    editor.run();
 
     return 0;
 }

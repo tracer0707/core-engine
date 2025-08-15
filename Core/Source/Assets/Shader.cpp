@@ -1,23 +1,28 @@
 #include "Shader.h"
 
+#include "../Renderer/Renderer.h"
+
 namespace Core
 {
+    Shader::Shader(Renderer* renderer, UString vertexSrc, UString fragmentSrc)
+    {
+        _renderer = renderer;
+        _nativeId = _renderer->createProgram(vertexSrc, fragmentSrc);
+    }
+
     Shader::~Shader()
     {
-        if (nativeId != nullptr)
+        if (_nativeId != nullptr)
         {
-            Renderer::current()->deleteProgram(nativeId);
-            nativeId = nullptr;
+            _renderer->deleteProgram(_nativeId);
+            _nativeId = nullptr;
         }
+
+        _renderer = nullptr;
     }
 
-    const void Shader::loadFromString(UString vertexSrc, UString fragmentSrc)
+    void Shader::bind()
     {
-        nativeId = Renderer::current()->createProgram(vertexSrc, fragmentSrc);
-    }
-
-    const void Shader::bind()
-    {
-        Renderer::current()->bindProgram(nativeId);
+        _renderer->bindProgram(_nativeId);
     }
 }

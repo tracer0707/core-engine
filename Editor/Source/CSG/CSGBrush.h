@@ -12,7 +12,7 @@ namespace Core
 {
 	class Object;
 	class Material;
-	class Transform;
+	class Transformable;
 }
 
 namespace carve
@@ -76,8 +76,7 @@ namespace Editor
 		CSGModel* parent = nullptr;
 		bool castShadows = true;
 		BrushOperation brushOperation = BrushOperation::Add;
-		Core::Object* object = nullptr;
-		Core::Transform* transform = nullptr;
+		Core::Transformable* transform = nullptr;
 		carve::poly::Polyhedron* brushPtr = nullptr;
 
 		Core::List<glm::vec3> vertices;
@@ -111,8 +110,7 @@ namespace Editor
 			carve::interpolate::FaceAttr<Core::Uuid>* f_brushId
 		);
 
-		Core::Object* getObject() { return object; }
-		Core::Transform* getTransform() { return transform; }
+		Core::Transformable* getTransform() { return transform; }
 
 		Core::List<int> getFlatIndices();
 		Core::List<glm::vec3>& getVertices() { return vertices; }

@@ -1,62 +1,38 @@
 #include "Texture.h"
 
+#include <FreeImage.h>
+
+#include "../Classes/bc7compressor.h"
+#include "../Classes/TextureUtils.h"
 #include "../Renderer/Renderer.h"
-#include <GL/glew.h>
 
 namespace Core
 {
-	Texture::Texture()
+	Texture::Texture(Renderer* renderer, FIBITMAP* bitmap, TextureFormat format)
 	{
+		_renderer = renderer;
+		_bitmap = bitmap;
+		_format = format;
 
-	}
+		makeSquare();
+		updateSize();
 
-	Texture::~Texture()
-	{
-		if (_bitmap != nullptr)
-			delete _bitmap;
-
-		_bitmap = nullptr;
-
-		Renderer::current()->deleteTexture(nativeId);
-		nativeId = 0;
-	}
-
-	Texture* Texture::loadFromFile(UString fileName, TextureFormat fmt)
-	{
-		Texture* tex = new Texture();
-		tex->format = fmt;
-
-		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(ToStdString(fileName).c_str());
-		FIBITMAP* texture = FreeImage_Load(_fmt, ToStdString(fileName).c_str());
-		
-		if (FreeImage_GetBPP(texture) != 32)
+		if (format == TextureFormat::RGBA8)
 		{
-			FIBITMAP* convert = FreeImage_ConvertTo32Bits(texture);
-			FreeImage_Unload(texture);
-			texture = convert;
+			unsigned char* data = FreeImage_GetBits(_bitmap);
+			_nativeId = _renderer->createTexture(data, _width, _height, 0, format);
 		}
-
-		tex->_bitmap = texture;
-		tex->updateSize();
-
-		tex->makeSquare();
-
-		if (fmt == TextureFormat::RGBA8)
-		{
-			unsigned char* data = FreeImage_GetBits(tex->_bitmap);
-			tex->nativeId = Renderer::current()->createTexture(data, tex->getWidth(), tex->getHeight(), 0, fmt);
-		}
-		else if (fmt == TextureFormat::BC7)
+		else if (format == TextureFormat::BC7)
 		{
 			color_quad_u8_vec pixels;
-			uint32_t imageSize = (((tex->width + 3) & ~3) * ((tex->height + 3) & ~3) * 8) >> 3;
+			uint32_t imageSize = (((_width + 3) & ~3) * ((_height + 3) & ~3) * 8) >> 3;
 			unsigned char* newPixels = new unsigned char[imageSize];
-			copyPixels(pixels, tex->_bitmap, tex->width, tex->height);
+			TextureUtils::copyPixels(pixels, _bitmap, _width, _height);
 			int size = 0;
-			bc7compress(pixels, tex->width, tex->height, newPixels, size, 1);
+			bc7compress(pixels, _width, _height, newPixels, size, 1);
 			pixels.clear();
 
-			tex->nativeId = Renderer::current()->createTexture(newPixels, tex->getWidth(), tex->getHeight(), size, fmt);
+			_nativeId = _renderer->createTexture(newPixels, _width, _height, size, format);
 
 			delete[] newPixels;
 		}
@@ -64,43 +40,17 @@ namespace Core
 		{
 			throw "Texture format is unsupported";
 		}
-
-		FreeImage_Unload(tex->_bitmap);
-
-		return tex;
 	}
 
-	Texture* Texture::loadFromBytes(unsigned char* data, int w, int h, int bpp, TextureFormat fmt)
+	Texture::~Texture()
 	{
-		Texture* tex = new Texture();
-		tex->format = fmt;
+		if (_bitmap != nullptr)
+			delete _bitmap;
 
-		tex->_bitmap = FreeImage_Allocate(w, h, bpp * 8, 8, 8, 8);
-		for (std::int32_t i = 0; i < h; ++i)
-		{
-			BYTE* bits = FreeImage_GetScanLine(tex->_bitmap, h - 1 - i);
-			for (std::int32_t j = 0; j < w; ++j)
-			{
-				bits[0] = data[(i * w + j) * 4 + 2];
-				bits[1] = data[(i * w + j) * 4 + 1];
-				bits[2] = data[(i * w + j) * 4 + 0];
-				bits[3] = data[(i * w + j) * 4 + 3];
-				bits += 4;
-			}
-		}
-
-		FIBITMAP* conv = FreeImage_ConvertTo32Bits(tex->_bitmap);
-		FreeImage_Unload(tex->_bitmap);
-		tex->_bitmap = conv;
-
-		tex->updateSize();
-
-		unsigned char* _data = FreeImage_GetBits(tex->_bitmap);
-		tex->nativeId = Renderer::current()->createTexture(_data, tex->getWidth(), tex->getHeight(), 0, TextureFormat::RGBA8);
-
-		FreeImage_Unload(tex->_bitmap);
-
-		return tex;
+		_renderer->deleteTexture(_nativeId);
+		_bitmap = nullptr;
+		_renderer = nullptr;
+		_nativeId = 0;
 	}
 
 	void Texture::makeSquare()
@@ -136,38 +86,6 @@ namespace Core
 		}
 	}
 
-	void Texture::copyPixels(color_quad_u8_vec& dst, FIBITMAP* src, int width, int height)
-	{
-		BYTE* pixels = (BYTE*)FreeImage_GetBits(src);
-		FIBITMAP* alphaChannel = FreeImage_GetChannel(src, FREE_IMAGE_COLOR_CHANNEL::FICC_ALPHA);
-		BYTE* bits = FreeImage_GetBits(alphaChannel);
-
-		int pixelsCount = width * height;
-		dst.resize(pixelsCount);
-
-		int pos = 0;
-		for (int i = 0; i < width; ++i)
-		{
-			for (int j = 0; j < height; ++j)
-			{
-				color_quad_u8 pixel;
-				RGBQUAD rgb;
-				FreeImage_GetPixelColor(src, j, i, &rgb);
-
-				BYTE alpha = 255;
-				if (alphaChannel != nullptr)
-					alpha = pixels[pos * 4 + 3];
-
-				pixel.set(rgb.rgbRed, rgb.rgbGreen, rgb.rgbBlue, alpha);
-				dst[pos] = pixel;
-				++pos;
-			}
-		}
-
-		if (alphaChannel != nullptr)
-			FreeImage_Unload(alphaChannel);
-	}
-
 	void Texture::rescale(int newW, int newH)
 	{
 		FIBITMAP* scaled = FreeImage_Rescale(_bitmap, newW, newH, FREE_IMAGE_FILTER::FILTER_BOX);
@@ -179,12 +97,12 @@ namespace Core
 
 	void Texture::updateSize()
 	{
-		width = FreeImage_GetWidth(_bitmap);
-		height = FreeImage_GetHeight(_bitmap);
+		_width = FreeImage_GetWidth(_bitmap);
+		_height = FreeImage_GetHeight(_bitmap);
 	}
 
 	void Texture::bind(const char* name, int slot)
 	{
-		Renderer::current()->bindTexture(nativeId, name, slot);
+		_renderer->bindTexture(_nativeId, name, slot);
 	}
 }

@@ -18,9 +18,9 @@ namespace Editor
 		}
 	}
 
-	static void findNodeByUserObjectRecursive(void* value, TreeNode* root, TreeNode** out)
+	static void findNodeByTagRecursive(int key, void* value, TreeNode* root, TreeNode** out)
 	{
-		if (root->getUserObject() == value)
+		if (root->getTag(key) == value)
 		{
 			*out = root;
 			return;
@@ -29,18 +29,45 @@ namespace Editor
 		for (int i = 0; i < root->getControlsCount(); ++i)
 		{
 			if (*out != nullptr) return;
-			findNodeByUserObjectRecursive(value, (TreeNode*)root->getControl(i), out);
+			findNodeByTagRecursive(key, value, (TreeNode*)root->getControl(i), out);
 		}
 	}
 
-	TreeNode* TreeView::findNodeByUserObject(void* value)
+	static void findNodeByObjectRecursive(void* value, TreeNode* root, TreeNode** out)
+	{
+		if (root->getObject() == value)
+		{
+			*out = root;
+			return;
+		}
+
+		for (int i = 0; i < root->getControlsCount(); ++i)
+		{
+			if (*out != nullptr) return;
+			findNodeByObjectRecursive(value, (TreeNode*)root->getControl(i), out);
+		}
+	}
+
+	TreeNode* TreeView::findNodeByTag(int key, void* value)
 	{
 		TreeNode* node = nullptr;
 
 		for (int i = 0; i < _controls.count(); ++i)
 		{
-			findNodeByUserObjectRecursive(value, (TreeNode*)_controls.get(i), &node);
+			findNodeByTagRecursive(key, value, (TreeNode*)_controls.get(i), &node);
+			if (node != nullptr) break;
+		}
 
+		return node;
+	}
+
+	TreeNode* TreeView::findNodeByObject(void* value)
+	{
+		TreeNode* node = nullptr;
+
+		for (int i = 0; i < _controls.count(); ++i)
+		{
+			findNodeByObjectRecursive(value, (TreeNode*)_controls.get(i), &node);
 			if (node != nullptr) break;
 		}
 

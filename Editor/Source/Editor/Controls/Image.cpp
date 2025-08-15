@@ -11,7 +11,7 @@ namespace Editor
 	{
 	}
 
-	Image::Image(UInt32 width, UInt32 height)
+	Image::Image(unsigned int width, unsigned int height)
 	{
 		this->width = width;
 		this->height = height;
@@ -31,7 +31,7 @@ namespace Editor
 		if (w == 0) w = ImGui::GetContentRegionAvail().x;
 		if (h == 0) h = ImGui::GetContentRegionAvail().y;
 
-		UInt32 texId = nativeTextureId;
+		unsigned int texId = nativeTextureId;
 		if (texture != nullptr) texId = texture->getNativeId();
 
 		ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));

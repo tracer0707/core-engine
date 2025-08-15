@@ -10,9 +10,11 @@ namespace Core
 {
 	class Object;
 	class MeshRenderer;
-	class Transform;
 	class Material;
 	class SubMesh;
+	class Scene;
+	class Renderer;
+	class AssetManager;
 	struct Vertex;
 }
 
@@ -31,28 +33,29 @@ namespace Editor
 			Core::List<Core::Uuid> brushIds;
 		};
 
-		UString name = "";
+		UString _name = "";
 		Core::List<CSGBrush*> _brushes;
 		std::map<Core::Material*, SubMeshInfo*> _subMeshes;
 
-		Core::Object* object = nullptr;
-		Core::Transform* transform = nullptr;
-		Core::MeshRenderer* meshRenderer = nullptr;
+		Core::Renderer* _renderer = nullptr;
+		Core::Scene* _scene = nullptr;
+		Core::AssetManager* _assetManager = nullptr;
+		Core::Object* _object = nullptr;
+		Core::MeshRenderer* _meshRenderer = nullptr;
 
-		static Core::Material* defaultMaterial;
+		static Core::Material* _defaultMaterial;
 
-		CSGBrush* nullBrush = nullptr;
+		CSGBrush* _nullBrush = nullptr;
 
 	public:
-		CSGModel();
+		CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager);
 		~CSGModel();
 
-		UString getName() { return name; }
-		void setName(UString value) { name = value; }
+		UString getName() { return _name; }
+		void setName(UString value) { _name = value; }
 
-		Core::Object* getObject() { return object; }
-		Core::Transform* getTransform() { return transform; }
-		Core::MeshRenderer* getMeshRenderer() { return meshRenderer; }
+		Core::Object* getObject() { return _object; }
+		Core::MeshRenderer* getMeshRenderer() { return _meshRenderer; }
 
 		CSGBrushCube* createCubeBrush();
 

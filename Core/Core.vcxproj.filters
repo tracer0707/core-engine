@@ -40,6 +40,9 @@
     <Filter Include="Исходные файлы\Scene">
       <UniqueIdentifier>{2083552b-33df-4c69-b3d8-cf3dacad79f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Interface">
+      <UniqueIdentifier>{89f5cfd6-955d-4332-aa69-294baa023074}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Shared\IO.cpp">
@@ -138,9 +141,6 @@
     <ClCompile Include="Source\System\InputManager.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\DeviceContext.cpp">
-      <Filter>Исходные файлы\System</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Shared\List.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
@@ -167,6 +167,21 @@
     </ClCompile>
     <ClCompile Include="Source\Renderer\Color.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Application.cpp">
+      <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\System\Window.cpp">
+      <Filter>Исходные файлы\System</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Assets\AssetManager.cpp">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Classes\TextureUtils.cpp">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Interface\Transformable.cpp">
+      <Filter>Исходные файлы\Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,9 +223,6 @@
     </ClInclude>
     <ClInclude Include="Source\Components\Camera.h">
       <Filter>Исходные файлы\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Config.h">
-      <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Source\Assets\Texture.h">
       <Filter>Исходные файлы\Assets</Filter>
@@ -278,9 +290,6 @@
     <ClInclude Include="Source\System\InputManager.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\DeviceContext.h">
-      <Filter>Исходные файлы\System</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Shared\List.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
@@ -310,6 +319,24 @@
     </ClInclude>
     <ClInclude Include="Source\Shared\Uuid.h">
       <Filter>Исходные файлы\Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Application.h">
+      <Filter>Исходные файлы\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\System\Window.h">
+      <Filter>Исходные файлы\System</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Assets\AssetManager.h">
+      <Filter>Исходные файлы\Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Config.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Classes\TextureUtils.h">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Interface\Transformable.h">
+      <Filter>Исходные файлы\Interface</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

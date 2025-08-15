@@ -1,7 +1,9 @@
-#include "DeviceContext.h"
+#include "Window.h"
 
+#include <stdexcept>
 #include <SDL/SDL.h>
 
+#include "../Assets/AssetManager.h"
 #include "../Renderer/Renderer.h"
 #include "../System/EventHandler.h"
 #include "../System/InputManager.h"
@@ -9,45 +11,54 @@
 
 namespace Core
 {
-    int DeviceContext::createWindow(UString title, int width, int height)
+    Window::Window(UString title, int width, int height)
     {
-        if (window != nullptr)
-        {
-            return -1;
-        }
+        _width = width;
+        _height = height;
 
-        windowWidth = width;
-        windowHeight = height;
-
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
-
-        window = SDL_CreateWindow(ToStdString(title).c_str(),
+        _ctx = SDL_CreateWindow(ToStdString(title).c_str(),
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
-            width,
-            height,
+            _width,
+            _height,
             SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
-        if (window == NULL)
+        if (_ctx == NULL)
         {
-            return -1;
+            throw new std::runtime_error("Create window failed");
         }
 
-        renderer = Core::Renderer::init(this);
-
-        return 0;
+        _renderer = Renderer::init(_ctx);
+        _assetManager = new AssetManager(_renderer);
+        _time = new Time();
+        _inputManager = new InputManager();
     }
 
-    void DeviceContext::setWindowTitle(UString title)
+    Window::~Window()
     {
-        SDL_SetWindowTitle((SDL_Window*)window, ToStdString(title).c_str());
+        _renderer->makeCurrent();
+        delete _assetManager;
+        delete _time;
+        delete _inputManager;
+        Renderer::destroy(_renderer);
+        SDL_DestroyWindow((SDL_Window*)_ctx);
+        _ctx = nullptr;
+        _assetManager = nullptr;
+        _renderer = nullptr;
+        _time = nullptr;
+        _inputManager = nullptr;
     }
 
-    void DeviceContext::updateWindow(bool& isRunning)
+    void Window::setTitle(UString title)
+    {
+        SDL_SetWindowTitle((SDL_Window*)_ctx, ToStdString(title).c_str());
+    }
+
+    void Window::internalUpdate(bool& isRunning)
     {
         SDL_Event event;
-        Time::beginTimer();
-        renderer->makeCurrent();
+        _time->beginTimer();
+        _renderer->makeCurrent();
 
         while (SDL_PollEvent(&event))
         {
@@ -67,7 +78,7 @@ namespace Core
                         case SDL_WINDOWEVENT_RESIZED:
                         case SDL_WINDOWEVENT_SIZE_CHANGED:
                         {
-                            SDL_GetWindowSize((SDL_Window*)window, &windowWidth, &windowHeight);
+                            SDL_GetWindowSize((SDL_Window*)_ctx, &_width, &_height);
                             break;
                         }
                         case SDL_WINDOWEVENT_RESTORED:
@@ -94,28 +105,18 @@ namespace Core
                     break;
             }
 
-            InputManager::singleton()->updateKeys(&event);
-            renderer->processEvents(&event);
+            _inputManager->updateKeys(&event);
+            _renderer->processEvents(&event);
         }
 
-        InputManager::singleton()->updateMouse(window);
+        _inputManager->updateMouse(_ctx);
         EventHandler::singleton()->processEvents();
-    }
 
-    void DeviceContext::swapWindow()
-    {
-        InputManager::singleton()->reset();
-        renderer->makeCurrent();
-        renderer->swapBuffers();
-        Time::endTimer();
-    }
+        update();
+        render();
 
-    void DeviceContext::destroyWindow()
-    {
-        renderer->makeCurrent();
-        Core::Renderer::destroy(renderer);
-        SDL_DestroyWindow((SDL_Window*)window);
-        window = nullptr;
-        SDL_Quit();
+        _inputManager->reset();
+        _renderer->swapBuffers();
+        _time->endTimer();
     }
 }

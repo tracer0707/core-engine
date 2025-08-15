@@ -10,7 +10,6 @@
 #include <Components/Transform.h>
 #include <Renderer/VertexBuffer.h>
 
-#include "../Shared/Layers.h"
 #include "../Editor/Modifiers/ModifierManager.h"
 #include "../Editor/Modifiers/CSGModifier.h"
 #include "../CSG/CSGModel.h"
@@ -29,12 +28,14 @@ namespace Editor
 
 		for (auto* obj : objects)
 		{
-			if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
+			/*if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
 			{
 				if (!obj->getFlags().getBit(LAYER_CSG)) continue;
-			}
+			}*/
 
 			Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
+			if (meshRenderer == nullptr) continue;
+
 			auto aab = meshRenderer->getWorldBoundingBox();
 			auto boundsHit = aab.intersects(ray.origin, ray.direction);
 

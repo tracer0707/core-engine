@@ -40,7 +40,7 @@ namespace Editor
 		_camera = camera;
 		_windowManager = windowManager;
 
-		Core::InputManager::singleton()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		_windowManager->getInputManager()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 		{
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
@@ -59,7 +59,7 @@ namespace Editor
 			}
 		});
 
-		Core::InputManager::singleton()->subscribeMouseMoveEvent([=](int x, int y)
+		_windowManager->getInputManager()->subscribeMouseMoveEvent([=](int x, int y)
 		{
 			if (_isMouseLPressed)
 			{
@@ -67,7 +67,7 @@ namespace Editor
 			}
 		});
 
-		Core::InputManager::singleton()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
+		_windowManager->getInputManager()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
 		{
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT
 				&& !_isMouseRPressed
@@ -131,8 +131,8 @@ namespace Editor
 						mod->setCurrentBrush(brush);
 
 						Gizmo::singleton()->setTransform(brush->getTransform());
-						TreeNode* node = treeView->findNodeByUserObject(brush->getObject());
-						treeView->selectNode(node, false);
+						//TreeNode* node = treeView->findNodeByObject(brush->getObject());
+						//treeView->selectNode(node, false);
 
 						break;
 					}

@@ -9,7 +9,7 @@
 
 namespace Editor
 {
-	void Rendering::renderGrid(Core::Camera* camera)
+	void Rendering::renderGrid(Core::Renderer* renderer, Core::Material* material, Core::Camera* camera)
 	{
 		Core::Color lineColor = Core::Color(0.8f, 0.8f, 0.8f, 0.8f);
 		Core::Color xColor = Core::Color(0.8f, 0.0f, 0.0f, 0.8f);
@@ -88,7 +88,7 @@ namespace Editor
 			verts2.add(v4);
 		}
 
-		UInt32 flags = C_CCW
+		unsigned int flags = C_CCW
 			| C_CULL_BACK
 			| C_ENABLE_DEPTH_TEST
 			| C_ENABLE_DEPTH_WRITE
@@ -99,9 +99,9 @@ namespace Editor
 		glm::mat4 proj = camera->getProjectionMatrix();
 		glm::mat4 mtx = glm::identity<glm::mat4>();
 
-		Core::Primitives::lines(view, proj, mtx, verts1.ptr(), verts1.count(), flags);
+		Core::Primitives::lines(renderer, material, view, proj, mtx, verts1.ptr(), verts1.count(), flags);
 
 		if (verts2.count() > 0)
-			Core::Primitives::lines(view, proj, mtx, verts2.ptr(), verts2.count(), flags);
+			Core::Primitives::lines(renderer, material, view, proj, mtx, verts2.ptr(), verts2.count(), flags);
 	}
 }

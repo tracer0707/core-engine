@@ -1,14 +1,12 @@
 #pragma once
 
-#include "../Config.h"
-
 namespace Core
 {
 	class FrameBuffer
 	{
 	public:
-		UInt32 frameBuffer = 0;
-		UInt32 colorTexture = 0;
-		UInt32 depthTexture = 0;
+		unsigned int frameBuffer = 0;
+		unsigned int colorTexture = 0;
+		unsigned int depthTexture = 0;
 	};
 }

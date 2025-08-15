@@ -10,7 +10,8 @@
 namespace Core
 {
 	class Camera;
-	class Transform;
+	class Transformable;
+	class InputManager;
 }
 
 namespace Editor
@@ -39,7 +40,8 @@ namespace Editor
 
 		static Gizmo _singleton;
 
-		Core::Transform* _transform = nullptr;
+		Core::InputManager* _inputManager = nullptr;
+		Core::Transformable* _transform = nullptr;
 
 		bool _isUsing = false;
 		bool _lmbDown = false;
@@ -50,8 +52,8 @@ namespace Editor
 	public:
 		static Gizmo* singleton() { return &_singleton; }
 
-		void setTransform(Core::Transform* value) { _transform = value; }
-		Core::Transform* getTransform() { return _transform; }
+		void setTransform(Core::Transformable* value) { _transform = value; }
+		Core::Transformable* getTransform() { return _transform; }
 
 		TransformSpace getTransformSpace() { return transformSpace; }
 		void setTransformSpace(TransformSpace value) { transformSpace = value; }
@@ -62,7 +64,7 @@ namespace Editor
 		Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
 		void unsubscribeManipulateEndEvent(Core::Uuid id);
 
-		void init();
+		void init(Core::InputManager* inputManager);
 		void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
 	};
 }

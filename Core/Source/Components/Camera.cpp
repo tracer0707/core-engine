@@ -11,10 +11,14 @@
 
 namespace Core
 {
-    Camera::Camera(Object* owner) : Component(owner) {}
+    Camera::Camera(Object* owner, Renderer* renderer) : Component(owner)
+    {
+        _renderer = renderer;
+    }
+
     Camera::~Camera() {}
 
-    UInt32 Camera::getComponentType()
+    unsigned int Camera::getComponentType()
     {
         return COMPONENT_CAMERA;
     }
@@ -38,8 +42,8 @@ namespace Core
 
     const glm::mat4 Camera::getProjectionMatrix()
     {
-        int w = Renderer::current()->getWidth();
-        int h = Renderer::current()->getHeight();
+        int w = _renderer->getWidth();
+        int h = _renderer->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -54,8 +58,8 @@ namespace Core
 
     const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY)
     {
-        float screenW = Renderer::current()->getWidth();
-        float screenH = Renderer::current()->getHeight();
+        float screenW = _renderer->getWidth();
+        float screenH = _renderer->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -86,8 +90,8 @@ namespace Core
         Transform* transform = owner->findComponent<Transform*>();
         if (transform == nullptr) return glm::vec3(0.0f);
 
-        float width = Renderer::current()->getWidth();
-        float height = Renderer::current()->getHeight();
+        float width = _renderer->getWidth();
+        float height = _renderer->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -120,8 +124,8 @@ namespace Core
 
     const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY)
     {
-        float width = Renderer::current()->getWidth();
-        float height = Renderer::current()->getHeight();
+        float width = _renderer->getWidth();
+        float height = _renderer->getHeight();
 
         if (renderTexture != nullptr)
         {
