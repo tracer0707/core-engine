@@ -40,27 +40,27 @@ namespace Editor
 			virtual void update();
 			virtual void render();
 
-			Core::Object* cameraObject = nullptr;
-			Core::Camera* camera = nullptr;
-			Core::Scene* scene = nullptr;
-			Core::RenderTexture* renderTexture = nullptr;
+			Core::Object* _cameraObject = nullptr;
+			Core::Camera* _camera = nullptr;
+			Core::Scene* _scene = nullptr;
+			Core::RenderTexture* _renderTexture = nullptr;
 
-			WindowManager* windowManager = nullptr;
+			WindowManager* _windowManager = nullptr;
 
-			MainMenu* mainMenu = nullptr;
-			SceneWindow* sceneWindow = nullptr;
-			ObjectWindow* objectWindow = nullptr;
-			CSGObjectWindow* csgObjectWindow = nullptr;
-			InspectorWindow* inspectorWindow = nullptr;
-			HierarchyWindow* hierarchyWindow = nullptr;
-			AssetsWindow* assetsWindow = nullptr;
-			GizmoWindow* gizmoWindow = nullptr;
-			CSGEditWindow* csgEditWindow = nullptr;
+			MainMenu* _mainMenu = nullptr;
+			SceneWindow* _sceneWindow = nullptr;
+			ObjectWindow* _objectWindow = nullptr;
+			CSGObjectWindow* _csgObjectWindow = nullptr;
+			InspectorWindow* _inspectorWindow = nullptr;
+			HierarchyWindow* _hierarchyWindow = nullptr;
+			AssetsWindow* _assetsWindow = nullptr;
+			GizmoWindow* _gizmoWindow = nullptr;
+			CSGEditWindow* _csgEditWindow = nullptr;
 
-			CSGModifier* csgModifier = nullptr;
+			CSGModifier* _csgModifier = nullptr;
 		};
 	
-		MainWindow* wnd = nullptr;
+		MainWindow* _wnd = nullptr;
 
 		virtual void init();
 		virtual void destroy();

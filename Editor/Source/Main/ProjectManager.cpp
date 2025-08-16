@@ -11,21 +11,21 @@ namespace Editor
 
     ProjectManager::MainWindow::MainWindow() : Window("Project Manager", 800, 400)
     {
-        windowManager = new WindowManager();
-        windowManager->setTime(_time);
-        windowManager->setRenderer(_renderer);
-        windowManager->setAssetManager(_assetManager);
-        windowManager->setInputManager(_inputManager);
+        _windowManager = new WindowManager();
+        _windowManager->setTime(_time);
+        _windowManager->setRenderer(_renderer);
+        _windowManager->setAssetManager(_assetManager);
+        _windowManager->setInputManager(_inputManager);
 
-        ProjectManagerWindow* projectManagerWindow = windowManager->addWindow<ProjectManagerWindow*>();
+        ProjectManagerWindow* projectManagerWindow = _windowManager->addWindow<ProjectManagerWindow*>();
         projectManagerWindow->setCanAcceptDocking(false);
         projectManagerWindow->setCanDock(false);
     }
 
     ProjectManager::MainWindow::~MainWindow()
     {
-        delete windowManager;
-        windowManager = nullptr;
+        delete _windowManager;
+        _windowManager = nullptr;
     }
 
     void ProjectManager::MainWindow::update() {}
@@ -36,7 +36,7 @@ namespace Editor
         _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
         _renderer->beginUI();
-        windowManager->update(_width, _height);
+        _windowManager->update(_width, _height);
         _renderer->endUI();
     }
 
@@ -44,12 +44,12 @@ namespace Editor
 
     void ProjectManager::init()
     {
-        wnd = new MainWindow();
-        addWindow(wnd);
+        _wnd = new MainWindow();
+        addWindow(_wnd);
     }
 
     void ProjectManager::destroy()
     {
-        wnd = nullptr;
+        _wnd = nullptr;
     }
 }

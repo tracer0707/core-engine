@@ -35,8 +35,8 @@ namespace Editor
 		typedef std::function<void()> GizmoEvent;
 
 	private:
-		TransformSpace transformSpace = TransformSpace::World;
-		TransformMode transformMode = TransformMode::Translate;
+		TransformSpace _transformSpace = TransformSpace::World;
+		TransformMode _transformMode = TransformMode::Translate;
 
 		static Gizmo _singleton;
 
@@ -55,11 +55,11 @@ namespace Editor
 		void setTransform(Core::Transformable* value) { _transform = value; }
 		Core::Transformable* getTransform() { return _transform; }
 
-		TransformSpace getTransformSpace() { return transformSpace; }
-		void setTransformSpace(TransformSpace value) { transformSpace = value; }
+		TransformSpace getTransformSpace() { return _transformSpace; }
+		void setTransformSpace(TransformSpace value) { _transformSpace = value; }
 
-		TransformMode getTransformMode() { return transformMode; }
-		void setTransformMode(TransformMode value) { transformMode = value; }
+		TransformMode getTransformMode() { return _transformMode; }
+		void setTransformMode(TransformMode value) { _transformMode = value; }
 
 		Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
 		void unsubscribeManipulateEndEvent(Core::Uuid id);

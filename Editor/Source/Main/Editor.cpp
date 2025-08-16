@@ -36,69 +36,69 @@ namespace Editor
 
     Editor::MainWindow::MainWindow() : Window("Project Manager", 1366, 768)
     {
-        scene = new Core::Scene(_renderer);
+        _scene = new Core::Scene(_renderer);
         
-        cameraObject = scene->createObject();
-        camera = cameraObject->addComponent<Core::Camera*>();
-        Core::Transform* cameraTransform = (Core::Transform*)cameraObject->findComponent<Core::Transform*>();
+        _cameraObject = _scene->createObject();
+        _camera = _cameraObject->addComponent<Core::Camera*>();
+        Core::Transform* cameraTransform = (Core::Transform*)_cameraObject->findComponent<Core::Transform*>();
 
-        renderTexture = _assetManager->createRenderTexture(512, 512);
-        camera->setRenderTexture(renderTexture);
+        _renderTexture = _assetManager->createRenderTexture(512, 512);
+        _camera->setRenderTexture(_renderTexture);
 
-        scene->setMainCamera(camera);
+        _scene->setMainCamera(_camera);
 
         cameraTransform->setPosition(glm::vec3(0, 5, 5));
         cameraTransform->setRotation(glm::vec3(-10, 0, 0));
 
-        windowManager = new WindowManager();
-        windowManager->setTime(_time);
-        windowManager->setRenderer(_renderer);
-        windowManager->setAssetManager(_assetManager);
-        windowManager->setInputManager(_inputManager);
+        _windowManager = new WindowManager();
+        _windowManager->setTime(_time);
+        _windowManager->setRenderer(_renderer);
+        _windowManager->setAssetManager(_assetManager);
+        _windowManager->setInputManager(_inputManager);
 
-        csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
+        _csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
 
-        mainMenu = new MainMenu();
-        windowManager->setMenuBar(mainMenu->getMenuBar());
+        _mainMenu = new MainMenu();
+        _windowManager->setMenuBar(_mainMenu->getMenuBar());
 
-        sceneWindow = windowManager->addWindow<SceneWindow*>();
-        sceneWindow->setTime(_time);
-        sceneWindow->setScene(scene);
-        sceneWindow->setRenderTexture(renderTexture);
+        _sceneWindow = _windowManager->addWindow<SceneWindow*>();
+        _sceneWindow->setTime(_time);
+        _sceneWindow->setScene(_scene);
+        _sceneWindow->setRenderTexture(_renderTexture);
 
-        inspectorWindow = windowManager->addWindow<InspectorWindow*>();
-        hierarchyWindow = windowManager->addWindow<HierarchyWindow*>();
-        assetsWindow = windowManager->addWindow<AssetsWindow*>();
+        _inspectorWindow = _windowManager->addWindow<InspectorWindow*>();
+        _hierarchyWindow = _windowManager->addWindow<HierarchyWindow*>();
+        _assetsWindow = _windowManager->addWindow<AssetsWindow*>();
 
-        gizmoWindow = windowManager->addWindow<GizmoWindow*>();
-        gizmoWindow->setHasTitle(false);
-        gizmoWindow->setCanAcceptDocking(false);
-        gizmoWindow->setCanDock(false);
+        _gizmoWindow = _windowManager->addWindow<GizmoWindow*>();
+        _gizmoWindow->setHasTitle(false);
+        _gizmoWindow->setCanAcceptDocking(false);
+        _gizmoWindow->setCanDock(false);
 
-        objectWindow = windowManager->addWindow<ObjectWindow*>();
-        objectWindow->setHasTitle(false);
-        objectWindow->setCanAcceptDocking(false);
-        objectWindow->setCanDock(false);
+        _objectWindow = _windowManager->addWindow<ObjectWindow*>();
+        _objectWindow->setHasTitle(false);
+        _objectWindow->setCanAcceptDocking(false);
+        _objectWindow->setCanDock(false);
 
-        csgObjectWindow = windowManager->addWindow<CSGObjectWindow*>();
-        csgObjectWindow->setHasTitle(false);
-        csgObjectWindow->setCanAcceptDocking(false);
-        csgObjectWindow->setCanDock(false);
-        csgObjectWindow->setVisible(false);
+        _csgObjectWindow = _windowManager->addWindow<CSGObjectWindow*>();
+        _csgObjectWindow->setHasTitle(false);
+        _csgObjectWindow->setCanAcceptDocking(false);
+        _csgObjectWindow->setCanDock(false);
+        _csgObjectWindow->setVisible(false);
 
-        csgEditWindow = windowManager->addWindow<CSGEditWindow*>();
-        csgEditWindow->setHasTitle(false);
-        csgEditWindow->setCanAcceptDocking(false);
-        csgEditWindow->setCanDock(false);
-        csgEditWindow->setVisible(false);
+        _csgEditWindow = _windowManager->addWindow<CSGEditWindow*>();
+        _csgEditWindow->setHasTitle(false);
+        _csgEditWindow->setCanAcceptDocking(false);
+        _csgEditWindow->setCanDock(false);
+        _csgEditWindow->setVisible(false);
 
-        ModifierManager::singleton()->init(windowManager, scene);
+        ModifierManager::singleton()->init(_windowManager, _scene);
 
-        windowManager->setOnDock([this] {
-            auto dockInspector = inspectorWindow->dock(DockDirection::Right, 0, 0.25f);
-            auto dockHierarchy = hierarchyWindow->dock(DockDirection::Right, dockInspector.area2, 0.2f);
-            auto dockAssets = assetsWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
-            auto dockScene = sceneWindow->dock(DockDirection::None, dockAssets.area2, 0.7f);
+        _windowManager->setOnDock([this] {
+            auto dockInspector = _inspectorWindow->dock(DockDirection::Right, 0, 0.25f);
+            auto dockHierarchy = _hierarchyWindow->dock(DockDirection::Right, dockInspector.area2, 0.2f);
+            auto dockAssets = _assetsWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
+            auto dockScene = _sceneWindow->dock(DockDirection::None, dockAssets.area2, 0.7f);
         });
     }
 
@@ -106,8 +106,8 @@ namespace Editor
     {
         ModifierManager::singleton()->destroy();
 
-        delete windowManager;
-        delete scene;
+        delete _windowManager;
+        delete _scene;
     }
 
     void Editor::MainWindow::update()
@@ -118,17 +118,17 @@ namespace Editor
     void Editor::MainWindow::render()
     {
         //** Render scene begin **//
-        camera->getRenderTexture()->bind();
+        _camera->getRenderTexture()->bind();
 
-        int viewportWidth = renderTexture->getWidth();
-        int viewportHeight = renderTexture->getHeight();
+        int viewportWidth = _renderTexture->getWidth();
+        int viewportHeight = _renderTexture->getHeight();
 
         _renderer->setViewportSize(viewportWidth, viewportHeight);
         _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
-        Rendering::renderGrid(_renderer, _assetManager->getDefaultMaterial(), camera);
+        Rendering::renderGrid(_renderer, _assetManager->getDefaultMaterial(), _camera);
         ModifierManager::singleton()->render();
-        scene->render();
+        _scene->render();
 
         _renderer->bindFrameBuffer(nullptr);
         //** Render scene end **//
@@ -138,7 +138,7 @@ namespace Editor
         _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
         _renderer->beginUI();
-        windowManager->update(_width, _height);
+        _windowManager->update(_width, _height);
         _renderer->endUI();
         //** Render UI end **//
 
@@ -149,12 +149,12 @@ namespace Editor
 
     void Editor::init()
     {
-        wnd = new MainWindow();
-        addWindow(wnd);
+        _wnd = new MainWindow();
+        addWindow(_wnd);
     }
 
     void Editor::destroy()
     {
-        wnd = nullptr;
+        _wnd = nullptr;
     }
 }

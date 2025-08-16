@@ -21,10 +21,10 @@ namespace Editor
 			virtual void update();
 			virtual void render();
 
-			WindowManager* windowManager = nullptr;
+			WindowManager* _windowManager = nullptr;
 		};
 
-		MainWindow* wnd = nullptr;
+		MainWindow* _wnd = nullptr;
 		
 		virtual void init();
 		virtual void destroy();
