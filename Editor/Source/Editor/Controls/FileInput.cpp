@@ -1,6 +1,7 @@
 #include "FileInput.h"
 
 #include <System/Application.h>
+#include <System/EventHandler.h>
 
 #include "LinearLayout.h"
 #include "TextInput.h"
@@ -23,8 +24,11 @@ namespace Editor
 		layout->addControl(button);
 
 		button->setOnClick([=] {
-			FileSystemDialog* dlg = new FileSystemDialog();
-			_application->addWindow(dlg);
+			application->getEventHandler()->addEvent([this]
+			{
+				FileSystemDialog* dlg = new FileSystemDialog();
+				_application->addWindow(dlg);
+			});
 		});
 
 		addControl(layout);

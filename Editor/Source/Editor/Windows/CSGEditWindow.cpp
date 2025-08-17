@@ -85,11 +85,11 @@ namespace Editor
 
 		_layoutMain->addControl(csgEditFacesBtn);
 
-		EVENT({
+		_parent->getEventHandler()->addEvent([this] {
 			activateAll(false);
 			invalidate();
 			_csgSelectBtn->setActive(true);
-		}, =);
+		});
 	}
 
 	CSGEditWindow::~CSGEditWindow()

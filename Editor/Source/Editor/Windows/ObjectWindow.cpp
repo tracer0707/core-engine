@@ -74,9 +74,10 @@ namespace Editor
 
 		layoutMain->addControl(cameraTool);
 
-		EVENT({
+		_parent->getEventHandler()->addEvent([this]
+		{
 			disableAll();
-		}, =);
+		});
 	}
 
 	ObjectWindow::~ObjectWindow()

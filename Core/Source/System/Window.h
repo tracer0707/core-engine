@@ -10,6 +10,7 @@ namespace Core
 	class AssetManager;
 	class Time;
 	class InputManager;
+	class EventHandler;
 
 	class Window
 	{
@@ -33,6 +34,7 @@ namespace Core
 		AssetManager* _assetManager = nullptr;
 		Time* _time = nullptr;
 		InputManager* _inputManager = nullptr;
+		EventHandler* _eventHandler = nullptr;
 
 		int _width = 0;
 		int _height = 0;

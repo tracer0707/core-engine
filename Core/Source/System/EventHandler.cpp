@@ -2,14 +2,11 @@
 
 namespace Core
 {
-	EventHandler EventHandler::_singleton;
-
-	EventHandler::EventHandler()
-	{
-	}
+	EventHandler::EventHandler() {}
 
 	EventHandler::~EventHandler()
 	{
+		events.clear();
 	}
 
 	void EventHandler::processEvents()

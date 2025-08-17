@@ -55,6 +55,7 @@ namespace Editor
         _windowManager->setRenderer(_renderer);
         _windowManager->setAssetManager(_assetManager);
         _windowManager->setInputManager(_inputManager);
+        _windowManager->setEventHandler(_eventHandler);
 
         _csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
 

@@ -32,6 +32,7 @@ namespace Core
         _assetManager = new AssetManager(_renderer);
         _time = new Time();
         _inputManager = new InputManager();
+        _eventHandler = new EventHandler();
 
         _opened = true;
     }
@@ -39,16 +40,21 @@ namespace Core
     Window::~Window()
     {
         _renderer->makeCurrent();
+        
         delete _assetManager;
         delete _time;
         delete _inputManager;
+        delete _eventHandler;
+
         Renderer::destroy(_renderer);
         SDL_DestroyWindow((SDL_Window*)_ctx);
+
         _ctx = nullptr;
         _assetManager = nullptr;
         _renderer = nullptr;
         _time = nullptr;
         _inputManager = nullptr;
+        _eventHandler = nullptr;
     }
 
     void Window::setTitle(UString title)
@@ -113,7 +119,7 @@ namespace Core
         _renderer->makeCurrent();
 
         _inputManager->updateMouse(_ctx);
-        EventHandler::singleton()->processEvents();
+        _eventHandler->processEvents();
 
         update();
         render();

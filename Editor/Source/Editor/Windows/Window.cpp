@@ -117,7 +117,7 @@ namespace Editor
 
 		if (cw != _clientWidth || ch != _clientHeight)
 		{
-			EVENT(
+			_parent->getEventHandler()->addEvent([=]
 			{
 				onResize(cw, ch);
 
@@ -125,7 +125,7 @@ namespace Editor
 				{
 					_onResize(cw, ch);
 				}
-			}, =);
+			});
 		}
 
 		_isHovered = ImGui::IsWindowHovered();

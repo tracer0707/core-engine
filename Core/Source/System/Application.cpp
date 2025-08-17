@@ -3,6 +3,7 @@
 #include <SDL/SDL.h>
 
 #include "Window.h"
+#include "EventHandler.h"
 
 namespace Core
 {
@@ -19,6 +20,8 @@ namespace Core
 
 	void Application::internalInit()
 	{
+		_eventHandler = new EventHandler();
+
 		init();
 
 		if (!_windows.isEmpty())
@@ -42,7 +45,6 @@ namespace Core
 					if (wndCtx != wnd->_ctx) continue;
 
 					wnd->processEvents(&event);
-					
 				}
 			}
 
@@ -77,6 +79,8 @@ namespace Core
 			{
 				_isRunning = false;
 			}
+
+			_eventHandler->processEvents();
 		}
 	}
 
@@ -89,6 +93,9 @@ namespace Core
 			delete wnd;
 		}
 
+		delete _eventHandler;
+
+		_eventHandler = nullptr;
 		_mainWindow = nullptr;
 		_windows.clear();
 	}

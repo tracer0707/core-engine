@@ -55,7 +55,7 @@ namespace Editor
 		{
 			if (_onClick != nullptr)
 			{
-				Core::EventHandler::singleton()->addEvent(_onClick);
+				_onClick();
 			}
 		}
 	}

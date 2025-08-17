@@ -113,9 +113,10 @@ namespace Editor
 
 		_layoutMain->addControl(csgPolygon);
 
-		EVENT({
+		_parent->getEventHandler()->addEvent([this]
+		{
 			invalidate();
-		}, =);
+		});
 	}
 
 	CSGObjectWindow::~CSGObjectWindow()

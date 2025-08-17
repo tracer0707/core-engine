@@ -45,13 +45,13 @@ namespace Editor
 
 	void WindowManager::invalidateAll()
 	{
-		EVENT({
+		_eventHandler->addEvent([this] {
 			for (int i = 0; i < _windows.count(); ++i)
 			{
 				Window* window = _windows.get(i);
 				window->invalidate();
 			}
-		}, =);
+		});
 	}
 
 	Window* WindowManager::addWindow(const char* name)
