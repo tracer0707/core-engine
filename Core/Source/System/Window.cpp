@@ -32,6 +32,8 @@ namespace Core
         _assetManager = new AssetManager(_renderer);
         _time = new Time();
         _inputManager = new InputManager();
+
+        _opened = true;
     }
 
     Window::~Window()
@@ -54,60 +56,61 @@ namespace Core
         SDL_SetWindowTitle((SDL_Window*)_ctx, ToStdString(title).c_str());
     }
 
-    void Window::internalUpdate(bool& isRunning)
+    void Window::processEvents(void* event)
     {
-        SDL_Event event;
-        _time->beginTimer();
-        _renderer->makeCurrent();
+        SDL_Event& evt = *((SDL_Event*)event);
 
-        while (SDL_PollEvent(&event))
+        switch (evt.type)
         {
-            switch (event.type)
+        case SDL_QUIT:
+        {
+            _opened = false;
+            break;
+        }
+
+        case SDL_WINDOWEVENT:
+        {
+            const SDL_WindowEvent& wev = evt.window;
+            switch (wev.event)
             {
-                case SDL_QUIT:
-                {
-                    isRunning = false;
-                    break;
-                }
-
-                case SDL_WINDOWEVENT:
-                {
-                    const SDL_WindowEvent& wev = event.window;
-                    switch (wev.event)
-                    {
-                        case SDL_WINDOWEVENT_RESIZED:
-                        case SDL_WINDOWEVENT_SIZE_CHANGED:
-                        {
-                            SDL_GetWindowSize((SDL_Window*)_ctx, &_width, &_height);
-                            break;
-                        }
-                        case SDL_WINDOWEVENT_RESTORED:
-                        case SDL_WINDOWEVENT_FOCUS_GAINED:
-                        {
-                            //TODO
-                            break;
-                        }
-
-                        case SDL_WINDOWEVENT_CLOSE:
-                        {
-                            isRunning = false;
-                            break;
-                        }
-
-                        default:
-                            break;
-                    }
-
-                    break;
-                }
-
-                default:
-                    break;
+            case SDL_WINDOWEVENT_RESIZED:
+            case SDL_WINDOWEVENT_SIZE_CHANGED:
+            {
+                SDL_GetWindowSize((SDL_Window*)_ctx, &_width, &_height);
+                break;
+            }
+            case SDL_WINDOWEVENT_RESTORED:
+            case SDL_WINDOWEVENT_FOCUS_GAINED:
+            {
+                //TODO
+                break;
             }
 
-            _inputManager->updateKeys(&event);
-            _renderer->processEvents(&event);
+            case SDL_WINDOWEVENT_CLOSE:
+            {
+                _opened = false;
+                break;
+            }
+
+            default:
+                break;
+            }
+
+            break;
         }
+
+        default:
+            break;
+        }
+
+        _inputManager->updateKeys(event);
+        _renderer->processEvents(event);
+    }
+
+    void Window::internalUpdate()
+    {
+        _time->beginTimer();
+        _renderer->makeCurrent();
 
         _inputManager->updateMouse(_ctx);
         EventHandler::singleton()->processEvents();

@@ -16,7 +16,10 @@ namespace Core
 		friend class Application;
 
 	private:
-		void internalUpdate(bool& isRunning);
+		bool _opened = false;
+
+		void processEvents(void* event);
+		void internalUpdate();
 		
 		virtual void update() {}
 		virtual void render() {}

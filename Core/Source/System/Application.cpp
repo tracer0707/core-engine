@@ -20,16 +20,62 @@ namespace Core
 	void Application::internalInit()
 	{
 		init();
-		isRunning = true;
+
+		if (!_windows.isEmpty())
+		{
+			_isRunning = true;
+		}
 	}
 
 	void Application::internalLoop()
 	{
-		while (isRunning)
+		while (_isRunning)
 		{
+			List<Window*> windowsToClose;
+
+			SDL_Event event;
+			while (SDL_PollEvent(&event))
+			{
+				for (Window* wnd : _windows)
+				{
+					void* wndCtx = SDL_GetWindowFromID(event.window.windowID);
+					if (wndCtx != wnd->_ctx) continue;
+
+					wnd->processEvents(&event);
+					
+				}
+			}
+
 			for (Window* wnd : _windows)
 			{
-				wnd->internalUpdate(isRunning);
+				if (!wnd->_opened)
+				{
+					windowsToClose.add(wnd);
+				}
+			}
+
+			for (Window* wnd : windowsToClose)
+			{
+				if (_mainWindow == wnd)
+				{
+					_isRunning = false;
+				}
+
+				removeWindow(wnd);
+			}
+
+			windowsToClose.clear();
+
+			if (!_isRunning) break;
+
+			for (Window* wnd : _windows)
+			{
+				wnd->internalUpdate();
+			}
+
+			if (_windows.isEmpty())
+			{
+				_isRunning = false;
 			}
 		}
 	}
@@ -43,16 +89,28 @@ namespace Core
 			delete wnd;
 		}
 
+		_mainWindow = nullptr;
 		_windows.clear();
 	}
 
 	void Application::addWindow(Window* value)
 	{
 		_windows.add(value);
+
+		if (_mainWindow == nullptr)
+		{
+			_mainWindow = value;
+		}
 	}
 
 	void Application::removeWindow(Window* value)
 	{
+		if (_mainWindow == value)
+		{
+			_mainWindow = nullptr;
+		}
+
 		_windows.remove(value);
+		delete value;
 	}
 }

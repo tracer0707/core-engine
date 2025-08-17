@@ -18,7 +18,7 @@ namespace Core
 		material->bind();
 
 		renderer->bindBuffer(vb);
-		renderer->drawBuffer(vb, GL_LINES, flags, view, proj, model);
+		renderer->drawBuffer(vb, PrimitiveType::Line, flags, view, proj, model);
 		renderer->deleteBuffer(vb);
 	}
 

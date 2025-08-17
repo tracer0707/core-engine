@@ -60,7 +60,7 @@ namespace Core
 
             glm::mat4& model = transform->getTransformMatrix();
 
-            _renderer->drawBuffer(subMesh->getVertexBuffer(), GL_TRIANGLES,
+            _renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,
                 C_CCW
                 | C_CULL_BACK
                 | C_ENABLE_DEPTH_TEST

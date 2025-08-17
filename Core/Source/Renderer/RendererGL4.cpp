@@ -32,7 +32,9 @@ namespace Core
             fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
         }
 
-        ImGui::CreateContext();
+        _imguiCtx = ImGui::CreateContext();
+        ImGui::SetCurrentContext(_imguiCtx);
+
         ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)_windowCtx, (SDL_GLContext)_renderCtx);
         ImGui_ImplOpenGL3_Init("#version 130");
 
@@ -45,14 +47,17 @@ namespace Core
 
         glDisable(GL_MULTISAMPLE);
 
+        ImGui::SetCurrentContext(_imguiCtx);
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
+
         SDL_GL_DeleteContext(_renderCtx);
     }
 
     const void RendererGL4::processEvents(void* event)
     {
+        ImGui::SetCurrentContext(_imguiCtx);
         ImGui_ImplSDL2_ProcessEvent((SDL_Event*)event);
     }
 
@@ -66,6 +71,7 @@ namespace Core
 
     const void RendererGL4::beginUI()
     {
+        ImGui::SetCurrentContext(_imguiCtx);
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
@@ -257,7 +263,7 @@ namespace Core
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
     }
 
-    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, int primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
+    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
     {
         GLuint viewMtxId = glGetUniformLocation(_currentProgram->program, "u_viewMtx");
         GLuint projMtxId = glGetUniformLocation(_currentProgram->program, "u_projMtx");
@@ -290,10 +296,25 @@ namespace Core
         if (flags & C_DEPTH_NEVER) glDepthFunc(GL_NEVER);
         if (flags & C_DEPTH_NOTEQUAL) glDepthFunc(GL_NOTEQUAL);
 
+        int _primitiveType = 0;
+
+        switch (primitiveType)
+        {
+        case PrimitiveType::Triangle:
+            _primitiveType = GL_TRIANGLES;
+            break;
+        case PrimitiveType::Line:
+            _primitiveType = GL_LINES;
+            break;
+        default:
+            throw new std::runtime_error("Unknown primitive type");
+            break;
+        }
+
         if (buffer->indexArray != nullptr)
         {
             glDrawElements(
-                primitiveType,
+                _primitiveType,
                 buffer->indexArraySize,
                 GL_UNSIGNED_INT,
                 0
@@ -301,7 +322,7 @@ namespace Core
         }
         else
         {
-            glDrawArrays(primitiveType, 0, buffer->vertexArraySize);
+            glDrawArrays(_primitiveType, 0, buffer->vertexArraySize);
         }
     }
 

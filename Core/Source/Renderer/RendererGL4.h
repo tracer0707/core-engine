@@ -30,7 +30,7 @@ namespace Core
 		const VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 		const void deleteBuffer(const VertexBuffer* buffer);
 		const void bindBuffer(const VertexBuffer* buffer);
-		const void drawBuffer(const VertexBuffer* buffer, int primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
+		const void drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
 
 		const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
 		const void deleteFrameBuffer(const FrameBuffer* buffer);

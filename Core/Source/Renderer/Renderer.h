@@ -1,4 +1,4 @@
-#pragma once
+                   #pragma once
 
 #include <vector>
 #include <map>
@@ -9,8 +9,6 @@
 #include "FrameBuffer.h"
 #include "Color.h"
 #include "TextureFormat.h"
-
-#include <GL/glew.h>
 
 //Render flags
 #define C_CW 1 << 0
@@ -33,10 +31,18 @@
 #define C_CLEAR_COLOR 1 << 0
 #define C_CLEAR_DEPTH 1 << 1
 
+struct ImGuiContext;
+
 namespace Core
 {
 	class DeviceContext;
 	class Program;
+
+	enum class PrimitiveType
+	{
+		Triangle,
+		Line
+	};
 
 	class Renderer
 	{
@@ -52,6 +58,7 @@ namespace Core
 
 		void* _windowCtx = nullptr;
 		void* _renderCtx = nullptr;
+		ImGuiContext* _imguiCtx = nullptr;
 
 		virtual const void makeCurrent() = 0;
 		virtual const void swapBuffers() = 0;
@@ -81,7 +88,7 @@ namespace Core
 		virtual const VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize) = 0;
 		virtual const void deleteBuffer(const VertexBuffer* buffer) = 0;
 		virtual const void bindBuffer(const VertexBuffer* buffer) = 0;
-		virtual const void drawBuffer(const VertexBuffer* buffer, int primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
+		virtual const void drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
 
 		virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
 		virtual const void deleteFrameBuffer(const FrameBuffer* buffer) = 0;

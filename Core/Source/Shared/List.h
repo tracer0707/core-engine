@@ -28,6 +28,7 @@ namespace Core
 		std::vector<T>::iterator end() { return list.end(); }
 		bool tryFind(T& out, std::function<bool(T&)> func);
 		bool contains(T& value);
+		bool isEmpty() { return list.empty(); }
 		void sort(std::function<bool(T&, T&)> func);
 
 		List& operator = (std::vector<T> other);
