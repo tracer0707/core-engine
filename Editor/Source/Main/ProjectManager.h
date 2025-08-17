@@ -6,6 +6,7 @@
 namespace Editor
 {
 	class WindowManager;
+	class FullscreenWindow;
 
 	class ProjectManager : public Core::Application
 	{
@@ -15,13 +16,14 @@ namespace Editor
 			friend class ProjectManager;
 
 		private:
-			MainWindow();
+			MainWindow(Core::Application* app);
 			virtual ~MainWindow();
+
+			Core::Application* _app = nullptr;
+			FullscreenWindow* _wnd = nullptr;
 
 			virtual void update();
 			virtual void render();
-
-			WindowManager* _windowManager = nullptr;
 		};
 
 		MainWindow* _wnd = nullptr;

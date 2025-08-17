@@ -33,8 +33,4 @@ namespace Editor
 #ifndef OBJECT_WINDOW
 	#define OBJECT_WINDOW "Objects"
 #endif
-
-#ifndef PROJECT_MANAGER_WINDOW
-	#define PROJECT_MANAGER_WINDOW "Project Manager"
-#endif
 }

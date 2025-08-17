@@ -6,15 +6,21 @@
 
 #include "Control.h"
 
+namespace Core
+{
+	class Application;
+}
+
 namespace Editor
 {
 	class FileInput : public Control
 	{
 	private:
 		UString _filePath = "";
+		Core::Application* _application = nullptr;
 
 	public:
-		FileInput();
+		FileInput(Core::Application* application);
 		virtual ~FileInput();
 
 		UString getFilePath() { return _filePath; }

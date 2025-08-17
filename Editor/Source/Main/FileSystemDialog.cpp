@@ -1,4 +1,4 @@
-#include "ProjectManager.h"
+#include "FileSystemDialog.h"
 
 #include <Renderer/Renderer.h>
 
@@ -9,55 +9,35 @@
 
 namespace Editor
 {
-    /* WINDOW */
-
-    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window("Project Manager", 800, 400)
+    FileSystemDialog::FileSystemDialog() : Window("File Dialog", 800, 400)
     {
-        _app = app;
-
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Center);
         _layout->setHorizontalAlignment(LayoutAlignment::Center);
 
         Label* label = new Label("Project location");
-        FileInput* fileInput = new FileInput(_app);
 
         _layout->addControl(label);
-        _layout->addControl(fileInput);
 
         _wnd = new FullscreenWindow();
         _wnd->addControl(_layout);
     }
 
-    ProjectManager::MainWindow::~MainWindow()
+    FileSystemDialog::~FileSystemDialog()
     {
         delete _wnd;
         _wnd = nullptr;
-        _app = nullptr;
     }
 
-    void ProjectManager::MainWindow::update() {}
+    void FileSystemDialog::update() {}
 
-    void ProjectManager::MainWindow::render()
+    void FileSystemDialog::render()
     {
         _renderer->setViewportSize(_width, _height);
         _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
         _renderer->beginUI();
-        _wnd->update("Project Manager", _width, _height);
+        _wnd->update("File Dialog", _width, _height);
         _renderer->endUI();
-    }
-
-    /* PROJECT MANAGER */
-
-    void ProjectManager::init()
-    {
-        _wnd = new MainWindow(this);
-        addWindow(_wnd);
-    }
-
-    void ProjectManager::destroy()
-    {
-        _wnd = nullptr;
     }
 }

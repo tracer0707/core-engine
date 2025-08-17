@@ -120,10 +120,4 @@ namespace Editor
 	{
 		return (SceneWindow*)addWindow(SCENE_WINDOW);
 	}
-
-	template <>
-	inline ProjectManagerWindow* WindowManager::addWindow<ProjectManagerWindow*>()
-	{
-		return (ProjectManagerWindow*)addWindow(PROJECT_MANAGER_WINDOW);
-	}
 }

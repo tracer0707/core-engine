@@ -141,9 +141,6 @@
     <ClCompile Include="Source\Main\ProjectManager.cpp">
       <Filter>Исходные файлы\Main</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\ProjectManagerWindow.cpp">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Editor\Controls\FileInput.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClCompile>
@@ -155,6 +152,12 @@
     </ClCompile>
     <ClCompile Include="Source\Main\Editor.cpp">
       <Filter>Исходные файлы\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Main\FileSystemDialog.cpp">
+      <Filter>Исходные файлы\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Windows\FullscreenWindow.cpp">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -272,9 +275,6 @@
     <ClInclude Include="Source\Editor\Windows\WindowList.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\ProjectManagerWindow.h">
-      <Filter>Исходные файлы\Editor\Windows</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Editor\Controls\FileInput.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
@@ -286,6 +286,12 @@
     </ClInclude>
     <ClInclude Include="Source\Main\Editor.h">
       <Filter>Исходные файлы\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Main\FileSystemDialog.h">
+      <Filter>Исходные файлы\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Windows\FullscreenWindow.h">
+      <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,7 +15,6 @@
 #include "InspectorWindow.h"
 #include "ObjectWindow.h"
 #include "SceneWindow.h"
-#include "ProjectManagerWindow.h"
 
 #include "../Controls/MenuBar.h"
 
@@ -90,10 +89,6 @@ namespace Editor
 		else if (name == SCENE_WINDOW)
 		{
 			window = new SceneWindow(this);
-		}
-		else if (name == PROJECT_MANAGER_WINDOW)
-		{
-			window = new ProjectManagerWindow(this);
 		}
 
 		assert(window != nullptr && "Unknown window");
