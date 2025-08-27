@@ -42,7 +42,8 @@ namespace Editor
 			}
 		}
 
-		ImGui::BeginChild(_id.c_str(), ImVec2(0, 0), ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
+		ImGui::BeginChild(_id.c_str(), ImVec2(0, 0), ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysUseWindowPadding);
 		for (auto it : _controls)
 		{
 			it->update();
@@ -58,6 +59,7 @@ namespace Editor
 			}
 		}
 		ImGui::EndChild();
+		ImGui::PopStyleVar();
 
 		ImVec2 groupSize = ImGui::GetItemRectSize();
 		_totalWidth = groupSize.x;

@@ -17,6 +17,9 @@ namespace Editor
 		_name = name;
 		_id = Core::Uuid::create();
 		_parent = parent;
+
+		_style.paddingX = 4.0f;
+		_style.paddingY = 4.0f;
 	}
 
 	Window::~Window()

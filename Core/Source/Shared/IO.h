@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Shared/String.h"
+#include "../Shared/List.h"
 
 namespace Core
 {
@@ -18,5 +19,6 @@ namespace Core
 		static void createDir(const UString& path, const bool& recursive = false);
 		static void fileDelete(const UString& path);
 		static void dirDelete(const UString& path, const bool& recursive = true);
+		static List<UString> getDiskDrives();
 	};
 }

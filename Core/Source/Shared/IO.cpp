@@ -156,4 +156,33 @@ namespace Core
 				std::filesystem::remove(path_str);
 		}
 	}
+
+	List<UString> IO::getDiskDrives()
+	{
+		List<UString> drives;
+
+#ifdef _WIN32
+		for (char drive = 'A'; drive <= 'Z'; ++drive) {
+			std::string drive_path = std::string(1, drive) + ":\\";
+			if (std::filesystem::exists(drive_path)) {
+				drives.add(FromStdString(drive_path));
+			}
+		}
+#else
+		std::filesystem::path mount_path("/");
+		if (std::filesystem::exists(mount_path)) {
+			drives.add(FromStdString(mount_path.string()));
+		}
+
+		std::vector<std::string> common_mounts = { "/mnt", "/media", "/Volumes" };
+		for (const auto& mount : common_mounts) {
+			if (std::filesystem::exists(mount) &&
+				std::filesystem::is_directory(mount)) {
+				drives.add(FromStdString(mount));
+			}
+		}
+#endif
+
+		return drives;
+	}
 }
