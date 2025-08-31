@@ -9,6 +9,8 @@
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/FileInput.h"
 #include "../Editor/Controls/Label.h"
+#include "../Editor/Controls/TreeView.h"
+#include "../Editor/Controls/TreeNode.h"
 
 namespace Editor
 {
@@ -22,11 +24,16 @@ namespace Editor
 
         Core::List<UString> _diskDrives = Core::IO::getDiskDrives();
 
+        TreeView* _treeView = new TreeView();
+
         for (auto& d : _diskDrives)
         {
-            Label* label = new Label(d);
-            _layout->addControl(label);
+            TreeNode* _node = _treeView->createNode();
+            _node->setText(d);
+            _treeView->addControl(_node);
         }
+
+        _layout->addControl(_treeView);
 
         _wnd = new FullscreenWindow();
         _wnd->addControl(_layout);

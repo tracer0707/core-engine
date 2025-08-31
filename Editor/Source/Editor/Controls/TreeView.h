@@ -21,6 +21,9 @@ namespace Editor
 
 		virtual void update();
 
+		TreeNode* createNode();
+		void destroyNode(TreeNode* value);
+
 		void setOnSelectionChanged(std::function<void(Core::List<TreeNode*>&)> callback) { _onSelectionChanged = callback; }
 
 		Core::List<TreeNode*>& getSelectedNodes() { return selectedNodes; }

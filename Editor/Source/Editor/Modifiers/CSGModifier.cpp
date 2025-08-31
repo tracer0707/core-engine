@@ -67,7 +67,8 @@ namespace Editor
 
 		auto* tree = _hierarchyWindow->getTreeView();
 
-		TreeNode* modelNode = new TreeNode(_currentModel->getName(), tree);
+		TreeNode* modelNode = tree->createNode();
+		modelNode->setText(_currentModel->getName());
 		modelNode->setTag(TAG_CSG_MODEL, _currentModel);
 		tree->addControl(modelNode);
 		tree->selectNode(modelNode);
@@ -98,7 +99,8 @@ namespace Editor
 
 		auto* tree = _hierarchyWindow->getTreeView();
 
-		TreeNode* brushNode = new TreeNode(_currentBrush->getName(), tree);
+		TreeNode* brushNode = tree->createNode();
+		brushNode->setText(_currentBrush->getName());
 		brushNode->setTag(TAG_CSG_BRUSH, _currentBrush);
 
 		TreeNode* modelNode = tree->findNodeByTag(TAG_CSG_MODEL, _currentModel);

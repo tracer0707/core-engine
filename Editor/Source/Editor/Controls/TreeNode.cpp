@@ -8,13 +8,15 @@
 
 namespace Editor
 {
-	TreeNode::TreeNode(UString text, TreeView* treeView)
+	TreeNode::TreeNode(TreeView* treeView)
 	{
-		_text = text;
 		_tree = treeView;
 	}
 
-	TreeNode::~TreeNode() {}
+	TreeNode::~TreeNode()
+	{
+		_tree = nullptr;
+	}
 
 	void TreeNode::update()
 	{

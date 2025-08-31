@@ -18,6 +18,18 @@ namespace Editor
 		}
 	}
 
+	TreeNode* TreeView::createNode()
+	{
+		TreeNode* _node = new TreeNode(this);
+		return _node;
+	}
+
+	void TreeView::destroyNode(TreeNode* value)
+	{
+		assert(value->_tree == this && "This node is from another tree");
+		delete value;
+	}
+
 	static void findNodeByTagRecursive(int key, void* value, TreeNode* root, TreeNode** out)
 	{
 		if (root->getTag(key) == value)

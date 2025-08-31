@@ -13,6 +13,7 @@ namespace Editor
 
 	class TreeNode : public Control
 	{
+		friend class TreeView;
 	private:
 		UString _text = "";
 
@@ -23,10 +24,10 @@ namespace Editor
 
 		TreeView* _tree = nullptr;
 
-	public:
-		TreeNode(UString text, TreeView* treeView);
+		TreeNode(TreeView* treeView);
 		~TreeNode();
 
+	public:
 		virtual void update();
 
 		void setText(UString value) { _text = value; }
