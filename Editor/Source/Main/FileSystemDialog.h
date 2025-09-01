@@ -5,6 +5,7 @@
 namespace Editor
 {
 	class FullscreenWindow;
+	class LinearLayout;
 
 	class FileSystemDialog : public Core::Window
 	{
@@ -12,6 +13,7 @@ namespace Editor
 
 	private:
 		FullscreenWindow* _wnd = nullptr;
+		LinearLayout* _layout = nullptr;
 
 		virtual void update();
 		virtual void render();

@@ -27,6 +27,9 @@ namespace Editor
 		float _totalWidth = FLT_MAX;
 		float _totalHeight = FLT_MAX;
 
+		float _width = 0;
+		float _height = 0;
+
 	public:
 		LinearLayout();
 		LinearLayout(LayoutDirection direction);
@@ -42,5 +45,11 @@ namespace Editor
 
 		void setVerticalAlignment(LayoutAlignment value) { _vAlignment = value; }
 		LayoutAlignment getVerticalAlignment() { return _vAlignment; }
+
+		float getWidth();
+		void setWidth(float value);
+
+		float getHeight();
+		void setHeight(float value);
 	};
 }

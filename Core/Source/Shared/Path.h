@@ -15,5 +15,6 @@ namespace Core
 		static const UString combine(const UString& part0, const UString& part1);
 		static const UString combine(const UString& part0, const UString& part1, const UString& part2);
 		static const bool isDir(const UString& dir);
+		static const bool isHiddenOrSystem(UString& path);
 	};
 }

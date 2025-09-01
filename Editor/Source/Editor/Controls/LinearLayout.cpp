@@ -42,8 +42,13 @@ namespace Editor
 			}
 		}
 
+		uint32_t _flags = ImGuiChildFlags_AlwaysUseWindowPadding;
+
+		if (_width == 0) _flags |= ImGuiChildFlags_AutoResizeX;
+		if (_height == 0) _flags |= ImGuiChildFlags_AutoResizeY;
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
-		ImGui::BeginChild(_id.c_str(), ImVec2(0, 0), ImGuiChildFlags_AutoResizeX | ImGuiChildFlags_AutoResizeY | ImGuiChildFlags_AlwaysUseWindowPadding);
+		ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height), _flags);
 		for (auto it : _controls)
 		{
 			it->update();
@@ -62,7 +67,29 @@ namespace Editor
 		ImGui::PopStyleVar();
 
 		ImVec2 groupSize = ImGui::GetItemRectSize();
-		_totalWidth = groupSize.x;
-		_totalHeight = groupSize.y;
+		if (_width == 0) _totalWidth = groupSize.x;
+		if (_height == 0) _totalHeight = groupSize.y;
+	}
+
+	float LinearLayout::getWidth()
+	{
+		return _totalWidth;
+	}
+
+	void LinearLayout::setWidth(float value)
+	{
+		_width = value;
+		_totalWidth = value;
+	}
+
+	float LinearLayout::getHeight()
+	{
+		return _totalHeight;
+	}
+
+	void LinearLayout::setHeight(float value)
+	{
+		_height = value;
+		_totalHeight = value;
 	}
 }

@@ -1,7 +1,11 @@
 #include "FileSystemDialog.h"
 
+#include <filesystem>
+#include <iostream>
+
 #include <Renderer/Renderer.h>
 #include <Shared/IO.h>
+#include <Shared/Path.h>
 #include <Shared/List.h>
 #include <Shared/String.h>
 
@@ -14,9 +18,47 @@
 
 namespace Editor
 {
+    static void scanDisk(UString path, TreeView* treeView, TreeNode* rootNode)
+    {
+        std::string _path = ToStdString(path);
+
+        TreeNode* _node = treeView->createNode();
+        _node->setText(path);
+
+        if (rootNode != nullptr)
+        {
+            rootNode->addControl(_node);
+        }
+        else
+        {
+            treeView->addControl(_node);
+        }
+
+        try
+        {
+            if (std::filesystem::is_directory(_path))
+            {
+                for (const auto& entry : std::filesystem::directory_iterator(_path))
+                {
+                    UString p = FromStdString(entry.path().generic_string());
+                    if (Core::Path::isHiddenOrSystem(p)) continue;
+
+                    TreeNode* _nodeChild = treeView->createNode();
+                    _nodeChild->setText(entry.path().c_str());
+
+                    _node->addControl(_nodeChild);
+                }
+            }
+        }
+        catch (const std::filesystem::filesystem_error& e)
+        {
+            std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
+        }
+    }
+
     FileSystemDialog::FileSystemDialog() : Window("File Dialog", 800, 400)
     {
-        LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
+        _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Start);
         _layout->getStyle().paddingX = 10;
@@ -28,9 +70,7 @@ namespace Editor
 
         for (auto& d : _diskDrives)
         {
-            TreeNode* _node = _treeView->createNode();
-            _node->setText(d);
-            _treeView->addControl(_node);
+            scanDisk(d, _treeView, nullptr);
         }
 
         _layout->addControl(_treeView);
@@ -45,7 +85,11 @@ namespace Editor
         _wnd = nullptr;
     }
 
-    void FileSystemDialog::update() {}
+    void FileSystemDialog::update()
+    {
+        _layout->setWidth(_width);
+        _layout->setHeight(_height);
+    }
 
     void FileSystemDialog::render()
     {

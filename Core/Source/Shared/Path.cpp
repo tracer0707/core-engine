@@ -131,4 +131,37 @@ namespace Core
 		const std::string dir_str = String::toStdString(dir);
 		return std::filesystem::is_directory(dir_str);
 	}
+
+	const bool Path::isHiddenOrSystem(UString& path)
+	{
+		std::filesystem::path _path = std::filesystem::path(ToStdString(path));
+
+		std::string filename = _path.filename().string();
+		if (!filename.empty() && filename[0] == '.')
+		{
+			return true;
+		}
+
+#ifdef _WIN32
+		DWORD attrs = GetFileAttributesW(_path.wstring().c_str());
+		if (attrs != INVALID_FILE_ATTRIBUTES)
+		{
+			if (attrs & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY))
+			{
+				return true;
+			}
+		}
+#else
+		struct stat stat_buf;
+		if (stat(_path.c_str(), &stat_buf) == 0)
+		{
+			if (!S_ISREG(stat_buf.st_mode) && !S_ISDIR(stat_buf.st_mode))
+			{
+				return true;
+			}
+		}
+#endif
+
+		return false;
+	}
 }
