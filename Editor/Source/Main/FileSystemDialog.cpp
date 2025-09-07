@@ -18,12 +18,20 @@
 
 namespace Editor
 {
-    static void scanDisk(UString path, TreeView* treeView, TreeNode* rootNode)
+    static void scanPath(UString path, TreeView* treeView, TreeNode* rootNode)
     {
         std::string _path = ToStdString(path);
+        auto fs_path = std::filesystem::path(_path);
 
         TreeNode* _node = treeView->createNode();
-        _node->setText(path);
+        if (rootNode != nullptr)
+        {
+            _node->setText(fs_path.filename().generic_string().c_str());
+        }
+        else
+        {
+            _node->setText(_path.c_str());
+        }
 
         if (rootNode != nullptr)
         {
@@ -34,25 +42,29 @@ namespace Editor
             treeView->addControl(_node);
         }
 
-        try
+        if (std::filesystem::is_directory(_path))
         {
-            if (std::filesystem::is_directory(_path))
-            {
-                for (const auto& entry : std::filesystem::directory_iterator(_path))
+            _node->setAlwaysShowOpenArrow(true);
+            _node->setOnOpen([_path, treeView, _node](bool opened)
                 {
-                    UString p = FromStdString(entry.path().generic_string());
-                    if (Core::Path::isHiddenOrSystem(p)) continue;
+                    if (opened)
+                    {
+                        try
+                        {
+                            for (const auto& entry : std::filesystem::directory_iterator(_path, std::filesystem::directory_options::skip_permission_denied))
+                            {
+                                UString path = FromStdString(entry.path().generic_string());
+                                if (Core::Path::isHiddenOrSystem(path)) continue;
 
-                    TreeNode* _nodeChild = treeView->createNode();
-                    _nodeChild->setText(entry.path().c_str());
-
-                    _node->addControl(_nodeChild);
-                }
-            }
-        }
-        catch (const std::filesystem::filesystem_error& e)
-        {
-            std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
+                                scanPath(path, treeView, _node);
+                            }
+                        }
+                        catch (const std::filesystem::filesystem_error& e)
+                        {
+                            std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
+                        }
+                    }
+                });
         }
     }
 
@@ -70,7 +82,7 @@ namespace Editor
 
         for (auto& d : _diskDrives)
         {
-            scanDisk(d, _treeView, nullptr);
+            scanPath(d, _treeView, nullptr);
         }
 
         _layout->addControl(_treeView);

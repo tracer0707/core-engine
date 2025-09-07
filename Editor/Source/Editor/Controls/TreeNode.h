@@ -16,8 +16,11 @@ namespace Editor
 		friend class TreeView;
 	private:
 		UString _text = "";
+		bool _prevOpened = false;
+		bool _alwaysShowOpenArrow = false;
 
 		std::function<void()> _onClick = nullptr;
+		std::function<void(bool)> _onOpen = nullptr;
 
 		void* _obj = nullptr;
 		std::map<int, void*> _tags;
@@ -34,6 +37,10 @@ namespace Editor
 		UString getText() { return _text; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
+		void setOnOpen(std::function<void(bool)> callback) { _onOpen = callback; }
+
+		void setAlwaysShowOpenArrow(bool value) { _alwaysShowOpenArrow = value; }
+		bool getAlwaysShowOpenArrow() { return _alwaysShowOpenArrow; }
 
 		void setObject(void* value) { _obj = value; }
 		void* getObject() { return _obj; }

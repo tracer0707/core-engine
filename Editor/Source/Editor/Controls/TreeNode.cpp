@@ -20,18 +20,28 @@ namespace Editor
 
 	void TreeNode::update()
 	{
-		uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
+		uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanFullWidth;
+		bool isLeaf = _controls.count() == 0 && !_alwaysShowOpenArrow;
 		
 		if (_tree->isNodeSelected(this)) flags |= ImGuiTreeNodeFlags_Selected;
-		if (_controls.count() == 0) flags |= ImGuiTreeNodeFlags_Leaf;
+		if (isLeaf) flags |= ImGuiTreeNodeFlags_Leaf;
 
 		bool isNodeOpened = ImGui::TreeNodeEx(ToStdString(_text).c_str(), flags);
 
-		if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+		if (_prevOpened != isNodeOpened && !isLeaf)
 		{
-			_tree->selectNode(this, true);
-			if (_onClick != nullptr) _onClick();
+			if (_onOpen != nullptr) _onOpen(isNodeOpened);
 		}
+		else
+		{
+			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+			{
+				_tree->selectNode(this, true);
+				if (_onClick != nullptr) _onClick();
+			}
+		}
+
+		_prevOpened = isNodeOpened;
 		
 		if (isNodeOpened)
 		{

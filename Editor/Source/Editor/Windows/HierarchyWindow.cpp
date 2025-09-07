@@ -23,7 +23,7 @@ namespace Editor
 	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
-		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Vertical);
+		_linearLayout = new LinearLayout(LayoutDirection::Vertical);
 		
 		_objectTree = new TreeView();
 
@@ -62,12 +62,17 @@ namespace Editor
 			}
 		});
 
-		layoutMain->addControl(_objectTree);
-
-		addControl(layoutMain);
+		_linearLayout->addControl(_objectTree);
+		
+		addControl(_linearLayout);
 	}
 
 	HierarchyWindow::~HierarchyWindow()
 	{
+	}
+
+	void HierarchyWindow::onUpdate()
+	{
+		_linearLayout->setWidth(getClientWidth());
 	}
 }
