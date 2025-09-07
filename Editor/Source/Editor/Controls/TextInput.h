@@ -20,6 +20,7 @@ namespace Editor
 		TextInput();
 		virtual ~TextInput();
 
+		virtual int getControlType();
 		virtual void update();
 
 		UString getText();

@@ -26,6 +26,7 @@ namespace Editor
 		UString getFilePath() { return _filePath; }
 		void setFilePath(UString value) { _filePath = value; }
 
+		virtual int getControlType();
 		virtual void update();
 	};
 }

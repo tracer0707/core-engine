@@ -293,6 +293,9 @@
     <ClInclude Include="Source\Editor\Windows\FullscreenWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\ControlList.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Editor.rc">

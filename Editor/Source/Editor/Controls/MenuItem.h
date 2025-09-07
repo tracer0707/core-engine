@@ -22,6 +22,7 @@ namespace Editor
 		MenuItem(UString text) { _text = text; }
 		~MenuItem();
 
+		virtual int getControlType();
 		virtual void update();
 
 		UString getText() { return _text; }

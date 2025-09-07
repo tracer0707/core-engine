@@ -9,6 +9,7 @@
 #include <Shared/List.h>
 #include <Shared/String.h>
 
+#include "../Editor/Controls/ControlList.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/FileInput.h"
@@ -25,22 +26,14 @@ namespace Editor
 
         TreeNode* _node = treeView->createNode();
         if (rootNode != nullptr)
-        {
             _node->setText(fs_path.filename().generic_string().c_str());
-        }
         else
-        {
             _node->setText(_path.c_str());
-        }
 
         if (rootNode != nullptr)
-        {
             rootNode->addControl(_node);
-        }
         else
-        {
             treeView->addControl(_node);
-        }
 
         if (std::filesystem::is_directory(_path))
         {
@@ -51,9 +44,32 @@ namespace Editor
                     {
                         try
                         {
+                            Core::List<std::filesystem::path> fs;
                             for (const auto& entry : std::filesystem::directory_iterator(_path, std::filesystem::directory_options::skip_permission_denied))
                             {
-                                UString path = FromStdString(entry.path().generic_string());
+                                fs.add(entry.path());
+                            }
+
+                            fs.sort([](std::filesystem::path& a, std::filesystem::path& b) -> bool {
+                                bool isDirA = std::filesystem::is_directory(a);
+                                bool isDirB = std::filesystem::is_directory(b);
+
+                                std::string _a = a.generic_string();
+                                std::string _b = b.generic_string();
+
+                                std::transform(_a.begin(), _a.end(), _a.begin(), [](unsigned char c) { return std::tolower(c); });
+                                std::transform(_b.begin(), _b.end(), _b.begin(), [](unsigned char c) { return std::tolower(c); });
+
+                                if (isDirA && isDirB) return _a < _b;
+                                if (isDirA) return 1;
+                                if (isDirB) return 0;
+
+                                return _a < _b;
+                            });
+
+                            for (const auto& entry : fs)
+                            {
+                                UString path = FromStdString(entry.generic_string());
                                 if (Core::Path::isHiddenOrSystem(path)) continue;
 
                                 scanPath(path, treeView, _node);
@@ -63,6 +79,10 @@ namespace Editor
                         {
                             std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
                         }
+                    }
+                    else
+                    {
+                        _node->clear();
                     }
                 });
         }

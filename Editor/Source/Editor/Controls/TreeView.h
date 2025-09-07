@@ -19,6 +19,7 @@ namespace Editor
 		TreeView();
 		virtual ~TreeView();
 
+		virtual int getControlType();
 		virtual void update();
 
 		TreeNode* createNode();

@@ -23,6 +23,7 @@ namespace Editor
 		Image(unsigned int width, unsigned int height);
 		virtual ~Image();
 
+		virtual int getControlType();
 		virtual void update();
 
 		void setWidth(unsigned int value) { width = value; }

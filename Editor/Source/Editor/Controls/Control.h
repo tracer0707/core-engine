@@ -32,6 +32,8 @@ namespace Editor
 		void setEnabled(bool value) { _style.enabled = value; }
 		bool getEnabled() { return _style.enabled; }
 
+		virtual int getControlType() = 0;
+
 		virtual void update() = 0;
 	};
 }

@@ -28,9 +28,10 @@ namespace Editor
 		TreeView* _tree = nullptr;
 
 		TreeNode(TreeView* treeView);
-		~TreeNode();
+		virtual ~TreeNode();
 
 	public:
+		virtual int getControlType();
 		virtual void update();
 
 		void setText(UString value) { _text = value; }

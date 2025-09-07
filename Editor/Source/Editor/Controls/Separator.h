@@ -19,6 +19,7 @@ namespace Editor
 		Separator();
 		virtual ~Separator();
 
+		virtual int getControlType();
 		virtual void update();
 
 		void setSeparatorDirection(SeparatorDirection value) { _direction = value; }

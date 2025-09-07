@@ -11,11 +11,13 @@ namespace Editor
 		clear();
 	}
 
-	void Editor::Container::clear()
+	void Container::clear()
 	{
 		for (int i = 0; i < _controls.count(); ++i)
 		{
 			Control* control = _controls.get(i);
+			control->clear();
+			control->_parent = nullptr;
 			delete control;
 		}
 

@@ -4,8 +4,9 @@
 #include <imgui_internal.h>
 
 #include <System/EventHandler.h>
-
 #include <Assets/Texture.h>
+
+#include "ControlList.h"
 
 namespace Editor
 {
@@ -58,6 +59,11 @@ namespace Editor
 				_onClick();
 			}
 		}
+	}
+
+	int Button::getControlType()
+	{
+		return CONTROL_BUTTON;
 	}
 
 	void Button::setActive(bool value)

@@ -184,6 +184,7 @@
     <ClInclude Include="Source\Editor\Controls\Button.h" />
     <ClInclude Include="Source\Editor\Controls\Container.h" />
     <ClInclude Include="Source\Editor\Controls\Control.h" />
+    <ClInclude Include="Source\Editor\Controls\ControlList.h" />
     <ClInclude Include="Source\Editor\Controls\FileInput.h" />
     <ClInclude Include="Source\Editor\Controls\Image.h" />
     <ClInclude Include="Source\Editor\Controls\Label.h" />

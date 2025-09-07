@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include "ControlList.h"
+
 namespace Editor
 {
 	LinearLayout::LinearLayout() : Control() {}
@@ -69,6 +71,11 @@ namespace Editor
 		ImVec2 groupSize = ImGui::GetItemRectSize();
 		if (_width == 0) _totalWidth = groupSize.x;
 		if (_height == 0) _totalHeight = groupSize.y;
+	}
+
+	int LinearLayout::getControlType()
+	{
+		return CONTROL_LINEAR_LAYOUT;
 	}
 
 	float LinearLayout::getWidth()

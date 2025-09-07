@@ -19,6 +19,7 @@ namespace Editor
 		UString getText() { return _text; }
 		void setText(UString value) { _text = value; }
 
+		virtual int getControlType();
 		virtual void update();
 	};
 }

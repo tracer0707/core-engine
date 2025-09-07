@@ -4,6 +4,7 @@
 
 #include <Shared/List.h>
 
+#include "ControlList.h"
 #include "TreeView.h"
 
 namespace Editor
@@ -22,7 +23,7 @@ namespace Editor
 	{
 		uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanFullWidth;
 		bool isLeaf = _controls.count() == 0 && !_alwaysShowOpenArrow;
-		
+
 		if (_tree->isNodeSelected(this)) flags |= ImGuiTreeNodeFlags_Selected;
 		if (isLeaf) flags |= ImGuiTreeNodeFlags_Leaf;
 
@@ -67,5 +68,10 @@ namespace Editor
 		}
 
 		return _tags[key];
+	}
+
+	int TreeNode::getControlType()
+	{
+		return CONTROL_TREE_NODE;
 	}
 }

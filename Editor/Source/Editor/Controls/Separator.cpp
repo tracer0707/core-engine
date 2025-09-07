@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
+#include "ControlList.h"
+
 namespace Editor
 {
 	Separator::Separator() {}
@@ -19,5 +21,10 @@ namespace Editor
 		{
 			ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
 		}
+	}
+
+	int Separator::getControlType()
+	{
+		return CONTROL_SEPARATOR;
 	}
 }

@@ -5,6 +5,8 @@
 
 #include <System/EventHandler.h>
 
+#include "ControlList.h"
+
 namespace Editor
 {
 	TextInput::TextInput()
@@ -46,5 +48,10 @@ namespace Editor
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}
+	}
+
+	int TextInput::getControlType()
+	{
+		return CONTROL_TEXT_INPUT;
 	}
 }

@@ -3,6 +3,7 @@
 #include <System/Application.h>
 #include <System/EventHandler.h>
 
+#include "ControlList.h"
 #include "LinearLayout.h"
 #include "TextInput.h"
 #include "Button.h"
@@ -47,5 +48,10 @@ namespace Editor
 		{
 			it->update();
 		}
+	}
+
+	int FileInput::getControlType()
+	{
+		return CONTROL_FILE_INPUT;
 	}
 }

@@ -32,6 +32,7 @@ namespace Editor
 		Button(UString text);
 		virtual ~Button();
 
+		virtual int getControlType();
 		virtual void update();
 
 		UString getText() { return _text; }

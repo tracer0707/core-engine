@@ -1,8 +1,9 @@
 #include "TreeView.h"
 
-#include "TreeNode.h"
-
 #include <System/EventHandler.h>
+
+#include "ControlList.h"
+#include "TreeNode.h"
 
 namespace Editor
 {
@@ -113,5 +114,10 @@ namespace Editor
 	bool TreeView::isNodeSelected(TreeNode* node)
 	{
 		return selectedNodes.contains(node);
+	}
+
+	int TreeView::getControlType()
+	{
+		return CONTROL_TREE_VIEW;
 	}
 }

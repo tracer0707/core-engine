@@ -5,6 +5,8 @@
 
 #include <Assets/Texture.h>
 
+#include "ControlList.h"
+
 namespace Editor
 {
 	Image::Image()
@@ -35,5 +37,10 @@ namespace Editor
 		if (texture != nullptr) texId = texture->getNativeId();
 
 		ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
+	}
+
+	int Image::getControlType()
+	{
+		return CONTROL_IMAGE;
 	}
 }

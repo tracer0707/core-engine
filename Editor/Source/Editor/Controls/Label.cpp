@@ -3,6 +3,8 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
+#include "ControlList.h"
+
 namespace Editor
 {
 	Label::Label() {}
@@ -22,5 +24,10 @@ namespace Editor
 
 		std::string _str = ToStdString(_text);
 		ImGui::Text(_str.c_str());
+	}
+
+	int Label::getControlType()
+	{
+		return CONTROL_LABEL;
 	}
 }

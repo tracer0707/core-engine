@@ -2,6 +2,8 @@
 
 #include <imgui.h>
 
+#include "ControlList.h"
+
 namespace Editor
 {
 	MenuItem::~MenuItem() {}
@@ -27,5 +29,10 @@ namespace Editor
 				if (_onClick != nullptr) _onClick();
 			}
 		}
+	}
+
+	int MenuItem::getControlType()
+	{
+		return CONTROL_MENU_ITEM;
 	}
 }

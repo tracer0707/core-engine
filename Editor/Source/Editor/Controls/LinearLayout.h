@@ -35,6 +35,7 @@ namespace Editor
 		LinearLayout(LayoutDirection direction);
 		virtual ~LinearLayout();
 
+		virtual int getControlType();
 		virtual void update();
 
 		void setDirection(LayoutDirection value) { _direction = value; }
