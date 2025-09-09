@@ -7,6 +7,7 @@ namespace Editor
 {
 	class WindowManager;
 	class FullscreenWindow;
+	class Font;
 
 	class ProjectManager : public Core::Application
 	{
@@ -26,6 +27,7 @@ namespace Editor
 			virtual void render();
 		};
 
+		Font* _mainFont = nullptr;
 		MainWindow* _wnd = nullptr;
 		
 		virtual void init();

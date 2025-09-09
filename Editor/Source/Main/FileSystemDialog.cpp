@@ -9,11 +9,14 @@
 #include <Shared/List.h>
 #include <Shared/String.h>
 
+#include "../Editor/Font.h"
 #include "../Editor/Controls/ControlList.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/FileInput.h"
 #include "../Editor/Controls/Label.h"
+#include "../Editor/Controls/Button.h"
+#include "../Editor/Controls/TextInput.h"
 #include "../Editor/Controls/TreeView.h"
 #include "../Editor/Controls/TreeNode.h"
 
@@ -88,13 +91,20 @@ namespace Editor
         }
     }
 
-    FileSystemDialog::FileSystemDialog() : Window("File Dialog", 800, 400)
+    FileSystemDialog::FileSystemDialog() : Core::Window("File Dialog", 800, 400)
     {
+        _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+        _mainFont->setDefault();
+
         _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Start);
         _layout->getStyle().paddingX = 10;
         _layout->getStyle().paddingY = 10;
+
+        _topLayout = new LinearLayout(LayoutDirection::Vertical);
+        _topLayout->setVerticalAlignment(LayoutAlignment::Start);
+        _topLayout->setHorizontalAlignment(LayoutAlignment::Start);
 
         Core::List<UString> _diskDrives = Core::IO::getDiskDrives();
 
@@ -105,7 +115,21 @@ namespace Editor
             scanPath(d, _treeView, nullptr);
         }
 
-        _layout->addControl(_treeView);
+        _topLayout->addControl(_treeView);
+
+        _bottomLayout = new LinearLayout(LayoutDirection::Horizontal);
+        _bottomLayout->setHorizontalAlignment(LayoutAlignment::Center);
+
+        TextInput* selectedFile = new TextInput();
+        Button* okBtn = new Button("OK");
+        Button* cancelBtn = new Button("Cancel");
+
+        _bottomLayout->addControl(selectedFile);
+        _bottomLayout->addControl(okBtn);
+        _bottomLayout->addControl(cancelBtn);
+
+        _layout->addControl(_topLayout);
+        _layout->addControl(_bottomLayout);
 
         _wnd = new FullscreenWindow();
         _wnd->addControl(_layout);
@@ -113,7 +137,10 @@ namespace Editor
 
     FileSystemDialog::~FileSystemDialog()
     {
+        delete _mainFont;
         delete _wnd;
+
+        _mainFont = nullptr;
         _wnd = nullptr;
     }
 
@@ -121,6 +148,9 @@ namespace Editor
     {
         _layout->setWidth(_width);
         _layout->setHeight(_height);
+
+        _topLayout->setWidth(_width - 20);
+        _topLayout->setHeight(_height - 45);
     }
 
     void FileSystemDialog::render()

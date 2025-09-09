@@ -152,6 +152,7 @@
     <ClCompile Include="Source\Editor\Controls\TreeNode.cpp" />
     <ClCompile Include="Source\Editor\Controls\TreeView.cpp" />
     <ClCompile Include="Source\Editor\CameraController.cpp" />
+    <ClCompile Include="Source\Editor\Font.cpp" />
     <ClCompile Include="Source\Editor\Gizmo.cpp" />
     <ClCompile Include="Source\Editor\Modifiers\CSGModifier.cpp" />
     <ClCompile Include="Source\Editor\Modifiers\Modifier.cpp" />
@@ -197,6 +198,7 @@
     <ClInclude Include="Source\Editor\Controls\TreeNode.h" />
     <ClInclude Include="Source\Editor\Controls\TreeView.h" />
     <ClInclude Include="Source\Editor\CameraController.h" />
+    <ClInclude Include="Source\Editor\Font.h" />
     <ClInclude Include="Source\Editor\Gizmo.h" />
     <ClInclude Include="Source\Editor\Modifiers\CSGModifier.h" />
     <ClInclude Include="Source\Editor\Modifiers\Modifier.h" />

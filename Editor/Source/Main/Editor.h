@@ -25,6 +25,7 @@ namespace Editor
 	class GizmoWindow;
 	class CSGEditWindow;
 	class CSGModifier;
+	class Font;
 
 	class Editor : public Core::Application
 	{
@@ -60,6 +61,7 @@ namespace Editor
 			CSGModifier* _csgModifier = nullptr;
 		};
 	
+		Font* _mainFont = nullptr;
 		MainWindow* _wnd = nullptr;
 
 		virtual void init();

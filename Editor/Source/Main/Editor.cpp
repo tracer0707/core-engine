@@ -13,6 +13,7 @@
 #include <Assets/RenderTexture.h>
 #include <Assets/AssetManager.h>
 
+#include "../Editor/Font.h"
 #include "../Editor/Windows/WindowManager.h"
 #include "../Editor/Windows/MainMenu.h"
 #include "../Editor/Windows/SceneWindow.h"
@@ -152,10 +153,16 @@ namespace Editor
     {
         _wnd = new MainWindow();
         addWindow(_wnd);
+
+        _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+        _mainFont->setDefault();
     }
 
     void Editor::destroy()
     {
+        delete _mainFont;
+
+        _mainFont = nullptr;
         _wnd = nullptr;
     }
 }

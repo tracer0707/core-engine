@@ -1,7 +1,9 @@
 #include "ProjectManager.h"
 
+#include <Shared/Path.h>
 #include <Renderer/Renderer.h>
 
+#include "../Editor/Font.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/FileInput.h"
@@ -11,7 +13,7 @@ namespace Editor
 {
     /* WINDOW */
 
-    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window("Project Manager", 800, 400)
+    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window("Project Manager", 900, 500)
     {
         _app = app;
 
@@ -32,6 +34,7 @@ namespace Editor
     ProjectManager::MainWindow::~MainWindow()
     {
         delete _wnd;
+
         _wnd = nullptr;
         _app = nullptr;
     }
@@ -54,10 +57,16 @@ namespace Editor
     {
         _wnd = new MainWindow(this);
         addWindow(_wnd);
+
+        _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+        _mainFont->setDefault();
     }
 
     void ProjectManager::destroy()
     {
+        delete _mainFont;
+
+        _mainFont = nullptr;
         _wnd = nullptr;
     }
 }
