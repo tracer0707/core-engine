@@ -162,6 +162,9 @@
     <ClCompile Include="Source\Editor\Font.cpp">
       <Filter>Исходные файлы\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Editor\Controls\ListView.cpp">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Editor\CameraController.h">
@@ -301,6 +304,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Font.h">
       <Filter>Исходные файлы\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Controls\ListView.h">
+      <Filter>Исходные файлы\Editor\Controls</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -338,5 +338,8 @@
     <ClInclude Include="Source\Interface\Transformable.h">
       <Filter>Исходные файлы\Interface</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Classes\json.hpp">
+      <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

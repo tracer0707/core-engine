@@ -8,24 +8,37 @@
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/FileInput.h"
 #include "../Editor/Controls/Label.h"
+#include "../Editor/Controls/Button.h"
 
 namespace Editor
 {
     /* WINDOW */
 
-    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window("Project Manager", 900, 500)
+    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window("Project Manager", 700, 500)
     {
         _app = app;
 
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
-        _layout->setVerticalAlignment(LayoutAlignment::Center);
+        _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Center);
+
+        _layout->getStyle().paddingX = 20;
+        _layout->getStyle().paddingY = 20;
+
+        LinearLayout* _buttonsLayout = new LinearLayout();
+        _buttonsLayout->setHorizontalAlignment(LayoutAlignment::Center);
 
         Label* label = new Label("Project location");
         FileInput* fileInput = new FileInput(_app);
+        Button* openBtn = new Button("Open");
+        Button* quitBtn = new Button("Quit");
+
+        _buttonsLayout->addControl(openBtn);
+        _buttonsLayout->addControl(quitBtn);
 
         _layout->addControl(label);
         _layout->addControl(fileInput);
+        _layout->addControl(_buttonsLayout);
 
         _wnd = new FullscreenWindow();
         _wnd->addControl(_layout);

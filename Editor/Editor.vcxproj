@@ -145,6 +145,7 @@
     <ClCompile Include="Source\Editor\Controls\Image.cpp" />
     <ClCompile Include="Source\Editor\Controls\Label.cpp" />
     <ClCompile Include="Source\Editor\Controls\LinearLayout.cpp" />
+    <ClCompile Include="Source\Editor\Controls\ListView.cpp" />
     <ClCompile Include="Source\Editor\Controls\MenuBar.cpp" />
     <ClCompile Include="Source\Editor\Controls\MenuItem.cpp" />
     <ClCompile Include="Source\Editor\Controls\Separator.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="Source\Editor\Controls\Image.h" />
     <ClInclude Include="Source\Editor\Controls\Label.h" />
     <ClInclude Include="Source\Editor\Controls\LinearLayout.h" />
+    <ClInclude Include="Source\Editor\Controls\ListView.h" />
     <ClInclude Include="Source\Editor\Controls\MenuBar.h" />
     <ClInclude Include="Source\Editor\Controls\MenuItem.h" />
     <ClInclude Include="Source\Editor\Controls\Separator.h" />
