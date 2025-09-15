@@ -85,10 +85,10 @@ namespace Core
 
 	/* TEXTURE */
 
-	Texture* AssetManager::loadTextureFromFile(UString fileName, TextureFormat fmt)
+	Texture* AssetManager::loadTextureFromFile(String fileName, TextureFormat fmt)
 	{
-		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(ToStdString(fileName).c_str());
-		FIBITMAP* texture = FreeImage_Load(_fmt, ToStdString(fileName).c_str());
+		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(fileName.std_str().c_str());
+		FIBITMAP* texture = FreeImage_Load(_fmt, fileName.std_str().c_str());
 
 		if (FreeImage_GetBPP(texture) != 32)
 		{
@@ -149,7 +149,7 @@ namespace Core
 		return _mesh;
 	}
 
-	Mesh* AssetManager::loadMeshFromFile(UString fileName)
+	Mesh* AssetManager::loadMeshFromFile(String fileName)
 	{
 		Assimp::Importer* importer = new Assimp::Importer();
 		importer->SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.0f);
@@ -166,7 +166,7 @@ namespace Core
 		importFlags |= aiProcess_JoinIdenticalVertices;
 		importFlags |= aiProcess_GenSmoothNormals | aiProcess_ForceGenNormals;
 
-		const aiScene* _scene = importer->ReadFile(ToStdString(fileName), importFlags);
+		const aiScene* _scene = importer->ReadFile(fileName.std_str().c_str(), importFlags);
 
 		Mesh* _mesh = createMesh(_scene->mNumMeshes);
 		SubMesh** _subMeshes = _mesh->getSubMeshes();
@@ -230,7 +230,7 @@ namespace Core
 
 	/* SHADER */
 
-	Shader* AssetManager::loadShaderFromString(const char* vertexSrc, const char* fragmentSrc)
+	Shader* AssetManager::loadShaderFromString(String vertexSrc, String fragmentSrc)
 	{
 		Shader* shader = new Shader(_renderer, vertexSrc, fragmentSrc);
 		_shaders.add(shader);

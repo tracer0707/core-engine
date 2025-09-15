@@ -4,16 +4,28 @@
 
 #include <unicode/unistr.h>
 
-#define UString icu::UnicodeString
-#define ToStdString(VAL) Core::String::toStdString(VAL)
-#define FromStdString(VAL) Core::String::fromStdString(VAL)
-
 namespace Core
 {
 	class String
 	{
+	private:
+		icu::UnicodeString _buffer;
+
 	public:
-		static std::string toStdString(const UString& src);
-		static UString fromStdString(const std::string& src);
+		String() = default;
+		String(const char* buffer);
+		String(std::string buffer);
+
+		String& operator=(std::string str);
+		String& operator=(const char* str);
+		String& operator+=(String& str);
+		String& operator+=(char str);
+		bool operator!=(const char* str);
+
+		std::string std_str();
+
+		String replace(char src, char dst);
+		int lastIndexOf(char src);
+		int length();
 	};
 }

@@ -14,7 +14,7 @@ namespace Core
 		friend class AssetManager;
 
 	private:
-		Shader(Renderer* renderer, UString vertexSrc, UString fragmentSrc);
+		Shader(Renderer* renderer, String vertexSrc, String fragmentSrc);
 		~Shader();
 
 		Renderer* _renderer = nullptr;

@@ -43,10 +43,10 @@ namespace Core
 		Mesh* createMesh(int subMeshesCount);
 		RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
-		Texture* loadTextureFromFile(UString fileName, TextureFormat fmt);
+		Texture* loadTextureFromFile(String fileName, TextureFormat fmt);
 		Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, TextureFormat fmt);
-		Mesh* loadMeshFromFile(UString fileName);
-		Shader* loadShaderFromString(const char* vertexSrc, const char* fragmentSrc);
+		Mesh* loadMeshFromFile(String fileName);
+		Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);
 
 		void destroy(Material* value) { destroyMaterial(value); }
 		void destroy(Mesh* value) { destroyMesh(value); }

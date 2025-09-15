@@ -80,7 +80,7 @@ namespace Core
 		virtual const void beginUI() = 0;
 		virtual const void endUI() = 0;
 		
-		virtual const Program* createProgram(UString vertexSrc, UString fragmentSrc) = 0;
+		virtual const Program* createProgram(String vertexSrc, String fragmentSrc) = 0;
 		virtual const void deleteProgram(const Program* program) = 0;
 		virtual const void bindProgram(const Program* program) = 0;
 		virtual const char* checkProgramErrors(unsigned int program) = 0;

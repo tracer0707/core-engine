@@ -27,7 +27,7 @@ namespace Core
 		virtual void render() {}
 
 	protected:
-		Window(Application* application, UString title, int width, int height);
+		Window(Application* application, String title, int width, int height);
 		virtual ~Window();
 
 		void* _ctx = nullptr;
@@ -46,9 +46,11 @@ namespace Core
 		Renderer* getRenderer() { return _renderer; }
 		AssetManager* getAssetManager() { return _assetManager; }
 
-		void setTitle(UString title);
+		void setTitle(String title);
 		
 		int getWidth() { return _width; }
 		int getHeight() { return _height; }
+
+		void close();
 	};
 }

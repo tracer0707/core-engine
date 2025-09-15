@@ -16,15 +16,15 @@ namespace Editor
 	class FileInput : public Control
 	{
 	private:
-		UString _filePath = "";
+		Core::String _filePath = "";
 		Core::Application* _application = nullptr;
 
 	public:
 		FileInput(Core::Application* application);
 		virtual ~FileInput();
 
-		UString getFilePath() { return _filePath; }
-		void setFilePath(UString value) { _filePath = value; }
+		Core::String getFilePath() { return _filePath; }
+		void setFilePath(Core::String value) { _filePath = value; }
 
 		virtual int getControlType();
 		virtual void update();

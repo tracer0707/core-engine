@@ -28,7 +28,7 @@ namespace Editor
 			application->getEventHandler()->addEvent([=]
 			{
 				FileSystemDialog* dlg = new FileSystemDialog(_application);
-				dlg->setOnSelectionChanged([=](UString fileName)
+				dlg->setOnFileSelected([=](Core::String fileName)
 				{
 					textInput->setText(fileName);
 				});

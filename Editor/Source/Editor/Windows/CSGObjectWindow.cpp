@@ -1,5 +1,7 @@
 #include "CSGObjectWindow.h"
 
+#include <filesystem>
+
 #include <Assets/AssetManager.h>
 #include <Assets/Texture.h>
 #include <Shared/Path.h>
@@ -32,7 +34,7 @@ namespace Editor
 		/* CSG add model */
 
 		_csgAddModelBtn = new Button();
-		Core::Texture* csgAddModelBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgAddModelBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), Core::TextureFormat::RGBA8);
 		_csgAddModelBtn->setSize(32, 32);
 		_csgAddModelBtn->setImage(csgAddModelBtnImage);
 		_csgAddModelBtn->setOnClick([=] {
@@ -44,7 +46,7 @@ namespace Editor
 		/* CSG cube */
 
 		Button* csgCube = new Button();
-		Core::Texture* csgCubeImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cube.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgCubeImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), Core::TextureFormat::RGBA8);
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
 		csgCube->setOnClick([=] {
@@ -56,7 +58,7 @@ namespace Editor
 		/* CSG sphere */
 
 		Button* csgSphere = new Button();
-		Core::Texture* csgSphereImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/sphere.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgSphereImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/sphere.png"), Core::TextureFormat::RGBA8);
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
 		csgSphere->setOnClick([=] {
@@ -68,7 +70,7 @@ namespace Editor
 		/* CSG cylinder */
 
 		Button* csgCylinder = new Button();
-		Core::Texture* csgCylinderImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cylinder.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgCylinderImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cylinder.png"), Core::TextureFormat::RGBA8);
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
 		csgCylinder->setOnClick([=] {
@@ -80,7 +82,7 @@ namespace Editor
 		/* CSG cone */
 
 		Button* csgCone = new Button();
-		Core::Texture* csgConeImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/cone.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgConeImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cone.png"), Core::TextureFormat::RGBA8);
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
 		csgCone->setOnClick([=] {
@@ -92,7 +94,7 @@ namespace Editor
 		/* CSG stair */
 
 		Button* csgStair = new Button();
-		Core::Texture* csgStairImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/stairs.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgStairImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/stairs.png"), Core::TextureFormat::RGBA8);
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
 		csgStair->setOnClick([=] {
@@ -104,7 +106,7 @@ namespace Editor
 		/* CSG polygon */
 
 		Button* csgPolygon = new Button();
-		Core::Texture* csgPolygonImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/polygon.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgPolygonImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/polygon.png"), Core::TextureFormat::RGBA8);
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);
 		csgPolygon->setOnClick([=] {

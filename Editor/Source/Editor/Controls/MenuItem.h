@@ -14,19 +14,19 @@ namespace Editor
 		friend class MenuBar;
 
 	private:
-		UString _text = "";
+		Core::String _text = "";
 		
 		std::function<void()> _onClick = nullptr;
 
 	public:
-		MenuItem(UString text) { _text = text; }
+		MenuItem(Core::String text) { _text = text; }
 		~MenuItem();
 
 		virtual int getControlType();
 		virtual void update();
 
-		UString getText() { return _text; }
-		void setText(UString value) { _text = value; }
+		Core::String getText() { return _text; }
+		void setText(Core::String value) { _text = value; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 	};

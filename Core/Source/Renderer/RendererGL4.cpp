@@ -93,10 +93,10 @@ namespace Core
         SDL_GL_SwapWindow((SDL_Window*)_windowCtx);
     }
 
-    const Program* RendererGL4::createProgram(UString vertexSrc, UString fragmentSrc)
+    const Program* RendererGL4::createProgram(String vertexSrc, String fragmentSrc)
     {
-        std::string vertexSrcUtf8 = String::toStdString(vertexSrc);
-        std::string fragmentSrcUtf8 = String::toStdString(fragmentSrc);
+        std::string vertexSrcUtf8 = vertexSrc.std_str();
+        std::string fragmentSrcUtf8 = fragmentSrc.std_str();
 
         const char* _vertexSrcUtf8 = vertexSrcUtf8.c_str();
         const char* _fragmentSrcUtf8 = fragmentSrcUtf8.c_str();

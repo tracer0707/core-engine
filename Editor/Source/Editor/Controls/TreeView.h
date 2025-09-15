@@ -31,7 +31,6 @@ namespace Editor
 		bool isNodeSelected(TreeNode* node);
 
 		TreeNode* findNodeByTag(int key, void* value);
-		TreeNode* findNodeByObject(void* value);
 
 		void selectNode(TreeNode* value, bool byUser = true);
 		void clearSelection(bool byUser = true);

@@ -69,7 +69,7 @@ namespace Editor
 
 		TreeNode* modelNode = tree->createNode();
 		modelNode->setText(_currentModel->getName());
-		modelNode->setTag(TAG_CSG_MODEL, _currentModel);
+		modelNode->setObjectTag(TAG_CSG_MODEL, _currentModel);
 		tree->addControl(modelNode);
 		tree->selectNode(modelNode);
 
@@ -101,7 +101,7 @@ namespace Editor
 
 		TreeNode* brushNode = tree->createNode();
 		brushNode->setText(_currentBrush->getName());
-		brushNode->setTag(TAG_CSG_BRUSH, _currentBrush);
+		brushNode->setObjectTag(TAG_CSG_BRUSH, _currentBrush);
 
 		TreeNode* modelNode = tree->findNodeByTag(TAG_CSG_MODEL, _currentModel);
 		assert(modelNode != nullptr && "TreeNode of CSG model not found");

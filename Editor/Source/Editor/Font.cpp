@@ -5,10 +5,10 @@
 
 namespace Editor
 {
-	Font::Font(UString path, float size)
+	Font::Font(Core::String path, float size)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		_font = io.Fonts->AddFontFromFileTTF(ToStdString(path).c_str(), size, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+		_font = io.Fonts->AddFontFromFileTTF(path.std_str().c_str(), size, nullptr, io.Fonts->GetGlyphRangesCyrillic());
 		io.Fonts->Build();
 
 		ImGui_ImplOpenGL3_DestroyFontsTexture();

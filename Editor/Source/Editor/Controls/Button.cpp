@@ -14,7 +14,7 @@ namespace Editor
 	{
 	}
 
-	Button::Button(UString text) : Control()
+	Button::Button(Core::String text) : Control()
 	{
 		_text = text;
 	}
@@ -41,7 +41,7 @@ namespace Editor
 		}
 		else
 		{
-			hasClick = ImGui::Button(ToStdString(_text).c_str());
+			hasClick = ImGui::Button(_text.std_str().c_str());
 		}
 
 		ImGui::PopStyleVar();

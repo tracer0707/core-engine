@@ -12,7 +12,7 @@ namespace Editor
 	{
 		if (_controls.count() > 0)
 		{
-			if (ImGui::BeginMenu(ToStdString(_text).c_str()))
+			if (ImGui::BeginMenu(_text.std_str().c_str()))
 			{
 				for (auto it : _controls)
 				{
@@ -24,7 +24,7 @@ namespace Editor
 		}
 		else
 		{
-			if (ImGui::MenuItem(ToStdString(_text).c_str()))
+			if (ImGui::MenuItem(_text.std_str().c_str()))
 			{
 				if (_onClick != nullptr) _onClick();
 			}

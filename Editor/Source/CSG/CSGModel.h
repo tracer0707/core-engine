@@ -33,7 +33,7 @@ namespace Editor
 			Core::List<Core::Uuid> brushIds;
 		};
 
-		UString _name = "";
+		Core::String _name = "";
 		Core::List<CSGBrush*> _brushes;
 		std::map<Core::Material*, SubMeshInfo*> _subMeshes;
 
@@ -51,8 +51,8 @@ namespace Editor
 		CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager);
 		~CSGModel();
 
-		UString getName() { return _name; }
-		void setName(UString value) { _name = value; }
+		Core::String getName() { return _name; }
+		void setName(Core::String value) { _name = value; }
 
 		Core::Object* getObject() { return _object; }
 		Core::MeshRenderer* getMeshRenderer() { return _meshRenderer; }

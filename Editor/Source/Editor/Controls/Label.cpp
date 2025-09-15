@@ -9,7 +9,7 @@ namespace Editor
 {
 	Label::Label() {}
 
-	Label::Label(UString text)
+	Label::Label(Core::String text)
 	{
 		_text = text;
 	}
@@ -22,7 +22,7 @@ namespace Editor
 	{
 		if (!_visible) return;
 
-		std::string _str = ToStdString(_text);
+		std::string _str = _text.std_str();
 		ImGui::Text(_str.c_str());
 	}
 

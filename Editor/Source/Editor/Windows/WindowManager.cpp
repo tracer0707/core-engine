@@ -149,7 +149,7 @@ namespace Editor
 
 			for (auto it : _windows)
 			{
-				ImGui::DockBuilderDockWindow(ToStdString(it->_name).c_str(), it->_dockArea.area1);
+				ImGui::DockBuilderDockWindow(it->_name, it->_dockArea.area1);
 			}
 
 			ImGui::DockBuilderFinish(dockID);

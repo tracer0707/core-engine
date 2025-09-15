@@ -15,7 +15,7 @@ namespace Editor
 	{
 		friend class TreeView;
 	private:
-		UString _text = "";
+		Core::String _text = "";
 		bool _prevOpened = false;
 		bool _alwaysShowOpenArrow = false;
 
@@ -23,7 +23,8 @@ namespace Editor
 		std::function<void(bool)> _onOpen = nullptr;
 
 		void* _obj = nullptr;
-		std::map<int, void*> _tags;
+		std::map<int, void*> _objectTags;
+		std::map<int, Core::String> _stringTags;
 
 		TreeView* _tree = nullptr;
 
@@ -34,8 +35,8 @@ namespace Editor
 		virtual int getControlType();
 		virtual void update();
 
-		void setText(UString value) { _text = value; }
-		UString getText() { return _text; }
+		void setText(Core::String value) { _text = value; }
+		Core::String getText() { return _text; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 		void setOnOpen(std::function<void(bool)> callback) { _onOpen = callback; }
@@ -43,10 +44,10 @@ namespace Editor
 		void setAlwaysShowOpenArrow(bool value) { _alwaysShowOpenArrow = value; }
 		bool getAlwaysShowOpenArrow() { return _alwaysShowOpenArrow; }
 
-		void setObject(void* value) { _obj = value; }
-		void* getObject() { return _obj; }
+		void setObjectTag(int key, void* value);
+		void* getObjectTag(int key);
 
-		void setTag(int key, void* value);
-		void* getTag(int key);
+		void setStringTag(int key, Core::String value);
+		Core::String getStringTag(int key);
 	};
 }

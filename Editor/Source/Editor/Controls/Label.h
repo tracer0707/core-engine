@@ -9,15 +9,15 @@ namespace Editor
 	class Label : public Control
 	{
 	private:
-		UString _text = "";
+		Core::String _text = "";
 
 	public:
 		Label();
-		Label(UString text);
+		Label(Core::String text);
 		virtual ~Label();
 
-		UString getText() { return _text; }
-		void setText(UString value) { _text = value; }
+		Core::String getText() { return _text; }
+		void setText(Core::String value) { _text = value; }
 
 		virtual int getControlType();
 		virtual void update();

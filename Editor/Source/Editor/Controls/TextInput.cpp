@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <imgui_stdlib.h>
 
 #include <System/EventHandler.h>
 
@@ -17,14 +18,14 @@ namespace Editor
 	{
 	}
 
-	UString TextInput::getText()
+	Core::String TextInput::getText()
 	{
 		return _text;
 	}
 
-	void TextInput::setText(UString value)
+	void TextInput::setText(Core::String value)
 	{
-		_text = value;
+		_text = value.std_str();
 	}
 
 	void TextInput::update()
@@ -39,7 +40,7 @@ namespace Editor
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
 		}
 
-		ImGui::InputText("", _buffer, IM_ARRAYSIZE(_buffer));
+		ImGui::InputText("", &_text);
 
 		ImGui::PopStyleVar();
 

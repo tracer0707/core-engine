@@ -7,14 +7,8 @@ namespace Core
 	class Path
 	{
 	public:
-		static const UString getFileExtension(const UString& FileName);
-		static const UString getFileName(const UString& FileName);
-		static const UString getFileNameWithExtension(const UString& FileName);
-		static const UString getFilePath(const UString& FileName);
-		static const UString getExePath();
-		static const UString combine(const UString& part0, const UString& part1);
-		static const UString combine(const UString& part0, const UString& part1, const UString& part2);
-		static const bool isDir(const UString& dir);
-		static const bool isHiddenOrSystem(UString& path);
+		static String combine(String part0, String part1);
+		static String combine(String part0, String part1, String part2);
+		static bool isHiddenOrSystem(String& path);
 	};
 }

@@ -22,17 +22,24 @@
 
 namespace Editor
 {
-    static void scanPath(UString path, TreeView* treeView, TreeNode* rootNode)
+    static void scanPath(Core::String path, TreeView* treeView, TreeNode* rootNode)
     {
-        std::string _path = ToStdString(path);
-        auto fs_path = std::filesystem::path(_path);
+        std::string _path = path.std_str();
+        auto fs_path = std::filesystem::path(path.std_str());
 
         TreeNode* _node = treeView->createNode();
-        if (rootNode != nullptr)
-            _node->setText(fs_path.filename().generic_string().c_str());
-        else
-            _node->setText(_path.c_str());
 
+        if (rootNode != nullptr)
+        {
+            _node->setText(fs_path.filename().generic_string());
+            _node->setStringTag(0, fs_path.generic_string());
+        }
+        else
+        {
+            _node->setText(_path);
+            _node->setStringTag(0, path.replace('\\', '/'));
+        }
+        
         if (rootNode != nullptr)
             rootNode->addControl(_node);
         else
@@ -72,7 +79,7 @@ namespace Editor
 
                             for (const auto& entry : fs)
                             {
-                                UString path = FromStdString(entry.generic_string());
+                                Core::String path = entry.generic_string();
                                 if (Core::Path::isHiddenOrSystem(path)) continue;
 
                                 scanPath(path, treeView, _node);
@@ -93,7 +100,7 @@ namespace Editor
 
     FileSystemDialog::FileSystemDialog(Core::Application* app) : Core::Window(app, "File Dialog", 800, 400)
     {
-        _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+        _mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();
 
         _layout = new LinearLayout(LayoutDirection::Vertical);
@@ -106,19 +113,9 @@ namespace Editor
         _topLayout->setVerticalAlignment(LayoutAlignment::Start);
         _topLayout->setHorizontalAlignment(LayoutAlignment::Start);
 
-        Core::List<UString> _diskDrives = Core::IO::getDiskDrives();
+        Core::List<Core::String> _diskDrives = Core::IO::getDiskDrives();
 
         TreeView* _treeView = new TreeView();
-
-        _treeView->setOnSelectionChanged([this](Core::List<TreeNode*> lst) {
-            if (_onSelectionChanged != nullptr)
-            {
-                if (lst.count() > 0)
-                    _onSelectionChanged(lst.get(0)->getText());
-                else
-                    _onSelectionChanged("");
-            }
-        });
 
         for (auto& d : _diskDrives)
         {
@@ -143,6 +140,30 @@ namespace Editor
 
         _wnd = new FullscreenWindow();
         _wnd->addControl(_layout);
+
+        _treeView->setOnSelectionChanged([=](Core::List<TreeNode*> lst) {
+            if (lst.count() > 0)
+            {
+                selectedFile->setText(lst.get(0)->getStringTag(0));
+            }
+            else
+            {
+                selectedFile->setText("");
+            }
+        });
+
+        cancelBtn->setOnClick([this]() {
+            close();
+        });
+
+        okBtn->setOnClick([=]() {
+            if (selectedFile->getText() != "" && _onFileSelected != nullptr)
+            {
+                _onFileSelected(selectedFile->getText());
+            }
+
+            close();
+        });
     }
 
     FileSystemDialog::~FileSystemDialog()

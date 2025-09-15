@@ -16,7 +16,7 @@ namespace Editor
 	class Button : public Control
 	{
 	private:
-		UString _text = "";
+		Core::String _text = "";
 
 		Core::Texture* _image = nullptr;
 		
@@ -29,14 +29,14 @@ namespace Editor
 
 	public:
 		Button();
-		Button(UString text);
+		Button(Core::String text);
 		virtual ~Button();
 
 		virtual int getControlType();
 		virtual void update();
 
-		UString getText() { return _text; }
-		void setText(UString value) { _text = value; }
+		Core::String getText() { return _text; }
+		void setText(Core::String value) { _text = value; }
 
 		void setImage(Core::Texture* value) { _image = value;  }
 		Core::Texture* getImage() { return _image;  }

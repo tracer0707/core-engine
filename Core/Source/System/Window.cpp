@@ -12,12 +12,12 @@
 
 namespace Core
 {
-    Window::Window(Application* application, UString title, int width, int height)
+    Window::Window(Application* application, String title, int width, int height)
     {
         _width = width;
         _height = height;
 
-        _ctx = SDL_CreateWindow(ToStdString(title).c_str(),
+        _ctx = SDL_CreateWindow(title.std_str().c_str(),
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             _width,
@@ -61,9 +61,9 @@ namespace Core
         _eventHandler = nullptr;
     }
 
-    void Window::setTitle(UString title)
+    void Window::setTitle(String title)
     {
-        SDL_SetWindowTitle((SDL_Window*)_ctx, ToStdString(title).c_str());
+        SDL_SetWindowTitle((SDL_Window*)_ctx, title.std_str().c_str());
     }
 
     void Window::processEvents(void* event)
@@ -131,5 +131,10 @@ namespace Core
         _inputManager->reset();
         _renderer->swapBuffers();
         _time->endTimer();
+    }
+
+    void Window::close()
+    {
+        _opened = false;
     }
 }

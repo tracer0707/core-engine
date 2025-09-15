@@ -1,5 +1,7 @@
 #include "ProjectManager.h"
 
+#include <filesystem>
+
 #include <Shared/Path.h>
 #include <Renderer/Renderer.h>
 
@@ -66,7 +68,7 @@ namespace Editor
     {
         _wnd = new MainWindow(this);
 
-        _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+        _mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();
     }
 

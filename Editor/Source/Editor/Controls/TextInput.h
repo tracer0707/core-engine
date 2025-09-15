@@ -12,9 +12,7 @@ namespace Editor
 	class TextInput : public Control
 	{
 	private:
-		UString _text = "";
-
-		char _buffer[256] = "";
+		std::string _text = "";
 
 	public:
 		TextInput();
@@ -23,7 +21,7 @@ namespace Editor
 		virtual int getControlType();
 		virtual void update();
 
-		UString getText();
-		void setText(UString value);
+		Core::String getText();
+		void setText(Core::String value);
 	};
 }

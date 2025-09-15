@@ -12,7 +12,7 @@ namespace Editor
 		ImFont* _font = nullptr;
 
 	public:
-		Font(UString path, float size);
+		Font(Core::String path, float size);
 		~Font();
 
 		void setDefault();

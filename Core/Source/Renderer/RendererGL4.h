@@ -22,7 +22,7 @@ namespace Core
 		const void beginUI();
 		const void endUI();
 		
-		const Program* createProgram(UString vertexSrc, UString fragmentSrc);
+		const Program* createProgram(String vertexSrc, String fragmentSrc);
 		const void deleteProgram(const Program* programId);
 		const void bindProgram(const Program* programId);
 		const char* checkProgramErrors(unsigned int program);

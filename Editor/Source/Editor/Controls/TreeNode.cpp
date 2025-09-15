@@ -19,6 +19,11 @@ namespace Editor
 		_tree = nullptr;
 	}
 
+	int TreeNode::getControlType()
+	{
+		return CONTROL_TREE_NODE;
+	}
+
 	void TreeNode::update()
 	{
 		uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanFullWidth;
@@ -27,7 +32,7 @@ namespace Editor
 		if (_tree->isNodeSelected(this)) flags |= ImGuiTreeNodeFlags_Selected;
 		if (isLeaf) flags |= ImGuiTreeNodeFlags_Leaf;
 
-		bool isNodeOpened = ImGui::TreeNodeEx(ToStdString(_text).c_str(), flags);
+		bool isNodeOpened = ImGui::TreeNodeEx(_text.std_str().c_str(), flags);
 
 		if (_prevOpened != isNodeOpened && !isLeaf)
 		{
@@ -55,23 +60,33 @@ namespace Editor
 		}
 	}
 
-	void TreeNode::setTag(int key, void* value)
+	void TreeNode::setObjectTag(int key, void* value)
 	{
-		_tags[key] = value;
+		_objectTags[key] = value;
 	}
 
-	void* TreeNode::getTag(int key)
+	void* TreeNode::getObjectTag(int key)
 	{
-		if (_tags.find(key) == _tags.end())
+		if (_objectTags.find(key) == _objectTags.end())
 		{
 			return nullptr;
 		}
 
-		return _tags[key];
+		return _objectTags[key];
 	}
 
-	int TreeNode::getControlType()
+	void TreeNode::setStringTag(int key, Core::String value)
 	{
-		return CONTROL_TREE_NODE;
+		_stringTags[key] = value;
+	}
+
+	Core::String TreeNode::getStringTag(int key)
+	{
+		if (_stringTags.find(key) == _stringTags.end())
+		{
+			return nullptr;
+		}
+
+		return _stringTags[key];
 	}
 }

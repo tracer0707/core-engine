@@ -22,7 +22,7 @@ namespace Editor
 		LinearLayout* _topLayout = nullptr;
 		LinearLayout* _bottomLayout = nullptr;
 
-		std::function<void(UString)> _onSelectionChanged = nullptr;
+		std::function<void(Core::String)> _onFileSelected = nullptr;
 
 		virtual void update();
 		virtual void render();
@@ -31,6 +31,6 @@ namespace Editor
 		FileSystemDialog(Core::Application* app);
 		virtual ~FileSystemDialog();
 
-		void setOnSelectionChanged(std::function<void(UString)> value) { _onSelectionChanged = value; }
+		void setOnFileSelected(std::function<void(Core::String)> value) { _onFileSelected = value; }
 	};
 }

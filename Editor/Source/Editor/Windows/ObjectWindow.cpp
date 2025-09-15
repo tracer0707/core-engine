@@ -1,5 +1,7 @@
 #include "ObjectWindow.h"
 
+#include <filesystem>
+
 #include <Assets/AssetManager.h>
 #include <Assets/Texture.h>
 #include <Shared/Path.h>
@@ -30,7 +32,7 @@ namespace Editor
 		/* CSG tool */
 
 		Button* csgTool = new Button();
-		Core::Texture* csgToolImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/csg/csg.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* csgToolImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"), Core::TextureFormat::RGBA8);
 		csgTool->setSize(32, 32);
 		csgTool->setImage(csgToolImage);
 
@@ -47,7 +49,7 @@ namespace Editor
 		/* Light tool */
 
 		Button* lightTool = new Button();
-		Core::Texture* lightToolImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/gizmo/pointlight.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* lightToolImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), Core::TextureFormat::RGBA8);
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
 
@@ -62,7 +64,7 @@ namespace Editor
 		/* Camera tool */
 
 		Button* cameraTool = new Button();
-		Core::Texture* cameraToolImage = assetMgr->loadTextureFromFile(Core::Path::combine(Core::Path::getExePath(), "Editor/Icons/gizmo/camera.png"), Core::TextureFormat::RGBA8);
+		Core::Texture* cameraToolImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"), Core::TextureFormat::RGBA8);
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);
 
