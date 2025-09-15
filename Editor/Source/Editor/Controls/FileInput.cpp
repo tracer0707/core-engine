@@ -25,10 +25,13 @@ namespace Editor
 		layout->addControl(button);
 
 		button->setOnClick([=] {
-			application->getEventHandler()->addEvent([this]
+			application->getEventHandler()->addEvent([=]
 			{
-				FileSystemDialog* dlg = new FileSystemDialog();
-				_application->addWindow(dlg);
+				FileSystemDialog* dlg = new FileSystemDialog(_application);
+				dlg->setOnSelectionChanged([=](UString fileName)
+				{
+					textInput->setText(fileName);
+				});
 			});
 		});
 

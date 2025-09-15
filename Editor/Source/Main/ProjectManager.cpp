@@ -14,10 +14,8 @@ namespace Editor
 {
     /* WINDOW */
 
-    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window("Project Manager", 700, 500)
+    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window(app, "Project Manager", 700, 500)
     {
-        _app = app;
-
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Center);
@@ -29,7 +27,7 @@ namespace Editor
         _buttonsLayout->setHorizontalAlignment(LayoutAlignment::Center);
 
         Label* label = new Label("Project location");
-        FileInput* fileInput = new FileInput(_app);
+        FileInput* fileInput = new FileInput(_application);
         Button* openBtn = new Button("Open");
         Button* quitBtn = new Button("Quit");
 
@@ -47,9 +45,7 @@ namespace Editor
     ProjectManager::MainWindow::~MainWindow()
     {
         delete _wnd;
-
         _wnd = nullptr;
-        _app = nullptr;
     }
 
     void ProjectManager::MainWindow::update() {}
@@ -69,7 +65,6 @@ namespace Editor
     void ProjectManager::init()
     {
         _wnd = new MainWindow(this);
-        addWindow(_wnd);
 
         _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();

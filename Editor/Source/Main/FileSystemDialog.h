@@ -1,6 +1,9 @@
 #pragma once
 
 #include <System/Window.h>
+#include <Shared/String.h>
+
+#include <functional>
 
 namespace Editor
 {
@@ -19,11 +22,15 @@ namespace Editor
 		LinearLayout* _topLayout = nullptr;
 		LinearLayout* _bottomLayout = nullptr;
 
+		std::function<void(UString)> _onSelectionChanged = nullptr;
+
 		virtual void update();
 		virtual void render();
 
 	public:
-		FileSystemDialog();
+		FileSystemDialog(Core::Application* app);
 		virtual ~FileSystemDialog();
+
+		void setOnSelectionChanged(std::function<void(UString)> value) { _onSelectionChanged = value; }
 	};
 }

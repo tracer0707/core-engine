@@ -35,7 +35,7 @@ namespace Editor
 {
     /* WINDOW */
 
-    Editor::MainWindow::MainWindow() : Window("Project Manager", 1366, 768)
+    Editor::MainWindow::MainWindow(Core::Application* app) : Window(app, "Project Manager", 1366, 768)
     {
         _scene = new Core::Scene(_renderer);
         
@@ -151,8 +151,7 @@ namespace Editor
 
     void Editor::init()
     {
-        _wnd = new MainWindow();
-        addWindow(_wnd);
+        _wnd = new MainWindow(this);
 
         _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();

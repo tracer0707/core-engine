@@ -5,13 +5,14 @@
 
 #include "../Assets/AssetManager.h"
 #include "../Renderer/Renderer.h"
+#include "../System/Application.h"
 #include "../System/EventHandler.h"
 #include "../System/InputManager.h"
 #include "../System/Time.h"
 
 namespace Core
 {
-    Window::Window(UString title, int width, int height)
+    Window::Window(Application* application, UString title, int width, int height)
     {
         _width = width;
         _height = height;
@@ -28,13 +29,15 @@ namespace Core
             throw new std::runtime_error("Create window failed");
         }
 
+        _application = application;
         _renderer = Renderer::init(_ctx);
         _assetManager = new AssetManager(_renderer);
         _time = new Time();
         _inputManager = new InputManager();
         _eventHandler = new EventHandler();
-
         _opened = true;
+
+        _application->addWindow(this);
     }
 
     Window::~Window()
@@ -49,6 +52,7 @@ namespace Core
         Renderer::destroy(_renderer);
         SDL_DestroyWindow((SDL_Window*)_ctx);
 
+        _application = nullptr;
         _ctx = nullptr;
         _assetManager = nullptr;
         _renderer = nullptr;

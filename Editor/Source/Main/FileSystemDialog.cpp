@@ -91,7 +91,7 @@ namespace Editor
         }
     }
 
-    FileSystemDialog::FileSystemDialog() : Core::Window("File Dialog", 800, 400)
+    FileSystemDialog::FileSystemDialog(Core::Application* app) : Core::Window(app, "File Dialog", 800, 400)
     {
         _mainFont = new Font(Core::Path::combine(Core::Path::getExePath(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();
@@ -109,6 +109,16 @@ namespace Editor
         Core::List<UString> _diskDrives = Core::IO::getDiskDrives();
 
         TreeView* _treeView = new TreeView();
+
+        _treeView->setOnSelectionChanged([this](Core::List<TreeNode*> lst) {
+            if (_onSelectionChanged != nullptr)
+            {
+                if (lst.count() > 0)
+                    _onSelectionChanged(lst.get(0)->getText());
+                else
+                    _onSelectionChanged("");
+            }
+        });
 
         for (auto& d : _diskDrives)
         {

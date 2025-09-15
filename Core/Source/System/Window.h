@@ -11,6 +11,7 @@ namespace Core
 	class Time;
 	class InputManager;
 	class EventHandler;
+	class Application;
 
 	class Window
 	{
@@ -26,10 +27,11 @@ namespace Core
 		virtual void render() {}
 
 	protected:
-		Window(UString title, int width, int height);
+		Window(Application* application, UString title, int width, int height);
 		virtual ~Window();
 
 		void* _ctx = nullptr;
+		Application* _application = nullptr;
 		Renderer* _renderer = nullptr;
 		AssetManager* _assetManager = nullptr;
 		Time* _time = nullptr;

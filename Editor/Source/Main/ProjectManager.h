@@ -20,7 +20,6 @@ namespace Editor
 			MainWindow(Core::Application* app);
 			virtual ~MainWindow();
 
-			Core::Application* _app = nullptr;
 			FullscreenWindow* _wnd = nullptr;
 
 			virtual void update();
