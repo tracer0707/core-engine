@@ -183,6 +183,9 @@
     <ClCompile Include="Source\Interface\Transformable.cpp">
       <Filter>Исходные файлы\Interface</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\imgui\imgui_stdlib.cpp">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Shared\IO.h">
@@ -340,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="Source\Classes\json.hpp">
       <Filter>Исходные файлы\Classes</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\imgui\imgui_stdlib.h">
+      <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
