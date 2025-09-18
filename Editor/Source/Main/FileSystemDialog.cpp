@@ -49,52 +49,52 @@ namespace Editor
         {
             _node->setAlwaysShowOpenArrow(true);
             _node->setOnOpen([_path, treeView, _node](bool opened)
+            {
+                if (opened)
                 {
-                    if (opened)
+                    try
                     {
-                        try
+                        Core::List<std::filesystem::path> fs;
+                        for (const auto& entry : std::filesystem::directory_iterator(_path, std::filesystem::directory_options::skip_permission_denied))
                         {
-                            Core::List<std::filesystem::path> fs;
-                            for (const auto& entry : std::filesystem::directory_iterator(_path, std::filesystem::directory_options::skip_permission_denied))
-                            {
-                                fs.add(entry.path());
-                            }
-
-                            fs.sort([](std::filesystem::path& a, std::filesystem::path& b) -> bool {
-                                bool isDirA = std::filesystem::is_directory(a);
-                                bool isDirB = std::filesystem::is_directory(b);
-
-                                std::string _a = a.generic_string();
-                                std::string _b = b.generic_string();
-
-                                std::transform(_a.begin(), _a.end(), _a.begin(), [](unsigned char c) { return std::tolower(c); });
-                                std::transform(_b.begin(), _b.end(), _b.begin(), [](unsigned char c) { return std::tolower(c); });
-
-                                if (isDirA && isDirB) return _a < _b;
-                                if (isDirA) return 1;
-                                if (isDirB) return 0;
-
-                                return _a < _b;
-                            });
-
-                            for (const auto& entry : fs)
-                            {
-                                Core::String path = entry.generic_string();
-                                if (Core::Path::isHiddenOrSystem(path)) continue;
-
-                                scanPath(path, treeView, _node);
-                            }
+                            fs.add(entry.path());
                         }
-                        catch (const std::filesystem::filesystem_error& e)
+
+                        fs.sort([](std::filesystem::path& a, std::filesystem::path& b) -> bool {
+                            bool isDirA = std::filesystem::is_directory(a);
+                            bool isDirB = std::filesystem::is_directory(b);
+
+                            std::string _a = a.generic_string();
+                            std::string _b = b.generic_string();
+
+                            std::transform(_a.begin(), _a.end(), _a.begin(), [](unsigned char c) { return std::tolower(c); });
+                            std::transform(_b.begin(), _b.end(), _b.begin(), [](unsigned char c) { return std::tolower(c); });
+
+                            if (isDirA && isDirB) return _a < _b;
+                            if (isDirA) return 1;
+                            if (isDirB) return 0;
+
+                            return _a < _b;
+                        });
+
+                        for (const auto& entry : fs)
                         {
-                            std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
+                            Core::String path = entry.generic_string();
+                            if (Core::Path::isHiddenOrSystem(path)) continue;
+
+                            scanPath(path, treeView, _node);
                         }
                     }
-                    else
+                    catch (const std::filesystem::filesystem_error& e)
                     {
-                        _node->clear();
+                        std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
                     }
-                });
+                }
+                else
+                {
+                    _node->clear();
+                }
+            });
         }
     }
 
