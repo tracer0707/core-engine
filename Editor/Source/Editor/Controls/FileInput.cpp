@@ -1,7 +1,7 @@
 #include "FileInput.h"
 
-#include <System/Application.h>
-#include <System/EventHandler.h>
+#include <Core/System/Application.h>
+#include <Core/System/EventHandler.h>
 
 #include "ControlList.h"
 #include "LinearLayout.h"

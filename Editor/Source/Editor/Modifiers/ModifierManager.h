@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Shared/List.h>
-#include <Shared/String.h>
+#include <Core/Shared/List.h>
+#include <Core/Shared/String.h>
 
 #include "ModifierList.h"
 

@@ -16,6 +16,9 @@ namespace Core
 	class AssetManager
 	{
 	private:
+		String _workingDir = "";
+		String _contentDir = "Content";
+
 		Renderer* _renderer = nullptr;
 		Material* _defaultMaterial = nullptr;
 		Shader* _defaultShader = nullptr;
@@ -35,6 +38,12 @@ namespace Core
 	public:
 		AssetManager(Renderer* renderer);
 		~AssetManager();
+
+		String getWorkingDir() { return _workingDir; }
+		String setWorkingDir(String value) { _workingDir = value; }
+
+		String getContentDir() { return _contentDir; }
+		String setContentDir(String value) { _contentDir = value; }
 
 		Material* getDefaultMaterial() { return _defaultMaterial; }
 		Shader* getDefaultShader() { return _defaultShader; }

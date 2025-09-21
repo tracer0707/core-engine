@@ -2,11 +2,11 @@
 
 #include <filesystem>
 
-#include <Assets/AssetManager.h>
-#include <Assets/Texture.h>
-#include <Shared/Path.h>
-#include <Shared/String.h>
-#include <System/EventHandler.h>
+#include <Core/Assets/AssetManager.h>
+#include <Core/Assets/Texture.h>
+#include <Core/Shared/Path.h>
+#include <Core/Shared/String.h>
+#include <Core/System/EventHandler.h>
 
 #include "WindowManager.h"
 

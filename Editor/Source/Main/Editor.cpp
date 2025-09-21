@@ -3,16 +3,16 @@
 #include <iostream>
 #include <filesystem>
 
-#include <System/Time.h>
-#include <Shared/String.h>
-#include <Shared/Path.h>
-#include <Renderer/Renderer.h>
-#include <Scene/Scene.h>
-#include <Scene/Object.h>
-#include <Components/Camera.h>
-#include <Components/Transform.h>
-#include <Assets/RenderTexture.h>
-#include <Assets/AssetManager.h>
+#include <Core/System/Time.h>
+#include <Core/Shared/String.h>
+#include <Core/Shared/Path.h>
+#include <Core/Renderer/Renderer.h>
+#include <Core/Scene/Scene.h>
+#include <Core/Scene/Object.h>
+#include <Core/Components/Camera.h>
+#include <Core/Components/Transform.h>
+#include <Core/Assets/RenderTexture.h>
+#include <Core/Assets/AssetManager.h>
 
 #include "../Editor/Font.h"
 #include "../Editor/Windows/WindowManager.h"

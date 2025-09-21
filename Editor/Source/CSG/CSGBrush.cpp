@@ -7,9 +7,9 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Math/Mathf.h>
-#include <Scene/Object.h>
-#include <Interface/Transformable.h>
+#include <Core/Math/Mathf.h>
+#include <Core/Scene/Object.h>
+#include <Core/Interface/Transformable.h>
 
 namespace Editor
 {

@@ -1,6 +1,6 @@
 #include "Control.h"
 
-#include <Shared/Uuid.h>
+#include <Core/Shared/Uuid.h>
 
 namespace Editor
 {

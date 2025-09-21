@@ -2,8 +2,8 @@
 
 #include <filesystem>
 
-#include <Shared/Path.h>
-#include <Renderer/Renderer.h>
+#include <Core/Shared/Path.h>
+#include <Core/Renderer/Renderer.h>
 
 #include "../Editor/Font.h"
 #include "../Editor/Windows/FullscreenWindow.h"
@@ -39,6 +39,16 @@ namespace Editor
         _layout->addControl(label);
         _layout->addControl(fileInput);
         _layout->addControl(_buttonsLayout);
+
+        openBtn->setOnClick([]()
+        {
+
+        });
+
+        quitBtn->setOnClick([app]()
+        {
+            app->stop(true);
+        });
 
         _wnd = new FullscreenWindow();
         _wnd->addControl(_layout);

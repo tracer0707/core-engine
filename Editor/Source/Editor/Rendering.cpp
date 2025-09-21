@@ -1,11 +1,11 @@
 #include "Rendering.h"
 
-#include <Renderer/Color.h>
-#include <Renderer/Renderer.h>
-#include <Renderer/Primitives.h>
-#include <Components/Transform.h>
-#include <Components/Camera.h>
-#include <Scene/Object.h>
+#include <Core/Renderer/Color.h>
+#include <Core/Renderer/Renderer.h>
+#include <Core/Renderer/Primitives.h>
+#include <Core/Components/Transform.h>
+#include <Core/Components/Camera.h>
+#include <Core/Scene/Object.h>
 
 namespace Editor
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Config.h>
+#include <Core/Config.h>
 
 #include "Window.h"
 

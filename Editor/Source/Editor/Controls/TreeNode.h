@@ -5,7 +5,7 @@
 
 #include "Control.h"
 
-#include <Shared/String.h>
+#include <Core/Shared/String.h>
 
 namespace Editor
 {

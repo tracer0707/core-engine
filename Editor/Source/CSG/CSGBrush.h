@@ -1,8 +1,8 @@
 #pragma once
 
-#include <Shared/String.h>
-#include <Shared/List.h>
-#include <Shared/Uuid.h>
+#include <Core/Shared/String.h>
+#include <Core/Shared/List.h>
+#include <Core/Shared/Uuid.h>
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>

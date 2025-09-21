@@ -3,7 +3,7 @@
 #include <functional>
 #include <string>
 
-#include <Shared/String.h>
+#include <Core/Shared/String.h>
 
 #include "Control.h"
 

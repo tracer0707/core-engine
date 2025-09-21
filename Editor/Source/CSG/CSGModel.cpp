@@ -8,15 +8,15 @@
 #include <carve/csg.hpp>
 #include <carve/input.hpp>
 
-#include <Scene/Scene.h>
-#include <Scene/Object.h>
-#include <Components/Transform.h>
-#include <Components/MeshRenderer.h>
-#include <Assets/Material.h>
-#include <Assets/Mesh.h>
-#include <Assets/AssetManager.h>
-#include <Renderer/VertexBuffer.h>
-#include <Renderer/Renderer.h>
+#include <Core/Scene/Scene.h>
+#include <Core/Scene/Object.h>
+#include <Core/Components/Transform.h>
+#include <Core/Components/MeshRenderer.h>
+#include <Core/Assets/Material.h>
+#include <Core/Assets/Mesh.h>
+#include <Core/Assets/AssetManager.h>
+#include <Core/Renderer/VertexBuffer.h>
+#include <Core/Renderer/Renderer.h>
 
 #include "CSGBrush.h"
 #include "CSGBrushCube.h"

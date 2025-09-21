@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Renderer/Color.h>
+#include <Core/Renderer/Color.h>
 
 namespace Editor
 {

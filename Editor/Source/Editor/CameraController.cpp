@@ -1,16 +1,15 @@
 #include "CameraController.h"
 
 #include <../sdl/include/SDL/SDL.h>
-#include <string>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <System/EventHandler.h>
-#include <System/InputManager.h>
-#include <System/Time.h>
-#include <Components/Camera.h>
-#include <Components/Transform.h>
-#include <Scene/Object.h>
-#include <Math/Mathf.h>
+#include <Core/System/EventHandler.h>
+#include <Core/System/InputManager.h>
+#include <Core/System/Time.h>
+#include <Core/Components/Camera.h>
+#include <Core/Components/Transform.h>
+#include <Core/Scene/Object.h>
+#include <Core/Math/Mathf.h>
 
 namespace Editor
 {

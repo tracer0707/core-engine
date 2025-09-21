@@ -1,10 +1,11 @@
 #include "ObjectPicker.h"
 
 #include <imgui.h>
-#include <Scene/Object.h>
-#include <Components/Camera.h>
-#include <Components/Transform.h>
-#include <System/InputManager.h>
+
+#include <Core/Scene/Object.h>
+#include <Core/Components/Camera.h>
+#include <Core/Components/Transform.h>
+#include <Core/System/InputManager.h>
 
 #include "Gizmo.h"
 #include "Windows/WindowManager.h"

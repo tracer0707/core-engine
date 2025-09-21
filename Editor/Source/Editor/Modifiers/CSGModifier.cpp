@@ -2,14 +2,14 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Scene/Scene.h>
-#include <System/InputManager.h>
-#include <Components/Camera.h>
-#include <Components/Transform.h>
-#include <Renderer/Renderer.h>
-#include <Renderer/Primitives.h>
-#include <Renderer/Color.h>
-#include <Assets/AssetManager.h>
+#include <Core/Scene/Scene.h>
+#include <Core/System/InputManager.h>
+#include <Core/Components/Camera.h>
+#include <Core/Components/Transform.h>
+#include <Core/Renderer/Renderer.h>
+#include <Core/Renderer/Primitives.h>
+#include <Core/Renderer/Color.h>
+#include <Core/Assets/AssetManager.h>
 
 #include "../Windows/WindowManager.h"
 #include "../Windows/HierarchyWindow.h"

@@ -1,8 +1,9 @@
 #include "SceneWindow.h"
 
 #include <imgui.h>
-#include <Assets/RenderTexture.h>
-#include <Scene/Scene.h>
+
+#include <Core/Assets/RenderTexture.h>
+#include <Core/Scene/Scene.h>
 
 #include "../Gizmo.h"
 #include "../ObjectPicker.h"

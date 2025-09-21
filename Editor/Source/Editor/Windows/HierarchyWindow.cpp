@@ -16,7 +16,7 @@
 #include "../../CSG/CSGBrush.h"
 #include "../../Shared/Tags.h"
 
-#include <Scene/Object.h>
+#include <Core/Scene/Object.h>
 
 namespace Editor
 {

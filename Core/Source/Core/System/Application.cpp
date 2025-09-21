@@ -18,6 +18,12 @@ namespace Core
 		SDL_Quit();
 	}
 
+	void Application::stop(bool forceClose)
+	{
+		_isRunning = false;
+		_forceClosed = forceClose;
+	}
+
 	void Application::internalInit()
 	{
 		_eventHandler = new EventHandler();

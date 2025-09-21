@@ -2,10 +2,10 @@
 
 #include <filesystem>
 
-#include <Assets/AssetManager.h>
-#include <Assets/Texture.h>
-#include <Shared/Path.h>
-#include <Shared/String.h>
+#include <Core/Assets/AssetManager.h>
+#include <Core/Assets/Texture.h>
+#include <Core/Shared/Path.h>
+#include <Core/Shared/String.h>
 
 #include "WindowList.h"
 

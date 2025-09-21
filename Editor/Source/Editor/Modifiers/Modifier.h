@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Shared/String.h>
-#include <Shared/List.h>
+#include <Core/Shared/String.h>
+#include <Core/Shared/List.h>
 
 namespace Core
 {

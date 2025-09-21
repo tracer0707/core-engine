@@ -3,8 +3,8 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include <System/EventHandler.h>
-#include <Assets/Texture.h>
+#include <Core/System/EventHandler.h>
+#include <Core/Assets/Texture.h>
 
 #include "ControlList.h"
 

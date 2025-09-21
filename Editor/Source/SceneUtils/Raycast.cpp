@@ -2,13 +2,13 @@
 
 #include <iostream>
 
-#include <Math/Mathf.h>
-#include <Scene/Scene.h>
-#include <Scene/Object.h>
-#include <Assets/Mesh.h>
-#include <Components/MeshRenderer.h>
-#include <Components/Transform.h>
-#include <Renderer/VertexBuffer.h>
+#include <Core/Math/Mathf.h>
+#include <Core/Scene/Scene.h>
+#include <Core/Scene/Object.h>
+#include <Core/Assets/Mesh.h>
+#include <Core/Components/MeshRenderer.h>
+#include <Core/Components/Transform.h>
+#include <Core/Renderer/VertexBuffer.h>
 
 #include "../Editor/Modifiers/ModifierManager.h"
 #include "../Editor/Modifiers/CSGModifier.h"

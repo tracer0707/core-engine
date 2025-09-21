@@ -38,5 +38,6 @@ namespace Core
 		EventHandler* getEventHandler() { return _eventHandler; }
 		bool isForceClosed() { return _forceClosed; }
 		void run();
+		void stop(bool forceClose);
 	};
 }

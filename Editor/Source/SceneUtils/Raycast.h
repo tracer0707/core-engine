@@ -3,8 +3,8 @@
 #include <glm/vec3.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Math/Ray.h>
-#include <Shared/Uuid.h>
+#include <Core/Math/Ray.h>
+#include <Core/Shared/Uuid.h>
 
 namespace Core
 {

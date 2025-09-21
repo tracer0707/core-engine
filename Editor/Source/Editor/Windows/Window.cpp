@@ -7,8 +7,8 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include <Shared/String.h>
-#include <System/EventHandler.h>
+#include <Core/Shared/String.h>
+#include <Core/System/EventHandler.h>
 
 namespace Editor
 {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <Shared/Uuid.h>
+#include <Core/Shared/Uuid.h>
 
 #include "../Controls/Container.h"
 #include "../Controls/Style.h"

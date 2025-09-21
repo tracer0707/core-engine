@@ -5,9 +5,9 @@
 #include <imgui.h>
 #include <ImGuizmo.h>
 
-#include <Components/Camera.h>
-#include <Components/Transform.h>
-#include <System/InputManager.h>
+#include <Core/Components/Camera.h>
+#include <Core/Components/Transform.h>
+#include <Core/System/InputManager.h>
 
 namespace Editor
 {

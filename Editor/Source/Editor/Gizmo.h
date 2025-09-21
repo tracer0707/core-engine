@@ -5,7 +5,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-#include <Shared/Uuid.h>
+#include <Core/Shared/Uuid.h>
 
 namespace Core
 {

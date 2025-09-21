@@ -1,7 +1,7 @@
 #pragma once
 
-#include <System/Window.h>
-#include <Shared/String.h>
+#include <Core/System/Window.h>
+#include <Core/Shared/String.h>
 
 #include <functional>
 

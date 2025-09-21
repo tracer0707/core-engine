@@ -1,7 +1,9 @@
 #pragma once
 
-#include <System/Application.h>
-#include <System/Window.h>
+#include <Core/System/Application.h>
+#include <Core/System/Window.h>
+#include <Core/Shared/List.h>
+#include <Core/Shared/String.h>
 
 namespace Editor
 {
@@ -19,6 +21,8 @@ namespace Editor
 		private:
 			MainWindow(Core::Application* app);
 			virtual ~MainWindow();
+
+			Core::List<Core::String> _recentProjects;
 
 			FullscreenWindow* _wnd = nullptr;
 

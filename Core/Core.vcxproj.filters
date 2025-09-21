@@ -45,64 +45,64 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Shared\IO.cpp">
+    <ClCompile Include="Source\Core\Shared\IO.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shared\Path.cpp">
+    <ClCompile Include="Source\Core\Shared\Path.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shared\String.cpp">
+    <ClCompile Include="Source\Core\Shared\String.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Transform.cpp">
+    <ClCompile Include="Source\Core\Components\Transform.cpp">
       <Filter>Исходные файлы\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\MeshRenderer.cpp">
+    <ClCompile Include="Source\Core\Components\MeshRenderer.cpp">
       <Filter>Исходные файлы\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\Material.cpp">
+    <ClCompile Include="Source\Core\Assets\Material.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\Mesh.cpp">
+    <ClCompile Include="Source\Core\Assets\Mesh.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\Shader.cpp">
+    <ClCompile Include="Source\Core\Assets\Shader.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Component.cpp">
+    <ClCompile Include="Source\Core\Components\Component.cpp">
       <Filter>Исходные файлы\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\Asset.cpp">
+    <ClCompile Include="Source\Core\Assets\Asset.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\Renderer.cpp">
+    <ClCompile Include="Source\Core\Renderer\Renderer.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\RendererGL4.cpp">
+    <ClCompile Include="Source\Core\Renderer\RendererGL4.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Components\Camera.cpp">
+    <ClCompile Include="Source\Core\Components\Camera.cpp">
       <Filter>Исходные файлы\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\Texture.cpp">
+    <ClCompile Include="Source\Core\Assets\Texture.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\VertexBuffer.cpp">
+    <ClCompile Include="Source\Core\Renderer\VertexBuffer.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\AxisAlignedBox.cpp">
+    <ClCompile Include="Source\Core\Math\AxisAlignedBox.cpp">
       <Filter>Исходные файлы\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\Mathf.cpp">
+    <ClCompile Include="Source\Core\Math\Mathf.cpp">
       <Filter>Исходные файлы\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\Plane.cpp">
+    <ClCompile Include="Source\Core\Math\Plane.cpp">
       <Filter>Исходные файлы\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Math\Ray.cpp">
+    <ClCompile Include="Source\Core\Math\Ray.cpp">
       <Filter>Исходные файлы\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Classes\bc7compressor.cpp">
+    <ClCompile Include="Source\Core\Classes\bc7compressor.cpp">
       <Filter>Исходные файлы\Classes</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\imgui\imgui.cpp">
@@ -120,13 +120,13 @@
     <ClCompile Include="Dependencies\imgui\imgui_widgets.cpp">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\Scene.cpp">
+    <ClCompile Include="Source\Core\Scene\Scene.cpp">
       <Filter>Исходные файлы\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Scene\Object.cpp">
+    <ClCompile Include="Source\Core\Scene\Object.cpp">
       <Filter>Исходные файлы\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\EventHandler.cpp">
+    <ClCompile Include="Source\Core\System\EventHandler.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\imgui\ImGuizmo.cpp">
@@ -138,49 +138,49 @@
     <ClCompile Include="Dependencies\imgui\imgui_impl_sdl2.cpp">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\InputManager.cpp">
+    <ClCompile Include="Source\Core\System\InputManager.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shared\List.cpp">
+    <ClCompile Include="Source\Core\Shared\List.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\Primitives.cpp">
+    <ClCompile Include="Source\Core\Renderer\Primitives.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Time.cpp">
+    <ClCompile Include="Source\Core\System\Time.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\FrameBuffer.cpp">
+    <ClCompile Include="Source\Core\Renderer\FrameBuffer.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\Program.cpp">
+    <ClCompile Include="Source\Core\Renderer\Program.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\RenderTexture.cpp">
+    <ClCompile Include="Source\Core\Assets\RenderTexture.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shared\BitSet.cpp">
+    <ClCompile Include="Source\Core\Shared\BitSet.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Shared\Uuid.cpp">
+    <ClCompile Include="Source\Core\Shared\Uuid.cpp">
       <Filter>Исходные файлы\Shared</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Renderer\Color.cpp">
+    <ClCompile Include="Source\Core\Renderer\Color.cpp">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Application.cpp">
+    <ClCompile Include="Source\Core\System\Application.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\System\Window.cpp">
+    <ClCompile Include="Source\Core\System\Window.cpp">
       <Filter>Исходные файлы\System</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Assets\AssetManager.cpp">
+    <ClCompile Include="Source\Core\Assets\AssetManager.cpp">
       <Filter>Исходные файлы\Assets</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Classes\TextureUtils.cpp">
+    <ClCompile Include="Source\Core\Classes\TextureUtils.cpp">
       <Filter>Исходные файлы\Classes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Interface\Transformable.cpp">
+    <ClCompile Include="Source\Core\Interface\Transformable.cpp">
       <Filter>Исходные файлы\Interface</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\imgui\imgui_stdlib.cpp">
@@ -188,67 +188,67 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Shared\IO.h">
+    <ClInclude Include="Source\Core\Shared\IO.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shared\Path.h">
+    <ClInclude Include="Source\Core\Shared\Path.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shared\String.h">
+    <ClInclude Include="Source\Core\Shared\String.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Transform.h">
+    <ClInclude Include="Source\Core\Components\Transform.h">
       <Filter>Исходные файлы\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\MeshRenderer.h">
+    <ClInclude Include="Source\Core\Components\MeshRenderer.h">
       <Filter>Исходные файлы\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\Material.h">
+    <ClInclude Include="Source\Core\Assets\Material.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\Mesh.h">
+    <ClInclude Include="Source\Core\Assets\Mesh.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\Shader.h">
+    <ClInclude Include="Source\Core\Assets\Shader.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Component.h">
+    <ClInclude Include="Source\Core\Components\Component.h">
       <Filter>Исходные файлы\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\Asset.h">
+    <ClInclude Include="Source\Core\Assets\Asset.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\Renderer.h">
+    <ClInclude Include="Source\Core\Renderer\Renderer.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\RendererGL4.h">
+    <ClInclude Include="Source\Core\Renderer\RendererGL4.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\Camera.h">
+    <ClInclude Include="Source\Core\Components\Camera.h">
       <Filter>Исходные файлы\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\Texture.h">
+    <ClInclude Include="Source\Core\Assets\Texture.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\Color.h">
+    <ClInclude Include="Source\Core\Renderer\Color.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\VertexBuffer.h">
+    <ClInclude Include="Source\Core\Renderer\VertexBuffer.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\AxisAlignedBox.h">
+    <ClInclude Include="Source\Core\Math\AxisAlignedBox.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Mathf.h">
+    <ClInclude Include="Source\Core\Math\Mathf.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Plane.h">
+    <ClInclude Include="Source\Core\Math\Plane.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Math\Ray.h">
+    <ClInclude Include="Source\Core\Math\Ray.h">
       <Filter>Исходные файлы\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Classes\bc7compressor.h">
+    <ClInclude Include="Source\Core\Classes\bc7compressor.h">
       <Filter>Исходные файлы\Classes</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imconfig.h">
@@ -269,16 +269,16 @@
     <ClInclude Include="Dependencies\imgui\imstb_truetype.h">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\Scene.h">
+    <ClInclude Include="Source\Core\Scene\Scene.h">
       <Filter>Исходные файлы\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Scene\Object.h">
+    <ClInclude Include="Source\Core\Scene\Object.h">
       <Filter>Исходные файлы\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Classes\dirent.h">
+    <ClInclude Include="Source\Core\Classes\dirent.h">
       <Filter>Исходные файлы\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\EventHandler.h">
+    <ClInclude Include="Source\Core\System\EventHandler.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\ImGuizmo.h">
@@ -290,58 +290,58 @@
     <ClInclude Include="Dependencies\imgui\imgui_impl_sdl2.h">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\InputManager.h">
+    <ClInclude Include="Source\Core\System\InputManager.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shared\List.h">
+    <ClInclude Include="Source\Core\Shared\List.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Components\ComponentList.h">
+    <ClInclude Include="Source\Core\Components\ComponentList.h">
       <Filter>Исходные файлы\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\Primitives.h">
+    <ClInclude Include="Source\Core\Renderer\Primitives.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Time.h">
+    <ClInclude Include="Source\Core\System\Time.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\FrameBuffer.h">
+    <ClInclude Include="Source\Core\Renderer\FrameBuffer.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\Program.h">
+    <ClInclude Include="Source\Core\Renderer\Program.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\RenderTexture.h">
+    <ClInclude Include="Source\Core\Assets\RenderTexture.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Renderer\TextureFormat.h">
+    <ClInclude Include="Source\Core\Renderer\TextureFormat.h">
       <Filter>Исходные файлы\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shared\BitSet.h">
+    <ClInclude Include="Source\Core\Shared\BitSet.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Shared\Uuid.h">
+    <ClInclude Include="Source\Core\Shared\Uuid.h">
       <Filter>Исходные файлы\Shared</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Application.h">
+    <ClInclude Include="Source\Core\System\Application.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\System\Window.h">
+    <ClInclude Include="Source\Core\System\Window.h">
       <Filter>Исходные файлы\System</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Assets\AssetManager.h">
+    <ClInclude Include="Source\Core\Assets\AssetManager.h">
       <Filter>Исходные файлы\Assets</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Config.h">
+    <ClInclude Include="Source\Core\Config.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Classes\TextureUtils.h">
+    <ClInclude Include="Source\Core\Classes\TextureUtils.h">
       <Filter>Исходные файлы\Classes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Interface\Transformable.h">
+    <ClInclude Include="Source\Core\Interface\Transformable.h">
       <Filter>Исходные файлы\Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Classes\json.hpp">
+    <ClInclude Include="Source\Core\Classes\json.hpp">
       <Filter>Исходные файлы\Classes</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imgui_stdlib.h">

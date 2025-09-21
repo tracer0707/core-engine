@@ -1,7 +1,7 @@
 #pragma once
 
-#include <System/Application.h>
-#include <System/Window.h>
+#include <Core/System/Application.h>
+#include <Core/System/Window.h>
 
 namespace Core
 {

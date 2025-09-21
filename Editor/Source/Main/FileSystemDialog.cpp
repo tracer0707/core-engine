@@ -3,11 +3,11 @@
 #include <filesystem>
 #include <iostream>
 
-#include <Renderer/Renderer.h>
-#include <Shared/IO.h>
-#include <Shared/Path.h>
-#include <Shared/List.h>
-#include <Shared/String.h>
+#include <Core/Renderer/Renderer.h>
+#include <Core/Shared/IO.h>
+#include <Core/Shared/Path.h>
+#include <Core/Shared/List.h>
+#include <Core/Shared/String.h>
 
 #include "../Editor/Font.h"
 #include "../Editor/Controls/ControlList.h"
