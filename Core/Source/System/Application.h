@@ -13,12 +13,6 @@ namespace Core
 		friend class Window;
 
 	private:
-		bool _isRunning = false;
-		List<Window*> _windows;
-
-		EventHandler* _eventHandler = nullptr;
-		Window* _mainWindow = nullptr;
-
 		void internalInit();
 		void internalLoop();
 		void internalDestroy();
@@ -27,6 +21,14 @@ namespace Core
 		void removeWindow(Window* value);
 
 	protected:
+		bool _isRunning = false;
+		bool _forceClosed = false;
+
+		List<Window*> _windows;
+
+		EventHandler* _eventHandler = nullptr;
+		Window* _mainWindow = nullptr;
+
 		virtual void init() {}
 		virtual void destroy() {}
 
@@ -34,6 +36,7 @@ namespace Core
 		Window* getMainWindow() { return _mainWindow; }
 		void setMainWindow(Window* value) { _mainWindow = value; }
 		EventHandler* getEventHandler() { return _eventHandler; }
+		bool isForceClosed() { return _forceClosed; }
 		void run();
 	};
 }

@@ -99,6 +99,11 @@ namespace Core
             case SDL_WINDOWEVENT_CLOSE:
             {
                 _opened = false;
+
+                if (_onClose != nullptr) {
+                    _onClose();
+                }
+
                 break;
             }
 

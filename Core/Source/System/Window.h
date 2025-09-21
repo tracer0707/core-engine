@@ -20,6 +20,8 @@ namespace Core
 	private:
 		bool _opened = false;
 
+		std::function<void()> _onClose = nullptr;
+
 		void processEvents(void* event);
 		void internalUpdate();
 		
@@ -50,6 +52,8 @@ namespace Core
 		
 		int getWidth() { return _width; }
 		int getHeight() { return _height; }
+
+		void setOnClose(std::function<void()> event) { _onClose = event; }
 
 		void close();
 	};

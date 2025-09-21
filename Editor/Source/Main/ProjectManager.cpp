@@ -68,6 +68,12 @@ namespace Editor
     {
         _wnd = new MainWindow(this);
 
+        _wnd->setOnClose([this]()
+        {
+            _isRunning = false;
+            _forceClosed = true;
+        });
+
         _mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();
     }
