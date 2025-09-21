@@ -7,7 +7,7 @@
 
 namespace Editor
 {
-	TreeView::TreeView() {}
+	TreeView::TreeView() : Control() {}
 
 	TreeView::~TreeView() {}
 

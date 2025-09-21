@@ -36,7 +36,7 @@ namespace Editor
 {
     /* WINDOW */
 
-    Editor::MainWindow::MainWindow(Core::Application* app) : Window(app, "Project Manager", 1366, 768)
+    Editor::MainWindow::MainWindow(Editor* app) : Window(app, "Project Manager", 1366, 768)
     {
         _scene = new Core::Scene(_renderer);
         

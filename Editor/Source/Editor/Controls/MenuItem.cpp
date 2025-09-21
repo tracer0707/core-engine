@@ -6,6 +6,11 @@
 
 namespace Editor
 {
+	MenuItem::MenuItem(Core::String text) : Control()
+	{
+		_text = text;
+	}
+
 	MenuItem::~MenuItem() {}
 
 	void MenuItem::update()

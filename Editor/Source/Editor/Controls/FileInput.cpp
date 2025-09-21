@@ -12,16 +12,16 @@
 
 namespace Editor
 {
-	FileInput::FileInput(Core::Application* application)
+	FileInput::FileInput(Core::Application* application) : Control()
 	{
 		_application = application;
 
 		LinearLayout* layout = new LinearLayout(LayoutDirection::Horizontal);
 
-		TextInput* textInput = new TextInput();
+		_textInput = new TextInput();
 		Button* button = new Button("...");
 		
-		layout->addControl(textInput);
+		layout->addControl(_textInput);
 		layout->addControl(button);
 
 		button->setOnClick([=] {
@@ -30,7 +30,7 @@ namespace Editor
 				FileSystemDialog* dlg = new FileSystemDialog(_application);
 				dlg->setOnFileSelected([=](Core::String fileName)
 				{
-					textInput->setText(fileName);
+					_textInput->setText(fileName);
 				});
 			});
 		});
@@ -51,6 +51,16 @@ namespace Editor
 		{
 			it->update();
 		}
+	}
+
+	Core::String FileInput::getFilePath()
+	{
+		return _textInput->getText();
+	}
+
+	void FileInput::setFilePath(Core::String value)
+	{
+		_textInput->setText(value);
 	}
 
 	int FileInput::getControlType()

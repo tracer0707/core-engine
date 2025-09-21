@@ -13,18 +13,21 @@ namespace Core
 
 namespace Editor
 {
+	class TextInput;
+
 	class FileInput : public Control
 	{
 	private:
-		Core::String _filePath = "";
 		Core::Application* _application = nullptr;
+
+		TextInput* _textInput = nullptr;
 
 	public:
 		FileInput(Core::Application* application);
 		virtual ~FileInput();
 
-		Core::String getFilePath() { return _filePath; }
-		void setFilePath(Core::String value) { _filePath = value; }
+		Core::String getFilePath();
+		void setFilePath(Core::String value);
 
 		virtual int getControlType();
 		virtual void update();

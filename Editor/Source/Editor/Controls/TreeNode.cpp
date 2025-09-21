@@ -9,7 +9,7 @@
 
 namespace Editor
 {
-	TreeNode::TreeNode(TreeView* treeView)
+	TreeNode::TreeNode(TreeView* treeView) : Control()
 	{
 		_tree = treeView;
 	}

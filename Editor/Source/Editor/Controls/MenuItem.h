@@ -19,7 +19,7 @@ namespace Editor
 		std::function<void()> _onClick = nullptr;
 
 	public:
-		MenuItem(Core::String text) { _text = text; }
+		MenuItem(Core::String text);
 		~MenuItem();
 
 		virtual int getControlType();

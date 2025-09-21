@@ -10,7 +10,7 @@
 
 namespace Editor
 {
-	TextInput::TextInput()
+	TextInput::TextInput() : Control()
 	{
 	}
 

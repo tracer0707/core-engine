@@ -7,7 +7,7 @@
 
 namespace Editor
 {
-	Separator::Separator() {}
+	Separator::Separator() : Control() {}
 
 	Separator::~Separator() {}
 

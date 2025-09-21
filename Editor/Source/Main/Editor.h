@@ -35,7 +35,7 @@ namespace Editor
 			friend class Editor;
 
 		private:
-			MainWindow(Core::Application* app);
+			MainWindow(Editor* app);
 			virtual ~MainWindow();
 
 			virtual void update();

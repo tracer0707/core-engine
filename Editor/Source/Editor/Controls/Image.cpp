@@ -9,11 +9,11 @@
 
 namespace Editor
 {
-	Image::Image()
+	Image::Image() : Control()
 	{
 	}
 
-	Image::Image(unsigned int width, unsigned int height)
+	Image::Image(unsigned int width, unsigned int height) : Control()
 	{
 		this->width = width;
 		this->height = height;

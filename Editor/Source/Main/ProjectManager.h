@@ -19,7 +19,7 @@ namespace Editor
 			friend class ProjectManager;
 
 		private:
-			MainWindow(Core::Application* app);
+			MainWindow(ProjectManager* app);
 			virtual ~MainWindow();
 
 			Core::List<Core::String> _recentProjects;
@@ -30,10 +30,16 @@ namespace Editor
 			virtual void render();
 		};
 
+		Core::String _selectedProject = "";
+
 		Font* _mainFont = nullptr;
 		MainWindow* _wnd = nullptr;
 		
 		virtual void init();
 		virtual void destroy();
+
+	public:
+		Core::String getSelectedProject() { return _selectedProject; }
+		void setSelectedProject(Core::String value) { _selectedProject = value; }
 	};
 }

@@ -7,9 +7,9 @@
 
 namespace Editor
 {
-	Label::Label() {}
+	Label::Label() : Control() {}
 
-	Label::Label(Core::String text)
+	Label::Label(Core::String text) : Control()
 	{
 		_text = text;
 	}

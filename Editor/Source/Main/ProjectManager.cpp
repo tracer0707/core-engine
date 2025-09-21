@@ -16,7 +16,7 @@ namespace Editor
 {
     /* WINDOW */
 
-    ProjectManager::MainWindow::MainWindow(Core::Application* app) : Window(app, "Project Manager", 700, 500)
+    ProjectManager::MainWindow::MainWindow(ProjectManager* app) : Window(app, "Project Manager", 700, 500)
     {
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
@@ -40,9 +40,10 @@ namespace Editor
         _layout->addControl(fileInput);
         _layout->addControl(_buttonsLayout);
 
-        openBtn->setOnClick([]()
+        openBtn->setOnClick([app, fileInput]()
         {
-
+            app->setSelectedProject(fileInput->getFilePath());
+            app->stop(false);
         });
 
         quitBtn->setOnClick([app]()

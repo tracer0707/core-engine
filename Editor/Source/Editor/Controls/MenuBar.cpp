@@ -9,7 +9,7 @@
 
 namespace Editor
 {
-	MenuBar::MenuBar() {}
+	MenuBar::MenuBar() : Control() {}
 
 	MenuBar::~MenuBar() {}
 

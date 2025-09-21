@@ -100,7 +100,8 @@ namespace Core
             {
                 _opened = false;
 
-                if (_onClose != nullptr) {
+                if (_onClose != nullptr)
+                {
                     _onClose();
                 }
 

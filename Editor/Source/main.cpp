@@ -9,6 +9,7 @@ int main(int argc, char* argv[])
     if (projectManager.isForceClosed()) return 0;
     
     Editor::Editor editor;
+    editor.setWorkingDir(projectManager.getSelectedProject());
     editor.run();
 
     return 0;
