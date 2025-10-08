@@ -24,8 +24,15 @@ namespace Core
 		int indexOf(T value);
 		void clear();
 		T* ptr();
+		std::vector<T>& vec() { return list; }
+		
 		std::vector<T>::iterator begin() { return list.begin(); }
 		std::vector<T>::iterator end() { return list.end(); }
+		std::vector<T>::const_iterator begin() const { return list.begin(); }
+		std::vector<T>::const_iterator end() const { return list.end(); }
+		std::vector<T>::const_iterator cbegin() const { return list.cbegin(); }
+		std::vector<T>::const_iterator cend() const { return list.cend(); }
+
 		bool tryFind(T& out, std::function<bool(T&)> func);
 		bool contains(T& value);
 		bool isEmpty() { return list.empty(); }

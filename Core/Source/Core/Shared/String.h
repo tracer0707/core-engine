@@ -21,8 +21,9 @@ namespace Core
 		String& operator+=(String& str);
 		String& operator+=(char str);
 		bool operator!=(const char* str);
+		bool operator==(const String& str) const;
 
-		std::string std_str();
+		std::string std_str() const;
 
 		String replace(char src, char dst);
 		int lastIndexOf(char src);

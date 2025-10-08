@@ -43,6 +43,9 @@
     <Filter Include="Исходные файлы\Interface">
       <UniqueIdentifier>{89f5cfd6-955d-4332-aa69-294baa023074}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Serialization">
+      <UniqueIdentifier>{e43a0363-f042-4ecd-ad8c-6844b41393c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Core\Shared\IO.cpp">
@@ -346,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="Dependencies\imgui\imgui_stdlib.h">
       <Filter>Исходные файлы\Classes\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Serialization\JsonSerialization.h">
+      <Filter>Исходные файлы\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

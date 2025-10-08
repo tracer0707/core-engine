@@ -11,6 +11,7 @@
 #include "../Editor/Controls/FileInput.h"
 #include "../Editor/Controls/Label.h"
 #include "../Editor/Controls/Button.h"
+#include "../Serialization/RecentProjectList.h"
 
 namespace Editor
 {
@@ -18,6 +19,8 @@ namespace Editor
 
     ProjectManager::MainWindow::MainWindow(ProjectManager* app) : Window(app, "Project Manager", 700, 500)
     {
+        RecentProjectList::load();
+
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Center);
@@ -42,7 +45,16 @@ namespace Editor
 
         openBtn->setOnClick([app, fileInput]()
         {
-            app->setSelectedProject(fileInput->getFilePath());
+            Core::String selectedPath = fileInput->getFilePath();
+
+            app->setSelectedProject(selectedPath);
+
+            if (!RecentProjectList::getProjectList().contains(selectedPath))
+            {
+                RecentProjectList::getProjectList().add(selectedPath);
+                RecentProjectList::save();
+            }
+
             app->stop(false);
         });
 

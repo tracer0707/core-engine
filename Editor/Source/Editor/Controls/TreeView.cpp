@@ -11,6 +11,11 @@ namespace Editor
 
 	TreeView::~TreeView() {}
 
+	int TreeView::getControlType()
+	{
+		return CONTROL_TREE_VIEW;
+	}
+
 	void TreeView::update()
 	{
 		for (auto it : _controls)
@@ -61,35 +66,30 @@ namespace Editor
 
 	void TreeView::selectNode(TreeNode* value, bool byUser)
 	{
-		selectedNodes.clear();
+		_selectedNodes.clear();
 		if (value != nullptr)
 		{
-			selectedNodes.add(value);
+			_selectedNodes.add(value);
 		}
 
 		if (byUser && _onSelectionChanged != nullptr)
 		{
-			_onSelectionChanged(selectedNodes);
+			_onSelectionChanged(_selectedNodes);
 		}
 	}
 
 	void TreeView::clearSelection(bool byUser)
 	{
-		selectedNodes.clear();
+		_selectedNodes.clear();
 
 		if (byUser && _onSelectionChanged != nullptr)
 		{
-			_onSelectionChanged(selectedNodes);
+			_onSelectionChanged(_selectedNodes);
 		}
 	}
 
 	bool TreeView::isNodeSelected(TreeNode* node)
 	{
-		return selectedNodes.contains(node);
-	}
-
-	int TreeView::getControlType()
-	{
-		return CONTROL_TREE_VIEW;
+		return _selectedNodes.contains(node);
 	}
 }

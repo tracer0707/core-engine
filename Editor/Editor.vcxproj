@@ -177,6 +177,7 @@
     <ClCompile Include="Source\Main\FileSystemDialog.cpp" />
     <ClCompile Include="Source\Main\ProjectManager.cpp" />
     <ClCompile Include="Source\SceneUtils\Raycast.cpp" />
+    <ClCompile Include="Source\Serialization\RecentProjectList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Source\Main\FileSystemDialog.h" />
     <ClInclude Include="Source\Main\ProjectManager.h" />
     <ClInclude Include="Source\SceneUtils\Raycast.h" />
+    <ClInclude Include="Source\Serialization\RecentProjectList.h" />
     <ClInclude Include="Source\Shared\Tags.h" />
   </ItemGroup>
   <ItemGroup>

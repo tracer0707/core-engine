@@ -110,6 +110,7 @@
     <ClInclude Include="Source\Core\Renderer\VertexBuffer.h" />
     <ClInclude Include="Source\Core\Scene\Object.h" />
     <ClInclude Include="Source\Core\Scene\Scene.h" />
+    <ClInclude Include="Source\Core\Serialization\JsonSerialization.h" />
     <ClInclude Include="Source\Core\Shared\BitSet.h" />
     <ClInclude Include="Source\Core\Shared\IO.h" />
     <ClInclude Include="Source\Core\Shared\List.h" />

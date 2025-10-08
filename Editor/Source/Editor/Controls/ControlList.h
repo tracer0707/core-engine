@@ -49,4 +49,8 @@ namespace Core
 #ifndef CONTROL_TREE_VIEW
 #define CONTROL_TREE_VIEW 11
 #endif
+
+#ifndef CONTROL_LIST_VIEW
+#define CONTROL_LIST_VIEW 12
+#endif
 }

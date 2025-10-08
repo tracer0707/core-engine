@@ -41,7 +41,12 @@ namespace Core
 		return _buffer != str;
 	}
 
-	std::string String::std_str()
+	bool String::operator==(const String& str) const
+	{
+		return _buffer == str._buffer;
+	}
+
+	std::string String::std_str() const
 	{
 		std::string dst;
 		_buffer.toUTF8String(dst);

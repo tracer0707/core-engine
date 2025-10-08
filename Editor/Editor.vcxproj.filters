@@ -37,6 +37,9 @@
     <Filter Include="Исходные файлы\Main">
       <UniqueIdentifier>{b2e9387a-79ee-4fff-806c-73c577bbd99f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Serialization">
+      <UniqueIdentifier>{70ef9ea3-4902-49d8-8965-46ff413a4a7b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor\CameraController.cpp">
@@ -164,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="Source\Editor\Controls\ListView.cpp">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Serialization\RecentProjectList.cpp">
+      <Filter>Исходные файлы\Serialization</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +313,9 @@
     </ClInclude>
     <ClInclude Include="Source\Editor\Controls\ListView.h">
       <Filter>Исходные файлы\Editor\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Serialization\RecentProjectList.h">
+      <Filter>Исходные файлы\Serialization</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

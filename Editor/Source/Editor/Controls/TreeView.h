@@ -11,7 +11,7 @@ namespace Editor
 	class TreeView : public Control
 	{
 	private:
-		Core::List<TreeNode*> selectedNodes;
+		Core::List<TreeNode*> _selectedNodes;
 
 		std::function<void(Core::List<TreeNode*>&)> _onSelectionChanged = nullptr;
 
@@ -27,7 +27,7 @@ namespace Editor
 
 		void setOnSelectionChanged(std::function<void(Core::List<TreeNode*>&)> callback) { _onSelectionChanged = callback; }
 
-		Core::List<TreeNode*>& getSelectedNodes() { return selectedNodes; }
+		Core::List<TreeNode*>& getSelectedNodes() { return _selectedNodes; }
 		bool isNodeSelected(TreeNode* node);
 
 		TreeNode* findNodeByTag(int key, void* value);
