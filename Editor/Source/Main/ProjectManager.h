@@ -10,6 +10,7 @@ namespace Editor
 	class WindowManager;
 	class FullscreenWindow;
 	class Font;
+	class LinearLayout;
 
 	class ProjectManager : public Core::Application
 	{
@@ -24,6 +25,7 @@ namespace Editor
 
 			Core::List<Core::String> _recentProjects;
 
+			LinearLayout* _mainLayout = nullptr;
 			FullscreenWindow* _wnd = nullptr;
 
 			virtual void update();

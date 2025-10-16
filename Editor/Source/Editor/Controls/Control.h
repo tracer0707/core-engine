@@ -1,9 +1,12 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 #include "Container.h"
 #include "Style.h"
+
+#include <Core/Shared/String.h>
 
 namespace Editor
 {
@@ -19,6 +22,8 @@ namespace Editor
 		Container* _parent = nullptr;
 		Style _style;
 		bool _visible = true;
+		std::map<int, void*> _objectTags;
+		std::map<int, Core::String> _stringTags;
 
 	public:
 		Control();
@@ -31,6 +36,12 @@ namespace Editor
 
 		void setEnabled(bool value) { _style.enabled = value; }
 		bool getEnabled() { return _style.enabled; }
+
+		void setObjectTag(int key, void* value);
+		void* getObjectTag(int key);
+
+		void setStringTag(int key, Core::String value);
+		Core::String getStringTag(int key);
 
 		virtual int getControlType() = 0;
 

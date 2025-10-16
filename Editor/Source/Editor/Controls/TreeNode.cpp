@@ -59,34 +59,4 @@ namespace Editor
 			ImGui::TreePop();
 		}
 	}
-
-	void TreeNode::setObjectTag(int key, void* value)
-	{
-		_objectTags[key] = value;
-	}
-
-	void* TreeNode::getObjectTag(int key)
-	{
-		if (_objectTags.find(key) == _objectTags.end())
-		{
-			return nullptr;
-		}
-
-		return _objectTags[key];
-	}
-
-	void TreeNode::setStringTag(int key, Core::String value)
-	{
-		_stringTags[key] = value;
-	}
-
-	Core::String TreeNode::getStringTag(int key)
-	{
-		if (_stringTags.find(key) == _stringTags.end())
-		{
-			return nullptr;
-		}
-
-		return _stringTags[key];
-	}
 }

@@ -30,6 +30,9 @@ namespace Editor
 		float _width = 0;
 		float _height = 0;
 
+		bool _stretchX = false;
+		bool _stretchY = false;
+
 	public:
 		LinearLayout();
 		LinearLayout(LayoutDirection direction);
@@ -52,5 +55,11 @@ namespace Editor
 
 		float getHeight();
 		void setHeight(float value);
+
+		bool getStretchX() { return _stretchX; }
+		void setStretchX(bool value) { _stretchX = value; }
+
+		bool getStretchY() { return _stretchY; }
+		void setStretchY(bool value) { _stretchY = value; }
 	};
 }

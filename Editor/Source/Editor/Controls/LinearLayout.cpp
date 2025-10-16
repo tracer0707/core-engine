@@ -46,6 +46,12 @@ namespace Editor
 
 		uint32_t _flags = ImGuiChildFlags_AlwaysUseWindowPadding;
 
+		float availX = ImGui::GetContentRegionAvail().x;
+		float availY = ImGui::GetContentRegionAvail().y;
+
+		if (_stretchX) _totalWidth = _width = availX;
+		if (_stretchY) _totalHeight = _height = availY;
+
 		if (_width == 0) _flags |= ImGuiChildFlags_AutoResizeX;
 		if (_height == 0) _flags |= ImGuiChildFlags_AutoResizeY;
 

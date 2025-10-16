@@ -1,7 +1,6 @@
 #pragma once
 
 #include <functional>
-#include <map>
 
 #include "Control.h"
 
@@ -22,10 +21,6 @@ namespace Editor
 		std::function<void()> _onClick = nullptr;
 		std::function<void(bool)> _onOpen = nullptr;
 
-		void* _obj = nullptr;
-		std::map<int, void*> _objectTags;
-		std::map<int, Core::String> _stringTags;
-
 		TreeView* _tree = nullptr;
 
 		TreeNode(TreeView* treeView);
@@ -43,11 +38,5 @@ namespace Editor
 
 		void setAlwaysShowOpenArrow(bool value) { _alwaysShowOpenArrow = value; }
 		bool getAlwaysShowOpenArrow() { return _alwaysShowOpenArrow; }
-
-		void setObjectTag(int key, void* value);
-		void* getObjectTag(int key);
-
-		void setStringTag(int key, Core::String value);
-		Core::String getStringTag(int key);
 	};
 }

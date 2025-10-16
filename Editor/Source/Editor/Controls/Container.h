@@ -15,7 +15,7 @@ namespace Editor
 
 	public:
 		Container();
-		~Container();
+		virtual ~Container();
 
 		void addControl(Control* value);
 		void removeControl(Control* value);

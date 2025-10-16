@@ -13,4 +13,34 @@ namespace Editor
 	{
 		_parent = nullptr;
 	}
+
+	void Control::setObjectTag(int key, void* value)
+	{
+		_objectTags[key] = value;
+	}
+
+	void* Control::getObjectTag(int key)
+	{
+		if (_objectTags.find(key) == _objectTags.end())
+		{
+			return nullptr;
+		}
+
+		return _objectTags[key];
+	}
+
+	void Control::setStringTag(int key, Core::String value)
+	{
+		_stringTags[key] = value;
+	}
+
+	Core::String Control::getStringTag(int key)
+	{
+		if (_stringTags.find(key) == _stringTags.end())
+		{
+			return nullptr;
+		}
+
+		return _stringTags[key];
+	}
 }

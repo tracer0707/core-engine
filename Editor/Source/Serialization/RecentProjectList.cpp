@@ -16,7 +16,7 @@ namespace Editor
 
     void RecentProjectList::save()
     {
-        nlohmann::json j = nlohmann::json{ { "recent_projects", _projectList } };
+        nlohmann::json j = nlohmann::json{ { "RecentProjects", _projectList } };
 
         std::ofstream file(filename.std_str());
         if (file.is_open()) {
@@ -35,7 +35,7 @@ namespace Editor
             nlohmann::json j;
             file >> j;
             file.close();
-            _projectList = j["recent_projects"].get<Core::List<Core::String>>();
+            _projectList = j["RecentProjects"].get<Core::List<Core::String>>();
         }
         else {
             throw new std::runtime_error("Error opening file for read");

@@ -11,6 +11,8 @@
 #include "../Editor/Controls/FileInput.h"
 #include "../Editor/Controls/Label.h"
 #include "../Editor/Controls/Button.h"
+#include "../Editor/Controls/ListView.h"
+
 #include "../Serialization/RecentProjectList.h"
 
 namespace Editor
@@ -21,31 +23,65 @@ namespace Editor
     {
         RecentProjectList::load();
 
+        _mainLayout = new LinearLayout(LayoutDirection::Vertical);
+        _mainLayout->setStretchX(true);
+        _mainLayout->setStretchY(true);
+        
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Center);
-
         _layout->getStyle().paddingX = 20;
         _layout->getStyle().paddingY = 20;
+
+        LinearLayout* _listLayout = new LinearLayout(LayoutDirection::Vertical);
+        _listLayout->getStyle().paddingX = 20;
+        _listLayout->getStyle().paddingY = 20;
+        _listLayout->setStretchX(true);
+        _listLayout->setStretchY(true);
 
         LinearLayout* _buttonsLayout = new LinearLayout();
         _buttonsLayout->setHorizontalAlignment(LayoutAlignment::Center);
 
-        Label* label = new Label("Project location");
-        FileInput* fileInput = new FileInput(_application);
-        Button* openBtn = new Button("Open");
-        Button* quitBtn = new Button("Quit");
+        Label* _label = new Label("Project location");
+        FileInput* _fileInput = new FileInput(_application);
+        Button* _openBtn = new Button("Open");
+        Button* _quitBtn = new Button("Quit");
 
-        _buttonsLayout->addControl(openBtn);
-        _buttonsLayout->addControl(quitBtn);
+        ListView* listView = new ListView();
 
-        _layout->addControl(label);
-        _layout->addControl(fileInput);
+        for (auto& it : RecentProjectList::getProjectList())
+        {
+            auto path = std::filesystem::path(it.std_str());
+            LinearLayout* ll = new LinearLayout(LayoutDirection::Vertical);
+            ll->setObjectTag(0, &it);
+            ll->setStretchX(true);
+            ll->getStyle().paddingX = 5;
+            ll->getStyle().paddingY = 5;
+            Label* lbl1 = new Label(path.filename().generic_string());
+            Label* lbl2 = new Label(it);
+            ll->addControl(lbl1);
+            ll->addControl(lbl2);
+            listView->addControl(ll);
+        }
+
+        listView->setOnItemClick([=](Control* item) {
+            Core::String* path = (Core::String*)item->getObjectTag(0);
+            app->setSelectedProject(*path);
+            app->stop(false);
+        });
+
+        _buttonsLayout->addControl(_openBtn);
+        _buttonsLayout->addControl(_quitBtn);
+
+        _layout->addControl(_label);
+        _layout->addControl(_fileInput);
         _layout->addControl(_buttonsLayout);
 
-        openBtn->setOnClick([app, fileInput]()
+        _listLayout->addControl(listView);
+
+        _openBtn->setOnClick([app, _fileInput]()
         {
-            Core::String selectedPath = fileInput->getFilePath();
+            Core::String selectedPath = _fileInput->getFilePath();
 
             app->setSelectedProject(selectedPath);
 
@@ -58,13 +94,16 @@ namespace Editor
             app->stop(false);
         });
 
-        quitBtn->setOnClick([app]()
+        _quitBtn->setOnClick([app]()
         {
             app->stop(true);
         });
 
+        _mainLayout->addControl(_layout);
+        _mainLayout->addControl(_listLayout);
+
         _wnd = new FullscreenWindow();
-        _wnd->addControl(_layout);
+        _wnd->addControl(_mainLayout);
     }
 
     ProjectManager::MainWindow::~MainWindow()

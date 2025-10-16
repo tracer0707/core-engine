@@ -55,10 +55,17 @@ namespace Editor
 		{
 			it->update();
 
+			if (ImGui::IsItemHovered(ImGuiHoveredFlags_RectOnly)) {
+				ImDrawList* draw_list = ImGui::GetWindowDrawList();
+				ImVec2 min = ImGui::GetItemRectMin();
+				ImVec2 max = ImGui::GetItemRectMax();
+				draw_list->AddRectFilled(min, max, ImGui::GetColorU32(ImGuiCol_HeaderHovered));
+			}
+
 			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
 			{
 				if (_onItemClick != nullptr) _onItemClick(it);
-				selectItem(this, true);
+				selectItem(it, true);
 			}
 		}
 	}
