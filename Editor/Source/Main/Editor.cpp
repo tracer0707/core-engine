@@ -22,7 +22,7 @@
 #include "../Editor/Windows/CSGObjectWindow.h"
 #include "../Editor/Windows/InspectorWindow.h"
 #include "../Editor/Windows/HierarchyWindow.h"
-#include "../Editor/Windows/AssetsWindow.h"
+#include "../Editor/Windows/ContentWindow.h"
 #include "../Editor/Windows/GizmoWindow.h"
 #include "../Editor/Windows/CSGEditWindow.h"
 
@@ -71,9 +71,9 @@ namespace Editor
 
         _inspectorWindow = _windowManager->addWindow<InspectorWindow*>();
         _hierarchyWindow = _windowManager->addWindow<HierarchyWindow*>();
-        _assetsWindow = _windowManager->addWindow<AssetsWindow*>();
+        _contentWindow = _windowManager->addWindow<ContentWindow*>();
 
-        _assetsWindow->setAssetsDir(app->getContentDir());
+        _contentWindow->setContentDir(app->getContentDir());
 
         _gizmoWindow = _windowManager->addWindow<GizmoWindow*>();
         _gizmoWindow->setHasTitle(false);
@@ -102,8 +102,8 @@ namespace Editor
         _windowManager->setOnDock([this] {
             auto dockInspector = _inspectorWindow->dock(DockDirection::Right, 0, 0.25f);
             auto dockHierarchy = _hierarchyWindow->dock(DockDirection::Right, dockInspector.area2, 0.2f);
-            auto dockAssets = _assetsWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
-            auto dockScene = _sceneWindow->dock(DockDirection::None, dockAssets.area2, 0.7f);
+            auto dockContent = _contentWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
+            auto dockScene = _sceneWindow->dock(DockDirection::None, dockContent.area2, 0.7f);
         });
 
         _windowManager->initWindows();

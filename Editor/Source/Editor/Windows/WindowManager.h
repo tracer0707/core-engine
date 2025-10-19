@@ -20,7 +20,7 @@ namespace Editor
 {
 	class MenuBar;
 	class Window;
-	class AssetsWindow;
+	class ContentWindow;
 	class CSGEditWindow;
 	class CSGObjectWindow;
 	class GizmoWindow;
@@ -81,9 +81,9 @@ namespace Editor
 	};
 
 	template <>
-	inline AssetsWindow* WindowManager::addWindow<AssetsWindow*>()
+	inline ContentWindow* WindowManager::addWindow<ContentWindow*>()
 	{
-		return (AssetsWindow*)addWindow(ASSETS_WINDOW);
+		return (ContentWindow*)addWindow(CONTENT_WINDOW);
 	}
 
 	template <>

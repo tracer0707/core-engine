@@ -21,7 +21,7 @@ namespace Editor
 	class CSGObjectWindow;
 	class InspectorWindow;
 	class HierarchyWindow;
-	class AssetsWindow;
+	class ContentWindow;
 	class GizmoWindow;
 	class CSGEditWindow;
 	class CSGModifier;
@@ -54,7 +54,7 @@ namespace Editor
 			CSGObjectWindow* _csgObjectWindow = nullptr;
 			InspectorWindow* _inspectorWindow = nullptr;
 			HierarchyWindow* _hierarchyWindow = nullptr;
-			AssetsWindow* _assetsWindow = nullptr;
+			ContentWindow* _contentWindow = nullptr;
 			GizmoWindow* _gizmoWindow = nullptr;
 			CSGEditWindow* _csgEditWindow = nullptr;
 

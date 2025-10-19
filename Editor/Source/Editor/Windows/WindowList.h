@@ -6,8 +6,8 @@ namespace Editor
 	#define SCENE_WINDOW "Scene"
 #endif
 
-#ifndef ASSETS_WINDOW
-	#define ASSETS_WINDOW "Assets"
+#ifndef CONTENT_WINDOW
+	#define CONTENT_WINDOW "Content"
 #endif
 
 #ifndef CSG_EDIT_WINDOW

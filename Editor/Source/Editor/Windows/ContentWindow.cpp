@@ -12,10 +12,13 @@
 
 namespace Editor
 {
-	ContentWindow::ContentWindow(WindowManager* parent) : Window(parent, ASSETS_WINDOW)
+	ContentWindow::ContentWindow(WindowManager* parent) : Window(parent, CONTENT_WINDOW)
 	{
 		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Horizontal);
 		_treeView = new TreeView();
+
+		_mainLayout->addControl(_treeView);
+		addControl(_mainLayout);
 	}
 
 	void ContentWindow::init()

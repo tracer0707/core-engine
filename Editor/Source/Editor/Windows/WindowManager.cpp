@@ -7,7 +7,7 @@
 #include <Core/System/EventHandler.h>
 
 #include "Window.h"
-#include "AssetsWindow.h"
+#include "ContentWindow.h"
 #include "CSGEditWindow.h"
 #include "CSGObjectWindow.h"
 #include "GizmoWindow.h"
@@ -66,9 +66,9 @@ namespace Editor
 	{
 		Window* window = nullptr;
 
-		if (name == ASSETS_WINDOW)
+		if (name == CONTENT_WINDOW)
 		{
-			window = new AssetsWindow(this);
+			window = new ContentWindow(this);
 		}
 		else if (name == CSG_EDIT_WINDOW)
 		{
