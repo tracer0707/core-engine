@@ -28,7 +28,7 @@ namespace Editor
 			application->getEventHandler()->addEvent([=]
 			{
 				FileSystemDialog* dlg = new FileSystemDialog(_application);
-				dlg->setOnFileSelected([=](Core::String fileName)
+				dlg->setOnPathSelected([=](Core::String fileName)
 				{
 					_textInput->setText(fileName);
 				});
@@ -41,16 +41,6 @@ namespace Editor
 	FileInput::~FileInput()
 	{
 		_application = nullptr;
-	}
-
-	void FileInput::update()
-	{
-		if (!_visible) return;
-
-		for (auto it : _controls)
-		{
-			it->update();
-		}
 	}
 
 	Core::String FileInput::getFilePath()
@@ -66,5 +56,15 @@ namespace Editor
 	int FileInput::getControlType()
 	{
 		return CONTROL_FILE_INPUT;
+	}
+
+	void FileInput::update()
+	{
+		if (!_visible) return;
+
+		for (auto it : _controls)
+		{
+			it->update();
+		}
 	}
 }

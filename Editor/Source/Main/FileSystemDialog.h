@@ -10,6 +10,7 @@ namespace Editor
 	class FullscreenWindow;
 	class LinearLayout;
 	class Font;
+	class TreeView;
 
 	class FileSystemDialog : public Core::Window
 	{
@@ -21,8 +22,12 @@ namespace Editor
 		LinearLayout* _layout = nullptr;
 		LinearLayout* _topLayout = nullptr;
 		LinearLayout* _bottomLayout = nullptr;
+		TreeView* _treeView = nullptr;
+		bool _showFiles = true;
 
-		std::function<void(Core::String)> _onFileSelected = nullptr;
+		std::function<void(Core::String)> _onPathSelected = nullptr;
+
+		void rescan();
 
 		virtual void update();
 		virtual void render();
@@ -31,6 +36,9 @@ namespace Editor
 		FileSystemDialog(Core::Application* app);
 		virtual ~FileSystemDialog();
 
-		void setOnFileSelected(std::function<void(Core::String)> value) { _onFileSelected = value; }
+		bool getShowFiles() { return _showFiles; }
+		void setShowFiles(bool value);
+
+		void setOnPathSelected(std::function<void(Core::String)> value) { _onPathSelected = value; }
 	};
 }

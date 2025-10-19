@@ -34,5 +34,7 @@ namespace Editor
 
 		void selectNode(TreeNode* value, bool byUser = true);
 		void clearSelection(bool byUser = true);
+
+		virtual void clear();
 	};
 }

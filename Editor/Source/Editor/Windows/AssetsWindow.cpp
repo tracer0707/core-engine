@@ -5,6 +5,8 @@
 #include "WindowList.h"
 
 #include "../Controls/Button.h"
+#include "../Controls/TreeView.h"
+#include "../Controls/TreeNode.h"
 
 namespace Editor
 {

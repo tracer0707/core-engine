@@ -16,6 +16,8 @@ namespace Core
 		String(const char* buffer);
 		String(std::string buffer);
 
+		static String Empty;
+
 		String& operator=(std::string str);
 		String& operator=(const char* str);
 		String& operator+=(String& str);

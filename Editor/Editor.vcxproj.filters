@@ -40,6 +40,9 @@
     <Filter Include="Исходные файлы\Serialization">
       <UniqueIdentifier>{70ef9ea3-4902-49d8-8965-46ff413a4a7b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Исходные файлы\Editor\Utils">
+      <UniqueIdentifier>{06f4bd3d-567d-48f2-a881-8648e487c771}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Editor\CameraController.cpp">
@@ -170,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="Source\Serialization\RecentProjectList.cpp">
       <Filter>Исходные файлы\Serialization</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Editor\Utils\FileSystemUtils.cpp">
+      <Filter>Исходные файлы\Editor\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -316,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="Source\Serialization\RecentProjectList.h">
       <Filter>Исходные файлы\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Editor\Utils\FileSystemUtils.h">
+      <Filter>Исходные файлы\Editor\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

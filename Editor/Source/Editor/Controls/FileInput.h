@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-
 #include <Core/Shared/String.h>
 
 #include "Control.h"
@@ -19,7 +17,6 @@ namespace Editor
 	{
 	private:
 		Core::Application* _application = nullptr;
-
 		TextInput* _textInput = nullptr;
 
 	public:

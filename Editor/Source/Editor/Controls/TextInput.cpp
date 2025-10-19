@@ -4,8 +4,6 @@
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 
-#include <Core/System/EventHandler.h>
-
 #include "ControlList.h"
 
 namespace Editor
@@ -41,6 +39,12 @@ namespace Editor
 		}
 
 		ImGui::InputText("", &_text);
+
+		if (_text != _prevText && _onTextChanged != nullptr)
+		{
+			_onTextChanged(_text);
+			_prevText = _text;
+		}
 
 		ImGui::PopStyleVar();
 

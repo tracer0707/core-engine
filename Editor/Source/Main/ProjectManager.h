@@ -26,6 +26,7 @@ namespace Editor
 			Core::List<Core::String> _recentProjects;
 
 			LinearLayout* _mainLayout = nullptr;
+			LinearLayout* _listLayout = nullptr;
 			FullscreenWindow* _wnd = nullptr;
 
 			virtual void update();

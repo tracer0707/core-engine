@@ -1,7 +1,6 @@
 #include "FileSystemDialog.h"
 
 #include <filesystem>
-#include <iostream>
 
 #include <Core/Renderer/Renderer.h>
 #include <Core/Shared/IO.h>
@@ -10,6 +9,7 @@
 #include <Core/Shared/String.h>
 
 #include "../Editor/Font.h"
+#include "../Editor/Utils/FileSystemUtils.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/Button.h"
@@ -19,82 +19,6 @@
 
 namespace Editor
 {
-    static void scanPath(Core::String path, TreeView* treeView, TreeNode* rootNode)
-    {
-        std::string _path = path.std_str();
-        auto fs_path = std::filesystem::path(path.std_str());
-
-        TreeNode* _node = treeView->createNode();
-
-        if (rootNode != nullptr)
-        {
-            _node->setText(fs_path.filename().generic_string());
-            _node->setStringTag(0, fs_path.generic_string());
-        }
-        else
-        {
-            _node->setText(_path);
-            _node->setStringTag(0, path.replace('\\', '/'));
-        }
-        
-        if (rootNode != nullptr)
-            rootNode->addControl(_node);
-        else
-            treeView->addControl(_node);
-
-        if (std::filesystem::is_directory(_path))
-        {
-            _node->setAlwaysShowOpenArrow(true);
-            _node->setOnOpen([_path, treeView, _node](bool opened)
-            {
-                if (opened)
-                {
-                    try
-                    {
-                        Core::List<std::filesystem::path> fs;
-                        for (const auto& entry : std::filesystem::directory_iterator(_path, std::filesystem::directory_options::skip_permission_denied))
-                        {
-                            fs.add(entry.path());
-                        }
-
-                        fs.sort([](std::filesystem::path& a, std::filesystem::path& b) -> bool {
-                            bool isDirA = std::filesystem::is_directory(a);
-                            bool isDirB = std::filesystem::is_directory(b);
-
-                            std::string _a = a.generic_string();
-                            std::string _b = b.generic_string();
-
-                            std::transform(_a.begin(), _a.end(), _a.begin(), [](unsigned char c) { return std::tolower(c); });
-                            std::transform(_b.begin(), _b.end(), _b.begin(), [](unsigned char c) { return std::tolower(c); });
-
-                            if (isDirA && isDirB) return _a < _b;
-                            if (isDirA) return 1;
-                            if (isDirB) return 0;
-
-                            return _a < _b;
-                        });
-
-                        for (const auto& entry : fs)
-                        {
-                            Core::String path = entry.generic_string();
-                            if (Core::Path::isHiddenOrSystem(path)) continue;
-
-                            scanPath(path, treeView, _node);
-                        }
-                    }
-                    catch (const std::filesystem::filesystem_error& e)
-                    {
-                        std::cerr << "Error accessing " << _path << ": " << e.what() << std::endl;
-                    }
-                }
-                else
-                {
-                    _node->clear();
-                }
-            });
-        }
-    }
-
     FileSystemDialog::FileSystemDialog(Core::Application* app) : Core::Window(app, "File Dialog", 800, 400)
     {
         _mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
@@ -103,32 +27,31 @@ namespace Editor
         _layout = new LinearLayout(LayoutDirection::Vertical);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Start);
+        _layout->setStretchX(true);
         _layout->getStyle().paddingX = 10;
         _layout->getStyle().paddingY = 10;
 
         _topLayout = new LinearLayout(LayoutDirection::Vertical);
         _topLayout->setVerticalAlignment(LayoutAlignment::Start);
         _topLayout->setHorizontalAlignment(LayoutAlignment::Start);
+        _topLayout->setStretchX(true);
 
-        Core::List<Core::String> _diskDrives = Core::IO::getDiskDrives();
+        _treeView = new TreeView();
 
-        TreeView* _treeView = new TreeView();
-
-        for (auto& d : _diskDrives)
-        {
-            scanPath(d, _treeView, nullptr);
-        }
+        rescan();
 
         _topLayout->addControl(_treeView);
 
         _bottomLayout = new LinearLayout(LayoutDirection::Horizontal);
         _bottomLayout->setHorizontalAlignment(LayoutAlignment::Center);
 
-        TextInput* selectedFile = new TextInput();
+        TextInput* selectedPath = new TextInput();
         Button* okBtn = new Button("OK");
         Button* cancelBtn = new Button("Cancel");
 
-        _bottomLayout->addControl(selectedFile);
+        okBtn->setEnabled(false);
+
+        _bottomLayout->addControl(selectedPath);
         _bottomLayout->addControl(okBtn);
         _bottomLayout->addControl(cancelBtn);
 
@@ -141,12 +64,20 @@ namespace Editor
         _treeView->setOnSelectionChanged([=](Core::List<TreeNode*> lst) {
             if (lst.count() > 0)
             {
-                selectedFile->setText(lst.get(0)->getStringTag(0));
+                selectedPath->setText(lst.get(0)->getStringTag(0));
+                okBtn->setEnabled(true);
             }
             else
             {
-                selectedFile->setText("");
+                selectedPath->setText(Core::String::Empty);
+                okBtn->setEnabled(false);
             }
+        });
+
+        selectedPath->setOnTextChanged([=](Core::String value) {
+            auto path = std::filesystem::path(value.std_str());
+            bool checkFile = _showFiles || std::filesystem::is_directory(path);
+            okBtn->setEnabled(std::filesystem::exists(path) && checkFile);
         });
 
         cancelBtn->setOnClick([this]() {
@@ -154,9 +85,9 @@ namespace Editor
         });
 
         okBtn->setOnClick([=]() {
-            if (selectedFile->getText() != "" && _onFileSelected != nullptr)
+            if (selectedPath->getText() != Core::String::Empty && _onPathSelected != nullptr)
             {
-                _onFileSelected(selectedFile->getText());
+                _onPathSelected(selectedPath->getText());
             }
 
             close();
@@ -172,12 +103,25 @@ namespace Editor
         _wnd = nullptr;
     }
 
+    void FileSystemDialog::setShowFiles(bool value)
+    {
+        _showFiles = value;
+        rescan();
+    }
+
+    void FileSystemDialog::rescan()
+    {
+        _treeView->clear();
+        Core::List<Core::String> _diskDrives = Core::IO::getDiskDrives();
+        for (auto& d : _diskDrives)
+        {
+            FileSystemUtils::fsToTreeView(d, _treeView, nullptr, _showFiles);
+        }
+    }
+
     void FileSystemDialog::update()
     {
-        _layout->setWidth(_width);
         _layout->setHeight(_height);
-
-        _topLayout->setWidth(_width - 20);
         _topLayout->setHeight(_height - 45);
     }
 

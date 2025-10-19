@@ -88,6 +88,12 @@ namespace Editor
 		}
 	}
 
+	void TreeView::clear()
+	{
+		clearSelection();
+		Container::clear();
+	}
+
 	bool TreeView::isNodeSelected(TreeNode* node)
 	{
 		return _selectedNodes.contains(node);

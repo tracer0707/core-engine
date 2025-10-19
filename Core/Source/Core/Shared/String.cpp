@@ -2,6 +2,8 @@
 
 namespace Core
 {
+	String String::Empty = "";
+
 	String::String(const char* buffer)
 	{
 		_buffer = buffer;

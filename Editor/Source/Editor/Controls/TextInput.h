@@ -13,6 +13,9 @@ namespace Editor
 	{
 	private:
 		std::string _text = "";
+		std::string _prevText = "";
+
+		std::function<void(Core::String)> _onTextChanged = nullptr;
 
 	public:
 		TextInput();
@@ -23,5 +26,7 @@ namespace Editor
 
 		Core::String getText();
 		void setText(Core::String value);
+
+		void setOnTextChanged(std::function<void(Core::String)> value) { _onTextChanged = value; }
 	};
 }
