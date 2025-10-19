@@ -12,7 +12,8 @@
 #endif
 #include <windows.h>
 #endif
-#elif defined(__linux__) || defined(__unix__)
+#endif
+#if defined(__linux__) || defined(__unix__)
 #include <libgen.h>
 #include <unistd.h>
 #include <linux/limits.h>

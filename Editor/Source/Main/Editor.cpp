@@ -73,6 +73,8 @@ namespace Editor
         _hierarchyWindow = _windowManager->addWindow<HierarchyWindow*>();
         _assetsWindow = _windowManager->addWindow<AssetsWindow*>();
 
+        _assetsWindow->setAssetsDir(app->getContentDir());
+
         _gizmoWindow = _windowManager->addWindow<GizmoWindow*>();
         _gizmoWindow->setHasTitle(false);
         _gizmoWindow->setCanAcceptDocking(false);
@@ -103,6 +105,8 @@ namespace Editor
             auto dockAssets = _assetsWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
             auto dockScene = _sceneWindow->dock(DockDirection::None, dockAssets.area2, 0.7f);
         });
+
+        _windowManager->initWindows();
     }
 
     Editor::MainWindow::~MainWindow()

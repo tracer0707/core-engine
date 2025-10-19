@@ -39,7 +39,7 @@ namespace Core
 
 	/* Mesh */
 
-	Mesh::Mesh(SubMesh** subMeshes, int subMeshesCount)
+	Mesh::Mesh(SubMesh** subMeshes, int subMeshesCount) : Asset()
 	{
 		_subMeshes = subMeshes;
 		_subMeshesCount = subMeshesCount;

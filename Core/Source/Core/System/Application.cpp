@@ -4,6 +4,7 @@
 
 #include "Window.h"
 #include "EventHandler.h"
+#include "../Shared/Path.h"
 
 namespace Core
 {
@@ -125,5 +126,10 @@ namespace Core
 
 		_windows.remove(value);
 		delete value;
+	}
+
+	String Application::getContentDir()
+	{
+		return Path::combine(_workingDir, _contentDir);
 	}
 }

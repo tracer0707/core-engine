@@ -5,7 +5,7 @@
 
 namespace Core
 {
-	Material::Material(Renderer* renderer)
+	Material::Material(Renderer* renderer) : Asset()
 	{
 		_renderer = renderer;
 	}

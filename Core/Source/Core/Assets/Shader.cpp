@@ -4,7 +4,7 @@
 
 namespace Core
 {
-    Shader::Shader(Renderer* renderer, String vertexSrc, String fragmentSrc)
+    Shader::Shader(Renderer* renderer, String vertexSrc, String fragmentSrc) : Asset()
     {
         _renderer = renderer;
         _nativeId = _renderer->createProgram(vertexSrc, fragmentSrc);

@@ -5,7 +5,7 @@
 
 namespace Core
 {
-	RenderTexture::RenderTexture(Renderer* renderer, unsigned int width, unsigned int height)
+	RenderTexture::RenderTexture(Renderer* renderer, unsigned int width, unsigned int height) : Asset()
 	{
 		_renderer = renderer;
 

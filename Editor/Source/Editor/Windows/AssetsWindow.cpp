@@ -8,8 +8,18 @@
 
 namespace Editor
 {
+	static void scanAssets()
+	{
+
+	}
+
 	AssetsWindow::AssetsWindow(WindowManager* parent) : Window(parent, ASSETS_WINDOW)
 	{
 		
+	}
+
+	void AssetsWindow::init()
+	{
+
 	}
 }

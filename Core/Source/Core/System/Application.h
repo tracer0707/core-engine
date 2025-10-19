@@ -45,8 +45,7 @@ namespace Core
 		String getWorkingDir() { return _workingDir; }
 		void setWorkingDir(String value) { _workingDir = value; }
 
-		String getContentDir() { return _contentDir; }
-		void setContentDir(String value) { _contentDir = value; }
+		String getContentDir();
 
 		void run();
 		void stop(bool forceClose);

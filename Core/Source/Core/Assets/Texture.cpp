@@ -8,7 +8,7 @@
 
 namespace Core
 {
-	Texture::Texture(Renderer* renderer, FIBITMAP* bitmap, TextureFormat format)
+	Texture::Texture(Renderer* renderer, FIBITMAP* bitmap, TextureFormat format) : Asset()
 	{
 		_renderer = renderer;
 		_bitmap = bitmap;

@@ -10,11 +10,8 @@
 #include <Core/Shared/String.h>
 
 #include "../Editor/Font.h"
-#include "../Editor/Controls/ControlList.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
-#include "../Editor/Controls/FileInput.h"
-#include "../Editor/Controls/Label.h"
 #include "../Editor/Controls/Button.h"
 #include "../Editor/Controls/TextInput.h"
 #include "../Editor/Controls/TreeView.h"

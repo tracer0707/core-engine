@@ -43,6 +43,14 @@ namespace Editor
 		_windows.clear();
 	}
 
+	void WindowManager::initWindows()
+	{
+		for (auto win : _windows)
+		{
+			win->init();
+		}
+	}
+
 	void WindowManager::invalidateAll()
 	{
 		_eventHandler->addEvent([this] {

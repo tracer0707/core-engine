@@ -50,6 +50,8 @@ namespace Editor
 		WindowManager();
 		~WindowManager();
 
+		void initWindows();
+
 		void setTime(Core::Time* value) { _time = value; }
 		void setRenderer(Core::Renderer* value) { _renderer = value; }
 		void setAssetManager(Core::AssetManager* value) { _assetManager = value; }

@@ -73,8 +73,9 @@ namespace Editor
 		Window(WindowManager* parent, const char* name);
 		virtual ~Window();
 
-		WindowManager* getParent() { return _parent; }
+		virtual void init() {}
 
+		WindowManager* getParent() { return _parent; }
 		const char* getName() { return _name; };
 
 		void setVisible(bool value) { _visible = value; }
