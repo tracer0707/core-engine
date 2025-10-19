@@ -75,7 +75,7 @@
     <ClCompile Include="Source\Editor\Windows\InspectorWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp">
+    <ClCompile Include="Source\Editor\Windows\ContentWindow.cpp">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClCompile>
     <ClCompile Include="Source\Editor\Windows\HierarchyWindow.cpp">
@@ -206,7 +206,7 @@
     <ClInclude Include="Source\Editor\Windows\InspectorWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Editor\Windows\AssetsWindow.h">
+    <ClInclude Include="Source\Editor\Windows\ContentWindow.h">
       <Filter>Исходные файлы\Editor\Windows</Filter>
     </ClInclude>
     <ClInclude Include="Source\Editor\Windows\HierarchyWindow.h">

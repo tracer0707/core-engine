@@ -11,12 +11,13 @@ namespace Editor
 		clear();
 	}
 
+
+	//Remove all controls and delete them
 	void Container::clear()
 	{
 		for (int i = 0; i < _controls.count(); ++i)
 		{
 			Control* control = _controls.get(i);
-			control->clear();
 			control->_parent = nullptr;
 			delete control;
 		}
@@ -30,6 +31,7 @@ namespace Editor
 		value->_parent = this;
 	}
 
+	//Remove control from the list without deleting it
 	void Container::removeControl(Control* value)
 	{
 		_controls.remove(value);

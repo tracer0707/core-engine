@@ -161,7 +161,7 @@
     <ClCompile Include="Source\Editor\ObjectPicker.cpp" />
     <ClCompile Include="Source\Editor\Rendering.cpp" />
     <ClCompile Include="Source\Editor\Utils\FileSystemUtils.cpp" />
-    <ClCompile Include="Source\Editor\Windows\AssetsWindow.cpp" />
+    <ClCompile Include="Source\Editor\Windows\ContentWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\CSGEditWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\FullscreenWindow.cpp" />
     <ClCompile Include="Source\Editor\Windows\GizmoWindow.cpp" />
@@ -211,7 +211,7 @@
     <ClInclude Include="Source\Editor\ObjectPicker.h" />
     <ClInclude Include="Source\Editor\Rendering.h" />
     <ClInclude Include="Source\Editor\Utils\FileSystemUtils.h" />
-    <ClInclude Include="Source\Editor\Windows\AssetsWindow.h" />
+    <ClInclude Include="Source\Editor\Windows\ContentWindow.h" />
     <ClInclude Include="Source\Editor\Windows\CSGEditWindow.h" />
     <ClInclude Include="Source\Editor\Windows\FullscreenWindow.h" />
     <ClInclude Include="Source\Editor\Windows\GizmoWindow.h" />

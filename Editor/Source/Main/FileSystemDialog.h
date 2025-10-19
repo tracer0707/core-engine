@@ -27,7 +27,7 @@ namespace Editor
 
 		std::function<void(Core::String)> _onPathSelected = nullptr;
 
-		void rescan();
+		void rescanFs();
 
 		virtual void update();
 		virtual void render();

@@ -38,7 +38,7 @@ namespace Editor
 
         _treeView = new TreeView();
 
-        rescan();
+        rescanFs();
 
         _topLayout->addControl(_treeView);
 
@@ -106,10 +106,10 @@ namespace Editor
     void FileSystemDialog::setShowFiles(bool value)
     {
         _showFiles = value;
-        rescan();
+        rescanFs();
     }
 
-    void FileSystemDialog::rescan()
+    void FileSystemDialog::rescanFs()
     {
         _treeView->clear();
         Core::List<Core::String> _diskDrives = Core::IO::getDiskDrives();
