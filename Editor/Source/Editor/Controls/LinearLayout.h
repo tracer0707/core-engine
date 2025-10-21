@@ -33,6 +33,8 @@ namespace Editor
 		bool _stretchX = false;
 		bool _stretchY = false;
 
+		bool _splitControls = false;
+
 	public:
 		LinearLayout();
 		LinearLayout(LayoutDirection direction);
@@ -61,5 +63,8 @@ namespace Editor
 
 		bool getStretchY() { return _stretchY; }
 		void setStretchY(bool value) { _stretchY = value; }
+
+		bool getSplitControls() { return _splitControls; }
+		void setSplitControls(bool value) { _splitControls = value; }
 	};
 }
