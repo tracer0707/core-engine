@@ -17,6 +17,7 @@
 #include <libgen.h>
 #include <unistd.h>
 #include <linux/limits.h>
+#include <sys/stat.h>
 #endif
 
 namespace Core

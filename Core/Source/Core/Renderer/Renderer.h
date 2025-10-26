@@ -69,12 +69,12 @@ namespace Core
 
 		const Program* _currentProgram = nullptr;
 
-		int _width = 0;
-		int _height = 0;
+		unsigned int _width = 0;
+		unsigned int _height = 0;
 
 	public:
-		const unsigned int& getWidth() { return _width; }
-		const unsigned int& getHeight() { return _height; }
+		unsigned int getWidth() { return _width; }
+		unsigned int getHeight() { return _height; }
 
 		virtual const void setViewportSize(int w, int h) = 0;
 		virtual const void beginUI() = 0;

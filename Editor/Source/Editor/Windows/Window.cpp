@@ -12,7 +12,7 @@
 
 namespace Editor
 {
-	Window::Window(WindowManager* parent, const char* name)
+	Window::Window(WindowManager* parent, std::string name)
 	{
 		_name = name;
 		_id = Core::Uuid::create();
@@ -113,7 +113,7 @@ namespace Editor
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, _style.borderSize);
-		ImGui::Begin(_name, &_visible, _flags);
+		ImGui::Begin(_name.c_str(), &_visible, _flags);
 		
 		int cw = ImGui::GetContentRegionAvail().x;
 		int ch = ImGui::GetContentRegionAvail().y;

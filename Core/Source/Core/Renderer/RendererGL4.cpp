@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <functional>
 
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>

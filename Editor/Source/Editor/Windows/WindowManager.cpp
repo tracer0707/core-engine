@@ -62,7 +62,7 @@ namespace Editor
 		});
 	}
 
-	Window* WindowManager::addWindow(const char* name)
+	Window* WindowManager::addWindow(std::string name)
 	{
 		Window* window = nullptr;
 
@@ -106,7 +106,7 @@ namespace Editor
 		return window;
 	}
 
-	Window* WindowManager::getWindow(const char* name)
+	Window* WindowManager::getWindow(std::string name)
 	{
 		for (int i = 0; i < _windows.count(); ++i)
 		{
@@ -157,7 +157,7 @@ namespace Editor
 
 			for (auto it : _windows)
 			{
-				ImGui::DockBuilderDockWindow(it->_name, it->_dockArea.area1);
+				ImGui::DockBuilderDockWindow(it->_name.c_str(), it->_dockArea.area1);
 			}
 
 			ImGui::DockBuilderFinish(dockID);

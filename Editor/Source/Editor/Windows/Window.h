@@ -1,6 +1,8 @@
 #pragma once
 
 #include <functional>
+#include <string>
+#include <cfloat>
 #include <Core/Shared/Uuid.h>
 
 #include "../Controls/Container.h"
@@ -38,7 +40,7 @@ namespace Editor
 
 		std::function<void(int, int)> _onResize = nullptr;
 
-		const char* _name = nullptr;
+		std::string _name = "";
 
 		float _positionX = 0;
 		float _positionY = 0;
@@ -70,13 +72,13 @@ namespace Editor
 		virtual void onUpdate() {}
 
 	public:
-		Window(WindowManager* parent, const char* name);
+		Window(WindowManager* parent, std::string name);
 		virtual ~Window();
 
 		virtual void init() {}
 
 		WindowManager* getParent() { return _parent; }
-		const char* getName() { return _name; };
+		std::string getName() { return _name; };
 
 		void setVisible(bool value) { _visible = value; }
 		bool getVisible() { return _visible; }

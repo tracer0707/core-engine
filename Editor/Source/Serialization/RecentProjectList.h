@@ -5,7 +5,7 @@
 
 namespace Editor
 {
-	static class RecentProjectList
+	class RecentProjectList
 	{
 	private:
 		static Core::List<Core::String> _projectList;

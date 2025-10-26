@@ -14,8 +14,6 @@ namespace Editor
 
 	class FileSystemDialog : public Core::Window
 	{
-		friend class FileSystemDialog;
-
 	private:
 		Font* _mainFont = nullptr;
 		FullscreenWindow* _wnd = nullptr;

@@ -38,7 +38,7 @@ namespace Editor
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
 		}
 
-		ImGui::InputText("", &_text);
+		ImGui::InputText((std::string("##") + _id).c_str(), &_text);
 
 		if (_text != _prevText && _onTextChanged != nullptr)
 		{

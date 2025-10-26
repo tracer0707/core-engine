@@ -1,7 +1,7 @@
 #include <cassert>
 #include <vector>
 
-#include <bc7enc16.h>
+#include <bc7enc.h>
 
 #include <algorithm>
 

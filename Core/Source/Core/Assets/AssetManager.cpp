@@ -19,6 +19,8 @@ namespace Core
 {
 	AssetManager::AssetManager(Renderer* renderer)
 	{
+		FreeImage_Initialise();
+
 		_renderer = renderer;
 
 		_defaultShader = loadShaderFromString("#version 400\n"
@@ -65,6 +67,8 @@ namespace Core
 		_defaultMaterial = nullptr;
 		_defaultShader = nullptr;
 		_renderer = nullptr;
+
+		FreeImage_DeInitialise();
 	}
 
 	/* MATERIAL */

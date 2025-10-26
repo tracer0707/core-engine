@@ -38,7 +38,7 @@ namespace Editor
             _projectList = j["RecentProjects"].get<Core::List<Core::String>>();
         }
         else {
-            throw new std::runtime_error("Error opening file for read");
+            std::cout << "Project list file not found. Creating one...";
         }
 	}
 }

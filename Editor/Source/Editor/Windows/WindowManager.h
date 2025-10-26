@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
@@ -44,7 +45,7 @@ namespace Editor
 
 		MenuBar* _menuBar = nullptr;
 
-		Window* addWindow(const char* name);
+		Window* addWindow(std::string name);
 
 	public:
 		WindowManager();
@@ -69,7 +70,7 @@ namespace Editor
 		template <typename T>
 		T addWindow() {}
 
-		Window* getWindow(const char* name);
+		Window* getWindow(std::string name);
 		void setOnDock(std::function<void()> value) { _onDock = value; }
 
 		bool isMouseCaptured();
