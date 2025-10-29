@@ -1,5 +1,6 @@
 #include "RendererGL4.h"
 
+#define GLEW_STATIC
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
@@ -138,28 +139,15 @@ namespace Core
 
     const void RendererGL4::deleteProgram(const Program* program)
     {
-        const auto& it = std::find_if(
-            _shaderPrograms.begin(),
-            _shaderPrograms.end(),
-            [=](Program* a) -> bool {
-                return program->program == a->program;
-            }
-        );
+        const auto& it =
+            std::find_if(_shaderPrograms.begin(), _shaderPrograms.end(), [=](Program* a) -> bool { return program->program == a->program; });
 
-        if (it == _shaderPrograms.end())
-            throw std::invalid_argument("Попытка удалить несуществующую программу");
+        if (it == _shaderPrograms.end()) throw std::invalid_argument("Попытка удалить несуществующую программу");
 
-        if ((*it)->vertexShader > 0)
-            glDeleteShader((*it)->vertexShader);
-
-        if ((*it)->fragmentShader > 0)
-            glDeleteShader((*it)->fragmentShader);
-
-        if ((*it)->geometryShader > 0)
-            glDeleteShader((*it)->geometryShader);
-
-        if ((*it)->computeShader > 0)
-            glDeleteShader((*it)->computeShader);
+        if ((*it)->vertexShader > 0) glDeleteShader((*it)->vertexShader);
+        if ((*it)->fragmentShader > 0) glDeleteShader((*it)->fragmentShader);
+        if ((*it)->geometryShader > 0) glDeleteShader((*it)->geometryShader);
+        if ((*it)->computeShader > 0) glDeleteShader((*it)->computeShader);
 
         _shaderPrograms.erase(it);
 
@@ -199,7 +187,8 @@ namespace Core
         return nullptr;
     }
 
-    const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
+    const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+                                                  unsigned int indexArraySize)
     {
         assert(vertexArray != nullptr && vertexArraySize > 0);
 
@@ -218,11 +207,11 @@ namespace Core
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(unsigned int), indexArray, GL_STATIC_DRAW);
         }
 
-        VertexBuffer* buffer = new VertexBuffer { vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize };
+        VertexBuffer* buffer = new VertexBuffer{vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize};
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-        
+
         return buffer;
     }
 
@@ -230,8 +219,7 @@ namespace Core
     {
         glDeleteBuffers(1, &buffer->vbo);
 
-        if (buffer->indexArray != nullptr)
-            glDeleteBuffers(1, &buffer->ibo);
+        if (buffer->indexArray != nullptr) glDeleteBuffers(1, &buffer->ibo);
 
         delete buffer;
     }
@@ -247,7 +235,7 @@ namespace Core
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
-     
+
         unsigned int position = glGetAttribLocation(_currentProgram->program, "position");
         unsigned int uv0 = glGetAttribLocation(_currentProgram->program, "uv0");
         unsigned int color0 = glGetAttribLocation(_currentProgram->program, "color0");
@@ -260,11 +248,11 @@ namespace Core
         glVertexAttribPointer(uv0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
         glVertexAttribPointer(color0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
 
-        if (buffer->indexArray != nullptr)
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
+        if (buffer->indexArray != nullptr) glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
     }
 
-    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
+    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
+                                       glm::mat4& model)
     {
         GLuint viewMtxId = glGetUniformLocation(_currentProgram->program, "u_viewMtx");
         GLuint projMtxId = glGetUniformLocation(_currentProgram->program, "u_projMtx");
@@ -314,12 +302,7 @@ namespace Core
 
         if (buffer->indexArray != nullptr)
         {
-            glDrawElements(
-                _primitiveType,
-                buffer->indexArraySize,
-                GL_UNSIGNED_INT,
-                0
-            );
+            glDrawElements(_primitiveType, buffer->indexArraySize, GL_UNSIGNED_INT, 0);
         }
         else
         {
@@ -338,14 +321,7 @@ namespace Core
         glBindFramebuffer(GL_FRAMEBUFFER, fb->frameBuffer);
 
         glBindTexture(GL_TEXTURE_2D, fb->colorTexture);
-        glTexImage2D(GL_TEXTURE_2D,
-            0,
-            GL_RGBA,
-            width, height,
-            0,
-            GL_RGBA,
-            GL_UNSIGNED_BYTE,
-            NULL);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -379,7 +355,8 @@ namespace Core
         glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
     }
 
-    const unsigned int RendererGL4::createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format)
+    const unsigned int RendererGL4::createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
+                                                  TextureFormat format)
     {
         GLuint tex;
         glGenTextures(1, &tex);
@@ -388,7 +365,7 @@ namespace Core
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        
+
         if (format == TextureFormat::RGBA8)
         {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE, data);

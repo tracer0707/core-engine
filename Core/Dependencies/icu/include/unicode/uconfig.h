@@ -151,7 +151,7 @@
  * @internal
  */
 #ifndef U_ENABLE_DYLOAD
-#define U_ENABLE_DYLOAD 1
+#define U_ENABLE_DYLOAD 0
 #endif
 
 /**
@@ -160,7 +160,7 @@
  * @internal
  */
 #ifndef U_CHECK_DYLOAD
-#define U_CHECK_DYLOAD 1
+#define U_CHECK_DYLOAD 0
 #endif
 
 /**

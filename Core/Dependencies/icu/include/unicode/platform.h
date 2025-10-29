@@ -810,6 +810,10 @@ namespace std {
 /** @{ Symbol import-export control                                          */
 /*===========================================================================*/
 
+#define U_EXPORT
+#define U_IMPORT
+#define U_EXPORT2
+
 #ifdef U_EXPORT
     /* Use the predefined value. */
 #elif defined(U_STATIC_IMPLEMENTATION)

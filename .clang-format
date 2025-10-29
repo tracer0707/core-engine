@@ -1,0 +1,29 @@
+BasedOnStyle: LLVM
+PointerAlignment: Left
+AlignAfterOpenBracket: true
+AlignEscapedNewlines: Right
+AlignOperands: true
+AlignTrailingComments: true
+NamespaceIndentation: All
+IndentWidth: 4
+ColumnLimit: 150
+SortIncludes: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortBlocksOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: WithoutElse
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterObjCDeclaration: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
