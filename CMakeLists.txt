@@ -21,14 +21,13 @@ set(CMAKE_CXX_EXTENSIONS ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-if(MSVC)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS Release Debug MinSizeRel RelWithDebInfo)
-    set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
-    set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT")
-    set(CMAKE_BUILD_TYPE Release)
-    cmake_policy(SET CMP0091 NEW)
-    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded" CACHE STRING "MSVC runtime" FORCE)
+if(PLATFORM_WINDOWS)
+    string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    string(REPLACE "/MDd" "/MTd" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+    
+    if(NOT CMAKE_CXX_FLAGS_RELWITHDEBINFO MATCHES "/MT")
+        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MT")
+    endif()
 endif()
 
 # Core headers
@@ -173,7 +172,7 @@ file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h")
 file(GLOB_RECURSE EDITOR_SOURCES "Editor/Source/*.cpp")
 
 # Editor (executable, depends on Core)
-add_executable(Editor ${EDITOR_HEADERS} ${EDITOR_SOURCES})
+add_executable(Editor ${EDITOR_HEADERS} ${EDITOR_SOURCES} Editor/Editor.rc)
 
 if(PLATFORM_LINUX)
     set_target_properties(Editor PROPERTIES OUTPUT_NAME "Editor.app")
@@ -233,12 +232,12 @@ if(PLATFORM_LINUX)
     add_custom_command(
         TARGET Editor
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Resources" "${CMAKE_BINARY_DIR}/linux64/${CMAKE_BUILD_TYPE}/Editor"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Resources" "$<TARGET_FILE_DIR:Editor>/Editor"
     )
 elseif(PLATFORM_WINDOWS)
     add_custom_command(
         TARGET Editor
         POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Resources" "${CMAKE_BINARY_DIR}/win64/${CMAKE_BUILD_TYPE}/Editor/"
+        COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_SOURCE_DIR}/Resources" "$<TARGET_FILE_DIR:Editor>/Editor"
     )
 endif()
