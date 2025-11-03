@@ -151,7 +151,6 @@
 // - You can temporarily use an unstripped version. See https://github.com/dearimgui/gl3w_stripped/releases
 // Changes to this backend using new APIs should be accompanied by a regenerated stripped loader version.
 #define IMGL3W_IMPL
-#define GLEW_STATIC
 #include <GL/glew.h>
 #endif
 

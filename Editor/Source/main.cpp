@@ -7,7 +7,7 @@ int main(int argc, char* argv[])
     projectManager.run();
 
     if (projectManager.isForceClosed()) return 0;
-    
+
     Editor::Editor editor;
     editor.setWorkingDir(projectManager.getSelectedProject());
     editor.run();

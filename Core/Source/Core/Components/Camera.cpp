@@ -27,8 +27,7 @@ namespace Core
     {
         Transform* transform = owner->findComponent<Transform*>();
 
-        if (transform == nullptr)
-            return glm::identity<glm::mat4>();
+        if (transform == nullptr) return glm::identity<glm::mat4>();
 
         glm::vec3 right = transform->getRight();
         glm::vec3 forward = transform->getForward();
@@ -42,8 +41,8 @@ namespace Core
 
     const glm::mat4 Camera::getProjectionMatrix()
     {
-        int w = _renderer->getWidth();
-        int h = _renderer->getHeight();
+        unsigned int w = _renderer->getWidth();
+        unsigned int h = _renderer->getHeight();
 
         if (renderTexture != nullptr)
         {
@@ -58,17 +57,16 @@ namespace Core
 
     const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY)
     {
-        float screenW = _renderer->getWidth();
-        float screenH = _renderer->getHeight();
+        float screenW = (float)_renderer->getWidth();
+        float screenH = (float)_renderer->getHeight();
 
         if (renderTexture != nullptr)
         {
-            screenW = renderTexture->getWidth();
-            screenH = renderTexture->getHeight();
+            screenW = (float)renderTexture->getWidth();
+            screenH = (float)renderTexture->getHeight();
         }
 
-        glm::mat4x4 mViewProjInverse;
-        mViewProjInverse = glm::inverse(getProjectionMatrix() * getViewMatrix());
+        glm::mat4x4 mViewProjInverse = glm::inverse(getProjectionMatrix() * getViewMatrix());
 
         float mx = (x - offsetX);
         float my = (y - offsetY);
@@ -101,16 +99,11 @@ namespace Core
 
         glm::vec4 spPoint = getProjectionMatrix() * (getViewMatrix() * glm::vec4(point, 1.0f));
 
-        bool isInFrustum =
-            (spPoint.x < -1.0f) ||
-            (spPoint.x > 1.0f) ||
-            (spPoint.y < -1.0f) ||
-            (spPoint.y > 1.0f);
+        bool isInFrustum = (spPoint.x < -1.0f) || (spPoint.x > 1.0f) || (spPoint.y < -1.0f) || (spPoint.y > 1.0f);
 
         Plane cameraPlane = Plane(transform->getForward(), transform->getPosition());
 
-        if (cameraPlane.getSide(point) == Plane::NEGATIVE_SIDE)
-            isInFrustum = false;
+        if (cameraPlane.getSide(point) == Plane::NEGATIVE_SIDE) isInFrustum = false;
 
         glm::vec3 spoint = glm::vec3(spPoint) / spPoint.w;
 
@@ -141,4 +134,4 @@ namespace Core
 
         return vect;
     }
-}
+} // namespace Core

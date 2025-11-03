@@ -17,12 +17,8 @@ namespace Core
         _width = width;
         _height = height;
 
-        _ctx = SDL_CreateWindow(title.std_str().c_str(),
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            _width,
-            _height,
-            SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+        _ctx = SDL_CreateWindow(title.std_str().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
+                                SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
         if (_ctx == NULL)
         {
@@ -43,7 +39,7 @@ namespace Core
     Window::~Window()
     {
         _renderer->makeCurrent();
-        
+
         delete _assetManager;
         delete _time;
         delete _inputManager;
@@ -72,32 +68,27 @@ namespace Core
 
         switch (evt.type)
         {
-        case SDL_QUIT:
-        {
+        case SDL_QUIT: {
             _opened = false;
             break;
         }
 
-        case SDL_WINDOWEVENT:
-        {
+        case SDL_WINDOWEVENT: {
             const SDL_WindowEvent& wev = evt.window;
             switch (wev.event)
             {
             case SDL_WINDOWEVENT_RESIZED:
-            case SDL_WINDOWEVENT_SIZE_CHANGED:
-            {
+            case SDL_WINDOWEVENT_SIZE_CHANGED: {
                 SDL_GetWindowSize((SDL_Window*)_ctx, &_width, &_height);
                 break;
             }
             case SDL_WINDOWEVENT_RESTORED:
-            case SDL_WINDOWEVENT_FOCUS_GAINED:
-            {
-                //TODO
+            case SDL_WINDOWEVENT_FOCUS_GAINED: {
+                // TODO
                 break;
             }
 
-            case SDL_WINDOWEVENT_CLOSE:
-            {
+            case SDL_WINDOWEVENT_CLOSE: {
                 _opened = false;
 
                 if (_onClose != nullptr)
@@ -143,4 +134,4 @@ namespace Core
     {
         _opened = false;
     }
-}
+} // namespace Core

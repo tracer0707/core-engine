@@ -53,21 +53,12 @@ namespace Core
             SubMesh* subMesh = mesh->getSubMesh(i);
             Material* material = subMesh->getMaterial();
 
-            if (material != nullptr)
-                material->bind();
-
-            _renderer->bindBuffer(subMesh->getVertexBuffer());
-
             glm::mat4& model = transform->getTransformMatrix();
 
+            if (material != nullptr) material->bind();
             _renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,
-                C_CCW
-                | C_CULL_BACK
-                | C_ENABLE_DEPTH_TEST
-                | C_ENABLE_DEPTH_WRITE
-                | C_ENABLE_CULL_FACE
-                | C_DEPTH_LEQUAL,
-                view, proj, model);
+                                  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
+                                  model);
         }
     }
-}
+} // namespace Core

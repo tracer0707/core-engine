@@ -40,6 +40,7 @@ file(GLOB_RECURSE CORE_SOURCES "Core/Source/*.cpp" "Core/Dependencies/imgui/*.cp
 add_library(Core STATIC ${CORE_HEADERS} ${CORE_SOURCES})
 
 target_compile_definitions(Core PRIVATE FREEIMAGE_LIB)
+target_compile_definitions(Core PRIVATE GLEW_STATIC)
 
 if(PLATFORM_LINUX)
     set_target_properties(Core PROPERTIES OUTPUT_NAME "libCore.a")

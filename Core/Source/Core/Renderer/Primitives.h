@@ -9,21 +9,27 @@
 
 namespace Core
 {
-	class Vertex;
-	class Renderer;
-	class Material;
+    struct Vertex;
+    class VertexBuffer;
+    class Renderer;
+    class Material;
 
-	class Primitives
-	{
-	public:
-		enum class WireframeMode
-		{
-			Triangle,
-			Polygon
-		};
+    class Primitives
+    {
+      public:
+        enum class WireframeMode
+        {
+            Triangle,
+            Polygon
+        };
 
-		static void lines(Renderer* renderer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model, Vertex* points, int pointsCount, unsigned int flags);
-		static void wireCube(Renderer* renderer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model, glm::vec3 size, glm::vec3 center, Color color, unsigned int flags);
-		static void wireMesh(Renderer* renderer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model, List<glm::vec3>& vertices, List<int>& indices, Color color, WireframeMode mode, unsigned int flags);
-	};
-}
+        static void lines(Renderer* renderer, const VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+                          Vertex* points, int pointsCount, unsigned int flags);
+
+        static void wireCube(Renderer* renderer, const VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+                             glm::vec3 size, glm::vec3 center, Color color, unsigned int flags);
+
+        static void wireMesh(Renderer* renderer, const VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+                             List<glm::vec3>& vertices, List<int>& indices, Color color, WireframeMode mode, unsigned int flags);
+    };
+} // namespace Core

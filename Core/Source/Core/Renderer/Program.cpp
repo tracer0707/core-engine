@@ -2,19 +2,19 @@
 
 namespace Core
 {
-	const Program& Program::operator=(const Program& left)
-	{
-		program = left.program;
-		vertexShader = left.vertexShader;
-		fragmentShader = left.fragmentShader;
-		geometryShader = left.geometryShader;
-		computeShader = left.computeShader;
+    Program& Program::operator=(Program& left)
+    {
+        program = left.program;
+        vertexShader = left.vertexShader;
+        fragmentShader = left.fragmentShader;
+        geometryShader = left.geometryShader;
+        computeShader = left.computeShader;
 
-		return *this;
-	}
+        return *this;
+    }
 
-	const bool Program::operator==(const Program& left)
-	{
-		return program == left.program;
-	}
-}
+    bool Program::operator==(Program& left)
+    {
+        return program == left.program;
+    }
+} // namespace Core

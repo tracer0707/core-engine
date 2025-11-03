@@ -31,110 +31,104 @@
 
 namespace Editor
 {
-	uint32_t CSGModifier::NAME = CSG_MODIFIER;
+    uint32_t CSGModifier::NAME = CSG_MODIFIER;
 
-	CSGModifier::CSGModifier() : Modifier(NAME)
-	{
-	}
+    CSGModifier::CSGModifier() : Modifier(NAME) {}
 
-	CSGModifier::~CSGModifier()
-	{
-	}
+    CSGModifier::~CSGModifier()
+    {
+        _renderer->deleteBuffer(_wireframeBuffer);
+    }
 
-	void CSGModifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
-	{
-		Modifier::init(renderer, scene, assetManager);
+    void CSGModifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
+    {
+        Modifier::init(renderer, scene, assetManager);
 
-		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
+        WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
 
-		_hierarchyWindow = (HierarchyWindow*)winMgr->getWindow(HIERARCHY_WINDOW);
-		_csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSG_OBJECT_WINDOW);
-		_csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSG_EDIT_WINDOW);
-	}
+        _hierarchyWindow = (HierarchyWindow*)winMgr->getWindow(HIERARCHY_WINDOW);
+        _csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSG_OBJECT_WINDOW);
+        _csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSG_EDIT_WINDOW);
 
-	void CSGModifier::enableWindows(bool enable)
-	{
-		_csgObjectWindow->setVisible(enable);
-		_csgEditWindow->setVisible(enable);
-	}
+        _wireframeBuffer = renderer->createBuffer(2048, 2048);
+    }
 
-	void CSGModifier::addModel()
-	{
-		_currentBrush = nullptr;
-		_currentModel = new CSGModel(_renderer, _scene, _assetManager);
-		_currentModel->setName("CSG Model");
-		_models.add(_currentModel);
+    void CSGModifier::enableWindows(bool enable)
+    {
+        _csgObjectWindow->setVisible(enable);
+        _csgEditWindow->setVisible(enable);
+    }
 
-		auto* tree = _hierarchyWindow->getTreeView();
+    void CSGModifier::addModel()
+    {
+        _currentBrush = nullptr;
+        _currentModel = new CSGModel(_renderer, _scene, _assetManager);
+        _currentModel->setName("CSG Model");
+        _models.add(_currentModel);
 
-		TreeNode* modelNode = tree->createNode();
-		modelNode->setText(_currentModel->getName());
-		modelNode->setObjectTag(TAG_CSG_MODEL, _currentModel);
-		tree->addControl(modelNode);
-		tree->selectNode(modelNode);
+        auto* tree = _hierarchyWindow->getTreeView();
 
-		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
-		winMgr->invalidateAll();
-	}
+        TreeNode* modelNode = tree->createNode();
+        modelNode->setText(_currentModel->getName());
+        modelNode->setObjectTag(TAG_CSG_MODEL, _currentModel);
+        tree->addControl(modelNode);
+        tree->selectNode(modelNode);
 
-	void CSGModifier::addBrush(BrushType brushType)
-	{
-		CSGBrush* newBrush = nullptr;
+        WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
+        winMgr->invalidateAll();
+    }
 
-		switch (brushType)
-		{
-		case BrushType::Cube:
-			newBrush = _currentModel->createCubeBrush();
-			break;
-		default:
-			break;
-		}
+    void CSGModifier::addBrush(BrushType brushType)
+    {
+        CSGBrush* newBrush = nullptr;
 
-		if (newBrush == nullptr) return;
+        switch (brushType)
+        {
+        case BrushType::Cube:
+            newBrush = _currentModel->createCubeBrush();
+            break;
+        default:
+            break;
+        }
 
-		_currentBrush = newBrush;
-		_currentBrush->setName("CSG Brush");
-		_currentBrush->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
-		_currentModel->rebuild();
+        if (newBrush == nullptr) return;
 
-		auto* tree = _hierarchyWindow->getTreeView();
+        _currentBrush = newBrush;
+        _currentBrush->setName("CSG Brush");
+        _currentBrush->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
+        _currentModel->rebuild();
 
-		TreeNode* brushNode = tree->createNode();
-		brushNode->setText(_currentBrush->getName());
-		brushNode->setObjectTag(TAG_CSG_BRUSH, _currentBrush);
+        auto* tree = _hierarchyWindow->getTreeView();
 
-		TreeNode* modelNode = tree->findNodeByTag(TAG_CSG_MODEL, _currentModel);
-		assert(modelNode != nullptr && "TreeNode of CSG model not found");
-		
-		modelNode->addControl(brushNode);
-		tree->selectNode(brushNode);
+        TreeNode* brushNode = tree->createNode();
+        brushNode->setText(_currentBrush->getName());
+        brushNode->setObjectTag(TAG_CSG_BRUSH, _currentBrush);
 
-		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
-		winMgr->invalidateAll();
-	}
+        TreeNode* modelNode = tree->findNodeByTag(TAG_CSG_MODEL, _currentModel);
+        assert(modelNode != nullptr && "TreeNode of CSG model not found");
 
-	void CSGModifier::update()
-	{
-		
-	}
+        modelNode->addControl(brushNode);
+        tree->selectNode(brushNode);
 
-	void CSGModifier::render()
-	{
-		if (_currentBrush == nullptr) return;
+        WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
+        winMgr->invalidateAll();
+    }
 
-		glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
-		glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
-		glm::mat4& model = _currentBrush->getTransform()->getTransformMatrix();
+    void CSGModifier::update() {}
 
-		Core::List<int> inds = _currentBrush->getFlatIndices();
-		Core::List<glm::vec3>& verts = _currentBrush->getVertices();
+    void CSGModifier::render()
+    {
+        if (_currentBrush == nullptr) return;
 
-		Core::Primitives::wireMesh(_renderer, _assetManager->getDefaultMaterial(), view, proj, model, verts, inds, Core::Color::RED, Core::Primitives::WireframeMode::Polygon,
-			C_CCW
-			| C_CULL_BACK
-			| C_ENABLE_DEPTH_TEST
-			| C_ENABLE_DEPTH_WRITE
-			| C_ENABLE_CULL_FACE
-			| C_DEPTH_LEQUAL);
-	}
-}
+        glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
+        glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
+        glm::mat4& model = _currentBrush->getTransform()->getTransformMatrix();
+
+        Core::List<int> inds = _currentBrush->getFlatIndices();
+        Core::List<glm::vec3>& verts = _currentBrush->getVertices();
+
+        Core::Primitives::wireMesh(_renderer, _wireframeBuffer, _assetManager->getDefaultMaterial(), view, proj, model, verts, inds, Core::Color::RED,
+                                   Core::Primitives::WireframeMode::Polygon,
+                                   C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+    }
+} // namespace Editor

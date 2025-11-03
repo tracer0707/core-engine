@@ -7,34 +7,34 @@
 
 namespace Core
 {
-	Renderer* Renderer::init(void* windowCtx)
-	{
-		Renderer* renderer = nullptr;
+    Renderer* Renderer::init(void* windowCtx)
+    {
+        Renderer* renderer = nullptr;
 
 #if CURRENT_RENDERER == GL4
-		renderer = new RendererGL4(windowCtx);
+        renderer = new RendererGL4(windowCtx);
 #endif
 
-		return renderer;
-	}
+        return renderer;
+    }
 
-	void Renderer::destroy(Renderer* renderer)
-	{
-		delete renderer;
-	}
+    void Renderer::destroy(Renderer* renderer)
+    {
+        delete renderer;
+    }
 
-	Renderer::Renderer(void* windowCtx)
-	{
-		_windowCtx = windowCtx;
-		_defaultProgram = new Program();
-	}
+    Renderer::Renderer(void* windowCtx)
+    {
+        _windowCtx = windowCtx;
+        _defaultProgram = new Program();
+    }
 
-	Renderer::~Renderer()
-	{
-		delete _defaultProgram;
+    Renderer::~Renderer()
+    {
+        delete _defaultProgram;
 
-		_windowCtx = nullptr;
-		_renderCtx = nullptr;
-		_defaultProgram = nullptr;
-	}
-}
+        _windowCtx = nullptr;
+        _renderCtx = nullptr;
+        _defaultProgram = nullptr;
+    }
+} // namespace Core

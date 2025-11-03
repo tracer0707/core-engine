@@ -1,6 +1,5 @@
 #include "RendererGL4.h"
 
-#define GLEW_STATIC
 #include <SDL/SDL.h>
 #include <GL/glew.h>
 
@@ -19,6 +18,19 @@
 
 namespace Core
 {
+    void debugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+    {
+        if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
+        {
+            return;
+        }
+
+        if (severity == GL_DEBUG_SEVERITY_HIGH || severity == GL_DEBUG_SEVERITY_MEDIUM || severity == GL_DEBUG_SEVERITY_LOW)
+        {
+            std::cout << "OpenGL [" << severity << "]: " << message << " (" << id << ")" << std::endl;
+        }
+    }
+
     RendererGL4::RendererGL4(void* windowCtx) : Renderer(windowCtx)
     {
         _renderCtx = SDL_GL_CreateContext((SDL_Window*)_windowCtx);
@@ -41,6 +53,9 @@ namespace Core
         ImGui_ImplOpenGL3_Init("#version 130");
 
         glEnable(GL_MULTISAMPLE);
+
+        glEnable(GL_DEBUG_OUTPUT);
+        glDebugMessageCallback(debugMessageCallback, nullptr);
     }
 
     RendererGL4::~RendererGL4()
@@ -54,16 +69,25 @@ namespace Core
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
 
+        for (auto* p : _shaderPrograms)
+        {
+            if (p != nullptr) deleteProgram(p);
+        }
+        _shaderPrograms.clear();
+
         SDL_GL_DeleteContext(_renderCtx);
+
+        _imguiCtx = nullptr;
+        _renderCtx = nullptr;
     }
 
-    const void RendererGL4::processEvents(void* event)
+    void RendererGL4::processEvents(void* event)
     {
         ImGui::SetCurrentContext(_imguiCtx);
         ImGui_ImplSDL2_ProcessEvent((SDL_Event*)event);
     }
 
-    const void RendererGL4::setViewportSize(int w, int h)
+    void RendererGL4::setViewportSize(int w, int h)
     {
         _width = w;
         _height = h;
@@ -71,7 +95,7 @@ namespace Core
         glViewport(0, 0, w, h);
     }
 
-    const void RendererGL4::beginUI()
+    void RendererGL4::beginUI()
     {
         ImGui::SetCurrentContext(_imguiCtx);
         ImGui_ImplOpenGL3_NewFrame();
@@ -79,23 +103,23 @@ namespace Core
         ImGui::NewFrame();
     }
 
-    const void RendererGL4::endUI()
+    void RendererGL4::endUI()
     {
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     }
 
-    const void RendererGL4::makeCurrent()
+    void RendererGL4::makeCurrent()
     {
         SDL_GL_MakeCurrent((SDL_Window*)_windowCtx, (SDL_GLContext)_renderCtx);
     }
 
-    const void RendererGL4::swapBuffers()
+    void RendererGL4::swapBuffers()
     {
         SDL_GL_SwapWindow((SDL_Window*)_windowCtx);
     }
 
-    const Program* RendererGL4::createProgram(String vertexSrc, String fragmentSrc)
+    Program* RendererGL4::createProgram(String vertexSrc, String fragmentSrc)
     {
         std::string vertexSrcUtf8 = vertexSrc.std_str();
         std::string fragmentSrcUtf8 = fragmentSrc.std_str();
@@ -111,21 +135,37 @@ namespace Core
         glShaderSource(fs, 1, &_fragmentSrcUtf8, NULL);
         glCompileShader(fs);
 
-        const char* errorsVs = checkProgramErrors(vs);
-        const char* errorsFs = checkProgramErrors(fs);
+        std::string errorsVs = checkProgramErrors(vs);
+        std::string errorsFs = checkProgramErrors(fs);
 
-        if (errorsVs != nullptr) std::cout << errorsVs;
-        if (errorsFs != nullptr) std::cout << errorsFs;
+        if (!errorsVs.empty()) std::cout << errorsVs;
+        if (!errorsFs.empty()) std::cout << errorsFs;
 
-        if (errorsVs != nullptr || errorsFs != nullptr)
+        if (!errorsVs.empty() || !errorsFs.empty())
         {
             return nullptr;
         }
 
         GLuint programId = glCreateProgram();
-        glAttachShader(programId, fs);
         glAttachShader(programId, vs);
+        glAttachShader(programId, fs);
         glLinkProgram(programId);
+
+        GLint linkStatus;
+        glGetProgramiv(programId, GL_LINK_STATUS, &linkStatus);
+        if (linkStatus == GL_FALSE)
+        {
+            GLint maxLength = 0;
+            glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
+            std::vector<char> infoLog(maxLength);
+            glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
+            std::cerr << "Program link error:\n" << infoLog.data() << std::endl;
+            glDeleteProgram(programId);
+            return nullptr;
+        }
+
+        glDetachShader(programId, vs);
+        glDetachShader(programId, fs);
 
         Program* program = new Program();
         program->program = programId;
@@ -137,7 +177,7 @@ namespace Core
         return program;
     }
 
-    const void RendererGL4::deleteProgram(const Program* program)
+    void RendererGL4::deleteProgram(Program* program)
     {
         const auto& it =
             std::find_if(_shaderPrograms.begin(), _shaderPrograms.end(), [=](Program* a) -> bool { return program->program == a->program; });
@@ -154,7 +194,7 @@ namespace Core
         delete program;
     }
 
-    const void RendererGL4::bindProgram(const Program* program)
+    void RendererGL4::bindProgram(Program* program)
     {
         if (program == nullptr)
         {
@@ -168,7 +208,7 @@ namespace Core
         glUseProgram(program->program);
     }
 
-    const char* RendererGL4::checkProgramErrors(unsigned int program)
+    std::string RendererGL4::checkProgramErrors(unsigned int program)
     {
         GLint isCompiled = 0;
         glGetShaderiv(program, GL_COMPILE_STATUS, &isCompiled);
@@ -180,11 +220,50 @@ namespace Core
             char* result = new char[maxLength];
             glGetShaderInfoLog(program, maxLength, &maxLength, result);
 
+            std::string log(result);
+            delete[] result;
+
             glDeleteShader(program);
-            return result;
+            return log;
         }
 
-        return nullptr;
+        return "";
+    }
+
+    const VertexBuffer* RendererGL4::createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize)
+    {
+        assert(maxVertexSize > 0);
+
+        GLuint vao = 0, vbo = 0, ibo = 0;
+
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
+        glGenBuffers(1, &vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, maxVertexSize * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
+
+        if (maxIndexSize > 0)
+        {
+            glGenBuffers(1, &ibo);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+            glBufferData(GL_ELEMENT_ARRAY_BUFFER, maxIndexSize * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+        }
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
+        glEnableVertexAttribArray(0);
+
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+
+        glBindVertexArray(0);
+
+        VertexBuffer* buffer = new VertexBuffer{vao, vbo, ibo, nullptr, maxVertexSize, nullptr, maxIndexSize};
+
+        return buffer;
     }
 
     const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
@@ -192,12 +271,15 @@ namespace Core
     {
         assert(vertexArray != nullptr && vertexArraySize > 0);
 
-        GLuint vbo = 0;
+        GLuint vao, vbo, ibo = 0;
+
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
         glGenBuffers(1, &vbo);
         glBindBuffer(GL_ARRAY_BUFFER, vbo);
         glBufferData(GL_ARRAY_BUFFER, vertexArraySize * sizeof(Vertex), vertexArray, GL_STATIC_DRAW);
 
-        GLuint ibo = 0;
         if (indexArray != nullptr)
         {
             assert(indexArraySize > 0);
@@ -207,52 +289,42 @@ namespace Core
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(unsigned int), indexArray, GL_STATIC_DRAW);
         }
 
-        VertexBuffer* buffer = new VertexBuffer{vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize};
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
+        glEnableVertexAttribArray(0);
 
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(1);
+
+        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+
         glBindVertexArray(0);
+
+        VertexBuffer* buffer = new VertexBuffer{vao, vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize};
 
         return buffer;
     }
 
-    const void RendererGL4::deleteBuffer(const VertexBuffer* buffer)
+    void RendererGL4::deleteBuffer(const VertexBuffer* buffer)
     {
+        GLint currentVAO;
+        glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentVAO);
+
+        if (currentVAO == (GLint)buffer->vao)
+        {
+            glBindVertexArray(0);
+        }
+
+        glDeleteVertexArrays(1, &buffer->vao);
         glDeleteBuffers(1, &buffer->vbo);
 
-        if (buffer->indexArray != nullptr) glDeleteBuffers(1, &buffer->ibo);
+        if (buffer->ibo != 0) glDeleteBuffers(1, &buffer->ibo);
 
         delete buffer;
     }
 
-    const void RendererGL4::bindBuffer(const VertexBuffer* buffer)
-    {
-        if (buffer == nullptr)
-        {
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-            return;
-        }
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
-
-        unsigned int position = glGetAttribLocation(_currentProgram->program, "position");
-        unsigned int uv0 = glGetAttribLocation(_currentProgram->program, "uv0");
-        unsigned int color0 = glGetAttribLocation(_currentProgram->program, "color0");
-
-        glEnableVertexAttribArray(position);
-        glEnableVertexAttribArray(uv0);
-        glEnableVertexAttribArray(color0);
-
-        glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
-        glVertexAttribPointer(uv0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
-        glVertexAttribPointer(color0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
-
-        if (buffer->indexArray != nullptr) glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
-    }
-
-    const void RendererGL4::drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
-                                       glm::mat4& model)
+    void RendererGL4::drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
+                                 glm::mat4& model)
     {
         GLuint viewMtxId = glGetUniformLocation(_currentProgram->program, "u_viewMtx");
         GLuint projMtxId = glGetUniformLocation(_currentProgram->program, "u_projMtx");
@@ -285,7 +357,7 @@ namespace Core
         if (flags & C_DEPTH_NEVER) glDepthFunc(GL_NEVER);
         if (flags & C_DEPTH_NOTEQUAL) glDepthFunc(GL_NOTEQUAL);
 
-        int _primitiveType = 0;
+        int _primitiveType = GL_TRIANGLES;
 
         switch (primitiveType)
         {
@@ -296,17 +368,49 @@ namespace Core
             _primitiveType = GL_LINES;
             break;
         default:
-            throw new std::runtime_error("Unknown primitive type");
+            throw std::runtime_error("Unknown primitive type");
             break;
         }
 
+        glBindVertexArray(buffer->vao);
+
         if (buffer->indexArray != nullptr)
         {
-            glDrawElements(_primitiveType, buffer->indexArraySize, GL_UNSIGNED_INT, 0);
+            glDrawElements(_primitiveType, buffer->indexArraySize, GL_UNSIGNED_INT, nullptr);
         }
-        else
+        else if (buffer->vertexArray != nullptr)
         {
             glDrawArrays(_primitiveType, 0, buffer->vertexArraySize);
+        }
+    }
+
+    void RendererGL4::updateBuffer(const VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+                                   unsigned int indexArraySize)
+    {
+        assert(vertexArraySize <= buffer->vertexArraySize);
+
+        glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
+        void* vptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, vertexArraySize * sizeof(Vertex), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+
+        if (vptr != nullptr)
+        {
+            memcpy(vptr, vertexArray, vertexArraySize * sizeof(Vertex));
+            glUnmapBuffer(GL_ARRAY_BUFFER);
+        }
+
+        if (indexArray != nullptr)
+        {
+            assert(indexArraySize <= buffer->indexArraySize);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
+            void* iptr =
+                glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, indexArraySize * sizeof(unsigned int), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+
+            if (iptr != nullptr)
+            {
+                memcpy(iptr, indexArray, indexArraySize * sizeof(unsigned int));
+                glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+            }
         }
     }
 
@@ -315,35 +419,35 @@ namespace Core
         FrameBuffer* fb = new FrameBuffer();
 
         glGenFramebuffers(1, &fb->frameBuffer);
-        glGenTextures(1, &fb->colorTexture);
-        glGenRenderbuffers(1, &fb->depthTexture);
+        glGenTextures(1, &fb->colorBuffer);
+        glGenRenderbuffers(1, &fb->depthBuffer);
 
         glBindFramebuffer(GL_FRAMEBUFFER, fb->frameBuffer);
 
-        glBindTexture(GL_TEXTURE_2D, fb->colorTexture);
+        glBindTexture(GL_TEXTURE_2D, fb->colorBuffer);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->colorTexture, 0);
+        glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->colorBuffer, 0);
 
-        glBindRenderbuffer(GL_RENDERBUFFER, fb->depthTexture);
+        glBindRenderbuffer(GL_RENDERBUFFER, fb->depthBuffer);
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-        glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb->depthTexture);
+        glFramebufferRenderbuffer(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, fb->depthBuffer);
 
         return fb;
     }
 
-    const void RendererGL4::deleteFrameBuffer(const FrameBuffer* buffer)
+    void RendererGL4::deleteFrameBuffer(const FrameBuffer* buffer)
     {
         glDeleteFramebuffers(1, &buffer->frameBuffer);
-        glDeleteTextures(1, &buffer->colorTexture);
-        glDeleteRenderbuffers(1, &buffer->depthTexture);
+        glDeleteTextures(1, &buffer->colorBuffer);
+        glDeleteRenderbuffers(1, &buffer->depthBuffer);
 
         delete buffer;
     }
 
-    const void RendererGL4::bindFrameBuffer(const FrameBuffer* buffer)
+    void RendererGL4::bindFrameBuffer(const FrameBuffer* buffer)
     {
         if (buffer == nullptr)
         {
@@ -376,7 +480,7 @@ namespace Core
         }
         else
         {
-            throw "Texture format is unsupported";
+            throw std::runtime_error("Texture format is unsupported");
         }
 
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -385,21 +489,21 @@ namespace Core
         return tex;
     }
 
-    const void RendererGL4::bindTexture(unsigned int id, const char* name, unsigned int slot)
+    void RendererGL4::bindTexture(unsigned int id, const char* name, unsigned int slot)
     {
         GLuint texId = glGetUniformLocation(_currentProgram->program, name);
 
         glActiveTexture(GL_TEXTURE0 + slot);
         glBindTexture(GL_TEXTURE_2D, id);
-        glUniform1i(texId, slot);
+        if (texId >= 0) glUniform1i(texId, slot);
     }
 
-    const void RendererGL4::deleteTexture(unsigned int id)
+    void RendererGL4::deleteTexture(unsigned int id)
     {
         glDeleteTextures(1, &id);
     }
 
-    const void RendererGL4::clear(unsigned int flags, Color color)
+    void RendererGL4::clear(unsigned int flags, Color color)
     {
         unsigned int _flags = 0;
 
@@ -417,4 +521,4 @@ namespace Core
 
         glClear(_flags);
     }
-}
+} // namespace Core

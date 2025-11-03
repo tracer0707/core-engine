@@ -7,20 +7,20 @@
 
 namespace Core
 {
-	class Renderer;
+    class Renderer;
 
-	class Shader : public Asset
-	{
-		friend class AssetManager;
+    class Shader : public Asset
+    {
+        friend class AssetManager;
 
-	private:
-		Shader(Renderer* renderer, String vertexSrc, String fragmentSrc);
-		~Shader();
+      private:
+        Shader(Renderer* renderer, String vertexSrc, String fragmentSrc);
+        ~Shader();
 
-		Renderer* _renderer = nullptr;
-		const Program* _nativeId = nullptr;
+        Renderer* _renderer = nullptr;
+        Program* _nativeId = nullptr;
 
-	public:
-		void bind();
-	};
-}
+      public:
+        void bind();
+    };
+} // namespace Core

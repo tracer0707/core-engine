@@ -39,7 +39,7 @@ namespace Editor
     Editor::MainWindow::MainWindow(Editor* app) : Window(app, "Project Manager", 1366, 768)
     {
         _scene = new Core::Scene(_renderer);
-        
+
         _cameraObject = _scene->createObject();
         _camera = _cameraObject->addComponent<Core::Camera*>();
         Core::Transform* cameraTransform = (Core::Transform*)_cameraObject->findComponent<Core::Transform*>();
@@ -49,8 +49,10 @@ namespace Editor
 
         _scene->setMainCamera(_camera);
 
-        cameraTransform->setPosition(glm::vec3(0, 5, 5));
-        cameraTransform->setRotation(glm::vec3(-10, 0, 0));
+        cameraTransform->setPosition(glm::vec3(0.0f, 5.0f, 5.0f));
+        cameraTransform->setRotation(glm::vec3(-10.0f, 0, 0));
+
+        _gridBuffer = _renderer->createBuffer(2048, 0);
 
         _windowManager = new WindowManager();
         _windowManager->setTime(_time);
@@ -113,8 +115,14 @@ namespace Editor
     {
         ModifierManager::singleton()->destroy();
 
+        _renderer->deleteBuffer(_gridBuffer);
+
         delete _windowManager;
         delete _scene;
+
+        _gridBuffer = nullptr;
+        _windowManager = nullptr;
+        _scene = nullptr;
     }
 
     void Editor::MainWindow::update()
@@ -133,11 +141,11 @@ namespace Editor
         _renderer->setViewportSize(viewportWidth, viewportHeight);
         _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
-        Rendering::renderGrid(_renderer, _assetManager->getDefaultMaterial(), _camera);
+        Rendering::renderGrid(_renderer, _gridBuffer, _assetManager->getDefaultMaterial(), _camera);
         ModifierManager::singleton()->render();
         _scene->render();
 
-        _renderer->bindFrameBuffer(nullptr);
+        //_renderer->bindFrameBuffer(nullptr);
         //** Render scene end **//
 
         //** Render UI begin **//
@@ -169,4 +177,4 @@ namespace Editor
         _mainFont = nullptr;
         _wnd = nullptr;
     }
-}
+} // namespace Editor
