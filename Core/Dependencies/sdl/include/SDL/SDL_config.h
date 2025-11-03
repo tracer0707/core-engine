@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2023 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -49,7 +49,7 @@
 
 /* Comment this if you want to build without any C library requirements */
 /* #undef HAVE_LIBC */
-#if HAVE_LIBC
+#ifdef HAVE_LIBC
 
 /* Useful headers */
 /* #undef STDC_HEADERS */
@@ -190,7 +190,10 @@
 /* #undef HAVE_FOPEN64 */
 /* #undef HAVE_FSEEKO */
 /* #undef HAVE_FSEEKO64 */
+/* #undef HAVE_MEMFD_CREATE */
+/* #undef HAVE_POSIX_FALLOCATE */
 /* #undef HAVE_SIGACTION */
+/* #undef HAVE_SIGTIMEDWAIT */
 /* #undef HAVE_SA_SIGACTION */
 /* #undef HAVE_SETJMP */
 /* #undef HAVE_NANOSLEEP */
@@ -200,6 +203,7 @@
 /* #undef HAVE_GETPAGESIZE */
 /* #undef HAVE_MPROTECT */
 /* #undef HAVE_ICONV */
+/* #undef SDL_USE_LIBICONV */
 /* #undef HAVE_PTHREAD_SETNAME_NP */
 /* #undef HAVE_PTHREAD_SET_NAME_NP */
 /* #undef HAVE_SEM_TIMEDWAIT */
@@ -259,8 +263,7 @@
 #define HAVE_ROAPI_H 1
 #define HAVE_SHELLSCALINGAPI_H 1
 
-/* #undef HAVE_XINPUT_GAMEPAD_EX */
-/* #undef HAVE_XINPUT_STATE_EX */
+/* #undef USE_POSIX_SPAWN */
 
 /* SDL internal assertion support */
 #if 0
@@ -332,6 +335,7 @@
 /* #undef SDL_INPUT_LINUXEV */
 /* #undef SDL_INPUT_LINUXKD */
 /* #undef SDL_INPUT_FBSDKBIO */
+/* #undef SDL_INPUT_WSCONS */
 /* #undef SDL_JOYSTICK_ANDROID */
 /* #undef SDL_JOYSTICK_HAIKU */
 #define SDL_JOYSTICK_WGI 1
@@ -359,6 +363,7 @@
 #define SDL_HAPTIC_XINPUT 1
 /* #undef SDL_HAPTIC_ANDROID */
 /* #undef SDL_LIBUSB_DYNAMIC */
+/* #undef SDL_UDEV_DYNAMIC */
 
 /* Enable various sensor drivers */
 /* #undef SDL_SENSOR_ANDROID */
@@ -538,6 +543,8 @@
 /* #undef SDL_VIDEO_VITA_PIB */
 /* #undef SDL_VIDEO_VITA_PVR */
 /* #undef SDL_VIDEO_VITA_PVR_OGL */
+
+/* #undef SDL_HAVE_LIBDECOR_GET_MIN_MAX */
 
 #if !defined(HAVE_STDINT_H) && !defined(_STDINT_H_)
 /* Most everything except Visual Studio 2008 and earlier has stdint.h now */
