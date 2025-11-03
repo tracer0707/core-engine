@@ -29,15 +29,14 @@ namespace Core
         void bindProgram(Program* programId);
         std::string checkProgramErrors(unsigned int program);
 
-        const VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize);
-        const VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
+        VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize);
+        VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 
-        void deleteBuffer(const VertexBuffer* buffer);
+        void deleteBuffer(VertexBuffer* buffer);
 
-        void drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
-                        glm::mat4& model);
+        void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
 
-        virtual void updateBuffer(const VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+        virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
                                   unsigned int indexArraySize);
 
         const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);

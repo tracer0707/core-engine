@@ -35,7 +35,7 @@ namespace Core
         unsigned int* indexArray = nullptr;
         unsigned int indexArraySize = 0;
 
-        const VertexBuffer& operator=(const VertexBuffer& left);
-        const bool operator==(const VertexBuffer& left);
+        VertexBuffer& operator=(VertexBuffer& left);
+        bool operator==(VertexBuffer& left);
     };
 } // namespace Core

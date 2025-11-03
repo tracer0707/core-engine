@@ -46,7 +46,7 @@ namespace Editor
             Core::Camera* _camera = nullptr;
             Core::Scene* _scene = nullptr;
             Core::RenderTexture* _renderTexture = nullptr;
-            const Core::VertexBuffer* _gridBuffer = nullptr;
+            Core::VertexBuffer* _gridBuffer = nullptr;
 
             WindowManager* _windowManager = nullptr;
 

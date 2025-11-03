@@ -50,7 +50,7 @@ namespace Editor
         CSGModel* _currentModel = nullptr;
         CSGBrush* _currentBrush = nullptr;
 
-        const Core::VertexBuffer* _wireframeBuffer = nullptr;
+        Core::VertexBuffer* _wireframeBuffer = nullptr;
 
         virtual void enableWindows(bool enable);
 

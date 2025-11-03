@@ -9,7 +9,7 @@
 
 namespace Editor
 {
-    void Rendering::renderGrid(Core::Renderer* renderer, const Core::VertexBuffer* buffer, Core::Material* material, Core::Camera* camera)
+    void Rendering::renderGrid(Core::Renderer* renderer, Core::VertexBuffer* buffer, Core::Material* material, Core::Camera* camera)
     {
         Core::Color lineColor = Core::Color(0.8f, 0.8f, 0.8f, 0.8f);
         Core::Color xColor = Core::Color(0.8f, 0.0f, 0.0f, 0.8f);

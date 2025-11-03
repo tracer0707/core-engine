@@ -20,12 +20,12 @@ namespace Core
         SubMesh(Renderer* renderer);
         ~SubMesh();
 
-        const VertexBuffer* _vertexBuffer = nullptr;
+        VertexBuffer* _vertexBuffer = nullptr;
         Material* _material = nullptr;
         Renderer* _renderer = nullptr;
 
       public:
-        const VertexBuffer* getVertexBuffer() { return _vertexBuffer; }
+        VertexBuffer* getVertexBuffer() { return _vertexBuffer; }
         void updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 
         Material* getMaterial() { return _material; }

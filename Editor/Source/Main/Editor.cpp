@@ -145,7 +145,7 @@ namespace Editor
         ModifierManager::singleton()->render();
         _scene->render();
 
-        //_renderer->bindFrameBuffer(nullptr);
+        _renderer->bindFrameBuffer(nullptr);
         //** Render scene end **//
 
         //** Render UI begin **//

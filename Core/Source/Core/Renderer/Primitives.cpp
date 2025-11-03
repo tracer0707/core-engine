@@ -10,7 +10,7 @@
 
 namespace Core
 {
-    void Primitives::lines(Renderer* renderer, const VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+    void Primitives::lines(Renderer* renderer, VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
                            Vertex* points, int pointsCount, unsigned int flags)
     {
         renderer->updateBuffer(buffer, points, pointsCount, nullptr, 0);
@@ -19,7 +19,7 @@ namespace Core
         renderer->drawBuffer(buffer, PrimitiveType::Line, flags, view, proj, model);
     }
 
-    void Primitives::wireCube(Renderer* renderer, const VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+    void Primitives::wireCube(Renderer* renderer, VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
                               glm::vec3 size, glm::vec3 center, Color color, unsigned int flags)
     {
         Core::List<Core::Vertex> verts;
@@ -81,7 +81,7 @@ namespace Core
         Core::Primitives::lines(renderer, buffer, material, view, proj, model, verts.ptr(), verts.count(), flags);
     }
 
-    void Primitives::wireMesh(Renderer* renderer, const VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+    void Primitives::wireMesh(Renderer* renderer, VertexBuffer* buffer, Material* material, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
                               List<glm::vec3>& vertices, List<int>& indices, Color color, WireframeMode mode, unsigned int flags)
     {
         if (indices.count() == 0) return;

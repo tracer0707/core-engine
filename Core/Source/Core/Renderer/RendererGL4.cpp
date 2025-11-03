@@ -230,7 +230,7 @@ namespace Core
         return "";
     }
 
-    const VertexBuffer* RendererGL4::createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize)
+    VertexBuffer* RendererGL4::createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize)
     {
         assert(maxVertexSize > 0);
 
@@ -266,12 +266,11 @@ namespace Core
         return buffer;
     }
 
-    const VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-                                                  unsigned int indexArraySize)
+    VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
     {
         assert(vertexArray != nullptr && vertexArraySize > 0);
 
-        GLuint vao, vbo, ibo = 0;
+        GLuint vao = 0, vbo = 0, ibo = 0;
 
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -305,7 +304,7 @@ namespace Core
         return buffer;
     }
 
-    void RendererGL4::deleteBuffer(const VertexBuffer* buffer)
+    void RendererGL4::deleteBuffer(VertexBuffer* buffer)
     {
         GLint currentVAO;
         glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentVAO);
@@ -323,7 +322,7 @@ namespace Core
         delete buffer;
     }
 
-    void RendererGL4::drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
+    void RendererGL4::drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
                                  glm::mat4& model)
     {
         GLuint viewMtxId = glGetUniformLocation(_currentProgram->program, "u_viewMtx");
@@ -384,7 +383,7 @@ namespace Core
         }
     }
 
-    void RendererGL4::updateBuffer(const VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+    void RendererGL4::updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
                                    unsigned int indexArraySize)
     {
         assert(vertexArraySize <= buffer->vertexArraySize);
@@ -400,6 +399,7 @@ namespace Core
 
         if (indexArray != nullptr)
         {
+            assert(indexArraySize > 0);
             assert(indexArraySize <= buffer->indexArraySize);
 
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);

@@ -13,6 +13,6 @@ namespace Editor
     class Rendering
     {
       public:
-        static void renderGrid(Core::Renderer* renderer, const Core::VertexBuffer* buffer, Core::Material* material, Core::Camera* camera);
+        static void renderGrid(Core::Renderer* renderer, Core::VertexBuffer* buffer, Core::Material* material, Core::Camera* camera);
     };
 } // namespace Editor

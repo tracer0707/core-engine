@@ -87,18 +87,18 @@ namespace Core
         virtual std::string checkProgramErrors(unsigned int program) = 0;
 
         // Create dynamic buffer
-        virtual const VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;
+        virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;
 
         // Create static buffer
-        virtual const VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-                                                 unsigned int indexArraySize) = 0;
+        virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+                                           unsigned int indexArraySize) = 0;
 
-        virtual void deleteBuffer(const VertexBuffer* buffer) = 0;
+        virtual void deleteBuffer(VertexBuffer* buffer) = 0;
 
-        virtual void drawBuffer(const VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
+        virtual void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
                                 glm::mat4& model) = 0;
 
-        virtual void updateBuffer(const VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+        virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
                                   unsigned int indexArraySize) = 0;
 
         virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
