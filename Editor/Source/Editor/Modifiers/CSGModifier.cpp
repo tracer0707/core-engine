@@ -50,7 +50,7 @@ namespace Editor
         _csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSG_OBJECT_WINDOW);
         _csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSG_EDIT_WINDOW);
 
-        _wireframeBuffer = renderer->createBuffer(2048, 2048);
+        _wireframeBuffer = renderer->createBuffer(2048, 0);
     }
 
     void CSGModifier::enableWindows(bool enable)
@@ -122,7 +122,7 @@ namespace Editor
 
         glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
         glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
-        glm::mat4& model = _currentBrush->getTransform()->getTransformMatrix();
+        glm::mat4 model = _currentBrush->getTransform()->getTransformMatrix();
 
         Core::List<int> inds = _currentBrush->getFlatIndices();
         Core::List<glm::vec3>& verts = _currentBrush->getVertices();

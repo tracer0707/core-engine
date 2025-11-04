@@ -14,12 +14,12 @@ namespace Editor
     // Remove all controls and delete them
     void Container::clear()
     {
-        // for (int i = 0; i < _controls.count(); ++i)
-        // {
-        //     Control* control = _controls.get(i);
-        //     control->_parent = nullptr;
-        //     delete control;
-        // }
+        for (int i = 0; i < _controls.count(); ++i)
+        {
+            Control* control = _controls.get(i);
+            control->_parent = nullptr;
+            delete control;
+        }
 
         _controls.clear();
     }

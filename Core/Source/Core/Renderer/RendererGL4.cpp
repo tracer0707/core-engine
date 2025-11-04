@@ -44,6 +44,13 @@ namespace Core
         int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
         printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 
+        GLint origin, depth;
+        glGetIntegerv(GL_CLIP_ORIGIN, &origin);
+        glGetIntegerv(GL_CLIP_DEPTH_MODE, &depth);
+
+        std::cout << "Clip origin: " << (origin == GL_UPPER_LEFT ? "UPPER_LEFT" : origin == GL_LOWER_LEFT ? "LOWER_LEFT" : "UNKNOWN") << std::endl;
+        std::cout << "Depth mode: " << (depth == GL_NEGATIVE_ONE_TO_ONE ? "-1..1" : depth == GL_ZERO_TO_ONE ? "0..1" : "UNKNOWN") << std::endl;
+
         _imguiCtx = ImGui::CreateContext();
         ImGui::SetCurrentContext(_imguiCtx);
 
@@ -314,6 +321,8 @@ namespace Core
         {
             memcpy(vptr, vertexArray, vertexArraySize * sizeof(Vertex));
             glUnmapBuffer(GL_ARRAY_BUFFER);
+
+            buffer->vertexArraySize = vertexArraySize;
         }
 
         if (indexArray != nullptr)
@@ -329,6 +338,8 @@ namespace Core
             {
                 memcpy(iptr, indexArray, indexArraySize * sizeof(unsigned int));
                 glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+
+                buffer->indexArraySize = indexArraySize;
             }
         }
     }
@@ -400,15 +411,18 @@ namespace Core
             break;
         }
 
-        glBindVertexArray(buffer->vao);
+        if (buffer->vao > 0)
+        {
+            glBindVertexArray(buffer->vao);
 
-        if (buffer->indexArray != nullptr)
-        {
-            glDrawElements(_primitiveType, buffer->indexArraySize, GL_UNSIGNED_INT, nullptr);
-        }
-        else if (buffer->vertexArray != nullptr)
-        {
-            glDrawArrays(_primitiveType, 0, buffer->vertexArraySize);
+            if (buffer->ibo > 0 && buffer->indexArraySize > 0)
+            {
+                glDrawElements(_primitiveType, buffer->indexArraySize, GL_UNSIGNED_INT, nullptr);
+            }
+            else if (buffer->vbo > 0 && buffer->vertexArraySize > 0)
+            {
+                glDrawArrays(_primitiveType, 0, buffer->vertexArraySize);
+            }
         }
     }
 

@@ -53,7 +53,7 @@ namespace Core
             SubMesh* subMesh = mesh->getSubMesh(i);
             Material* material = subMesh->getMaterial();
 
-            glm::mat4& model = transform->getTransformMatrix();
+            glm::mat4 model = transform->getTransformMatrix();
 
             if (material != nullptr) material->bind();
             _renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,

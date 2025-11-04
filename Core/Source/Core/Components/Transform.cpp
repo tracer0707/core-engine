@@ -4,15 +4,12 @@
 
 namespace Core
 {
-	Transform::Transform(Object* owner) : Transformable(), Component(owner)
-	{
-		
-	}
+    Transform::Transform(Object* owner) : Component(owner), Transformable() {}
 
-	Transform::~Transform() {}
+    Transform::~Transform() {}
 
-	unsigned int Transform::getComponentType()
-	{
-		return COMPONENT_TRANSFORM;
-	}
+    unsigned int Transform::getComponentType()
+    {
+        return COMPONENT_TRANSFORM;
+    }
 }

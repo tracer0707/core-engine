@@ -7,14 +7,17 @@
 
 namespace Core
 {
-	class Object;
+    class Object;
 
-	class Transform: public Transformable, public Component
-	{
-	public:
-		Transform(Object* owner);
-		virtual ~Transform();
+    class Transform : public Component, public Transformable
+    {
+        friend class Object;
 
-		virtual unsigned int getComponentType();
-	};
-}
+      private:
+        Transform(Object* owner);
+        virtual ~Transform();
+
+      public:
+        virtual unsigned int getComponentType();
+    };
+} // namespace Core

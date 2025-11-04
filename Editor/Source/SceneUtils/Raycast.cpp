@@ -54,6 +54,8 @@ namespace Editor
             Core::Transform* transform = obj->findComponent<Core::Transform*>();
             Core::Mesh* mesh = meshRenderer->getMesh();
 
+            if (transform == nullptr) continue;
+
             glm::mat4 mtx = transform->getTransformMatrix();
             Core::Uuid brushId;
 

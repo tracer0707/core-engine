@@ -3,60 +3,73 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <algorithm>
+
+#include "../Shared/List.h"
 
 namespace Core
 {
-	class Transformable
-	{
-	protected:
-		Transformable* parent = nullptr;
+    class Transformable
+    {
+      protected:
+        Transformable* parent = nullptr;
+        List<Transformable*> children;
 
-		glm::mat4 worldMtx;
+        glm::vec3 position = glm::vec3(0.0f);
+        glm::quat rotation = glm::quat(1.0f, 0.0f, 0.0f, 0.0f);
+        glm::vec3 scale = glm::vec3(1.0f);
 
-	public:
-		Transformable();
-		virtual ~Transformable() = default;
+        mutable bool dirty = true;
+        mutable glm::mat4 cachedLocalMatrix = glm::mat4(1.0f);
+        mutable glm::mat4 cachedWorldMatrix = glm::mat4(1.0f);
 
-		Transformable* getParent() { return parent; }
-		void setParent(Transformable* value);
+        void markDirty();
 
-		glm::vec3 getPosition();
-		glm::vec3 getLocalPosition();
-		glm::quat getRotation();
-		glm::quat getRotationInverse();
-		glm::quat getLocalRotation();
-		glm::vec3 getScale();
-		glm::vec3 getLocalScale();
-		glm::vec3 getForward();
-		glm::vec3 getUp();
-		glm::vec3 getRight();
+      public:
+        Transformable() = default;
+        virtual ~Transformable() = default;
 
-		glm::mat4& getTransformMatrix();
-		glm::mat4 getTransformMatrixInverse();
-		glm::mat4 getLocalTransformMatrix();
-		glm::mat3 getLocalAxes();
+        Transformable* getParent() const { return parent; }
+        void setParent(Transformable* value);
 
-		static glm::mat4 makeTransformMatrix(glm::vec3 position, glm::quat rotation, glm::vec3 scale);
+        void addChild(Transformable* child);
+        void removeChild(Transformable* child);
+        const List<Transformable*>& getChildren() const { return children; }
 
-		void setPosition(glm::vec3 value);
-		void setLocalPosition(glm::vec3 value);
-		void setRotation(glm::quat value);
-		void setLocalRotation(glm::quat value);
-		void setScale(glm::vec3 value);
-		void setLocalScale(glm::vec3 value);
-		void setTransformMatrix(glm::mat4 value);
-		void setLocalTransformMatrix(glm::mat4 value);
+        glm::vec3 getPosition() const;
+        glm::vec3 getLocalPosition() const;
+        glm::quat getRotation() const;
+        glm::quat getRotationInverse() const;
+        glm::quat getLocalRotation() const;
+        glm::vec3 getScale() const;
+        glm::vec3 getLocalScale() const;
 
-		void yaw(float degree, bool world = true);
-		void pitch(float degree, bool world = true);
-		void roll(float degree, bool world = true);
-		void rotate(glm::vec3 axis, float degree, bool world = true);
-		void rotate(glm::quat q, bool world = true);
-		void translate(glm::vec3 direction, bool world = true);
+        glm::vec3 getForward() const;
+        glm::vec3 getUp() const;
+        glm::vec3 getRight() const;
 
-		glm::vec3 worldToLocalPosition(glm::vec3 worldPos);
-		glm::quat worldToLocalRotation(glm::quat worldRot);
-		glm::vec3 localToWorldPosition(glm::vec3 localPos);
-		glm::quat localToWorldRotation(glm::quat localRot);
-	};
-}
+        glm::mat4 getTransformMatrix() const;
+        glm::mat4 getTransformMatrixInverse() const;
+        glm::mat4 getLocalTransformMatrix() const;
+        glm::mat3 getLocalAxes() const;
+
+        void setPosition(const glm::vec3& value);
+        void setLocalPosition(const glm::vec3& value);
+        void setRotation(const glm::quat& value);
+        void setLocalRotation(const glm::quat& value);
+        void setScale(const glm::vec3& value);
+        void setLocalScale(const glm::vec3& value);
+
+        void yaw(float degree, bool world = true);
+        void pitch(float degree, bool world = true);
+        void roll(float degree, bool world = true);
+        void rotate(const glm::vec3& axis, float degree, bool world = true);
+        void rotate(const glm::quat& q, bool world = true);
+        void translate(const glm::vec3& direction, bool world = true);
+
+        glm::vec3 worldToLocalPosition(const glm::vec3& worldPos) const;
+        glm::quat worldToLocalRotation(const glm::quat& worldRot) const;
+        glm::vec3 localToWorldPosition(const glm::vec3& localPos) const;
+        glm::quat localToWorldRotation(const glm::quat& localRot) const;
+    };
+} // namespace Core
