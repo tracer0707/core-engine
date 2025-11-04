@@ -1,6 +1,7 @@
 #include "Window.h"
 
 #include <stdexcept>
+#define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
 
 #include "../Assets/AssetManager.h"
@@ -22,7 +23,7 @@ namespace Core
 
         if (_ctx == NULL)
         {
-            throw new std::runtime_error("Create window failed");
+            throw std::runtime_error("Create window failed");
         }
 
         _application = application;

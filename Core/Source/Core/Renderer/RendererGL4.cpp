@@ -1,7 +1,8 @@
 #include "RendererGL4.h"
 
+#include <glad/gl.h>
+#define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
-#include <GL/glew.h>
 
 #include <cassert>
 #include <iostream>
@@ -40,11 +41,8 @@ namespace Core
         makeCurrent();
         swapBuffers();
 
-        GLenum err = glewInit();
-        if (err != GLEW_OK)
-        {
-            fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-        }
+        int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
+        printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 
         _imguiCtx = ImGui::CreateContext();
         ImGui::SetCurrentContext(_imguiCtx);
@@ -304,6 +302,37 @@ namespace Core
         return buffer;
     }
 
+    void RendererGL4::updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+                                   unsigned int indexArraySize)
+    {
+        assert(vertexArraySize <= buffer->vertexArraySize);
+
+        glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
+        void* vptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, vertexArraySize * sizeof(Vertex), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+
+        if (vptr != nullptr)
+        {
+            memcpy(vptr, vertexArray, vertexArraySize * sizeof(Vertex));
+            glUnmapBuffer(GL_ARRAY_BUFFER);
+        }
+
+        if (indexArray != nullptr)
+        {
+            assert(indexArraySize > 0);
+            assert(indexArraySize <= buffer->indexArraySize);
+
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
+            void* iptr =
+                glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, indexArraySize * sizeof(unsigned int), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+
+            if (iptr != nullptr)
+            {
+                memcpy(iptr, indexArray, indexArraySize * sizeof(unsigned int));
+                glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+            }
+        }
+    }
+
     void RendererGL4::deleteBuffer(VertexBuffer* buffer)
     {
         GLint currentVAO;
@@ -380,37 +409,6 @@ namespace Core
         else if (buffer->vertexArray != nullptr)
         {
             glDrawArrays(_primitiveType, 0, buffer->vertexArraySize);
-        }
-    }
-
-    void RendererGL4::updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-                                   unsigned int indexArraySize)
-    {
-        assert(vertexArraySize <= buffer->vertexArraySize);
-
-        glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
-        void* vptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, vertexArraySize * sizeof(Vertex), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-
-        if (vptr != nullptr)
-        {
-            memcpy(vptr, vertexArray, vertexArraySize * sizeof(Vertex));
-            glUnmapBuffer(GL_ARRAY_BUFFER);
-        }
-
-        if (indexArray != nullptr)
-        {
-            assert(indexArraySize > 0);
-            assert(indexArraySize <= buffer->indexArraySize);
-
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
-            void* iptr =
-                glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, indexArraySize * sizeof(unsigned int), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
-
-            if (iptr != nullptr)
-            {
-                memcpy(iptr, indexArray, indexArraySize * sizeof(unsigned int));
-                glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-            }
         }
     }
 

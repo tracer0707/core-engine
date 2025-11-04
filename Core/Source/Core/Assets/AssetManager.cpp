@@ -188,19 +188,11 @@ namespace Core
             {
                 Vertex vtx{};
 
-                vtx.position[0] = mesh->mVertices[j].x;
-                vtx.position[1] = mesh->mVertices[j].y;
-                vtx.position[2] = mesh->mVertices[j].z;
+                vtx.position = glm::vec3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z);
+                vtx.uv = glm::vec2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y);
+                vtx.color = Color(mesh->mColors[0][j].r, mesh->mColors[0][j].g, mesh->mColors[0][j].b, mesh->mColors[0][j].a);
 
-                vtx.uv[0] = mesh->mTextureCoords[0][j].x;
-                vtx.uv[1] = mesh->mTextureCoords[0][j].y;
-
-                vtx.color[0] = mesh->mColors[0][j].r;
-                vtx.color[1] = mesh->mColors[0][j].g;
-                vtx.color[2] = mesh->mColors[0][j].b;
-                vtx.color[3] = mesh->mColors[0][j].a;
-
-                aab.merge(vtx.getPosition());
+                aab.merge(vtx.position);
 
                 verts.push_back(vtx);
             }

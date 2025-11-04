@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(CoreEngine LANGUAGES CXX)
+project(CoreEngine LANGUAGES C CXX)
 
 if(UNIX AND NOT APPLE)
     set(PLATFORM_LINUX 1)
@@ -36,16 +36,25 @@ file(GLOB_RECURSE CORE_HEADERS "Core/Source/*.h" "Core/Dependencies/imgui/*.h")
 # Core sources
 file(GLOB_RECURSE CORE_SOURCES "Core/Source/*.cpp" "Core/Dependencies/imgui/*.cpp")
 
+# glad sources
+if(PLATFORM_WINDOWS)
+    file(GLOB_RECURSE GLAD_SOURCES "Core/Dependencies/glad/include/glad/gl.h" "Core/Dependencies/glad/src/gl.c")
+endif()
+
 # Core (static lib)
 add_library(Core STATIC ${CORE_HEADERS} ${CORE_SOURCES})
 
+add_library(glad STATIC ${GLAD_SOURCES})
+set_target_properties(glad PROPERTIES LINKER_LANGUAGE C)
+
 target_compile_definitions(Core PRIVATE FREEIMAGE_LIB)
-target_compile_definitions(Core PRIVATE GLEW_STATIC)
 
 if(PLATFORM_LINUX)
     set_target_properties(Core PROPERTIES OUTPUT_NAME "libCore.a")
+    set_target_properties(glad PROPERTIES OUTPUT_NAME "libGlad.a")
 elseif(PLATFORM_WINDOWS)
     set_target_properties(Core PROPERTIES OUTPUT_NAME "Core")
+    set_target_properties(glad PROPERTIES OUTPUT_NAME "glad")
 endif()
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
@@ -59,12 +68,15 @@ elseif(PLATFORM_WINDOWS)
     target_link_libraries(Core PRIVATE OpenGL::GL)
 endif()
 
+target_include_directories(glad PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glad/include
+)
+
 target_include_directories(Core PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/FreeImage/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/bc7enc/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glew/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/imgui
@@ -74,16 +86,12 @@ add_library(Assimp STATIC IMPORTED)
 add_library(ICUDT STATIC IMPORTED)
 add_library(ICUUC STATIC IMPORTED)
 add_library(SDL2 STATIC IMPORTED)
-add_library(GLEW STATIC IMPORTED)
 add_library(FreeImage STATIC IMPORTED)
 add_library(bc7enc STATIC IMPORTED)
 add_library(glm STATIC IMPORTED)
 
 set_target_properties(Assimp PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/include"
-)
-set_target_properties(GLEW PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glew/include"
 )
 set_target_properties(ICUDT PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include"
@@ -108,9 +116,6 @@ if(PLATFORM_LINUX)
     set_target_properties(Assimp PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/bin/linux64/libassimp.so.6.0.2"
     )
-    set_target_properties(GLEW PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glew/bin/linux64/libGLEW.so.2.2.0"
-    )
     set_target_properties(ICUDT PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicudata.a"
     )
@@ -132,9 +137,6 @@ if(PLATFORM_LINUX)
 elseif(PLATFORM_WINDOWS)
     set_target_properties(Assimp PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/lib/win64/assimp-vc143-mt.lib"
-    )
-    set_target_properties(GLEW PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glew/lib/win64/glew32s.lib"
     )
     set_target_properties(ICUDT PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/win64/icudt.lib"
@@ -161,10 +163,10 @@ target_link_libraries(Core
     PRIVATE ICUDT
     PRIVATE ICUUC
     PRIVATE SDL2
-    PRIVATE GLEW
     PRIVATE FreeImage
     PRIVATE bc7enc
     PRIVATE glm
+    PRIVATE glad
 )
 # Editor headers
 file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h")

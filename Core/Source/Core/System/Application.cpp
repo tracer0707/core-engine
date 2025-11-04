@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
 
 #include "Window.h"
@@ -10,6 +11,7 @@ namespace Core
 {
     void Application::run()
     {
+        SDL_SetMainReady();
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 
         internalInit();
@@ -57,6 +59,13 @@ namespace Core
 
             for (Window* wnd : _windows)
             {
+                wnd->internalUpdate();
+            }
+
+            _eventHandler->processEvents();
+
+            for (Window* wnd : _windows)
+            {
                 if (!wnd->_opened)
                 {
                     windowsToClose.add(wnd);
@@ -75,19 +84,12 @@ namespace Core
 
             windowsToClose.clear();
 
-            if (!_isRunning) break;
-
-            for (Window* wnd : _windows)
-            {
-                wnd->internalUpdate();
-            }
-
             if (_windows.isEmpty())
             {
                 _isRunning = false;
             }
 
-            _eventHandler->processEvents();
+            if (!_isRunning) break;
         }
     }
 
@@ -100,11 +102,12 @@ namespace Core
             delete wnd;
         }
 
+        _windows.clear();
+
         delete _eventHandler;
 
         _eventHandler = nullptr;
         _mainWindow = nullptr;
-        _windows.clear();
     }
 
     void Application::addWindow(Window* value)

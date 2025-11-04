@@ -100,9 +100,9 @@ namespace Editor
                 Core::Vertex& v2 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 1] : j + 1];
                 Core::Vertex& v3 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 2] : j + 2];
 
-                glm::vec3 p1 = mtx * glm::vec4(v1.getPosition(), 1.0f);
-                glm::vec3 p2 = mtx * glm::vec4(v2.getPosition(), 1.0f);
-                glm::vec3 p3 = mtx * glm::vec4(v3.getPosition(), 1.0f);
+                glm::vec3 p1 = mtx * glm::vec4(v1.position, 1.0f);
+                glm::vec3 p2 = mtx * glm::vec4(v2.position, 1.0f);
+                glm::vec3 p3 = mtx * glm::vec4(v3.position, 1.0f);
 
                 std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, true);
 

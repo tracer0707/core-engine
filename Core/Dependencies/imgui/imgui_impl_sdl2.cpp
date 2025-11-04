@@ -89,6 +89,7 @@
 #endif
 
 // SDL
+#define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
 #include <SDL/SDL_syswm.h>
 #if defined(__APPLE__)

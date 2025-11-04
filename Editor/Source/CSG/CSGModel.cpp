@@ -17,6 +17,7 @@
 #include <Core/Assets/AssetManager.h>
 #include <Core/Renderer/VertexBuffer.h>
 #include <Core/Renderer/Renderer.h>
+#include <Core/Renderer/Color.h>
 
 #include "CSGBrush.h"
 #include "CSGBrushCube.h"
@@ -25,8 +26,8 @@ namespace Editor
 {
     Core::Material* CSGModel::_defaultMaterial = nullptr;
 
-	CSGModel::CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
-	{
+    CSGModel::CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
+    {
         _renderer = renderer;
         _scene = scene;
         _assetManager = assetManager;
@@ -35,25 +36,23 @@ namespace Editor
 
         _nullBrush = new CSGBrush(this);
 
-        if (_defaultMaterial == nullptr)
-            _defaultMaterial = _assetManager->createMaterial();
-	}
+        if (_defaultMaterial == nullptr) _defaultMaterial = _assetManager->createMaterial();
+    }
 
-	CSGModel::~CSGModel()
-	{
-		_scene->removeObject(_object);
+    CSGModel::~CSGModel()
+    {
+        _scene->removeObject(_object);
 
         _object = nullptr;
         _meshRenderer = nullptr;
 
-        if (_nullBrush != nullptr)
-            delete _nullBrush;
+        if (_nullBrush != nullptr) delete _nullBrush;
 
         _nullBrush = nullptr;
-	}
+    }
 
     void CSGModel::rebuild()
-	{
+    {
         for (auto& sm : _subMeshes)
         {
             sm.second->brushIds.clear();
@@ -84,7 +83,7 @@ namespace Editor
 
         _nullBrush->rebuild();
 
-        //Bind attributes
+        // Bind attributes
         for (auto brush : _brushes)
         {
             brush->rebuild();
@@ -100,7 +99,7 @@ namespace Editor
 
         csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
-        //Compute CSG
+        // Compute CSG
         for (auto* brush : _brushes)
         {
             glm::mat4x4 mtx = brush->getTransform()->getTransformMatrix();
@@ -110,8 +109,7 @@ namespace Editor
             carve::poly::Polyhedron* prevCSG = csgGeom;
             carve::csg::CSG::OP op = carve::csg::CSG::OP::UNION;
 
-            if (brush->getBrushOperation() == CSGBrush::BrushOperation::Subtract)
-                op = carve::csg::CSG::OP::A_MINUS_B;
+            if (brush->getBrushOperation() == CSGBrush::BrushOperation::Subtract) op = carve::csg::CSG::OP::A_MINUS_B;
 
             try
             {
@@ -125,14 +123,12 @@ namespace Editor
                 prevCSG = nullptr;
             }
 
-            if (prevCSG != nullptr && prevCSG != _nullBrush->getBrushPtr())
-                delete prevCSG;
+            if (prevCSG != nullptr && prevCSG != _nullBrush->getBrushPtr()) delete prevCSG;
         }
 
-        if (csgGeom == nullptr)
-            return;
+        if (csgGeom == nullptr) return;
 
-        //Build meshes
+        // Build meshes
         Core::AxisAlignedBox aab = Core::AxisAlignedBox();
 
         for (unsigned long long i = 0; i < csgGeom->faces.size(); ++i)
@@ -148,21 +144,13 @@ namespace Editor
             if (f_material.hasAttribute(f))
             {
                 Core::Material* mt = f_material.getAttribute(f);
-                if (mt != nullptr)
-                    mat = mt;
+                if (mt != nullptr) mat = mt;
             }
 
-            if (f_layer.hasAttribute(f))
-                layer = f_layer.getAttribute(f);
-
-            if (f_castShadows.hasAttribute(f))
-                castShadows = f_castShadows.getAttribute(f);
-
-            if (f_smoothNormals.hasAttribute(f))
-                smoothNormals = f_smoothNormals.getAttribute(f);
-
-            if (f_brushId.hasAttribute(f))
-                brushId = f_brushId.getAttribute(f);
+            if (f_layer.hasAttribute(f)) layer = f_layer.getAttribute(f);
+            if (f_castShadows.hasAttribute(f)) castShadows = f_castShadows.getAttribute(f);
+            if (f_smoothNormals.hasAttribute(f)) smoothNormals = f_smoothNormals.getAttribute(f);
+            if (f_brushId.hasAttribute(f)) brushId = f_brushId.getAttribute(f);
 
             SubMeshInfo* subMesh = nullptr;
 
@@ -182,32 +170,22 @@ namespace Editor
                 carve::geom3d::Vector v = f->vertex(j)->v;
                 CSGBrush::uv_t uv = CSGBrush::uv_t(0, 0);
 
-                if (fv_uv.hasAttribute(f, j))
-                    uv = fv_uv.getAttribute(f, j);
+                if (fv_uv.hasAttribute(f, j)) uv = fv_uv.getAttribute(f, j);
 
                 Core::Vertex vtx{};
 
-                vtx.position[0] = (float)v.x;
-                vtx.position[1] = (float)v.y;
-                vtx.position[2] = (float)v.z;
+                vtx.position = glm::vec3((float)v.x, (float)v.y, (float)v.z);
+                vtx.uv = glm::vec2(uv.u);
+                vtx.color = Core::Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-                vtx.uv[0] = uv.u;
-                vtx.uv[1] = uv.v;
-
-                vtx.color[0] = 1.0f;
-                vtx.color[1] = 1.0f;
-                vtx.color[2] = 1.0f;
-                vtx.color[3] = 1.0f;
-
-                aab.merge(vtx.getPosition());
+                aab.merge(vtx.position);
 
                 subMesh->vertices.add(vtx);
                 subMesh->brushIds.add(brushId);
             }
         }
 
-        if (csgGeom != nullptr && csgGeom != _nullBrush->getBrushPtr())
-            delete csgGeom;
+        if (csgGeom != nullptr && csgGeom != _nullBrush->getBrushPtr()) delete csgGeom;
 
         Core::Mesh* mesh = _assetManager->createMesh(_subMeshes.size());
         Core::SubMesh** subMeshes = mesh->getSubMeshes();
@@ -225,7 +203,7 @@ namespace Editor
             it->second->vertices.clear();
             it->second->subMesh = subMeshes[i];
         }
-	}
+    }
 
     CSGBrushCube* CSGModel::createCubeBrush()
     {
@@ -239,8 +217,7 @@ namespace Editor
     {
         for (auto it : _brushes)
         {
-            if (it->getId() == brushId)
-                return it;
+            if (it->getId() == brushId) return it;
         }
 
         return nullptr;
@@ -274,4 +251,4 @@ namespace Editor
 
         return Core::Uuid::empty;
     }
-}
+} // namespace Editor

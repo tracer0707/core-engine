@@ -16,29 +16,33 @@ namespace Editor
 
     void RecentProjectList::save()
     {
-        nlohmann::json j = nlohmann::json{ { "RecentProjects", _projectList } };
+        nlohmann::json j = nlohmann::json{{"RecentProjects", _projectList}};
 
         std::ofstream file(filename.std_str());
-        if (file.is_open()) {
+        if (file.is_open())
+        {
             file << j.dump(4);
             file.close();
         }
-        else {
-            throw new std::runtime_error("Error opening file for write");
+        else
+        {
+            throw std::runtime_error("Error opening file for write");
         }
     }
 
-	void RecentProjectList::load()
-	{
+    void RecentProjectList::load()
+    {
         std::ifstream file(filename.std_str());
-        if (file.is_open()) {
+        if (file.is_open())
+        {
             nlohmann::json j;
             file >> j;
             file.close();
             _projectList = j["RecentProjects"].get<Core::List<Core::String>>();
         }
-        else {
+        else
+        {
             std::cout << "Project list file not found. Creating one...";
         }
-	}
-}
+    }
+} // namespace Editor

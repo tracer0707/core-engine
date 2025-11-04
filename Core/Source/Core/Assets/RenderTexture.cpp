@@ -51,7 +51,11 @@ namespace Core
         this->width = width;
         this->height = height;
 
-        _renderer->deleteFrameBuffer(frameBuffer);
+        if (frameBuffer != nullptr)
+        {
+            _renderer->deleteFrameBuffer(frameBuffer);
+        }
+
         frameBuffer = _renderer->createFrameBuffer(width, height);
     }
 } // namespace Core
