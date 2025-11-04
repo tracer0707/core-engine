@@ -19,8 +19,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
-set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 if(PLATFORM_WINDOWS)
     string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
     string(REPLACE "/MDd" "/MTd" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
@@ -29,6 +27,8 @@ if(PLATFORM_WINDOWS)
         set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MT")
     endif()
 endif()
+
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Core headers
 file(GLOB_RECURSE CORE_HEADERS "Core/Source/*.h" "Core/Dependencies/imgui/*.h")
@@ -181,7 +181,8 @@ if(PLATFORM_LINUX)
     set_target_properties(Editor PROPERTIES OUTPUT_NAME "Editor.app")
 elseif(PLATFORM_WINDOWS)
     set_target_properties(Editor PROPERTIES OUTPUT_NAME "Editor")
-    target_link_options(Editor PRIVATE "/NODEFAULTLIB:msvcrt.lib") 
+    target_link_options(Editor PRIVATE "/NODEFAULTLIB:msvcrt.lib")
+    target_link_options(Editor PRIVATE "/NODEFAULTLIB:msvcprtd.lib")
     target_link_libraries(Core PRIVATE winmm imm32 version setupapi)
 endif()
 
@@ -219,6 +220,7 @@ target_link_libraries(Editor
 )
 
 # Group projects
+set_property(TARGET glad PROPERTY FOLDER "glad")
 set_property(TARGET Core PROPERTY FOLDER "Core")
 set_property(TARGET Editor PROPERTY FOLDER "Editor")
 
