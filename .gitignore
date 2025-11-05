@@ -18,7 +18,6 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
 
 # Executables
 *.exe
@@ -28,13 +27,4 @@
 # Local
 /.vs
 /.vscode
-/Core/x64/Release
-/x64/Release/Core.pdb
-/Editor/x64/Release
-/Core/imgui.ini
-/Editor/imgui.ini
-/x64/Release/Core.lib
-/x64/Release/Editor.pdb
-/Core/x64/Debug
-/Editor/x64/Debug
 /build

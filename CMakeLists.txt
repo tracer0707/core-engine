@@ -37,9 +37,7 @@ file(GLOB_RECURSE CORE_HEADERS "Core/Source/*.h" "Core/Dependencies/imgui/*.h")
 file(GLOB_RECURSE CORE_SOURCES "Core/Source/*.cpp" "Core/Dependencies/imgui/*.cpp")
 
 # glad sources
-if(PLATFORM_WINDOWS)
-    file(GLOB_RECURSE GLAD_SOURCES "Core/Dependencies/glad/include/glad/gl.h" "Core/Dependencies/glad/src/gl.c")
-endif()
+file(GLOB_RECURSE GLAD_SOURCES "Core/Dependencies/glad/include/glad/gl.h" "Core/Dependencies/glad/src/gl.c")
 
 # Core (static lib)
 add_library(Core STATIC ${CORE_HEADERS} ${CORE_SOURCES})
@@ -49,13 +47,8 @@ set_target_properties(glad PROPERTIES LINKER_LANGUAGE C)
 
 target_compile_definitions(Core PRIVATE FREEIMAGE_LIB)
 
-if(PLATFORM_LINUX)
-    set_target_properties(Core PROPERTIES OUTPUT_NAME "libCore.a")
-    set_target_properties(glad PROPERTIES OUTPUT_NAME "libGlad.a")
-elseif(PLATFORM_WINDOWS)
-    set_target_properties(Core PROPERTIES OUTPUT_NAME "Core")
-    set_target_properties(glad PROPERTIES OUTPUT_NAME "glad")
-endif()
+set_target_properties(Core PROPERTIES OUTPUT_NAME "core")
+set_target_properties(glad PROPERTIES OUTPUT_NAME "glad")
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
@@ -114,7 +107,7 @@ set_target_properties(glm PROPERTIES
 
 if(PLATFORM_LINUX)
     set_target_properties(Assimp PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/bin/linux64/libassimp.so.6.0.2"
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/lib/linux64/libassimp.a"
     )
     set_target_properties(ICUDT PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicudata.a"
@@ -123,7 +116,7 @@ if(PLATFORM_LINUX)
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicuuc.a"
     )
     set_target_properties(SDL2 PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/bin/linux64/libSDL2-2.0.so.0.2600.3"
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/lib/linux64/libSDL2.a"
     )
     set_target_properties(FreeImage PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/FreeImage/lib/linux64/libFreeImage.a"
