@@ -44,13 +44,6 @@ namespace Core
         int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
         printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
 
-        GLint origin, depth;
-        glGetIntegerv(GL_CLIP_ORIGIN, &origin);
-        glGetIntegerv(GL_CLIP_DEPTH_MODE, &depth);
-
-        std::cout << "Clip origin: " << (origin == GL_UPPER_LEFT ? "UPPER_LEFT" : origin == GL_LOWER_LEFT ? "LOWER_LEFT" : "UNKNOWN") << std::endl;
-        std::cout << "Depth mode: " << (depth == GL_NEGATIVE_ONE_TO_ONE ? "-1..1" : depth == GL_ZERO_TO_ONE ? "0..1" : "UNKNOWN") << std::endl;
-
         _imguiCtx = ImGui::CreateContext();
         ImGui::SetCurrentContext(_imguiCtx);
 

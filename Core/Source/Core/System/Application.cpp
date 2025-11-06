@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#include <iostream>
 #define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
 
@@ -14,8 +15,10 @@ namespace Core
         SDL_SetMainReady();
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 
+        std::cout << "Video driver: " << SDL_GetCurrentVideoDriver() << std::endl;
+
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
 
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
