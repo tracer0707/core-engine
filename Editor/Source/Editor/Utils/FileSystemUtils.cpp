@@ -42,10 +42,10 @@ namespace Editor
         return drives;
     }
 
-    Core::List<std::filesystem::path> FileSystemUtils::getEntries(std::string path)
+    Core::List<std::filesystem::path> FileSystemUtils::getPathEntries(Core::String path)
     {
         Core::List<std::filesystem::path> fs;
-        for (const auto& entry : std::filesystem::directory_iterator(path, std::filesystem::directory_options::skip_permission_denied))
+        for (const auto& entry : std::filesystem::directory_iterator(path.std_str(), std::filesystem::directory_options::skip_permission_denied))
         {
             fs.add(entry.path());
         }
@@ -76,7 +76,7 @@ namespace Editor
 
         if (!showRootNode)
         {
-            Core::List<std::filesystem::path> fs = getEntries(_path);
+            Core::List<std::filesystem::path> fs = getPathEntries(_path);
             for (const auto& entry : fs)
             {
                 Core::String path = entry.generic_string();
@@ -111,7 +111,7 @@ namespace Editor
                 {
                     try
                     {
-                        Core::List<std::filesystem::path> fs = getEntries(_path);
+                        Core::List<std::filesystem::path> fs = getPathEntries(_path);
 
                         for (const auto& entry : fs)
                         {

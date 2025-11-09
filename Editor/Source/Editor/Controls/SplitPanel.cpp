@@ -34,33 +34,25 @@ namespace Editor
 
         ImGuiWindow* window = g.CurrentWindow;
 
+        ImVec2 sz = ImGui::GetContentRegionAvail();
+
+        bool _new = _sizeMap.count() != _controls.count() && _sizeMap.count() == 0;
+
         if (_sizeMap.count() != _controls.count())
         {
-            bool _new = _sizeMap.count() == 0;
             _sizeMap.resize(_controls.count());
             _sizeMap.fill(100);
             if (_new && _sizeMap.count() > 0) _sizeMap.set(0, _startSize);
         }
 
-        ImVec2 sz = ImGui::GetContentRegionAvail();
-        if (horizontal)
+        if (_new && _sizeMap.count() > 1 || sz.x != _prevWidth || sz.y != _prevHeight)
         {
-            float totalW = 0;
-            for (int i = 0; i < _controls.count(); ++i)
-            {
-                totalW += _sizeMap.get(i);
-            }
-            _sizeMap.set(_controls.count() - 1, sz.x - totalW);
+            float size = horizontal ? sz.x : sz.y;
+            _sizeMap.set(_sizeMap.count() - 1, size - (100 * (_sizeMap.count() - 1)));
         }
-        else
-        {
-            float totalH = 0;
-            for (int i = 0; i < _controls.count(); ++i)
-            {
-                totalH += _sizeMap.get(i);
-            }
-            _sizeMap.set(_controls.count() - 1, sz.x - totalH);
-        }
+
+        _prevWidth = sz.x;
+        _prevHeight = sz.y;
 
         for (int i = 0; i < _controls.count(); ++i)
         {

@@ -18,6 +18,8 @@ namespace Editor
         Core::List<float> _sizeMap;
 
         float _startSize = 100;
+        float _prevWidth = 0;
+        float _prevHeight = 0;
 
       public:
         SplitPanel();
