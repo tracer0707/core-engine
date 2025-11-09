@@ -49,6 +49,6 @@ namespace Editor
     void ContentWindow::rescanContent()
     {
         _treeView->clear();
-        FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false);
+        FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, false);
     }
 } // namespace Editor

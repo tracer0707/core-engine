@@ -29,7 +29,7 @@ namespace Editor
         _mainLayout->setStretchX(true);
         _mainLayout->getStyle().paddingX = 20;
         _mainLayout->getStyle().paddingY = 20;
-        
+
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Horizontal);
         _layout->setVerticalAlignment(LayoutAlignment::Start);
         _layout->setHorizontalAlignment(LayoutAlignment::Center);
@@ -59,6 +59,7 @@ namespace Editor
 
         listView->setOnItemClick([=](Control* item) {
             Core::String* path = (Core::String*)item->getObjectTag(0);
+            app->initProject(*path);
             app->setSelectedProject(*path);
             app->stop(false);
         });
@@ -68,15 +69,17 @@ namespace Editor
 
         _listLayout->addControl(listView);
 
-        _openBtn->setOnClick([app]()
-        {
-            app->getEventHandler()->addEvent([=]
-            {
-                FileSystemDialog* dlg = new FileSystemDialog(app);
-                dlg->setShowFiles(false);
+        _openBtn->setOnClick([=]() {
+            app->getEventHandler()->addEvent([=] {
+                if (_fsDlg != nullptr) return;
 
-                dlg->setOnPathSelected([=](Core::String fileName)
-                {
+                _fsDlg = new FileSystemDialog(app);
+                _fsDlg->setShowFiles(false);
+
+                _fsDlg->setOnClose([=]() { _fsDlg = nullptr; });
+
+                _fsDlg->setOnPathSelected([=](Core::String fileName) {
+                    app->initProject(fileName);
                     app->setSelectedProject(fileName);
 
                     if (!RecentProjectList::getProjectList().contains(fileName))
@@ -90,10 +93,7 @@ namespace Editor
             });
         });
 
-        _quitBtn->setOnClick([app]()
-        {
-            app->stop(true);
-        });
+        _quitBtn->setOnClick([app]() { app->stop(true); });
 
         _mainLayout->addControl(_listLayout);
         _mainLayout->addControl(_layout);
@@ -130,8 +130,7 @@ namespace Editor
     {
         _wnd = new MainWindow(this);
 
-        _wnd->setOnClose([this]()
-        {
+        _wnd->setOnClose([this]() {
             _isRunning = false;
             _forceClosed = true;
         });
@@ -147,4 +146,15 @@ namespace Editor
         _mainFont = nullptr;
         _wnd = nullptr;
     }
-}
+
+    void ProjectManager::initProject(Core::String value)
+    {
+        std::filesystem::path _rootPath = std::filesystem::path(value.std_str());
+        std::filesystem::path _contentPath = std::filesystem::path(Core::Path::combine(value, "Content").std_str());
+
+        if (!std::filesystem::exists(_contentPath))
+        {
+            std::filesystem::create_directories(_contentPath);
+        }
+    }
+} // namespace Editor

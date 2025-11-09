@@ -80,9 +80,7 @@ namespace Editor
             okBtn->setEnabled(std::filesystem::exists(path) && checkFile);
         });
 
-        cancelBtn->setOnClick([this]() {
-            close();
-        });
+        cancelBtn->setOnClick([this]() { close(); });
 
         okBtn->setOnClick([=]() {
             if (selectedPath->getText() != Core::String::Empty && _onPathSelected != nullptr)
@@ -112,10 +110,10 @@ namespace Editor
     void FileSystemDialog::rescanFs()
     {
         _treeView->clear();
-        Core::List<Core::String> _diskDrives = Core::IO::getDiskDrives();
+        Core::List<Core::String> _diskDrives = FileSystemUtils::getDiskDrives();
         for (auto& d : _diskDrives)
         {
-            FileSystemUtils::fsToTreeView(d, _treeView, nullptr, _showFiles);
+            FileSystemUtils::fsToTreeView(d, _treeView, nullptr, _showFiles, true);
         }
     }
 
@@ -134,4 +132,4 @@ namespace Editor
         _wnd->update("File Dialog", _width, _height);
         _renderer->endUI();
     }
-}
+} // namespace Editor

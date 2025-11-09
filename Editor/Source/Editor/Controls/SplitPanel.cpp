@@ -26,12 +26,6 @@ namespace Editor
     {
         if (!_visible) return;
 
-        if (skipFrames > 0)
-        {
-            skipFrames--;
-            return;
-        }
-
         ImGuiContext& g = *ImGui::GetCurrentContext();
 
         float splitter_width = 2.0f;
@@ -49,7 +43,7 @@ namespace Editor
         }
 
         ImVec2 sz = ImGui::GetContentRegionAvail();
-        if (_prevWidth != sz.x && horizontal)
+        if (horizontal)
         {
             float totalW = 0;
             for (int i = 0; i < _controls.count(); ++i)
@@ -57,9 +51,8 @@ namespace Editor
                 totalW += _sizeMap.get(i);
             }
             _sizeMap.set(_controls.count() - 1, sz.x - totalW);
-            _prevWidth = sz.x;
         }
-        else if (_prevHeight != sz.y && !horizontal)
+        else
         {
             float totalH = 0;
             for (int i = 0; i < _controls.count(); ++i)
@@ -67,7 +60,6 @@ namespace Editor
                 totalH += _sizeMap.get(i);
             }
             _sizeMap.set(_controls.count() - 1, sz.x - totalH);
-            _prevHeight = sz.y;
         }
 
         for (int i = 0; i < _controls.count(); ++i)

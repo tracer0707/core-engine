@@ -70,7 +70,7 @@ namespace Core
         switch (evt.type)
         {
         case SDL_QUIT: {
-            _opened = false;
+            close();
             break;
         }
 
@@ -90,13 +90,7 @@ namespace Core
             }
 
             case SDL_WINDOWEVENT_CLOSE: {
-                _opened = false;
-
-                if (_onClose != nullptr)
-                {
-                    _onClose();
-                }
-
+                close();
                 break;
             }
 
@@ -134,5 +128,10 @@ namespace Core
     void Window::close()
     {
         _opened = false;
+
+        if (_onClose != nullptr)
+        {
+            _onClose();
+        }
     }
 } // namespace Core

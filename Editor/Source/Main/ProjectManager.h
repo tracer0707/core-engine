@@ -7,42 +7,45 @@
 
 namespace Editor
 {
-	class WindowManager;
-	class FullscreenWindow;
-	class Font;
-	class LinearLayout;
+    class WindowManager;
+    class FullscreenWindow;
+    class Font;
+    class LinearLayout;
+    class FileSystemDialog;
 
-	class ProjectManager : public Core::Application
-	{
-	private:
-		class MainWindow : public Core::Window
-		{
-			friend class ProjectManager;
+    class ProjectManager : public Core::Application
+    {
+      private:
+        class MainWindow : public Core::Window
+        {
+            friend class ProjectManager;
 
-		private:
-			MainWindow(ProjectManager* app);
-			virtual ~MainWindow();
+          private:
+            MainWindow(ProjectManager* app);
+            virtual ~MainWindow();
 
-			Core::List<Core::String> _recentProjects;
+            Core::List<Core::String> _recentProjects;
 
-			LinearLayout* _mainLayout = nullptr;
-			LinearLayout* _listLayout = nullptr;
-			FullscreenWindow* _wnd = nullptr;
+            LinearLayout* _mainLayout = nullptr;
+            LinearLayout* _listLayout = nullptr;
+            FullscreenWindow* _wnd = nullptr;
+            FileSystemDialog* _fsDlg = nullptr;
 
-			virtual void update();
-			virtual void render();
-		};
+            virtual void update();
+            virtual void render();
+        };
 
-		Core::String _selectedProject = "";
+        Core::String _selectedProject = "";
 
-		Font* _mainFont = nullptr;
-		MainWindow* _wnd = nullptr;
-		
-		virtual void init();
-		virtual void destroy();
+        Font* _mainFont = nullptr;
+        MainWindow* _wnd = nullptr;
 
-	public:
-		Core::String getSelectedProject() { return _selectedProject; }
-		void setSelectedProject(Core::String value) { _selectedProject = value; }
-	};
-}
+        virtual void init();
+        virtual void destroy();
+
+      public:
+        Core::String getSelectedProject() { return _selectedProject; }
+        void setSelectedProject(Core::String value) { _selectedProject = value; }
+        void initProject(Core::String value);
+    };
+} // namespace Editor
