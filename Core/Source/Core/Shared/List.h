@@ -13,19 +13,23 @@ namespace Core
         std::vector<T> list;
 
       public:
-        size_t count() { return list.size(); }
+        size_t count() const { return list.size(); }
 
-        void add(T value);
-        void remove(T value);
+        void add(const T& value);
+        void remove(const T& value);
         void removeAt(int index);
         T& get(int index);
-        void set(int index, T value);
-        int indexOf(T value);
-        void clear();
+        const T& get(int index) const;
+        void set(int index, const T& value);
+        int indexOf(const T& value) const;
+        void clear() noexcept;
         void resize(int size);
-        void fill(T value);
+        void fill(const T& value);
         T* ptr();
         std::vector<T>& vec() { return list; }
+
+        T& operator[](int index) { return get(index); }
+        const T& operator[](int index) const { return get(index); }
 
         std::vector<T>::iterator begin() { return list.begin(); }
         std::vector<T>::iterator end() { return list.end(); }
@@ -35,54 +39,55 @@ namespace Core
         std::vector<T>::const_iterator cend() const { return list.cend(); }
 
         bool tryFind(T& out, std::function<bool(T&)> func);
-        bool contains(T& value);
-        bool isEmpty() { return list.empty(); }
+        bool contains(const T& value) const;
+        bool isEmpty() const noexcept { return list.empty(); }
         void sort(std::function<bool(T&, T&)> func);
 
         List& operator=(std::vector<T> other);
     };
 
-    template <typename T> inline void List<T>::add(T value)
+    template <typename T> inline void List<T>::add(const T& value)
     {
         list.push_back(value);
     }
 
-    template <typename T> inline void List<T>::remove(T value)
+    template <typename T> inline void List<T>::remove(const T& value)
     {
         auto it = std::find(list.begin(), list.end(), value);
         if (it != list.end()) list.erase(it);
     }
 
-    template <typename T> inline void Core::List<T>::removeAt(int index)
+    template <typename T> inline void List<T>::removeAt(int index)
     {
-        assert(list.size() > index && "List index out of bounds");
-
+        assert(index >= 0 && index < static_cast<int>(list.size()) && "List index out of bounds");
         list.erase(list.begin() + index);
     }
 
     template <typename T> inline T& List<T>::get(int index)
     {
-        assert(list.size() > index && "List index out of bounds");
-
+        assert(index >= 0 && index < static_cast<int>(list.size()) && "List index out of bounds");
         return list[index];
     }
 
-    template <typename T> inline void List<T>::set(int index, T value)
+    template <typename T> inline const T& List<T>::get(int index) const
     {
-        assert(list.size() > index && "List index out of bounds");
+        assert(index >= 0 && index < static_cast<int>(list.size()) && "List index out of bounds");
+        return list[index];
+    }
 
+    template <typename T> inline void List<T>::set(int index, const T& value)
+    {
+        assert(index >= 0 && index < static_cast<int>(list.size()) && "List index out of bounds");
         list[index] = value;
     }
 
-    template <typename T> inline int List<T>::indexOf(T value)
+    template <typename T> inline int List<T>::indexOf(const T& value) const
     {
         auto it = std::find(list.begin(), list.end(), value);
-        if (it != list.end()) return std::distance(list.begin(), it);
-
-        return -1;
+        return it != list.end() ? std::distance(list.begin(), it) : -1;
     }
 
-    template <typename T> inline void List<T>::clear()
+    template <typename T> inline void List<T>::clear() noexcept
     {
         list.clear();
     }
@@ -92,17 +97,14 @@ namespace Core
         list.resize(size);
     }
 
-    template <typename T> inline void List<T>::fill(T value)
+    template <typename T> inline void List<T>::fill(const T& value)
     {
-        for (int i = 0; i < list.size(); ++i)
-        {
-            list[i] = value;
-        }
+        std::fill(list.begin(), list.end(), value);
     }
 
     template <typename T> inline T* List<T>::ptr()
     {
-        return &list[0];
+        return list.empty() ? nullptr : list.data();
     }
 
     template <typename T> inline bool List<T>::tryFind(T& out, std::function<bool(T&)> func)
@@ -114,12 +116,9 @@ namespace Core
         return true;
     }
 
-    template <typename T> inline bool List<T>::contains(T& value)
+    template <typename T> inline bool List<T>::contains(const T& value) const
     {
-        auto it = std::find(list.begin(), list.end(), value);
-        if (it == list.end()) return false;
-
-        return true;
+        return std::find(list.begin(), list.end(), value) != list.end();
     }
 
     template <typename T> inline void List<T>::sort(std::function<bool(T&, T&)> func)
