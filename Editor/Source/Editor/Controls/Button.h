@@ -8,50 +8,39 @@
 
 namespace Core
 {
-	class Texture;
+    class Texture;
 }
 
 namespace Editor
 {
-	class Button : public Control
-	{
-	private:
-		Core::String _text = "";
+    class Button : public Control
+    {
+      private:
+        Core::String _text = "";
 
-		Core::Texture* _image = nullptr;
-		
-		int _width = 0;
-		int _height = 0;
+        Core::Texture* _image = nullptr;
 
-		bool _active = true;
+        bool _active = true;
 
-		std::function<void()> _onClick = nullptr;
+        std::function<void()> _onClick = nullptr;
 
-	public:
-		Button();
-		Button(Core::String text);
-		virtual ~Button();
+      public:
+        Button();
+        Button(Core::String text);
+        virtual ~Button();
 
-		virtual int getControlType();
-		virtual void update();
+        virtual int getControlType();
+        virtual void update();
 
-		Core::String getText() { return _text; }
-		void setText(Core::String value) { _text = value; }
+        Core::String getText() { return _text; }
+        void setText(Core::String value) { _text = value; }
 
-		void setImage(Core::Texture* value) { _image = value;  }
-		Core::Texture* getImage() { return _image;  }
+        void setImage(Core::Texture* value) { _image = value; }
+        Core::Texture* getImage() { return _image; }
 
-		void setWidth(int value) { _width = value; }
-		int getWidth() { return _width; }
+        bool getActive() { return _active; }
+        void setActive(bool value);
 
-		void setHeight(int value) { _height = value; }
-		int getHeight() { return _height; }
-
-		void setSize(int width, int height) { _width = width; _height = height; }
-
-		bool getActive() { return _active; }
-		void setActive(bool value);
-
-		void setOnClick(std::function<void()> callback) { _onClick = callback; }
-	};
-}
+        void setOnClick(std::function<void()> callback) { _onClick = callback; }
+    };
+} // namespace Editor

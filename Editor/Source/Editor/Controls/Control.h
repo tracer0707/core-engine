@@ -10,41 +10,53 @@
 
 namespace Editor
 {
-	class Window;
-	class Container;
+    class Window;
+    class Container;
 
-	class Control: public Container
-	{
-		friend class Container;
+    class Control : public Container
+    {
+        friend class Container;
 
-	protected:
-		std::string _id = "";
-		Container* _parent = nullptr;
-		Style _style;
-		bool _visible = true;
-		std::map<int, void*> _objectTags;
-		std::map<int, Core::String> _stringTags;
+      protected:
+        std::string _id = "";
+        Container* _parent = nullptr;
+        Style _style;
+        bool _visible = true;
+        std::map<int, void*> _objectTags;
+        std::map<int, Core::String> _stringTags;
 
-	public:
-		Control();
-		virtual ~Control();
+        float _width = 0;
+        float _height = 0;
 
-		Style& getStyle() { return _style; }
+      public:
+        Control();
+        virtual ~Control();
 
-		void setVisible(bool value) { _visible = value; }
-		bool getVisible() { return _visible; }
+        std::string getId() { return _id; }
+        Style& getStyle() { return _style; }
 
-		void setEnabled(bool value) { _style.enabled = value; }
-		bool getEnabled() { return _style.enabled; }
+        virtual void setWidth(float value) { _width = value; }
+        virtual float getWidth() { return _width; }
 
-		void setObjectTag(int key, void* value);
-		void* getObjectTag(int key);
+        virtual void setHeight(float value) { _height = value; }
+        virtual float getHeight() { return _height; }
 
-		void setStringTag(int key, Core::String value);
-		Core::String getStringTag(int key);
+        void setSize(float width, float height);
 
-		virtual int getControlType() = 0;
+        void setVisible(bool value) { _visible = value; }
+        bool getVisible() { return _visible; }
 
-		virtual void update() = 0;
-	};
-}
+        void setEnabled(bool value) { _style.enabled = value; }
+        bool getEnabled() { return _style.enabled; }
+
+        void setObjectTag(int key, void* value);
+        void* getObjectTag(int key);
+
+        void setStringTag(int key, Core::String value);
+        Core::String getStringTag(int key);
+
+        virtual int getControlType() = 0;
+
+        virtual void update() = 0;
+    };
+} // namespace Editor

@@ -9,38 +9,34 @@
 
 namespace Editor
 {
-	Image::Image() : Control()
-	{
-	}
+    Image::Image() : Control() {}
 
-	Image::Image(unsigned int width, unsigned int height) : Control()
-	{
-		this->width = width;
-		this->height = height;
-	}
+    Image::Image(int width, int height) : Control()
+    {
+        _width = width;
+        _height = height;
+    }
 
-	Image::~Image()
-	{
-	}
+    Image::~Image() {}
 
-	void Image::update()
-	{
-		if (!_visible) return;
+    void Image::update()
+    {
+        if (!_visible) return;
 
-		float w = width;
-		float h = height;
+        float w = _width;
+        float h = _height;
 
-		if (w == 0) w = ImGui::GetContentRegionAvail().x;
-		if (h == 0) h = ImGui::GetContentRegionAvail().y;
+        if (w == 0) w = ImGui::GetContentRegionAvail().x;
+        if (h == 0) h = ImGui::GetContentRegionAvail().y;
 
-		unsigned int texId = nativeTextureId;
-		if (texture != nullptr) texId = texture->getNativeId();
+        unsigned int texId = nativeTextureId;
+        if (texture != nullptr) texId = texture->getNativeId();
 
-		ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
-	}
+        ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
+    }
 
-	int Image::getControlType()
-	{
-		return CONTROL_IMAGE;
-	}
-}
+    int Image::getControlType()
+    {
+        return CONTROL_IMAGE;
+    }
+} // namespace Editor

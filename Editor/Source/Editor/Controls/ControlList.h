@@ -53,4 +53,8 @@ namespace Core
 #ifndef CONTROL_LIST_VIEW
 #define CONTROL_LIST_VIEW 12
 #endif
+
+#ifndef CONTROL_SPLITTER
+#define CONTROL_SPLITTER 13
+#endif
 }
