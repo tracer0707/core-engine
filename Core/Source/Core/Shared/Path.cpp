@@ -22,53 +22,57 @@
 
 namespace Core
 {
-	String Path::combine(String part0, String part1)
-	{
-		String path = part0;
+    String Path::combine(String part0, String part1)
+    {
+        String path = part0;
+        String right = part1;
 
-		if (part0.lastIndexOf('/') != part0.length() - 1)
-			path += '/';
+        if (!path.endsWith('/')) path += '/';
+        while (right.startsWith('/'))
+        {
+            right = right.substring(1);
+        }
 
-		path += part1;
+        path += right;
 
-		return path;
-	}
+        return path;
+    }
 
-	String Path::combine(String part0, String part1, String part2)
-	{
-		return combine(combine(part0, part1), part2);
-	}
+    String Path::combine(String part0, String part1, String part2)
+    {
+        return combine(combine(part0, part1), part2);
+    }
 
-	bool Path::isHiddenOrSystem(String& path)
-	{
-		std::filesystem::path _path = std::filesystem::path(path.std_str());
+    bool Path::isHiddenOrSystem(String& path)
+    {
+        std::filesystem::path _path = std::filesystem::path(path.std_str());
 
-		std::string filename = _path.filename().string();
-		if (!filename.empty() && filename[0] == '.')
-		{
-			return true;
-		}
+        std::string filename = _path.filename().string();
+        if (!filename.empty() && filename[0] == '.')
+        {
+            return true;
+        }
 
 #ifdef _WIN32
-		DWORD attrs = GetFileAttributesW(_path.wstring().c_str());
-		if (attrs != INVALID_FILE_ATTRIBUTES)
-		{
-			if (attrs & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY))
-			{
-				return true;
-			}
-		}
+        DWORD attrs = GetFileAttributesW(_path.wstring().c_str());
+        if (attrs != INVALID_FILE_ATTRIBUTES)
+        {
+            if (attrs & (FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM | FILE_ATTRIBUTE_TEMPORARY))
+            {
+                return true;
+            }
+        }
 #else
-		struct stat stat_buf;
-		if (stat(_path.c_str(), &stat_buf) == 0)
-		{
-			if (!S_ISREG(stat_buf.st_mode) && !S_ISDIR(stat_buf.st_mode))
-			{
-				return true;
-			}
-		}
+        struct stat stat_buf;
+        if (stat(_path.c_str(), &stat_buf) == 0)
+        {
+            if (!S_ISREG(stat_buf.st_mode) && !S_ISDIR(stat_buf.st_mode))
+            {
+                return true;
+            }
+        }
 #endif
 
-		return false;
-	}
-}
+        return false;
+    }
+} // namespace Core
