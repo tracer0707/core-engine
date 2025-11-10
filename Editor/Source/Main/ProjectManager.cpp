@@ -17,6 +17,8 @@
 
 #include "../Serialization/RecentProjectList.h"
 
+namespace fs = std::filesystem;
+
 namespace Editor
 {
     /* WINDOW */
@@ -44,7 +46,7 @@ namespace Editor
 
         for (auto& it : RecentProjectList::getProjectList())
         {
-            auto path = std::filesystem::path(it.std_str());
+            auto path = fs::path(it.std_str());
             LinearLayout* ll = new LinearLayout(LayoutDirection::Vertical);
             ll->setObjectTag(0, &it);
             ll->setStretchX(true);
@@ -135,7 +137,7 @@ namespace Editor
             _forceClosed = true;
         });
 
-        _mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+        _mainFont = new Font(Core::Path::combine(fs::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
         _mainFont->setDefault();
     }
 
@@ -149,12 +151,24 @@ namespace Editor
 
     void ProjectManager::initProject(Core::String value)
     {
-        std::filesystem::path _rootPath = std::filesystem::path(value.std_str());
-        std::filesystem::path _contentPath = std::filesystem::path(Core::Path::combine(value, "Content").std_str());
+        fs::path _rootPath = fs::path(value.std_str());
+        fs::path _contentPath = fs::path(Core::Path::combine(value, "Content").std_str());
+        fs::path _libPath = fs::path(Core::Path::combine(value, "Library").std_str());
+        fs::path _libCachePath = fs::path(Core::Path::combine(_libPath.generic_string(), "Cache").std_str());
+        fs::path _libCacheThumbnailsPath = fs::path(Core::Path::combine(_libCachePath.generic_string(), "Thumbnails").std_str());
 
-        if (!std::filesystem::exists(_contentPath))
+        Core::List<fs::path> _dirsToCreate;
+        _dirsToCreate.add(_contentPath);
+        _dirsToCreate.add(_libPath);
+        _dirsToCreate.add(_libCachePath);
+        _dirsToCreate.add(_libCacheThumbnailsPath);
+
+        for (auto& p : _dirsToCreate)
         {
-            std::filesystem::create_directories(_contentPath);
+            if (!fs::exists(p))
+            {
+                fs::create_directories(p);
+            }
         }
     }
 } // namespace Editor
