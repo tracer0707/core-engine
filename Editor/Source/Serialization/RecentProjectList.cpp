@@ -42,7 +42,7 @@ namespace Editor
         }
         else
         {
-            std::cout << "Project list file not found. Creating one...";
+            std::cout << "Project list file not found. Creating one..." << std::endl;
         }
     }
 } // namespace Editor
