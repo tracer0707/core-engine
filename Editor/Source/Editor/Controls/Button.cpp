@@ -3,7 +3,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include <Core/Assets/Texture.h>
+#include <Core/Content/Texture.h>
 
 #include "ControlList.h"
 

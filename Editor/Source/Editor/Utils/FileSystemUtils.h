@@ -16,6 +16,7 @@ namespace Editor
       public:
         static Core::List<Core::String> getDiskDrives();
         static Core::List<std::filesystem::path> getPathEntries(Core::String path);
+        static void enumerateFiles(const std::filesystem::path& root, Core::List<std::filesystem::path>& out);
         static void fsToTreeView(Core::String path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode);
     };
 } // namespace Editor

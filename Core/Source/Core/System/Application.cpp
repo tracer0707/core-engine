@@ -142,8 +142,8 @@ namespace Core
         delete value;
     }
 
-    String Application::getContentDir()
+    String Application::getContentPath()
     {
-        return Path::combine(_workingDir, _contentDir);
+        return Path::combine(_workingPath, _contentPath);
     }
 } // namespace Core

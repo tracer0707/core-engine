@@ -32,7 +32,7 @@ namespace Core
 
       std::span<std::byte const, 16> as_bytes();
 
-      std::string to_string();
+      std::string to_string() const;
 
       friend bool operator==(Uuid const& lhs, Uuid const& rhs);
       friend bool operator<(Uuid const& lhs, Uuid const& rhs);

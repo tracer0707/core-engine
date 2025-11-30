@@ -6,7 +6,7 @@
 #include "VertexBuffer.h"
 #include "../Shared/List.h"
 
-#include "../Assets/Material.h"
+#include "../Content/Material.h"
 
 namespace Core
 {

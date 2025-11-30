@@ -2,14 +2,14 @@
 
 #include <filesystem>
 
-#include <Core/Assets/AssetManager.h>
-#include <Core/Assets/Texture.h>
+#include <Core/Content/Texture.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 
 #include "WindowList.h"
 
 #include "WindowManager.h"
+#include "../System/ContentLoader.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
@@ -17,7 +17,7 @@ namespace Editor
 {
 	GizmoWindow::GizmoWindow(WindowManager* parent) : Window(parent, GIZMO_WINDOW)
 	{
-		Core::AssetManager* assetMgr = parent->getAssetManager();
+		ContentLoader* contentLoader = parent->getContentLoader();
 
 		/* Layout */
 		
@@ -28,7 +28,9 @@ namespace Editor
 		/* Undo */
 
 		Button* undoBtn = new Button();
-		Core::Texture* undoBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/undo.png"), Core::TextureFormat::RGBA8);
+        Core::Texture* undoBtnImage = contentLoader->loadTextureFromFile(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/undo.png"),
+            Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		undoBtn->setSize(32, 32);
 		undoBtn->setImage(undoBtnImage);
 
@@ -37,7 +39,9 @@ namespace Editor
 		/* Redo */
 
 		Button* redoBtn = new Button();
-		Core::Texture* redoBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/redo.png"), Core::TextureFormat::RGBA8);
+        Core::Texture* redoBtnImage = contentLoader->loadTextureFromFile(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/redo.png"),
+            Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		redoBtn->setSize(32, 32);
 		redoBtn->setImage(redoBtnImage);
 
@@ -46,7 +50,9 @@ namespace Editor
 		/* Select */
 
 		Button* selectBtn = new Button();
-		Core::Texture* selectBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/select.png"), Core::TextureFormat::RGBA8);
+        Core::Texture* selectBtnImage = contentLoader->loadTextureFromFile(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/select.png"),
+            Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		selectBtn->setSize(32, 32);
 		selectBtn->setImage(selectBtnImage);
 
@@ -55,7 +61,9 @@ namespace Editor
 		/* Move */
 
 		Button* moveBtn = new Button();
-		Core::Texture* moveBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"), Core::TextureFormat::RGBA8);
+        Core::Texture* moveBtnImage = contentLoader->loadTextureFromFile(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"),
+            Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		moveBtn->setSize(32, 32);
 		moveBtn->setImage(moveBtnImage);
 
@@ -64,7 +72,9 @@ namespace Editor
 		/* Rotate */
 
 		Button* rotateBtn = new Button();
-		Core::Texture* rotateBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"), Core::TextureFormat::RGBA8);
+        Core::Texture* rotateBtnImage = contentLoader->loadTextureFromFile(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"),
+            Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		rotateBtn->setSize(32, 32);
 		rotateBtn->setImage(rotateBtnImage);
 
@@ -73,7 +83,9 @@ namespace Editor
 		/* Scale */
 
 		Button* scaleBtn = new Button();
-		Core::Texture* scaleBtnImage = assetMgr->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"), Core::TextureFormat::RGBA8);
+        Core::Texture* scaleBtnImage = contentLoader->loadTextureFromFile(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"),
+            Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		scaleBtn->setSize(32, 32);
 		scaleBtn->setImage(scaleBtnImage);
 

@@ -1,0 +1,11 @@
+namespace Core;
+
+table TextureSerializer {
+	width:int32;
+	height:int32;
+	format:int32;
+	size:int32;
+	data:[uint8];
+}
+
+root_type TextureSerializer;

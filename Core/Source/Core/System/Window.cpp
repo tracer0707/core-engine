@@ -4,7 +4,7 @@
 #define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
 
-#include "../Assets/AssetManager.h"
+#include "../Content/ContentManager.h"
 #include "../Renderer/Renderer.h"
 #include "../System/Application.h"
 #include "../System/EventHandler.h"
@@ -28,7 +28,7 @@ namespace Core
 
         _application = application;
         _renderer = Renderer::init(_ctx);
-        _assetManager = new AssetManager(_renderer);
+        _contentManager = new ContentManager(_renderer);
         _time = new Time();
         _inputManager = new InputManager();
         _eventHandler = new EventHandler();
@@ -41,7 +41,7 @@ namespace Core
     {
         _renderer->makeCurrent();
 
-        delete _assetManager;
+        delete _contentManager;
         delete _time;
         delete _inputManager;
         delete _eventHandler;
@@ -51,7 +51,7 @@ namespace Core
 
         _application = nullptr;
         _ctx = nullptr;
-        _assetManager = nullptr;
+        _contentManager = nullptr;
         _renderer = nullptr;
         _time = nullptr;
         _inputManager = nullptr;

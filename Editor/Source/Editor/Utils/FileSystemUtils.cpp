@@ -70,6 +70,19 @@ namespace Editor
         return fs;
     }
 
+    void FileSystemUtils::enumerateFiles(const std::filesystem::path& root, Core::List<std::filesystem::path>& out)
+    {
+        for (const auto& entry : std::filesystem::recursive_directory_iterator(root))
+        {
+            Core::String _p = entry.path().generic_string();
+            if (entry.is_regular_file() && !Core::Path::isHiddenOrSystem(_p))
+            {
+                _p = entry.path().lexically_relative(root).generic_string();
+                out.add(_p.std_str());
+            }
+        }
+    }
+
     void FileSystemUtils::fsToTreeView(Core::String path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode)
     {
         std::string _path = path.std_str();
@@ -96,6 +109,7 @@ namespace Editor
             _node->setText(fs_path.filename().generic_string());
         else
             _node->setText(_path);
+
         _node->setStringTag(0, fs_path.generic_string());
 
         if (rootNode != nullptr)

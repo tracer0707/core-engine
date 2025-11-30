@@ -7,8 +7,8 @@
 #include "../Math/Mathf.h"
 #include "../Components/Camera.h"
 #include "../Components/Transform.h"
-#include "../Assets/Mesh.h"
-#include "../Assets/Material.h"
+#include "../Content/Mesh.h"
+#include "../Content/Material.h"
 
 #include "../Renderer/Renderer.h"
 

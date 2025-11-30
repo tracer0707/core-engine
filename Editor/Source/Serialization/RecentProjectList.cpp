@@ -10,39 +10,42 @@
 
 namespace Editor
 {
-    Core::List<Core::String> RecentProjectList::_projectList;
-
-    static Core::String filename = Core::Path::combine(std::filesystem::current_path().generic_string(), "projects.json");
-
-    void RecentProjectList::save()
+    namespace Serialization
     {
-        nlohmann::json j = nlohmann::json{{"RecentProjects", _projectList}};
+        Core::List<Core::String> RecentProjectList::_projectList;
 
-        std::ofstream file(filename.std_str());
-        if (file.is_open())
-        {
-            file << j.dump(4);
-            file.close();
-        }
-        else
-        {
-            throw std::runtime_error("Error opening file for write");
-        }
-    }
+        static Core::String filename = Core::Path::combine(std::filesystem::current_path().generic_string(), "projects.json");
 
-    void RecentProjectList::load()
-    {
-        std::ifstream file(filename.std_str());
-        if (file.is_open())
+        void RecentProjectList::save()
         {
-            nlohmann::json j;
-            file >> j;
-            file.close();
-            _projectList = j["RecentProjects"].get<Core::List<Core::String>>();
+            nlohmann::json j = nlohmann::json{{"RecentProjects", _projectList}};
+
+            std::ofstream file(filename.std_str());
+            if (file.is_open())
+            {
+                file << j.dump(4);
+                file.close();
+            }
+            else
+            {
+                throw std::runtime_error("Error opening file for write");
+            }
         }
-        else
+
+        void RecentProjectList::load()
         {
-            std::cout << "Project list file not found. Creating one..." << std::endl;
+            std::ifstream file(filename.std_str());
+            if (file.is_open())
+            {
+                nlohmann::json j;
+                file >> j;
+                file.close();
+                _projectList = j["RecentProjects"].get<Core::List<Core::String>>();
+            }
+            else
+            {
+                std::cout << "Project list file not found. Creating one..." << std::endl;
+            }
         }
-    }
+    } // namespace Serialization
 } // namespace Editor

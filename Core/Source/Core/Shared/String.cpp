@@ -38,6 +38,16 @@ namespace Core
         return *this;
     }
 
+    bool String::operator<(const String& a) const
+    {
+        return _buffer < a._buffer;
+    }
+
+    bool String::operator>(const String& a) const
+    {
+        return _buffer > a._buffer;
+    }
+
     bool String::operator!=(const char* str)
     {
         return _buffer != str;

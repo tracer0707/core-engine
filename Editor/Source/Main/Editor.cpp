@@ -11,8 +11,8 @@
 #include <Core/Scene/Object.h>
 #include <Core/Components/Camera.h>
 #include <Core/Components/Transform.h>
-#include <Core/Assets/RenderTexture.h>
-#include <Core/Assets/AssetManager.h>
+#include <Core/Content/RenderTexture.h>
+#include <Core/Content/ContentManager.h>
 
 #include "../Editor/Font.h"
 #include "../Editor/Windows/WindowManager.h"
@@ -32,19 +32,26 @@
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
 
+#include "../Editor/System/ContentDatabase.h"
+#include "../Editor/System/ContentLoader.h"
+
 namespace Editor
 {
     /* WINDOW */
 
     Editor::MainWindow::MainWindow(Editor* app) : Window(app, "Project Manager", 1366, 768)
     {
+        _contentDatabase = new ContentDatabase(app);
+        _contentDatabase->rebuild();
+
+        _contentLoader = new ContentLoader(app, _contentDatabase, _contentManager);
         _scene = new Core::Scene(_renderer);
 
         _cameraObject = _scene->createObject();
         _camera = _cameraObject->addComponent<Core::Camera*>();
         Core::Transform* cameraTransform = (Core::Transform*)_cameraObject->findComponent<Core::Transform*>();
 
-        _renderTexture = _assetManager->createRenderTexture(512, 512);
+        _renderTexture = _contentManager->createRenderTexture(512, 512);
         _camera->setRenderTexture(_renderTexture);
 
         _scene->setMainCamera(_camera);
@@ -57,7 +64,7 @@ namespace Editor
         _windowManager = new WindowManager();
         _windowManager->setTime(_time);
         _windowManager->setRenderer(_renderer);
-        _windowManager->setAssetManager(_assetManager);
+        _windowManager->setContentLoader(_contentLoader);
         _windowManager->setInputManager(_inputManager);
         _windowManager->setEventHandler(_eventHandler);
 
@@ -75,7 +82,7 @@ namespace Editor
         _hierarchyWindow = _windowManager->addWindow<HierarchyWindow*>();
         _contentWindow = _windowManager->addWindow<ContentWindow*>();
 
-        _contentWindow->setContentDir(app->getContentDir());
+        _contentWindow->setContentDir(app->getContentPath());
 
         _gizmoWindow = _windowManager->addWindow<GizmoWindow*>();
         _gizmoWindow->setHasTitle(false);
@@ -119,7 +126,11 @@ namespace Editor
 
         delete _windowManager;
         delete _scene;
+        delete _contentDatabase;
+        delete _contentLoader;
 
+        _contentDatabase = nullptr;
+        _contentLoader = nullptr;
         _gridBuffer = nullptr;
         _windowManager = nullptr;
         _scene = nullptr;
@@ -141,7 +152,7 @@ namespace Editor
         _renderer->setViewportSize(viewportWidth, viewportHeight);
         _renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
-        Rendering::renderGrid(_renderer, _gridBuffer, _assetManager->getDefaultMaterial(), _camera);
+        Rendering::renderGrid(_renderer, _gridBuffer, _contentManager->getDefaultMaterial(), _camera);
         ModifierManager::singleton()->render();
         _scene->render();
 

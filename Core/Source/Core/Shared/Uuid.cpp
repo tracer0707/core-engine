@@ -247,7 +247,7 @@ namespace Core
         return std::span<std::byte const, 16>(reinterpret_cast<std::byte const*>(data.data()), 16);
     }
 
-    std::string Uuid::to_string()
+    std::string Uuid::to_string() const
     {
         std::string uustr{ empty_guid };
 

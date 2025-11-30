@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Core/Shared/String.h>
+#include <Core/Shared/Path.h>
 #include <Core/System/Application.h>
 #include <Core/System/Window.h>
 
@@ -27,10 +29,12 @@ namespace Editor
     class CSGEditWindow;
     class CSGModifier;
     class Font;
+    class ContentDatabase;
+    class ContentLoader;
 
     class Editor : public Core::Application
     {
-      private:
+    private:
         class MainWindow : public Core::Window
         {
             friend class Editor;
@@ -41,6 +45,9 @@ namespace Editor
 
             virtual void update();
             virtual void render();
+
+            ContentDatabase* _contentDatabase = nullptr;
+            ContentLoader* _contentLoader = nullptr;
 
             Core::Object* _cameraObject = nullptr;
             Core::Camera* _camera = nullptr;
@@ -68,5 +75,9 @@ namespace Editor
 
         virtual void init();
         virtual void destroy();
+
+    public:
+        Core::String getLibraryPath() { return Core::Path::combine(getWorkingPath(), "Library"); }
+        Core::String getLibraryContentPath() { return Core::Path::combine(getLibraryPath(), "Content"); }
     };
 } // namespace Editor

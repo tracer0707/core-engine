@@ -45,8 +45,6 @@ add_library(Core STATIC ${CORE_HEADERS} ${CORE_SOURCES})
 add_library(glad STATIC ${GLAD_SOURCES})
 set_target_properties(glad PROPERTIES LINKER_LANGUAGE C)
 
-target_compile_definitions(Core PRIVATE FREEIMAGE_LIB)
-
 set_target_properties(Core PROPERTIES OUTPUT_NAME "core")
 set_target_properties(glad PROPERTIES OUTPUT_NAME "glad")
 
@@ -66,26 +64,19 @@ target_include_directories(glad PUBLIC
 )
 
 target_include_directories(Core PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/FreeImage/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/bc7enc/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/imgui
 )
 
-add_library(Assimp STATIC IMPORTED)
 add_library(ICUDT STATIC IMPORTED)
 add_library(ICUUC STATIC IMPORTED)
 add_library(SDL2 STATIC IMPORTED)
-add_library(FreeImage STATIC IMPORTED)
-add_library(bc7enc STATIC IMPORTED)
 add_library(glm STATIC IMPORTED)
+add_library(flatbuffers STATIC IMPORTED)
 
-set_target_properties(Assimp PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/include"
-)
 set_target_properties(ICUDT PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include"
 )
@@ -95,20 +86,14 @@ set_target_properties(ICUUC PROPERTIES
 set_target_properties(SDL2 PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/include"
 )
-set_target_properties(FreeImage PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/FreeImage/include"
-)
-set_target_properties(bc7enc PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/bc7enc/include"
-)
 set_target_properties(glm PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/include"
 )
+set_target_properties(flatbuffers PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/include"
+)
 
 if(PLATFORM_LINUX)
-    set_target_properties(Assimp PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/lib/linux64/libassimp.a"
-    )
     set_target_properties(ICUDT PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicudata.a"
     )
@@ -118,19 +103,13 @@ if(PLATFORM_LINUX)
     set_target_properties(SDL2 PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/lib/linux64/libSDL2.a"
     )
-    set_target_properties(FreeImage PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/FreeImage/lib/linux64/libFreeImage.a"
-    )
-    set_target_properties(bc7enc PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/bc7enc/lib/linux64/libbc7enc.a"
-    )
     set_target_properties(glm PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/lib/linux64/libglm_static.a"
     )
-elseif(PLATFORM_WINDOWS)
-    set_target_properties(Assimp PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/assimp/lib/win64/assimp-vc143-mt.lib"
+    set_target_properties(flatbuffers PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/lib/linux64/libflatbuffers.a"
     )
+elseif(PLATFORM_WINDOWS)
     set_target_properties(ICUDT PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/win64/icudt.lib"
     )
@@ -140,35 +119,33 @@ elseif(PLATFORM_WINDOWS)
     set_target_properties(SDL2 PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/lib/win64/SDL2-static.lib"
     )
-    set_target_properties(FreeImage PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/FreeImage/lib/win64/FreeImage.lib"
-    )
-    set_target_properties(bc7enc PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/bc7enc/lib/win64/bc7enc.lib"
-    )
     set_target_properties(glm PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/lib/win64/glm_static.lib"
+    )
+    set_target_properties(flatbuffers PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/lib/win64/flatbuffers.lib"
     )
 endif()
 
 target_link_libraries(Core
-    PRIVATE Assimp
     PRIVATE ICUDT
     PRIVATE ICUUC
     PRIVATE SDL2
-    PRIVATE FreeImage
-    PRIVATE bc7enc
     PRIVATE glm
     PRIVATE glad
+    PRIVATE flatbuffers
 )
+
 # Editor headers
-file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h")
+file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h" "Core/Source/Core/Serialization/FlatBuffers/*.h")
 
 # Editor sources
 file(GLOB_RECURSE EDITOR_SOURCES "Editor/Source/*.cpp")
 
 # Editor (executable, depends on Core)
 add_executable(Editor ${EDITOR_HEADERS} ${EDITOR_SOURCES} Editor/Editor.rc)
+
+target_compile_definitions(Editor PRIVATE FREEIMAGE_LIB)
 
 if(PLATFORM_LINUX)
     set_target_properties(Editor PROPERTIES OUTPUT_NAME "Editor.app")
@@ -188,28 +165,67 @@ endif()
 
 target_include_directories(Editor PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Source
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/include
 )
 
 add_library(Carve STATIC IMPORTED)
+add_library(Assimp STATIC IMPORTED)
+add_library(FreeImage STATIC IMPORTED)
+add_library(bc7enc STATIC IMPORTED)
+
 set_target_properties(Carve PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/include"
 )
+set_target_properties(Assimp PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include"
+)
+set_target_properties(FreeImage PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/include"
+)
+set_target_properties(bc7enc PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/include"
+)
 
 if(PLATFORM_LINUX)
-set_target_properties(Carve PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/lib/linux64/libcarve.a"
-)
+    set_target_properties(Carve PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/lib/linux64/libcarve.a"
+    )
+    set_target_properties(Assimp PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/lib/linux64/libassimp.a"
+    )
+    set_target_properties(FreeImage PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/lib/linux64/libFreeImage.a"
+    )
+    set_target_properties(bc7enc PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/lib/linux64/libbc7enc.a"
+    )
 elseif(PLATFORM_WINDOWS)
-set_target_properties(Carve PROPERTIES
-    IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/lib/win64/carve.lib"
-)
+    set_target_properties(Carve PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/lib/win64/carve.lib"
+    )
+    set_target_properties(Assimp PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/lib/win64/assimp-vc143-mt.lib"
+    )
+    set_target_properties(FreeImage PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/lib/win64/FreeImage.lib"
+    )
+    set_target_properties(bc7enc PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/lib/win64/bc7enc.lib"
+    )
 endif()
 
 # Link Editor and Core
 target_link_libraries(Editor
     PRIVATE Core
     PRIVATE Carve
+    PRIVATE Assimp
+    PRIVATE FreeImage
+    PRIVATE bc7enc
+    PRIVATE flatbuffers
 )
 
 # Group projects

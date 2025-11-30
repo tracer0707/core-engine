@@ -5,6 +5,7 @@
 #include "../Classes/json.hpp"
 #include "../Shared/String.h"
 #include "../Shared/List.h"
+#include "../Shared/Uuid.h"
 
 namespace nlohmann
 {
@@ -20,6 +21,22 @@ namespace nlohmann
             }
 
             p = j.get<std::string>();
+        }
+    };
+
+    template <> struct adl_serializer<Core::Uuid>
+    {
+        static void to_json(json& j, const Core::Uuid& p) { j = p.to_string(); }
+
+        static void from_json(const json& j, Core::Uuid& p)
+        {
+            if (!j.is_string())
+            {
+                throw std::runtime_error("type must be string, but is " + std::string(j.type_name()));
+            }
+
+            std::string str = j.get<std::string>();
+            p = Core::Uuid::from_string(str);
         }
     };
 

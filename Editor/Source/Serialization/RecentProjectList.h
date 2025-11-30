@@ -5,15 +5,18 @@
 
 namespace Editor
 {
-	class RecentProjectList
-	{
-	private:
-		static Core::List<Core::String> _projectList;
+    namespace Serialization
+    {
+        class RecentProjectList
+        {
+          private:
+            static Core::List<Core::String> _projectList;
 
-	public:
-		static void save();
-		static void load();
+          public:
+            static void save();
+            static void load();
 
-		static Core::List<Core::String>& getProjectList() { return _projectList; }
-	};
+            static Core::List<Core::String>& getProjectList() { return _projectList; }
+        };
+    } // namespace Serialization
 }

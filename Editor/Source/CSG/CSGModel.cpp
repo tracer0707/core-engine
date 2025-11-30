@@ -12,13 +12,14 @@
 #include <Core/Scene/Object.h>
 #include <Core/Components/Transform.h>
 #include <Core/Components/MeshRenderer.h>
-#include <Core/Assets/Material.h>
-#include <Core/Assets/Mesh.h>
-#include <Core/Assets/AssetManager.h>
+#include <Core/Content/ContentManager.h>
+#include <Core/Content/Material.h>
+#include <Core/Content/Mesh.h>
 #include <Core/Renderer/VertexBuffer.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Color.h>
 
+#include "../Editor/System/ContentLoader.h"
 #include "CSGBrush.h"
 #include "CSGBrushCube.h"
 
@@ -26,17 +27,17 @@ namespace Editor
 {
     Core::Material* CSGModel::_defaultMaterial = nullptr;
 
-    CSGModel::CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
+    CSGModel::CSGModel(Core::Renderer* renderer, Core::Scene* scene, ContentLoader* contentLoader)
     {
         _renderer = renderer;
         _scene = scene;
-        _assetManager = assetManager;
+        _contentLoader = contentLoader;
         _object = _scene->createObject();
         _meshRenderer = _object->addComponent<Core::MeshRenderer*>();
 
         _nullBrush = new CSGBrush(this);
 
-        if (_defaultMaterial == nullptr) _defaultMaterial = _assetManager->createMaterial();
+        if (_defaultMaterial == nullptr) _defaultMaterial = _contentLoader->getContentManager()->createMaterial();
     }
 
     CSGModel::~CSGModel()
@@ -65,7 +66,7 @@ namespace Editor
         Core::Mesh* currentMesh = _meshRenderer->getMesh();
         if (currentMesh != nullptr)
         {
-            _assetManager->destroy(currentMesh);
+            _contentLoader->getContentManager()->destroy(currentMesh);
         }
 
         _meshRenderer->setMesh(nullptr);
@@ -187,7 +188,7 @@ namespace Editor
 
         if (csgGeom != nullptr && csgGeom != _nullBrush->getBrushPtr()) delete csgGeom;
 
-        Core::Mesh* mesh = _assetManager->createMesh(_subMeshes.size());
+        Core::Mesh* mesh = _contentLoader->getContentManager()->createMesh(_subMeshes.size());
         Core::SubMesh** subMeshes = mesh->getSubMeshes();
         mesh->setBoundingBox(aab);
         _meshRenderer->setMesh(mesh);

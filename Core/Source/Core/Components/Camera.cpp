@@ -4,7 +4,7 @@
 #include "ComponentList.h"
 
 #include "../Renderer/Renderer.h"
-#include "../Assets/RenderTexture.h"
+#include "../Content/RenderTexture.h"
 #include "../Math/Mathf.h"
 #include "../Math/Plane.h"
 #include "../Scene/Object.h"

@@ -16,6 +16,7 @@ namespace Editor
     class CSGEditWindow;
     class CSGModel;
     class CSGBrush;
+    class ContentLoader;
 
     class CSGModifier : public Modifier
     {
@@ -76,7 +77,7 @@ namespace Editor
         CSGBrush* getCurrentBrush() { return _currentBrush; }
         void setCurrentBrush(CSGBrush* value) { _currentBrush = value; }
 
-        virtual void init(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager);
+        virtual void init(Core::Renderer* renderer, Core::Scene* scene, ContentLoader* contentLoader);
         virtual void update();
         virtual void render();
     };

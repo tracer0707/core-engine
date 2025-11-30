@@ -7,7 +7,7 @@
 namespace Core
 {
 	class Renderer;
-	class AssetManager;
+    class ContentManager;
 	class Time;
 	class InputManager;
 	class EventHandler;
@@ -35,7 +35,7 @@ namespace Core
 		void* _ctx = nullptr;
 		Application* _application = nullptr;
 		Renderer* _renderer = nullptr;
-		AssetManager* _assetManager = nullptr;
+        ContentManager* _contentManager = nullptr;
 		Time* _time = nullptr;
 		InputManager* _inputManager = nullptr;
 		EventHandler* _eventHandler = nullptr;
@@ -46,7 +46,7 @@ namespace Core
 	public:
 		void* getContext() { return _ctx; }
 		Renderer* getRenderer() { return _renderer; }
-		AssetManager* getAssetManager() { return _assetManager; }
+        ContentManager* getContentManager() { return _contentManager; }
 
 		void setTitle(String title);
 		

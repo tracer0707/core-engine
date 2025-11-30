@@ -2,6 +2,7 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <Core/Content/ContentManager.h>
 #include <Core/Scene/Scene.h>
 #include <Core/System/InputManager.h>
 #include <Core/Components/Camera.h>
@@ -9,8 +10,8 @@
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Primitives.h>
 #include <Core/Renderer/Color.h>
-#include <Core/Assets/AssetManager.h>
 
+#include "../System/ContentLoader.h"
 #include "../Windows/WindowManager.h"
 #include "../Windows/HierarchyWindow.h"
 #include "../Windows/CSGObjectWindow.h"
@@ -40,9 +41,9 @@ namespace Editor
         _renderer->deleteBuffer(_wireframeBuffer);
     }
 
-    void CSGModifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager)
+    void CSGModifier::init(Core::Renderer* renderer, Core::Scene* scene, ContentLoader* contentLoader)
     {
-        Modifier::init(renderer, scene, assetManager);
+        Modifier::init(renderer, scene, contentLoader);
 
         WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
 
@@ -62,7 +63,7 @@ namespace Editor
     void CSGModifier::addModel()
     {
         _currentBrush = nullptr;
-        _currentModel = new CSGModel(_renderer, _scene, _assetManager);
+        _currentModel = new CSGModel(_renderer, _scene, _contentLoader);
         _currentModel->setName("CSG Model");
         _models.add(_currentModel);
 
@@ -127,7 +128,9 @@ namespace Editor
         Core::List<int> inds = _currentBrush->getFlatIndices();
         Core::List<glm::vec3>& verts = _currentBrush->getVertices();
 
-        Core::Primitives::wireMesh(_renderer, _wireframeBuffer, _assetManager->getDefaultMaterial(), view, proj, model, verts, inds, Core::Color::RED,
+        Core::Primitives::wireMesh(_renderer, _wireframeBuffer, _contentLoader->getContentManager()->getDefaultMaterial(), view, proj, model, verts,
+                                   inds,
+                                   Core::Color::RED,
                                    Core::Primitives::WireframeMode::Polygon,
                                    C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
     }

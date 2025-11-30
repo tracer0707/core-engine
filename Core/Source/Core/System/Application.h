@@ -24,8 +24,8 @@ namespace Core
 		bool _isRunning = false;
 		bool _forceClosed = false;
 
-		String _workingDir = "";
-		String _contentDir = "Content";
+		String _workingPath = String::Empty;
+        String _contentPath = "Content";
 
 		List<Window*> _windows;
 
@@ -42,10 +42,10 @@ namespace Core
 		EventHandler* getEventHandler() { return _eventHandler; }
 		bool isForceClosed() { return _forceClosed; }
 
-		String getWorkingDir() { return _workingDir; }
-		void setWorkingDir(String value) { _workingDir = value; }
+		String getWorkingPath() { return _workingPath; }
+		void setWorkingPath(String value) { _workingPath = value; }
 
-		String getContentDir();
+		String getContentPath();
 
 		void run();
 		void stop(bool forceClose);

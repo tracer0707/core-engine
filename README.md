@@ -9,4 +9,5 @@
 - FreeImage - 3.19.10
 - ImGui - 1.90.3
 - carve - 1.4.0
+- FlatBuffers - 25.9.23
 - bc7enc

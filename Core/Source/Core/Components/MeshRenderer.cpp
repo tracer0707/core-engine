@@ -5,8 +5,8 @@
 #include "Transform.h"
 
 #include "../Scene/Object.h"
-#include "../Assets/Material.h"
-#include "../Assets/Mesh.h"
+#include "../Content/Material.h"
+#include "../Content/Mesh.h"
 #include "../Components/Camera.h"
 #include "../Renderer/Renderer.h"
 

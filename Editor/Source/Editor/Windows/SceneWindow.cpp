@@ -2,7 +2,7 @@
 
 #include <imgui.h>
 
-#include <Core/Assets/RenderTexture.h>
+#include <Core/Content/RenderTexture.h>
 #include <Core/Scene/Scene.h>
 
 #include "../Gizmo.h"

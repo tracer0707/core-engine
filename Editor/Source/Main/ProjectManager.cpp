@@ -25,7 +25,7 @@ namespace Editor
 
     ProjectManager::MainWindow::MainWindow(ProjectManager* app) : Window(app, "Project Manager", 700, 500)
     {
-        RecentProjectList::load();
+        Serialization::RecentProjectList::load();
 
         _mainLayout = new LinearLayout(LayoutDirection::Vertical);
         _mainLayout->setStretchX(true);
@@ -44,7 +44,7 @@ namespace Editor
 
         ListView* listView = new ListView();
 
-        for (auto& it : RecentProjectList::getProjectList())
+        for (auto& it : Serialization::RecentProjectList::getProjectList())
         {
             auto path = fs::path(it.std_str());
             LinearLayout* ll = new LinearLayout(LayoutDirection::Vertical);
@@ -84,10 +84,10 @@ namespace Editor
                     app->initProject(fileName);
                     app->setSelectedProject(fileName);
 
-                    if (!RecentProjectList::getProjectList().contains(fileName))
+                    if (!Serialization::RecentProjectList::getProjectList().contains(fileName))
                     {
-                        RecentProjectList::getProjectList().add(fileName);
-                        RecentProjectList::save();
+                        Serialization::RecentProjectList::getProjectList().add(fileName);
+                        Serialization::RecentProjectList::save();
                     }
 
                     app->stop(false);
@@ -154,12 +154,14 @@ namespace Editor
         fs::path _rootPath = fs::path(value.std_str());
         fs::path _contentPath = fs::path(Core::Path::combine(value, "Content").std_str());
         fs::path _libPath = fs::path(Core::Path::combine(value, "Library").std_str());
+        fs::path _libContentPath = fs::path(Core::Path::combine(_libPath.generic_string(), "Content").std_str());
         fs::path _libCachePath = fs::path(Core::Path::combine(_libPath.generic_string(), "Cache").std_str());
         fs::path _libCacheThumbnailsPath = fs::path(Core::Path::combine(_libCachePath.generic_string(), "Thumbnails").std_str());
 
         Core::List<fs::path> _dirsToCreate;
         _dirsToCreate.add(_contentPath);
         _dirsToCreate.add(_libPath);
+        _dirsToCreate.add(_libContentPath);
         _dirsToCreate.add(_libCachePath);
         _dirsToCreate.add(_libCacheThumbnailsPath);
 

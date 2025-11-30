@@ -17,7 +17,7 @@ namespace Editor
 
         for (auto it : _modifiers)
         {
-            it->init(_windowManager->getRenderer(), _scene, _windowManager->getAssetManager());
+            it->init(_windowManager->getRenderer(), _scene, _windowManager->getContentLoader());
         }
     }
 

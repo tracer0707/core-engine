@@ -5,7 +5,7 @@
 #include <Core/Math/Mathf.h>
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/Object.h>
-#include <Core/Assets/Mesh.h>
+#include <Core/Content/Mesh.h>
 #include <Core/Components/MeshRenderer.h>
 #include <Core/Components/Transform.h>
 #include <Core/Renderer/VertexBuffer.h>

@@ -15,7 +15,6 @@ namespace Core
 	class SubMesh;
 	class Scene;
 	class Renderer;
-	class AssetManager;
 	struct Vertex;
 }
 
@@ -23,6 +22,7 @@ namespace Editor
 {
 	class CSGBrush;
 	class CSGBrushCube;
+	class ContentLoader;
 
 	class CSGModel
 	{
@@ -40,16 +40,16 @@ namespace Editor
 
 		Core::Renderer* _renderer = nullptr;
 		Core::Scene* _scene = nullptr;
-		Core::AssetManager* _assetManager = nullptr;
 		Core::Object* _object = nullptr;
 		Core::MeshRenderer* _meshRenderer = nullptr;
+        ContentLoader* _contentLoader = nullptr;
 
 		static Core::Material* _defaultMaterial;
 
 		CSGBrush* _nullBrush = nullptr;
 
 	public:
-		CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::AssetManager* assetManager);
+        CSGModel(Core::Renderer* renderer, Core::Scene* scene, ContentLoader* contentLoader);
 		~CSGModel();
 
 		Core::String getName() { return _name; }
