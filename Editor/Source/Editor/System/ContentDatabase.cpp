@@ -14,7 +14,7 @@ namespace Editor
     {
         _app = app;
 
-        Core::String dbPath = Core::Path::combine(_app->getLibraryPath(), "ContentDatabase.json");
+        Core::String dbPath = Core::Path::combine(_app->getRootPath(), "ContentDatabase.json");
 
         if (std::filesystem::exists(dbPath.std_str()))
         {
@@ -34,7 +34,7 @@ namespace Editor
 
     void ContentDatabase::rebuild()
     {
-        Core::String dbPath = Core::Path::combine(_app->getLibraryPath(), "ContentDatabase.json");
+        Core::String dbPath = Core::Path::combine(_app->getRootPath(), "ContentDatabase.json");
 
         if (std::filesystem::exists(dbPath.std_str()))
         {
