@@ -6,6 +6,7 @@
 
 namespace Core
 {
+    class Content;
 	class Renderer;
 	class Material;
 	class Texture;
@@ -20,17 +21,13 @@ namespace Core
 		Material* _defaultMaterial = nullptr;
 		Shader* _defaultShader = nullptr;
 
-		List<Material*> _materials;
-		List<Texture*> _textures;
-		List<Mesh*> _meshes;
-		List<Shader*> _shaders;
-		List<RenderTexture*> _renderTextures;
+		List<Content*> _materials;
+        List<Content*> _textures;
+        List<Content*> _meshes;
+        List<Content*> _shaders;
+        List<Content*> _renderTextures;
 
-		void destroyMaterial(Material* value);
-		void destroyTexture(Texture* value);
-		void destroyMesh(Mesh* value);
-		void destroyShader(Shader* value);
-		void destroyRenderTexture(RenderTexture* value);
+		void destroyContent(Content* value, List<Content*>& _list);
 
 	public:
         ContentManager(Renderer* renderer);
@@ -50,10 +47,10 @@ namespace Core
 		Mesh* loadMeshFromFile(String fileName);
 		Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);
 
-		void destroy(Material* value) { destroyMaterial(value); }
-		void destroy(Mesh* value) { destroyMesh(value); }
-		void destroy(Texture* value) { destroyTexture(value); }
-		void destroy(Shader* value) { destroyShader(value); }
-		void destroy(RenderTexture* value) { destroyRenderTexture(value); }
+		void destroy(Material* value);
+        void destroy(Mesh* value);
+        void destroy(Texture* value);
+        void destroy(Shader* value);
+        void destroy(RenderTexture* value);
 	};
 }

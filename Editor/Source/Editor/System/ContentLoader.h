@@ -40,6 +40,7 @@ namespace Editor
         ~ContentLoader();
 
         ContentDatabase* getContentDatabase() { return _contentDb; }
+
         Core::ContentManager* getContentManager() { return _contentMgr; }
         Core::Texture* loadTextureFromFile(Core::String fileName, Core::TextureFormat format, LoadMethod loadMethod);
         Core::Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, Core::TextureFormat format);

@@ -144,6 +144,6 @@ namespace Core
 
     String Application::getContentPath()
     {
-        return Path::combine(_workingPath, _contentPath);
+        return Path::combine(_rootPath, _contentPath);
     }
 } // namespace Core

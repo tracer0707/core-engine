@@ -77,7 +77,7 @@ namespace Editor
         virtual void destroy();
 
     public:
-        Core::String getLibraryPath() { return Core::Path::combine(getWorkingPath(), "Library"); }
+        Core::String getLibraryPath() { return Core::Path::combine(getRootPath(), "Library"); }
         Core::String getLibraryContentPath() { return Core::Path::combine(getLibraryPath(), "Content"); }
     };
 } // namespace Editor

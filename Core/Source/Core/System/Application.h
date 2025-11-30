@@ -24,7 +24,7 @@ namespace Core
 		bool _isRunning = false;
 		bool _forceClosed = false;
 
-		String _workingPath = String::Empty;
+		String _rootPath = String::Empty;
         String _contentPath = "Content";
 
 		List<Window*> _windows;
@@ -42,8 +42,8 @@ namespace Core
 		EventHandler* getEventHandler() { return _eventHandler; }
 		bool isForceClosed() { return _forceClosed; }
 
-		String getWorkingPath() { return _workingPath; }
-		void setWorkingPath(String value) { _workingPath = value; }
+		String getRootPath() { return _rootPath; }
+		void setRootPath(String value) { _rootPath = value; }
 
 		String getContentPath();
 

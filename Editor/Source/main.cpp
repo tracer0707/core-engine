@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     if (projectManager.isForceClosed()) return 0;
 
     Editor::Editor editor;
-    editor.setWorkingPath(projectManager.getSelectedProject());
+    editor.setRootPath(projectManager.getSelectedProject());
     editor.run();
 
     return 0;

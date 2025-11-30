@@ -80,12 +80,6 @@ namespace Core
         return value;
     }
 
-    void ContentManager::destroyMaterial(Material* value)
-    {
-        _materials.remove(value);
-        delete value;
-    }
-
     /* TEXTURE */
 
     Texture* ContentManager::loadTextureFromFile(String fileName, TextureFormat fmt)
@@ -101,19 +95,19 @@ namespace Core
 
         unsigned char* dataRaw = const_cast<unsigned char*>(textureSerialized->data()->data());
 
-        return new Texture(_renderer, textureSerialized->width(), textureSerialized->height(), dataRaw, textureSerialized->size(),
+        Texture* result = new Texture(_renderer, textureSerialized->width(), textureSerialized->height(), dataRaw, textureSerialized->size(),
                            static_cast<TextureFormat>(textureSerialized->format()));
+
+        _textures.add(result);
+        return result;
     }
 
     Texture* ContentManager::loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt)
     {
-        return new Texture(_renderer, w, h, data, size, fmt);
-    }
+        Texture* result = new Texture(_renderer, w, h, data, size, fmt);
 
-    void ContentManager::destroyTexture(Texture* value)
-    {
-        _textures.remove(value);
-        delete value;
+        _textures.add(result);
+        return result;
     }
 
     /* MESH */
@@ -134,13 +128,8 @@ namespace Core
 
     Mesh* ContentManager::loadMeshFromFile(String fileName)
     {
+        // TODO
         return nullptr;
-    }
-
-    void ContentManager::destroyMesh(Mesh* value)
-    {
-        _meshes.remove(value);
-        delete value;
     }
 
     /* SHADER */
@@ -152,12 +141,6 @@ namespace Core
         return shader;
     }
 
-    void ContentManager::destroyShader(Shader* value)
-    {
-        _shaders.remove(value);
-        delete value;
-    }
-
     /* RENDERTEXTURE */
 
     RenderTexture* ContentManager::createRenderTexture(unsigned int width, unsigned int height)
@@ -167,9 +150,40 @@ namespace Core
         return renderTexture;
     }
 
-    void ContentManager::destroyRenderTexture(RenderTexture* value)
+    /* DESTRUCTORS */
+
+    void ContentManager::destroy(Material* value)
     {
-        _renderTextures.remove(value);
+        destroyContent(value, _materials);
+    }
+
+    void ContentManager::destroy(Mesh* value)
+    {
+        destroyContent(value, _meshes);
+    }
+
+    void ContentManager::destroy(Texture* value)
+    {
+        destroyContent(value, _textures);
+    }
+
+    void ContentManager::destroy(Shader* value)
+    {
+        destroyContent(value, _shaders);
+    }
+
+    void ContentManager::destroy(RenderTexture* value)
+    {
+        destroyContent(value, _renderTextures);
+    }
+
+    void ContentManager::destroyContent(Content* value, List<Content*>& _list)
+    {
+        if (_list.contains(value))
+        {
+            _list.remove(value);
+        }
+
         delete value;
     }
 } // namespace Core
