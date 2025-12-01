@@ -251,4 +251,19 @@ namespace Editor
     {
         return _contentMgr->loadShaderFromString(vertexSrc, fragmentSrc);
     }
+
+    void ContentLoader::unload(Core::Texture* value)
+    {
+        _contentMgr->destroy(value);
+    }
+
+    void ContentLoader::unload(Core::Mesh* value)
+    {
+        _contentMgr->destroy(value);
+    }
+
+    void ContentLoader::unload(Core::Shader* value)
+    {
+        _contentMgr->destroy(value);
+    }
 } // namespace Editor

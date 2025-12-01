@@ -31,6 +31,7 @@ namespace Editor
     class Font;
     class ContentDatabase;
     class ContentLoader;
+    class ThumbCacheManager;
 
     class Editor : public Core::Application
     {
@@ -48,6 +49,7 @@ namespace Editor
 
             ContentDatabase* _contentDatabase = nullptr;
             ContentLoader* _contentLoader = nullptr;
+            ThumbCacheManager* _thumbCacheManager = nullptr;
 
             Core::Object* _cameraObject = nullptr;
             Core::Camera* _camera = nullptr;
@@ -79,5 +81,8 @@ namespace Editor
     public:
         Core::String getLibraryPath() { return Core::Path::combine(getRootPath(), "Library"); }
         Core::String getLibraryContentPath() { return Core::Path::combine(getLibraryPath(), "Content"); }
+
+        Core::String getCachePath() { return Core::Path::combine(getLibraryPath(), "Cache"); }
+        Core::String getCacheThumbPath() { return Core::Path::combine(getCachePath(), "Thumbnails"); }
     };
 } // namespace Editor

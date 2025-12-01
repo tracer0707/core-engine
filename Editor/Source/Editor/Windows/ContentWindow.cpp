@@ -1,15 +1,25 @@
 #include "ContentWindow.h"
 
+#include <filesystem>
 #include <imgui.h>
+
+#include <Core/Content/Texture.h>
 
 #include "WindowList.h"
 
 #include "../../Utils/FileSystemUtils.h"
+#include "../../System/ThumbCacheManager.h"
+#include "../../System/ContentLoader.h"
+#include "../../Main/Editor.h"
+
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
 #include "../Controls/Button.h"
 #include "../Controls/TreeView.h"
 #include "../Controls/TreeNode.h"
+#include "../Windows/WindowManager.h"
+
+namespace fs = std::filesystem;
 
 namespace Editor
 {
@@ -43,6 +53,11 @@ namespace Editor
         });
     }
 
+    ContentWindow::~ContentWindow()
+    {
+        clearLoadedResources();
+    }
+
     void ContentWindow::init()
     {
         rescanContent();
@@ -58,12 +73,62 @@ namespace Editor
     {
         _rightPane->clear();
 
+        clearLoadedResources();
+
         Core::List<std::filesystem::path> entries = FileSystemUtils::getPathEntries(path);
 
         for (auto& it : entries)
         {
             Button* thumbnail = new Button(it.filename().generic_string());
+            Core::Texture* tex = _parent->getThumbCacheManager()->getOrCreate(it.generic_string());
+
+            if (tex == nullptr)
+            {
+                tex = getIcon(it.extension().generic_string());
+            }
+
+            thumbnail->setImage(tex);
+            thumbnail->setSize(64, 64);
+
             _rightPane->addControl(thumbnail);
+
+            if (tex != nullptr)
+            {
+                _loadedThumbs.add(tex);
+            }
         }
+    }
+
+    Core::Texture* ContentWindow::getIcon(Core::String ext)
+    {
+        Core::String iconName = Core::String::Empty;
+
+        if (ext == ".ttf")
+        {
+            iconName = "font.png";
+        }
+        else if (ext == ".fbx")
+        {
+            iconName = "mesh.png";
+        }
+
+        if (iconName != Core::String::Empty)
+        {
+            return _parent->getContentLoader()->loadTextureFromFile(
+                Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/content", iconName), Core::TextureFormat::RGBA8,
+                LoadMethod::Direct);
+        }
+
+        return nullptr;
+    }
+
+    void ContentWindow::clearLoadedResources()
+    {
+        for (auto it : _loadedThumbs)
+        {
+            _parent->getContentLoader()->unload(it);
+        }
+
+        _loadedThumbs.clear();
     }
 } // namespace Editor

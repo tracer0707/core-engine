@@ -46,5 +46,9 @@ namespace Editor
         Core::Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, Core::TextureFormat format);
         Core::Mesh* loadMeshFromFile(Core::String fileName);
         Core::Shader* loadShaderFromString(Core::String vertexSrc, Core::String fragmentSrc);
+
+        void unload(Core::Texture* value);
+        void unload(Core::Mesh* value);
+        void unload(Core::Shader* value);
     };
 }

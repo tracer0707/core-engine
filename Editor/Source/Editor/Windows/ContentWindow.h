@@ -2,6 +2,12 @@
 
 #include "Window.h"
 #include <Core/Shared/String.h>
+#include <Core/Shared/List.h>
+
+namespace Core
+{
+    class Texture;
+}
 
 namespace Editor
 {
@@ -16,12 +22,17 @@ namespace Editor
         TreeView* _treeView = nullptr;
         LinearLayout* _rightPane = nullptr;
 
+        Core::List<Core::Texture*> _loadedThumbs;
+
         void rescanContent();
         void setCurrentDir(Core::String path);
 
+        void clearLoadedResources();
+        Core::Texture* getIcon(Core::String ext);
+
       public:
         ContentWindow(WindowManager* parent);
-        virtual ~ContentWindow() = default;
+        virtual ~ContentWindow();
 
         Core::String getContentDir() { return _contentDir; }
         void setContentDir(Core::String value) { _contentDir = value; }

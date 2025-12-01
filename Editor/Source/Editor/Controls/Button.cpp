@@ -9,69 +9,70 @@
 
 namespace Editor
 {
-	Button::Button() : Control()
-	{
-	}
+    Button::Button() : Control() {}
 
-	Button::Button(Core::String text) : Control()
-	{
-		_text = text;
-	}
+    Button::Button(Core::String text) : Control()
+    {
+        _text = text;
+    }
 
-	Button::~Button() {}
+    Button::~Button() {}
 
-	void Button::update()
-	{
-		if (!_visible) return;
+    void Button::update()
+    {
+        if (!_visible) return;
 
-		bool hasClick = false;
+        bool hasClick = false;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
+        ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
 
-		if (!_style.enabled)
-		{
-			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
-		}
+        if (!_style.enabled)
+        {
+            ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+            ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
+        }
 
-		if (_image != nullptr)
-		{
-			hasClick = ImGui::ImageButton(_id.c_str(), (ImTextureID)_image->getNativeId(), ImVec2(_width, _height), ImVec2(0, 1), ImVec2(1, 0));
-		}
-		else
-		{
-			hasClick = ImGui::Button(_text.std_str().c_str());
-		}
+        if (_image != nullptr)
+        {
+            int w = _width > 0 ? _width : _image->getWidth();
+            int h = _height > 0 ? _height : _image->getHeight();
 
-		ImGui::PopStyleVar();
+            hasClick = ImGui::ImageButton(_id.c_str(), (ImTextureID)_image->getNativeId(), ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
+        }
+        else
+        {
+            hasClick = ImGui::Button(_text.std_str().c_str(), ImVec2(_width, _height));
+        }
 
-		if (!_style.enabled)
-		{
-			ImGui::PopItemFlag();
-			ImGui::PopStyleVar();
-		}
+        ImGui::PopStyleVar();
 
-		if (hasClick)
-		{
-			if (_onClick != nullptr)
-			{
-				_onClick();
-			}
-		}
-	}
+        if (!_style.enabled)
+        {
+            ImGui::PopItemFlag();
+            ImGui::PopStyleVar();
+        }
 
-	int Button::getControlType()
-	{
-		return CONTROL_BUTTON;
-	}
+        if (hasClick)
+        {
+            if (_onClick != nullptr)
+            {
+                _onClick();
+            }
+        }
+    }
 
-	void Button::setActive(bool value)
-	{
-		_active = value;
+    int Button::getControlType()
+    {
+        return CONTROL_BUTTON;
+    }
 
-		if (_active)
-			_style.opacity = 1.0f;
-		else
-			_style.opacity = 0.5f;
-	}
-}
+    void Button::setActive(bool value)
+    {
+        _active = value;
+
+        if (_active)
+            _style.opacity = 1.0f;
+        else
+            _style.opacity = 0.5f;
+    }
+} // namespace Editor

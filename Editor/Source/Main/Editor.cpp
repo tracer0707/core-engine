@@ -34,6 +34,7 @@
 
 #include "../System/ContentDatabase.h"
 #include "../System/ContentLoader.h"
+#include "../System/ThumbCacheManager.h"
 
 namespace Editor
 {
@@ -45,6 +46,8 @@ namespace Editor
         _contentDatabase->rebuild();
 
         _contentLoader = new ContentLoader(app, _contentDatabase, _contentManager);
+        _thumbCacheManager = new ThumbCacheManager(app, _contentLoader);
+
         _scene = new Core::Scene(_renderer);
 
         _cameraObject = _scene->createObject();
@@ -67,6 +70,7 @@ namespace Editor
         _windowManager->setContentLoader(_contentLoader);
         _windowManager->setInputManager(_inputManager);
         _windowManager->setEventHandler(_eventHandler);
+        _windowManager->setThumbCacheManager(_thumbCacheManager);
 
         _csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
 
