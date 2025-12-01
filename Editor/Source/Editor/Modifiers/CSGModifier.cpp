@@ -11,7 +11,7 @@
 #include <Core/Renderer/Primitives.h>
 #include <Core/Renderer/Color.h>
 
-#include "../System/ContentLoader.h"
+#include "../../System/ContentLoader.h"
 #include "../Windows/WindowManager.h"
 #include "../Windows/HierarchyWindow.h"
 #include "../Windows/CSGObjectWindow.h"

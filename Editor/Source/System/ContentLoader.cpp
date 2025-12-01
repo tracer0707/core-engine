@@ -23,7 +23,7 @@
 
 #include "ContentDatabase.h"
 
-#include "../../Main/Editor.h"
+#include "../Main/Editor.h"
 #include "../Utils/bc7compressor.h"
 #include "../Utils/TextureUtils.h"
 

@@ -19,7 +19,7 @@
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Color.h>
 
-#include "../Editor/System/ContentLoader.h"
+#include "../System/ContentLoader.h"
 #include "CSGBrush.h"
 #include "CSGBrushCube.h"
 

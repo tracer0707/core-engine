@@ -8,8 +8,8 @@
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
 
+#include "../Utils/FileSystemUtils.h"
 #include "../Editor/Font.h"
-#include "../Editor/Utils/FileSystemUtils.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/Button.h"

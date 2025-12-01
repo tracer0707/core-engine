@@ -4,8 +4,8 @@
 
 #include <Core/Shared/Path.h>
 
-#include "../Controls/TreeView.h"
-#include "../Controls/TreeNode.h"
+#include "../Editor/Controls/TreeView.h"
+#include "../Editor/Controls/TreeNode.h"
 
 namespace Editor
 {

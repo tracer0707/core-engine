@@ -4,8 +4,8 @@
 
 #include <Core/Shared/Path.h>
 
-#include "../../Main/Editor.h"
-#include "../../Serialization/ContentDb.h"
+#include "../Main/Editor.h"
+#include "../Serialization/ContentDb.h"
 #include "../Utils/FileSystemUtils.h"
 
 namespace Editor

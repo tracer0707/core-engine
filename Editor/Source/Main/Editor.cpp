@@ -32,8 +32,8 @@
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
 
-#include "../Editor/System/ContentDatabase.h"
-#include "../Editor/System/ContentLoader.h"
+#include "../System/ContentDatabase.h"
+#include "../System/ContentLoader.h"
 
 namespace Editor
 {
