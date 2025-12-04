@@ -9,15 +9,20 @@ namespace Editor
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		_font = io.Fonts->AddFontFromFileTTF(path.std_str().c_str(), size, nullptr, io.Fonts->GetGlyphRangesCyrillic());
-		io.Fonts->Build();
-
-		ImGui_ImplOpenGL3_DestroyFontsTexture();
-		ImGui_ImplOpenGL3_CreateFontsTexture();
 	}
 
 	Font::~Font()
 	{
 		_font = nullptr;
+    }
+
+    void Font::rebuildFonts()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+        io.Fonts->Build();
+
+        ImGui_ImplOpenGL3_DestroyFontsTexture();
+        ImGui_ImplOpenGL3_CreateFontsTexture();
 	}
 
 	void Font::setDefault()

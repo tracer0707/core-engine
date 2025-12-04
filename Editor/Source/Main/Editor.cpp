@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <filesystem>
+#include <imgui.h>
 
 #include <Core/System/Time.h>
 #include <Core/Shared/String.h>
@@ -35,6 +36,7 @@
 #include "../System/ContentDatabase.h"
 #include "../System/ContentLoader.h"
 #include "../System/ThumbCacheManager.h"
+#include "../Shared/IconsForkAwesome.h"
 
 namespace Editor
 {
@@ -181,7 +183,22 @@ namespace Editor
     {
         _wnd = new MainWindow(this);
 
+        ImGuiIO& io = ImGui::GetIO();
         _mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+
+        float baseFontSize = 15.0f;
+        float iconFontSize = baseFontSize * 2.0f / 3.0f;
+
+        static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
+        ImFontConfig icons_config;
+        icons_config.MergeMode = true;
+        icons_config.PixelSnapH = true;
+        io.Fonts->AddFontFromFileTTF(
+            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts", FONT_ICON_FILE_NAME_FK).std_str().c_str(),
+                                     iconFontSize, &icons_config, icons_ranges);
+        
+        Font::rebuildFonts();
+
         _mainFont->setDefault();
     }
 

@@ -6,17 +6,17 @@ namespace Core
 
     String::String(const char* buffer)
     {
-        _buffer = buffer;
+        _buffer = icu::UnicodeString::fromUTF8(buffer);
     }
 
     String::String(std::string buffer)
     {
-        _buffer = buffer.data();
+        _buffer = icu::UnicodeString::fromUTF8(buffer.data());
     }
 
     String& String::operator=(std::string str)
     {
-        _buffer = str.data();
+        _buffer = icu::UnicodeString::fromUTF8(str.data());
         return *this;
     }
 

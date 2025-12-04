@@ -15,6 +15,8 @@ namespace Editor
 		Font(Core::String path, float size);
 		~Font();
 
+		static void rebuildFonts();
+
 		void setDefault();
 	};
 }
