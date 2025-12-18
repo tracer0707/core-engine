@@ -33,11 +33,6 @@ namespace Editor
         _splitPanel->setStartSize(200);
         _treeView = new TreeView();
 
-        _leftPane->setStretchY(true);
-        _rightPane->setStretchY(true);
-        _mainLayout->setStretchX(true);
-        _mainLayout->setStretchY(true);
-
         _leftPane->addControl(_treeView);
 
         _splitPanel->addControl(_leftPane);
@@ -88,7 +83,7 @@ namespace Editor
             }
 
             thumbnail->setImage(tex);
-            thumbnail->setSize(64, 64);
+            thumbnail->setSize(64, 80);
 
             _rightPane->addControl(thumbnail);
 

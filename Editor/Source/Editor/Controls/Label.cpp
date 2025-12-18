@@ -26,7 +26,29 @@ namespace Editor
 		ImGui::Text(_str.c_str());
 	}
 
-	int Label::getControlType()
+	float Label::getWidth()
+    {
+		if (_width == 0.0f)
+		{
+            ImVec2 textSize = ImGui::CalcTextSize(_text.std_str().c_str());
+            return textSize.x;
+		}
+
+        return _width;
+    }
+
+    float Label::getHeight()
+    {
+        if (_height == 0.0f)
+        {
+            ImVec2 textSize = ImGui::CalcTextSize(_text.std_str().c_str());
+            return textSize.y;
+        }
+
+        return _height;
+    }
+
+    int Label::getControlType()
 	{
 		return CONTROL_LABEL;
 	}

@@ -19,6 +19,9 @@ namespace Editor
 		Core::String getText() { return _text; }
 		void setText(Core::String value) { _text = value; }
 
+        virtual float getWidth();
+        virtual float getHeight();
+
 		virtual int getControlType();
 		virtual void update();
 	};

@@ -16,13 +16,13 @@ namespace Editor
 	{
 		_application = application;
 
-		LinearLayout* layout = new LinearLayout(LayoutDirection::Horizontal);
+		_layout = new LinearLayout(LayoutDirection::Horizontal);
 
 		_textInput = new TextInput();
 		Button* button = new Button("...");
 		
-		layout->addControl(_textInput);
-		layout->addControl(button);
+		_layout->addControl(_textInput);
+        _layout->addControl(button);
 
 		button->setOnClick([=] {
 			application->getEventHandler()->addEvent([=]
@@ -35,12 +35,32 @@ namespace Editor
 			});
 		});
 
-		addControl(layout);
+		addControl(_layout);
 	}
 
 	FileInput::~FileInput()
 	{
 		_application = nullptr;
+    }
+
+    float FileInput::getWidth()
+    {
+        return _layout->getWidth();
+    }
+
+    void FileInput::setWidth(float value)
+	{
+        _layout->setWidth(value);
+	}
+
+    float FileInput::getHeight()
+    {
+        return _layout->getHeight();
+    }
+
+    void FileInput::setHeight(float value)
+	{
+        _layout->setHeight(value);
 	}
 
 	Core::String FileInput::getFilePath()

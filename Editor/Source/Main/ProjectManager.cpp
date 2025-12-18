@@ -31,16 +31,14 @@ namespace Editor
         Serialization::RecentProjectList::load();
 
         _mainLayout = new LinearLayout(LayoutDirection::Vertical);
-        _mainLayout->setStretchX(true);
         _mainLayout->getStyle().paddingX = 20;
         _mainLayout->getStyle().paddingY = 20;
 
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Horizontal);
-        _layout->setVerticalAlignment(LayoutAlignment::Start);
-        _layout->setHorizontalAlignment(LayoutAlignment::Center);
+        _layout->setVerticalAlignment(LayoutVerticalAlignment::Top);
+        _layout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
 
         _listLayout = new LinearLayout(LayoutDirection::Vertical);
-        _listLayout->setStretchX(true);
 
         Button* _openBtn = new Button("Open project");
         Button* _quitBtn = new Button("Quit");
@@ -52,9 +50,9 @@ namespace Editor
             auto path = fs::path(it.std_str());
             LinearLayout* ll = new LinearLayout(LayoutDirection::Vertical);
             ll->setObjectTag(0, &it);
-            ll->setStretchX(true);
             ll->getStyle().paddingX = 5;
             ll->getStyle().paddingY = 5;
+            ll->setHeight(50);
             Label* lbl1 = new Label(path.filename().generic_string());
             Label* lbl2 = new Label(it);
             ll->addControl(lbl1);
@@ -71,6 +69,8 @@ namespace Editor
 
         _layout->addControl(_openBtn);
         _layout->addControl(_quitBtn);
+
+        _layout->setHeight(32.0f);
 
         _listLayout->addControl(listView);
 
@@ -116,7 +116,7 @@ namespace Editor
     void ProjectManager::MainWindow::update()
     {
         _mainLayout->setHeight(_height);
-        _listLayout->setHeight(_height - 65);
+        _listLayout->setHeight(_height - 85.0f);
     }
 
     void ProjectManager::MainWindow::render()

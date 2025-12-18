@@ -2,6 +2,9 @@
 
 #include "Layout.h"
 
+#include <vector>
+#include <imgui.h>
+
 namespace Editor
 {
     enum class LayoutDirection
@@ -10,27 +13,71 @@ namespace Editor
         Vertical,
     };
 
-    enum class LayoutAlignment
+    enum class LayoutHorizontalAlignment
     {
-        Start,
+        Left,
         Center,
-        End
+        Right
+    };
+
+    enum class LayoutVerticalAlignment
+    {
+        Top,
+        Middle,
+        Bottom
+    };
+
+    enum class LayoutWrapMode
+    {
+        NoWrap,
+        Wrap,
+        WrapReverse
     };
 
     class LinearLayout : public Layout
     {
       private:
         LayoutDirection _direction = LayoutDirection::Horizontal;
-        LayoutAlignment _hAlignment = LayoutAlignment::Start;
-        LayoutAlignment _vAlignment = LayoutAlignment::Start;
+        LayoutHorizontalAlignment _horizontalAlign = LayoutHorizontalAlignment::Left;
+        LayoutVerticalAlignment _verticalAlign = LayoutVerticalAlignment::Top;
+        LayoutWrapMode _wrapMode = LayoutWrapMode::Wrap;
 
-        bool _stretchX = false;
-        bool _stretchY = false;
+        ImVec2 _scrollOffset = ImVec2(0.0f, 0.0f);
+        float _scrollbarWidth = 8.0f;
+        float _actualWidth = 0.0f;
+        float _actualHeight = 0.0f;
+
+        struct RowInfo
+        {
+            std::vector<size_t> indices;
+            float totalWidth = 0.0f;
+            float maxHeight = 0.0f;
+            float startY = 0.0f;
+        };
+
+        struct ColumnInfo
+        {
+            std::vector<size_t> indices;
+            float totalHeight = 0.0f;
+            float maxWidth = 0.0f;
+            float startX = 0.0f;
+        };
+
+        void calculateSizes(std::vector<ImVec2>& sizes);
+        void calculateWrappedRows(float availableWidth, const std::vector<ImVec2>& sizes, std::vector<RowInfo>& rows);
+        void calculateWrappedColumns(float availableHeight, const std::vector<ImVec2>& sizes, std::vector<ColumnInfo>& columns);
+        void updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes);
+        void updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes);
+        void updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes);
+        void updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes);
 
       public:
         LinearLayout();
         LinearLayout(LayoutDirection direction);
         virtual ~LinearLayout();
+
+        virtual float getWidth();
+        virtual float getHeight();
 
         virtual int getControlType();
         virtual void update();
@@ -38,16 +85,13 @@ namespace Editor
         void setDirection(LayoutDirection value) { _direction = value; }
         LayoutDirection getDirection() { return _direction; }
 
-        void setHorizontalAlignment(LayoutAlignment value) { _hAlignment = value; }
-        LayoutAlignment getHorizontalAlignment() { return _hAlignment; }
+        void setHorizontalAlignment(LayoutHorizontalAlignment align) { _horizontalAlign = align; }
+        LayoutHorizontalAlignment getHorizontalAlignment() { return _horizontalAlign; }
 
-        void setVerticalAlignment(LayoutAlignment value) { _vAlignment = value; }
-        LayoutAlignment getVerticalAlignment() { return _vAlignment; }
+        void setVerticalAlignment(LayoutVerticalAlignment align) { _verticalAlign = align; }
+        LayoutVerticalAlignment getVerticalAlignment() { return _verticalAlign; }
 
-        bool getStretchX() { return _stretchX; }
-        void setStretchX(bool value) { _stretchX = value; }
-
-        bool getStretchY() { return _stretchY; }
-        void setStretchY(bool value) { _stretchY = value; }
+        void setWrapMode(LayoutWrapMode mode) { _wrapMode = mode; }
+        LayoutWrapMode getWrapMode() { return _wrapMode; }
     };
 } // namespace Editor

@@ -8,13 +8,29 @@
 
 namespace Editor
 {
-	TextInput::TextInput() : Control()
-	{
-	}
+	TextInput::TextInput() : Control() {}
 
-	TextInput::~TextInput()
-	{
-	}
+	TextInput::~TextInput() {}
+
+    float TextInput::getWidth()
+    {
+        if (_width == 0.0f)
+        {
+            return _actualWidth;
+        }
+
+        return _width;
+    }
+
+    float TextInput::getHeight()
+    {
+        if (_height == 0.0f)
+        {
+            return _actualHeight;
+        }
+
+        return _height;
+    }
 
 	Core::String TextInput::getText()
 	{
@@ -39,6 +55,10 @@ namespace Editor
 		}
 
 		ImGui::InputText((std::string("##") + _id).c_str(), &_text);
+
+		ImVec2 _actualSize = ImGui::GetItemRectSize();
+        _actualWidth = _actualSize.x;
+        _actualHeight = _actualSize.y;
 
 		if (_text != _prevText && _onTextChanged != nullptr)
 		{

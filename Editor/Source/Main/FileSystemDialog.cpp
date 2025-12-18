@@ -25,17 +25,11 @@ namespace Editor
         _mainFont->setDefault();
 
         _layout = new LinearLayout(LayoutDirection::Vertical);
-        _layout->setVerticalAlignment(LayoutAlignment::Start);
-        _layout->setHorizontalAlignment(LayoutAlignment::Start);
-        _layout->setStretchX(true);
         _layout->getStyle().paddingX = 10;
         _layout->getStyle().paddingY = 10;
 
         _topLayout = new LinearLayout(LayoutDirection::Vertical);
-        _topLayout->setVerticalAlignment(LayoutAlignment::Start);
-        _topLayout->setHorizontalAlignment(LayoutAlignment::Start);
-        _topLayout->setStretchX(true);
-
+        
         _treeView = new TreeView();
 
         rescanFs();
@@ -43,7 +37,7 @@ namespace Editor
         _topLayout->addControl(_treeView);
 
         _bottomLayout = new LinearLayout(LayoutDirection::Horizontal);
-        _bottomLayout->setHorizontalAlignment(LayoutAlignment::Center);
+        _bottomLayout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
 
         TextInput* selectedPath = new TextInput();
         Button* okBtn = new Button("OK");
@@ -54,6 +48,8 @@ namespace Editor
         _bottomLayout->addControl(selectedPath);
         _bottomLayout->addControl(okBtn);
         _bottomLayout->addControl(cancelBtn);
+
+        _bottomLayout->setHeight(32.0f);
 
         _layout->addControl(_topLayout);
         _layout->addControl(_bottomLayout);
@@ -120,7 +116,7 @@ namespace Editor
     void FileSystemDialog::update()
     {
         _layout->setHeight(_height);
-        _topLayout->setHeight(_height - 45);
+        _topLayout->setHeight(_height - 65);
     }
 
     void FileSystemDialog::render()

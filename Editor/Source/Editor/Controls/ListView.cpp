@@ -12,7 +12,26 @@ namespace Editor
     }
 
     ListView::~ListView()
+    {}
+
+    float ListView::getWidth()
     {
+        if (_width == 0.0f)
+        {
+            return _actualWidth;
+        }
+
+        return _width;
+    }
+
+    float ListView::getHeight()
+    {
+        if (_height == 0.0f)
+        {
+            return _actualHeight;
+        }
+
+        return _height;
     }
 
     int ListView::getControlType()
@@ -51,6 +70,8 @@ namespace Editor
 
 	void ListView::update()
 	{
+        ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height));
+
 		for (auto it : _controls)
 		{
 			it->update();
@@ -68,5 +89,11 @@ namespace Editor
 				selectItem(it, true);
 			}
 		}
+
+        ImGui::EndChild();
+
+		ImVec2 _actualSize = ImGui::GetWindowSize();
+        _actualWidth = _actualSize.x;
+        _actualHeight = _actualSize.y;
 	}
 }

@@ -21,6 +21,8 @@ namespace Editor
         Core::Texture* _image = nullptr;
 
         bool _active = true;
+        float _actualWidth = 0.0f;
+        float _actualHeight = 0.0f;
 
         std::function<void()> _onClick = nullptr;
 
@@ -28,6 +30,9 @@ namespace Editor
         Button();
         Button(Core::String text);
         virtual ~Button();
+
+        virtual float getWidth();
+        virtual float getHeight();
 
         virtual int getControlType();
         virtual void update();

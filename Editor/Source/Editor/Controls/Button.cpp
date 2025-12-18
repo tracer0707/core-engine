@@ -18,6 +18,26 @@ namespace Editor
 
     Button::~Button() {}
 
+    float Button::getWidth()
+    {
+        if (_width == 0.0f)
+        {
+            return _actualWidth;
+        }
+
+        return _width;
+    }
+
+    float Button::getHeight()
+    {
+        if (_height == 0.0f)
+        {
+            return _actualHeight;
+        }
+
+        return _height;
+    }
+
     void Button::update()
     {
         if (!_visible) return;
@@ -34,19 +54,23 @@ namespace Editor
 
         if (_image != nullptr)
         {
-            int w = _width > 0 ? _width : _image->getWidth();
-            int h = _height > 0 ? _height : _image->getHeight();
+            int w = _width;
+            int h = _height;
 
-            ImVec2 imgSize(w, h);
-            std::string label = _text.std_str();
             ImGuiStyle& style = ImGui::GetStyle();
+            ImVec2 padding = style.FramePadding;
+
+            std::string label = _text.std_str();
+            float spacing = !label.empty() ? style.ItemInnerSpacing.y : 0;
+            ImVec2 text_size = !label.empty() ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
+
+            ImVec2 imgSize(w - padding.x * 2.0f, h - spacing - text_size.y - padding.y * 2.0f);
             ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-            ImVec2 padding = style.FramePadding;
-            ImVec2 text_size = !label.empty() ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
-            float spacing = !label.empty() ? style.ItemInnerSpacing.y : 0;
+            if (text_size.x > w) text_size.x = w;
+            if (text_size.y > h) text_size.y = h;
 
-            ImVec2 total_size(imgSize.x + padding.x * 2.0f, imgSize.y + spacing + text_size.y + padding.y * 2.0f);
+            ImVec2 total_size(w, h);
 
             ImGui::PushID(_id.c_str());
             hasClick = ImGui::InvisibleButton("##ImageButtonWithText", total_size);
@@ -65,16 +89,21 @@ namespace Editor
             draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1),
                                 ImVec2(1, 0));
 
-            ImVec2 text_p(pos.x + (size.x - text_size.x) * 0.5f, img_p.y + imgSize.y + spacing);
             ImU32 text_col = ImGui::GetColorU32(ImGuiCol_Text);
-            ImVec2 text_min = ImVec2(pos.x + padding.x, img_p.y + imgSize.y + spacing);
-            ImVec2 text_max = ImVec2(pos.x + size.x - padding.x, text_min.y + text_size.y);
+
+            float lowSize = (size.x - text_size.x) * 0.5f;
+            float highSize = (size.x + text_size.x) * 0.5f;
+            ImVec2 text_min(pos.x + lowSize, img_p.y + imgSize.y + spacing);
+            ImVec2 text_max(pos.x + highSize, text_min.y + text_size.y);
 
             ImGui::RenderTextEllipsis(draw_list, text_min, text_max, text_max.x, text_max.x, label.c_str(), nullptr, nullptr);
         }
         else
         {
             hasClick = ImGui::Button(_text.std_str().c_str(), ImVec2(_width, _height));
+            ImVec2 _actualSize = ImGui::GetItemRectSize();
+            _actualWidth = _actualSize.x;
+            _actualHeight = _actualSize.y;
         }
 
         ImGui::PopStyleVar();
