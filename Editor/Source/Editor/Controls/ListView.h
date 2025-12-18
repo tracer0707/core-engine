@@ -22,16 +22,16 @@ namespace Editor
 		ListView();
 		virtual ~ListView();
 
-		virtual float getWidth();
-        virtual float getHeight();
+		virtual float getWidth() const;
+        virtual float getHeight() const;
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
 		void setOnSelectionChanged(std::function<void(Core::List<Control*>&)> callback) { _onSelectionChanged = callback; }
 		void setOnItemClick(std::function<void(Control*)> callback) { _onItemClick = callback; }
 
-		Core::List<Control*>& getSelectedItems() { return _selectedItems; }
+		const Core::List<Control*>& getSelectedItems() const { return _selectedItems; }
 		bool isItemSelected(Control* node);
 
 		void selectItem(Control* value, bool byUser = true);

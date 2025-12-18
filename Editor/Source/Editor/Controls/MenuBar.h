@@ -16,12 +16,12 @@ namespace Editor
 		MenuBar();
 		virtual ~MenuBar();
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
 		void setIsMainMenu(bool value) { _isMainMenu = value; }
-		bool getIsMainMenu() { return _isMainMenu; }
+		bool getIsMainMenu() const { return _isMainMenu; }
 
-		float getHeight() { return _height; }
+		float getHeight() const { return _height; }
 	};
 }

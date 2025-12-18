@@ -11,7 +11,7 @@ namespace Editor
 
 	TreeView::~TreeView() {}
 
-	int TreeView::getControlType()
+	int TreeView::getControlType() const
 	{
 		return CONTROL_TREE_VIEW;
 	}
@@ -94,7 +94,7 @@ namespace Editor
 		Container::clear();
 	}
 
-	bool TreeView::isNodeSelected(TreeNode* node)
+	bool TreeView::isNodeSelected(TreeNode* node) const
 	{
 		return _selectedNodes.contains(node);
 	}

@@ -16,13 +16,13 @@ namespace Editor
 		Label(Core::String text);
 		virtual ~Label();
 
-		Core::String getText() { return _text; }
+		Core::String getText() const { return _text; }
 		void setText(Core::String value) { _text = value; }
 
-        virtual float getWidth();
-        virtual float getHeight();
+        virtual float getWidth() const;
+        virtual float getHeight() const;
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 	};
 }

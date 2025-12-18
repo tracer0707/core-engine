@@ -26,7 +26,7 @@ namespace Editor
 		ImGui::Text(_str.c_str());
 	}
 
-	float Label::getWidth()
+	float Label::getWidth() const
     {
 		if (_width == 0.0f)
 		{
@@ -37,7 +37,7 @@ namespace Editor
         return _width;
     }
 
-    float Label::getHeight()
+    float Label::getHeight() const
     {
         if (_height == 0.0f)
         {
@@ -48,7 +48,7 @@ namespace Editor
         return _height;
     }
 
-    int Label::getControlType()
+    int Label::getControlType() const
 	{
 		return CONTROL_LABEL;
 	}

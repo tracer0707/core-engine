@@ -55,10 +55,10 @@ namespace Editor
 		void setTransform(Core::Transformable* value) { _transform = value; }
 		Core::Transformable* getTransform() { return _transform; }
 
-		TransformSpace getTransformSpace() { return _transformSpace; }
+		TransformSpace getTransformSpace() const { return _transformSpace; }
 		void setTransformSpace(TransformSpace value) { _transformSpace = value; }
 
-		TransformMode getTransformMode() { return _transformMode; }
+		TransformMode getTransformMode() const { return _transformMode; }
 		void setTransformMode(TransformMode value) { _transformMode = value; }
 
 		Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);

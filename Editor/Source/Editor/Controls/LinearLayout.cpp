@@ -15,7 +15,7 @@ namespace Editor
 
     LinearLayout::~LinearLayout() {}
 
-    float LinearLayout::getWidth()
+    float LinearLayout::getWidth() const
     {
         if (_width == 0.0f)
         {
@@ -25,7 +25,7 @@ namespace Editor
         return _width;
     }
 
-    float LinearLayout::getHeight()
+    float LinearLayout::getHeight() const
     {
         if (_height == 0.0f)
         {
@@ -407,7 +407,7 @@ namespace Editor
         _actualHeight = _actualSize.y;
     }
 
-    int LinearLayout::getControlType()
+    int LinearLayout::getControlType() const
     {
         return CONTROL_LINEAR_LAYOUT;
     }

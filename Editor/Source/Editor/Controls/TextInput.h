@@ -24,13 +24,13 @@ namespace Editor
 		TextInput();
 		virtual ~TextInput();
 
-		virtual float getWidth();
-        virtual float getHeight();
+		virtual float getWidth() const;
+        virtual float getHeight() const;
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
-		Core::String getText();
+		Core::String getText() const;
 		void setText(Core::String value);
 
 		void setOnTextChanged(std::function<void(Core::String)> value) { _onTextChanged = value; }

@@ -4,9 +4,8 @@
 
 namespace Editor
 {
-	class Style
+	struct Style
 	{
-	public:
 		bool enabled = true;
 		float borderSize = 1.0f;
 		float opacity = 1.0f;

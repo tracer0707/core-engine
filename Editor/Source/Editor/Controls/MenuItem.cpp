@@ -36,7 +36,7 @@ namespace Editor
 		}
 	}
 
-	int MenuItem::getControlType()
+	int MenuItem::getControlType() const
 	{
 		return CONTROL_MENU_ITEM;
 	}

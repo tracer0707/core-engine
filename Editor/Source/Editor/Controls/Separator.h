@@ -19,10 +19,10 @@ namespace Editor
 		Separator();
 		virtual ~Separator();
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
 		void setSeparatorDirection(SeparatorDirection value) { _direction = value; }
-		SeparatorDirection getSeparatorDirection() { return _direction; }
+		SeparatorDirection getSeparatorDirection() const { return _direction; }
 	};
 }

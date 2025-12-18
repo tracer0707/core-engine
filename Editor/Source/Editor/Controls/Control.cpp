@@ -25,14 +25,14 @@ namespace Editor
         _objectTags[key] = value;
     }
 
-    void* Control::getObjectTag(int key)
+    void* Control::getObjectTag(int key) const
     {
         if (_objectTags.find(key) == _objectTags.end())
         {
             return nullptr;
         }
 
-        return _objectTags[key];
+        return _objectTags.at(key);
     }
 
     void Control::setStringTag(int key, Core::String value)
@@ -40,13 +40,13 @@ namespace Editor
         _stringTags[key] = value;
     }
 
-    Core::String Control::getStringTag(int key)
+    Core::String Control::getStringTag(int key) const
     {
         if (_stringTags.find(key) == _stringTags.end())
         {
-            return nullptr;
+            return Core::String::Empty;
         }
 
-        return _stringTags[key];
+        return _stringTags.at(key);
     }
 } // namespace Editor

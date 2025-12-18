@@ -19,7 +19,7 @@ namespace Editor
 		TreeView();
 		virtual ~TreeView();
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
 		TreeNode* createNode();
@@ -27,8 +27,8 @@ namespace Editor
 
 		void setOnSelectionChanged(std::function<void(Core::List<TreeNode*>&)> callback) { _onSelectionChanged = callback; }
 
-		Core::List<TreeNode*>& getSelectedNodes() { return _selectedNodes; }
-		bool isNodeSelected(TreeNode* node);
+		const Core::List<TreeNode*>& getSelectedNodes() const { return _selectedNodes; }
+		bool isNodeSelected(TreeNode* node) const;
 
 		TreeNode* findNodeByTag(int key, void* value);
 

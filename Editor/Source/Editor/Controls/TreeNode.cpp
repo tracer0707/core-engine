@@ -19,7 +19,7 @@ namespace Editor
 		_tree = nullptr;
 	}
 
-	int TreeNode::getControlType()
+	int TreeNode::getControlType() const
 	{
 		return CONTROL_TREE_NODE;
 	}

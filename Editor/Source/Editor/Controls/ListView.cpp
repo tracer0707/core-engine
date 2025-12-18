@@ -14,7 +14,7 @@ namespace Editor
     ListView::~ListView()
     {}
 
-    float ListView::getWidth()
+    float ListView::getWidth() const
     {
         if (_width == 0.0f)
         {
@@ -24,7 +24,7 @@ namespace Editor
         return _width;
     }
 
-    float ListView::getHeight()
+    float ListView::getHeight() const
     {
         if (_height == 0.0f)
         {
@@ -34,7 +34,7 @@ namespace Editor
         return _height;
     }
 
-    int ListView::getControlType()
+    int ListView::getControlType() const
     {
         return CONTROL_LIST_VIEW;
     }

@@ -25,16 +25,16 @@ namespace Editor
 		FileInput(Core::Application* application);
 		virtual ~FileInput();
 
-		virtual float getWidth();
+		virtual float getWidth() const;
         virtual void setWidth(float value);
 
-        virtual float getHeight();
+        virtual float getHeight() const;
         virtual void setHeight(float value);
 
-		Core::String getFilePath();
+		Core::String getFilePath() const;
 		void setFilePath(Core::String value);
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 	};
 }

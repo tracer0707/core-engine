@@ -43,7 +43,7 @@ namespace Editor
 		_application = nullptr;
     }
 
-    float FileInput::getWidth()
+    float FileInput::getWidth() const
     {
         return _layout->getWidth();
     }
@@ -53,7 +53,7 @@ namespace Editor
         _layout->setWidth(value);
 	}
 
-    float FileInput::getHeight()
+    float FileInput::getHeight() const
     {
         return _layout->getHeight();
     }
@@ -63,7 +63,7 @@ namespace Editor
         _layout->setHeight(value);
 	}
 
-	Core::String FileInput::getFilePath()
+	Core::String FileInput::getFilePath() const
 	{
 		return _textInput->getText();
 	}
@@ -73,7 +73,7 @@ namespace Editor
 		_textInput->setText(value);
 	}
 
-	int FileInput::getControlType()
+	int FileInput::getControlType() const
 	{
 		return CONTROL_FILE_INPUT;
 	}

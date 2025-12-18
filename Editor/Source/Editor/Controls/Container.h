@@ -20,7 +20,7 @@ namespace Editor
 		void addControl(Control* value);
 		void removeControl(Control* value);
 		Control* getControl(int index) { return _controls.get(index); }
-		int getControlsCount() { return _controls.count(); }
+		const int& getControlsCount() const { return _controls.count(); }
 		virtual void clear();
 	};
 }

@@ -36,26 +36,26 @@ namespace Editor
         Style& getStyle() { return _style; }
 
         virtual void setWidth(float value) { _width = value; }
-        virtual float getWidth() { return _width; }
+        virtual float getWidth() const { return _width; }
 
         virtual void setHeight(float value) { _height = value; }
-        virtual float getHeight() { return _height; }
+        virtual float getHeight() const { return _height; }
 
         void setSize(float width, float height);
 
         void setVisible(bool value) { _visible = value; }
-        bool getVisible() { return _visible; }
+        bool getVisible() const { return _visible; }
 
         void setEnabled(bool value) { _style.enabled = value; }
-        bool getEnabled() { return _style.enabled; }
+        bool getEnabled() const { return _style.enabled; }
 
         void setObjectTag(int key, void* value);
-        void* getObjectTag(int key);
+        void* getObjectTag(int key) const;
 
         void setStringTag(int key, Core::String value);
-        Core::String getStringTag(int key);
+        Core::String getStringTag(int key) const;
 
-        virtual int getControlType() = 0;
+        virtual int getControlType() const = 0;
 
         virtual void update() = 0;
     };

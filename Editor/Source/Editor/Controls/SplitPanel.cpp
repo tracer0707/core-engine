@@ -17,7 +17,7 @@ namespace Editor
 
     SplitPanel::~SplitPanel() {}
 
-    int SplitPanel::getControlType()
+    int SplitPanel::getControlType() const
     {
         return CONTROL_SPLITTER;
     }

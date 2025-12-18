@@ -28,7 +28,7 @@ namespace Editor
 
         void setStartSize(float value) { _startSize = value; }
 
-        virtual int getControlType();
+        virtual int getControlType() const;
         virtual void update();
     };
 } // namespace Editor

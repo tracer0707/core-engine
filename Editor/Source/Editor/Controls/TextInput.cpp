@@ -12,7 +12,7 @@ namespace Editor
 
 	TextInput::~TextInput() {}
 
-    float TextInput::getWidth()
+    float TextInput::getWidth() const
     {
         if (_width == 0.0f)
         {
@@ -22,7 +22,7 @@ namespace Editor
         return _width;
     }
 
-    float TextInput::getHeight()
+    float TextInput::getHeight() const
     {
         if (_height == 0.0f)
         {
@@ -32,7 +32,7 @@ namespace Editor
         return _height;
     }
 
-	Core::String TextInput::getText()
+	Core::String TextInput::getText() const
 	{
 		return _text;
 	}
@@ -75,7 +75,7 @@ namespace Editor
 		}
 	}
 
-	int TextInput::getControlType()
+	int TextInput::getControlType() const
 	{
 		return CONTROL_TEXT_INPUT;
 	}

@@ -76,22 +76,22 @@ namespace Editor
         LinearLayout(LayoutDirection direction);
         virtual ~LinearLayout();
 
-        virtual float getWidth();
-        virtual float getHeight();
+        virtual float getWidth() const;
+        virtual float getHeight() const;
 
-        virtual int getControlType();
+        virtual int getControlType() const;
         virtual void update();
 
         void setDirection(LayoutDirection value) { _direction = value; }
-        LayoutDirection getDirection() { return _direction; }
+        LayoutDirection getDirection() const { return _direction; }
 
         void setHorizontalAlignment(LayoutHorizontalAlignment align) { _horizontalAlign = align; }
-        LayoutHorizontalAlignment getHorizontalAlignment() { return _horizontalAlign; }
+        LayoutHorizontalAlignment getHorizontalAlignment() const { return _horizontalAlign; }
 
         void setVerticalAlignment(LayoutVerticalAlignment align) { _verticalAlign = align; }
-        LayoutVerticalAlignment getVerticalAlignment() { return _verticalAlign; }
+        LayoutVerticalAlignment getVerticalAlignment() const { return _verticalAlign; }
 
         void setWrapMode(LayoutWrapMode mode) { _wrapMode = mode; }
-        LayoutWrapMode getWrapMode() { return _wrapMode; }
+        LayoutWrapMode getWrapMode() const { return _wrapMode; }
     };
 } // namespace Editor

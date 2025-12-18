@@ -27,16 +27,16 @@ namespace Editor
 		virtual ~TreeNode();
 
 	public:
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
 		void setText(Core::String value) { _text = value; }
-		Core::String getText() { return _text; }
+		Core::String getText() const { return _text; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 		void setOnOpen(std::function<void(bool)> callback) { _onOpen = callback; }
 
 		void setAlwaysShowOpenArrow(bool value) { _alwaysShowOpenArrow = value; }
-		bool getAlwaysShowOpenArrow() { return _alwaysShowOpenArrow; }
+		bool getAlwaysShowOpenArrow() const { return _alwaysShowOpenArrow; }
 	};
 }

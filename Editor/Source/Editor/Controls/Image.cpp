@@ -35,7 +35,7 @@ namespace Editor
         ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
     }
 
-    int Image::getControlType()
+    int Image::getControlType() const
     {
         return CONTROL_IMAGE;
     }

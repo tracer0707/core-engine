@@ -23,7 +23,7 @@ namespace Editor
 		}
 	}
 
-	int Separator::getControlType()
+	int Separator::getControlType() const
 	{
 		return CONTROL_SEPARATOR;
 	}

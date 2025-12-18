@@ -22,10 +22,10 @@ namespace Editor
 		MenuItem(Core::String text);
 		~MenuItem();
 
-		virtual int getControlType();
+		virtual int getControlType() const;
 		virtual void update();
 
-		Core::String getText() { return _text; }
+		Core::String getText() const { return _text; }
 		void setText(Core::String value) { _text = value; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }

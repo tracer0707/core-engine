@@ -18,7 +18,7 @@ namespace Editor
 
     Button::~Button() {}
 
-    float Button::getWidth()
+    float Button::getWidth() const
     {
         if (_width == 0.0f)
         {
@@ -28,7 +28,7 @@ namespace Editor
         return _width;
     }
 
-    float Button::getHeight()
+    float Button::getHeight() const
     {
         if (_height == 0.0f)
         {
@@ -123,7 +123,7 @@ namespace Editor
         }
     }
 
-    int Button::getControlType()
+    int Button::getControlType() const
     {
         return CONTROL_BUTTON;
     }

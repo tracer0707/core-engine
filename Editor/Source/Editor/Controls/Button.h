@@ -31,19 +31,19 @@ namespace Editor
         Button(Core::String text);
         virtual ~Button();
 
-        virtual float getWidth();
-        virtual float getHeight();
+        virtual float getWidth() const;
+        virtual float getHeight() const;
 
-        virtual int getControlType();
+        virtual int getControlType() const;
         virtual void update();
 
-        Core::String getText() { return _text; }
+        Core::String getText() const { return _text; }
         void setText(Core::String value) { _text = value; }
 
         void setImage(Core::Texture* value) { _image = value; }
         Core::Texture* getImage() { return _image; }
 
-        bool getActive() { return _active; }
+        bool getActive() const { return _active; }
         void setActive(bool value);
 
         void setOnClick(std::function<void()> callback) { _onClick = callback; }

@@ -20,13 +20,13 @@ namespace Editor
         Image(int width, int height);
         virtual ~Image();
 
-        virtual int getControlType();
+        virtual int getControlType() const;
         virtual void update();
 
         void setTexture(Core::Texture* value) { texture = value; }
         Core::Texture* getTexture() { return texture; }
 
         void setNativeTextureId(unsigned int value) { nativeTextureId = value; }
-        unsigned int getNativeTextureId() { return nativeTextureId; }
+        unsigned int getNativeTextureId() const { return nativeTextureId; }
     };
 } // namespace Editor
