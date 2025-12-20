@@ -15,18 +15,17 @@ namespace Editor
     {
       private:
         SplitPanelDirection _direction = SplitPanelDirection::Vertical;
-        Core::List<float> _sizeMap;
 
-        float _startSize = 100;
-        float _prevWidth = 0;
-        float _prevHeight = 0;
+        float _actualWidth = 0.0f;
+        float _actualHeight = 0.0f;
 
       public:
         SplitPanel();
         SplitPanel(SplitPanelDirection direction);
         virtual ~SplitPanel();
 
-        void setStartSize(float value) { _startSize = value; }
+        virtual float getWidth() const;
+        virtual float getHeight() const;
 
         virtual int getControlType() const;
         virtual void update();

@@ -35,7 +35,6 @@ namespace Editor
         _mainLayout->getStyle().paddingY = 20;
 
         LinearLayout* _layout = new LinearLayout(LayoutDirection::Horizontal);
-        _layout->setVerticalAlignment(LayoutVerticalAlignment::Top);
         _layout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
 
         _listLayout = new LinearLayout(LayoutDirection::Vertical);

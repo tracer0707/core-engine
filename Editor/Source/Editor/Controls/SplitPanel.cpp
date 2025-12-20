@@ -17,6 +17,26 @@ namespace Editor
 
     SplitPanel::~SplitPanel() {}
 
+    float SplitPanel::getWidth() const
+    {
+        if (_width == 0.0f)
+        {
+            return _actualWidth;
+        }
+
+        return _width;
+    }
+
+    float SplitPanel::getHeight() const
+    {
+        if (_height == 0.0f)
+        {
+            return _actualHeight;
+        }
+
+        return _height;
+    }
+
     int SplitPanel::getControlType() const
     {
         return CONTROL_SPLITTER;
@@ -27,80 +47,94 @@ namespace Editor
         if (!_visible) return;
 
         ImGuiContext& g = *ImGui::GetCurrentContext();
+        ImGuiStyle& style = ImGui::GetStyle();
+        
+        ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height));
+
+        ImGuiWindow* window = g.CurrentWindow;
 
         float splitter_width = 2.0f;
 
         bool horizontal = _direction == SplitPanelDirection::Horizontal;
 
-        ImGuiWindow* window = g.CurrentWindow;
-
-        ImVec2 sz = ImGui::GetContentRegionAvail();
-
-        bool _new = _sizeMap.count() != _controls.count() && _sizeMap.count() == 0;
-
-        if (_sizeMap.count() != _controls.count())
-        {
-            _sizeMap.resize(_controls.count());
-            _sizeMap.fill(100);
-            if (_new && _sizeMap.count() > 0) _sizeMap.set(0, _startSize);
-        }
-
-        if (_new && _sizeMap.count() > 1 || sz.x != _prevWidth || sz.y != _prevHeight)
-        {
-            float size = horizontal ? sz.x : sz.y;
-            _sizeMap.set(_sizeMap.count() - 1, size - (100 * (_sizeMap.count() - 1)));
-        }
-
-        _prevWidth = sz.x;
-        _prevHeight = sz.y;
+        float size2 = 0;
 
         for (int i = 0; i < _controls.count(); ++i)
         {
             Control* control1 = _controls.get(i);
-
-            ImRect splitter_bb;
-
-            float size1 = _sizeMap.get(i);
-            float size2 = 30;
-
-            if (i + 1 < _sizeMap.count())
-            {
-                size2 = _sizeMap.get(i + 1);
-            }
-
-            if (horizontal)
-            {
-                splitter_bb = ImRect(window->DC.CursorPos.x + size1, window->DC.CursorPos.y, window->DC.CursorPos.x + size1 + splitter_width,
-                                     window->DC.CursorPos.y + window->Size.y);
-            }
-            else
-            {
-                splitter_bb = ImRect(window->DC.CursorPos.x, window->DC.CursorPos.y + size1, window->DC.CursorPos.x + window->Size.x,
-                                     window->DC.CursorPos.y + size1 + splitter_width);
-            }
-
-            if (horizontal)
-                control1->setWidth(size1);
-            else
-                control1->setHeight(size1);
-
             control1->update();
 
-            if (i == _controls.count() - 1) break;
+            float size1 = 0;
 
-            if (horizontal) ImGui::SameLine();
-
-            ImGuiID splitter_id = window->GetID((_id + "_split_" + std::to_string(i)).c_str());
-            if (ImGui::SplitterBehavior(splitter_bb, splitter_id, horizontal ? ImGuiAxis_X : ImGuiAxis_Y, &size1, &size2, 30, 30, 0.0f))
+            if (horizontal)
             {
-                _sizeMap.set(i, size1);
-                if (i + 1 < _sizeMap.count())
-                {
-                    _sizeMap.set(i + 1, size2);
-                }
+                size1 = control1->getWidth();
+                ImGui::SameLine();
+            }
+            else
+            {
+                size1 = control1->getHeight();
+            }
+
+            if (i + 1 < _controls.count())
+            {
+                Control* control2 = _controls.get(i + 1);
+
+                if (horizontal)
+                    size2 = control2->getWidth();
+                else
+                    size2 = control2->getHeight();
+            }
+            else
+            {
+                break;
+            }
+
+            ImRect splitter_bb;
+            
+            if (horizontal)
+            {
+                splitter_bb = ImRect(window->DC.CursorPos.x - style.FramePadding.x, window->DC.CursorPos.y,
+                                     window->DC.CursorPos.x - style.FramePadding.x + splitter_width,
+                                     window->DC.CursorPos.y + _actualHeight);
+            }
+            else
+            {
+                splitter_bb = ImRect(window->DC.CursorPos.x - style.FramePadding.x, window->DC.CursorPos.y,
+                                     window->DC.CursorPos.x - style.FramePadding.x + _actualWidth,
+                                     window->DC.CursorPos.y + splitter_width);
+            }
+
+            ImGuiID splitter_id = window->GetID((_id + "_splitter_" + std::to_string(i)).c_str());
+            ImGui::SplitterBehavior(splitter_bb, splitter_id, horizontal ? ImGuiAxis_X : ImGuiAxis_Y, &size1, &size2, 30, 30);
+
+            Control* control2 = _controls.get(i + 1);
+            if (i + 1 == _controls.count() - 1)
+            {
+                if (horizontal)
+                    size2 = window->SizeFull.x - size1 - style.FramePadding.x;
+                else
+                    size2 = window->SizeFull.y - size1 - style.FramePadding.y;
+            }
+
+            if (horizontal)
+            {
+                control1->setWidth(size1);
+                control2->setWidth(size2);
+            }
+            else
+            {
+                control1->setHeight(size1);
+                control2->setHeight(size2);
             }
 
             if (horizontal) ImGui::SameLine();
         }
+
+        ImGui::EndChild();
+
+        ImVec2 _actualSize = ImGui::GetWindowSize();
+        _actualWidth = _actualSize.x;
+        _actualHeight = _actualSize.y;
     }
 } // namespace Editor

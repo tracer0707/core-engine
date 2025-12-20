@@ -30,10 +30,10 @@ namespace Editor
         _rightPane = new LinearLayout(LayoutDirection::Horizontal);
 
         SplitPanel* _splitPanel = new SplitPanel(SplitPanelDirection::Horizontal);
-        _splitPanel->setStartSize(200);
         _treeView = new TreeView();
 
         _leftPane->addControl(_treeView);
+        _leftPane->setWidth(200);
 
         _splitPanel->addControl(_leftPane);
         _splitPanel->addControl(_rightPane);
