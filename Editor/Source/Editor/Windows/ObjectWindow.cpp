@@ -26,15 +26,15 @@ namespace Editor
 		/* Layout */
 
 		layoutMain = new LinearLayout(LayoutDirection::Horizontal);
-		
+
 		addControl(layoutMain);
 
 		/* CSG tool */
 
 		Button* csgTool = new Button();
-        Core::Texture* csgToolImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"), Core::TextureFormat::RGBA8,
-            LoadMethod::Direct);
+		Core::Texture* csgToolImage =
+			contentLoader->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"),
+											   Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		csgTool->setSize(32, 32);
 		csgTool->setImage(csgToolImage);
 
@@ -51,9 +51,9 @@ namespace Editor
 		/* Light tool */
 
 		Button* lightTool = new Button();
-        Core::Texture* lightToolImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"),
-            Core::TextureFormat::RGBA8, LoadMethod::Direct);
+		Core::Texture* lightToolImage = contentLoader->loadTextureFromFile(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), Core::TextureFormat::RGBA8,
+			LoadMethod::Direct);
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
 
@@ -61,16 +61,16 @@ namespace Editor
 			disableAll();
 			modMgr->unsetCurrentModifier();
 			lightTool->setActive(true);
-			});
+		});
 
 		layoutMain->addControl(lightTool);
 
 		/* Camera tool */
 
 		Button* cameraTool = new Button();
-        Core::Texture* cameraToolImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"),
-            Core::TextureFormat::RGBA8, LoadMethod::Direct);
+		Core::Texture* cameraToolImage =
+			contentLoader->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"),
+											   Core::TextureFormat::RGBA8, LoadMethod::Direct);
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);
 
@@ -78,19 +78,14 @@ namespace Editor
 			disableAll();
 			modMgr->unsetCurrentModifier();
 			cameraTool->setActive(true);
-			});
+		});
 
 		layoutMain->addControl(cameraTool);
 
-		_parent->getEventHandler()->addEvent([this]
-		{
-			disableAll();
-		});
+		_parent->getEventHandler()->addEvent([this] { disableAll(); });
 	}
 
-	ObjectWindow::~ObjectWindow()
-	{
-	}
+	ObjectWindow::~ObjectWindow() {}
 
 	void ObjectWindow::disableAll()
 	{
@@ -114,4 +109,4 @@ namespace Editor
 		modMgr->setCurrentModifier(name);
 		return true;
 	}
-}
+} // namespace Editor
