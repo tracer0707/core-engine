@@ -8,19 +8,19 @@ namespace Editor
 
 	class Container
 	{
-	protected:
-		Core::List<Control*> _controls;
+		protected:
+			Core::List<Control*> _controls;
 
-		void updateControls();
+			void updateControls();
 
-	public:
-		Container();
-		virtual ~Container();
+		public:
+			Container();
+			virtual ~Container();
 
-		void addControl(Control* value);
-		void removeControl(Control* value);
-		Control* getControl(int index) { return _controls.get(index); }
-		const int& getControlsCount() const { return _controls.count(); }
-		virtual void clear();
+			void addControl(Control* value);
+			void removeControl(Control* value);
+			Control* getControl(int index) { return _controls.get(index); }
+			int getControlsCount() const { return _controls.count(); }
+			virtual void clear();
 	};
-}
+} // namespace Editor

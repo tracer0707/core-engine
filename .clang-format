@@ -5,7 +5,10 @@ AlignEscapedNewlines: Right
 AlignOperands: true
 AlignTrailingComments: true
 NamespaceIndentation: All
+UseTab: Always
 IndentWidth: 4
+TabWidth: 4
+IndentAccessModifiers: true
 ColumnLimit: 150
 SortIncludes: false
 AllowShortFunctionsOnASingleLine: Inline

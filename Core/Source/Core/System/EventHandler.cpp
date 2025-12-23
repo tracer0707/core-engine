@@ -22,4 +22,4 @@ namespace Core
 	{
 		events.push_back(value);
 	}
-}
+} // namespace Core

@@ -1,18 +1,19 @@
 #include "Texture.h"
 
+#include <cstring>
 #include "../Renderer/Renderer.h"
 
 namespace Core
 {
-    Texture::Texture(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format) : Content()
+	Texture::Texture(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format) : Content()
 	{
 		_renderer = renderer;
 		_format = format;
-        _size = size;
+		_size = size;
 		_width = width;
-        _height = height;
-        _data = new unsigned char[_size];
-        memcpy(_data, data, _size);
+		_height = height;
+		_data = new unsigned char[_size];
+		memcpy(_data, data, _size);
 
 		if (format == TextureFormat::RGBA8)
 		{
@@ -30,14 +31,13 @@ namespace Core
 
 	Texture::~Texture()
 	{
-		if (_data != nullptr)
-			delete[] _data;
+		if (_data != nullptr) delete[] _data;
 
 		_renderer->deleteTexture(_nativeId);
 		_data = nullptr;
 		_renderer = nullptr;
-        _width = 0;
-        _height = 0;
+		_width = 0;
+		_height = 0;
 		_nativeId = 0;
 	}
 
@@ -45,4 +45,4 @@ namespace Core
 	{
 		_renderer->bindTexture(_nativeId, name, slot);
 	}
-}
+} // namespace Core
