@@ -3,6 +3,7 @@
 #include <filesystem>
 #include <imgui.h>
 
+#include <Core/System/EventHandler.h>
 #include <Core/Content/Texture.h>
 
 #include "WindowList.h"
@@ -19,7 +20,11 @@
 #include "../Controls/TreeView.h"
 #include "../Controls/TreeNode.h"
 #include "../Controls/Separator.h"
+#include "../Controls/ContextMenu.h"
+#include "../Controls/MenuItem.h"
 #include "../Windows/WindowManager.h"
+
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -42,6 +47,11 @@ namespace Editor
 		Core::Texture* _addTex = loadEditorIcon(_parent->getContentLoader(), "editor/add.png");
 		Button* _createResourceBtn = new Button(_addTex);
 		_createResourceBtn->setSize(30, 30);
+		_createResourceBtn->setUseContextMenu(true);
+
+		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
+		MenuItem* _materialMenuItem = new MenuItem("Material");
+		_createResourceBtnCm->addControl(_materialMenuItem);
 
 		_toolbar->setHeight(30);
 		_toolbar->addControl(_createResourceBtn);
@@ -77,7 +87,7 @@ namespace Editor
 	void ContentWindow::rescanContent()
 	{
 		_treeView->clear();
-		FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, false);
+		FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, false, false);
 	}
 
 	void ContentWindow::setCurrentDir(Core::String path)
@@ -102,6 +112,21 @@ namespace Editor
 
 			thumbnail->setImage(tex);
 			thumbnail->setSize(64, 80);
+			thumbnail->setStringTag(0, it.generic_string());
+
+			if (fs::is_directory(it))
+			{
+				thumbnail->setOnDoubleClick([=]() {
+					Core::String p = thumbnail->getStringTag(0);
+					TreeNode* node = _treeView->findNodeByTag(0, p);
+					if (node != nullptr)
+					{
+						node->openParents();
+						_treeView->selectNode(node, false);
+					}
+					_parent->getEventHandler()->addEvent([this, p]() { setCurrentDir(p); });
+				});
+			}
 
 			_rightPane->addControl(thumbnail);
 

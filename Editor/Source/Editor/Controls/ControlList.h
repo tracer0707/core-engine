@@ -57,4 +57,8 @@ namespace Core
 #ifndef CONTROL_SPLITTER
 #define CONTROL_SPLITTER 13
 #endif
+
+#ifndef CONTROL_CONTEXT_MENU
+#define CONTROL_CONTEXT_MENU 14
+#endif
 }

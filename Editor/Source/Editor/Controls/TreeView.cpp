@@ -36,6 +36,21 @@ namespace Editor
 		delete value;
 	}
 
+	static void findNodeByTagRecursive(int key, Core::String value, TreeNode* root, TreeNode** out)
+	{
+		if (root->getStringTag(key) == value)
+		{
+			*out = root;
+			return;
+		}
+
+		for (int i = 0; i < root->getControlsCount(); ++i)
+		{
+			if (*out != nullptr) return;
+			findNodeByTagRecursive(key, value, (TreeNode*)root->getControl(i), out);
+		}
+	}
+
 	static void findNodeByTagRecursive(int key, void* value, TreeNode* root, TreeNode** out)
 	{
 		if (root->getObjectTag(key) == value)
@@ -49,6 +64,19 @@ namespace Editor
 			if (*out != nullptr) return;
 			findNodeByTagRecursive(key, value, (TreeNode*)root->getControl(i), out);
 		}
+	}
+
+	TreeNode* TreeView::findNodeByTag(int key, Core::String value)
+	{
+		TreeNode* node = nullptr;
+
+		for (int i = 0; i < _controls.count(); ++i)
+		{
+			findNodeByTagRecursive(key, value, (TreeNode*)_controls.get(i), &node);
+			if (node != nullptr) break;
+		}
+
+		return node;
 	}
 
 	TreeNode* TreeView::findNodeByTag(int key, void* value)

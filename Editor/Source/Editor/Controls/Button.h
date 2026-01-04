@@ -3,6 +3,7 @@
 #include <functional>
 
 #include <Core/Shared/String.h>
+#include <Core/Shared/List.h>
 
 #include "Control.h"
 
@@ -13,6 +14,8 @@ namespace Core
 
 namespace Editor
 {
+	class ContextMenu;
+
 	class Button : public Control
 	{
 		private:
@@ -24,7 +27,10 @@ namespace Editor
 			float _actualWidth = 0.0f;
 			float _actualHeight = 0.0f;
 
+			ContextMenu* _contextMenu = nullptr;
+
 			std::function<void()> _onClick = nullptr;
+			std::function<void()> _onDblClick = nullptr;
 
 		public:
 			Button();
@@ -48,6 +54,12 @@ namespace Editor
 			bool getActive() const { return _active; }
 			void setActive(bool value);
 
+			bool getUseContextMenu() const { return _contextMenu != nullptr; }
+			void setUseContextMenu(bool value);
+
+			ContextMenu* getContextMenu() const { return _contextMenu; }
+
 			void setOnClick(std::function<void()> callback) { _onClick = callback; }
+			void setOnDoubleClick(std::function<void()> callback) { _onDblClick = callback; }
 	};
 } // namespace Editor

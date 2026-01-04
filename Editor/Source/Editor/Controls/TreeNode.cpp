@@ -32,11 +32,12 @@ namespace Editor
 		if (_tree->isNodeSelected(this)) flags |= ImGuiTreeNodeFlags_Selected;
 		if (isLeaf) flags |= ImGuiTreeNodeFlags_Leaf;
 
-		bool isNodeOpened = ImGui::TreeNodeEx(_text.std_str().c_str(), flags);
+		ImGui::SetNextItemOpen(_isNodeOpened, ImGuiCond_Always);
+		_isNodeOpened = ImGui::TreeNodeEx(_text.std_str().c_str(), flags);
 
-		if (_prevOpened != isNodeOpened && !isLeaf)
+		if (_prevOpened != _isNodeOpened && !isLeaf)
 		{
-			if (_onOpen != nullptr) _onOpen(isNodeOpened);
+			if (_onOpen != nullptr) _onOpen(_isNodeOpened);
 		}
 		else
 		{
@@ -47,9 +48,9 @@ namespace Editor
 			}
 		}
 
-		_prevOpened = isNodeOpened;
-		
-		if (isNodeOpened)
+		_prevOpened = _isNodeOpened;
+
+		if (_isNodeOpened)
 		{
 			for (auto it : _controls)
 			{
@@ -59,4 +60,44 @@ namespace Editor
 			ImGui::TreePop();
 		}
 	}
-}
+
+	void TreeNode::open(bool openChildren)
+	{
+		_isNodeOpened = true;
+
+		if (openChildren)
+		{
+			for (auto it : _controls)
+			{
+				if (((Control*)it)->getControlType() != CONTROL_TREE_NODE) return;
+				TreeNode* _childNode = (TreeNode*)it;
+				_childNode->open(true);
+			}
+		}
+	}
+
+	void TreeNode::openParents()
+	{
+		if (_parent == nullptr) return;
+		if (!dynamic_cast<Control*>(_parent)) return;
+		if (((Control*)_parent)->getControlType() != CONTROL_TREE_NODE) return;
+		TreeNode* _parentNode = (TreeNode*)_parent;
+		_parentNode->open();
+		_parentNode->openParents();
+	}
+
+	void TreeNode::close(bool closeChildren)
+	{
+		_isNodeOpened = false;
+
+		if (closeChildren)
+		{
+			for (auto it : _controls)
+			{
+				if (((Control*)it)->getControlType() != CONTROL_TREE_NODE) return;
+				TreeNode* _childNode = (TreeNode*)it;
+				_childNode->close(true);
+			}
+		}
+	}
+} // namespace Editor

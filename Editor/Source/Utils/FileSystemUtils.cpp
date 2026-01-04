@@ -83,7 +83,7 @@ namespace Editor
 		}
 	}
 
-	void FileSystemUtils::fsToTreeView(Core::String path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode)
+	void FileSystemUtils::fsToTreeView(Core::String path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode, bool lazyLoad)
 	{
 		std::string _path = path.std_str();
 
@@ -96,7 +96,7 @@ namespace Editor
 				if (Core::Path::isHiddenOrSystem(path)) continue;
 				if (!addFiles && !std::filesystem::is_directory(entry)) continue;
 
-				fsToTreeView(path, treeView, nullptr, addFiles, true);
+				fsToTreeView(path, treeView, nullptr, addFiles, true, lazyLoad);
 			}
 			return;
 		}
@@ -139,23 +139,37 @@ namespace Editor
 				_node->setAlwaysShowOpenArrow(hasDir);
 			}
 
-			_node->setOnOpen([_path, treeView, _node, addFiles, fs](bool opened) {
-				if (opened)
-				{
-					for (const auto& entry : fs)
+			if (lazyLoad)
+			{
+				_node->setOnOpen([_path, treeView, _node, addFiles, fs, lazyLoad](bool opened) {
+					if (opened)
 					{
-						Core::String path = entry.generic_string();
-						if (Core::Path::isHiddenOrSystem(path)) continue;
-						if (!addFiles && !std::filesystem::is_directory(entry)) continue;
+						for (const auto& entry : fs)
+						{
+							Core::String path = entry.generic_string();
+							if (Core::Path::isHiddenOrSystem(path)) continue;
+							if (!addFiles && !std::filesystem::is_directory(entry)) continue;
 
-						fsToTreeView(path, treeView, _node, addFiles, true);
+							fsToTreeView(path, treeView, _node, addFiles, true, lazyLoad);
+						}
 					}
-				}
-				else
+					else
+					{
+						_node->clear();
+					}
+				});
+			}
+			else
+			{
+				for (const auto& entry : fs)
 				{
-					_node->clear();
+					Core::String path = entry.generic_string();
+					if (Core::Path::isHiddenOrSystem(path)) continue;
+					if (!addFiles && !std::filesystem::is_directory(entry)) continue;
+
+					fsToTreeView(path, treeView, _node, addFiles, true, lazyLoad);
 				}
-			});
+			}
 		}
 	}
 } // namespace Editor

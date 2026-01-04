@@ -6,6 +6,7 @@
 #include <Core/Content/Texture.h>
 
 #include "ControlList.h"
+#include "ContextMenu.h"
 
 namespace Editor
 {
@@ -27,7 +28,29 @@ namespace Editor
 		_image = image;
 	}
 
-	Button::~Button() {}
+	Button::~Button()
+	{
+		setUseContextMenu(false);
+	}
+
+	void Button::setUseContextMenu(bool value)
+	{
+		if (value)
+		{
+			if (_contextMenu == nullptr)
+			{
+				_contextMenu = new ContextMenu();
+			}
+		}
+		else
+		{
+			if (_contextMenu != nullptr)
+			{
+				delete _contextMenu;
+				_contextMenu = nullptr;
+			}
+		}
+	}
 
 	float Button::getWidth() const
 	{
@@ -54,6 +77,7 @@ namespace Editor
 		if (!_visible) return;
 
 		bool hasClick = false;
+		bool hasDblClick = false;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
 
@@ -65,8 +89,8 @@ namespace Editor
 
 		if (_image != nullptr)
 		{
-			int w = _width;
-			int h = _height;
+			float w = _width;
+			float h = _height;
 
 			ImGuiStyle& style = ImGui::GetStyle();
 			ImVec2 padding = style.FramePadding;
@@ -89,6 +113,8 @@ namespace Editor
 
 			ImGui::PushID(_id.c_str());
 			hasClick = ImGui::InvisibleButton("##ImageButtonWithText", total_size);
+			hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
+
 			bool hovered = ImGui::IsItemHovered();
 			bool active = ImGui::IsItemActive();
 			ImVec2 pos = ImGui::GetItemRectMin();
@@ -119,6 +145,8 @@ namespace Editor
 		else
 		{
 			hasClick = ImGui::Button(_text.std_str().c_str(), ImVec2(_width, _height));
+			hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
+
 			ImVec2 _actualSize = ImGui::GetItemRectSize();
 			_actualWidth = _actualSize.x;
 			_actualHeight = _actualSize.y;
@@ -134,10 +162,30 @@ namespace Editor
 
 		if (hasClick)
 		{
-			if (_onClick != nullptr)
+			if (_contextMenu != nullptr)
 			{
-				_onClick();
+				_contextMenu->open();
 			}
+			else
+			{
+				if (_onClick != nullptr)
+				{
+					_onClick();
+				}
+			}
+		}
+
+		if (hasDblClick)
+		{
+			if (_onDblClick != nullptr)
+			{
+				_onDblClick();
+			}
+		}
+
+		if (_contextMenu != nullptr)
+		{
+			_contextMenu->update();
 		}
 	}
 
