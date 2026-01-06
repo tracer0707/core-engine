@@ -2,6 +2,7 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
+#include <imgui_stdlib.h>
 
 #include <Core/Content/Texture.h>
 
@@ -96,8 +97,8 @@ namespace Editor
 			ImVec2 padding = style.FramePadding;
 
 			std::string label = _text.std_str();
-			float spacing = !label.empty() ? style.ItemInnerSpacing.y : 0;
-			ImVec2 text_size = !label.empty() ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
+			float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0;
+			ImVec2 text_size = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
 
 			if (w == 0) w = _image->getWidth() + padding.x * 2.0f;
 			if (h == 0) h = _image->getHeight() + spacing + text_size.y + padding.y * 2.0f;
@@ -110,11 +111,11 @@ namespace Editor
 			if (text_size.y > h) text_size.y = h;
 
 			ImVec2 total_size(w, h);
+			ImVec2 cur = ImGui::GetCursorPos();
 
 			ImGui::PushID(_id.c_str());
 			hasClick = ImGui::InvisibleButton("##ImageButtonWithText", total_size);
 			hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
-
 			bool hovered = ImGui::IsItemHovered();
 			bool active = ImGui::IsItemActive();
 			ImVec2 pos = ImGui::GetItemRectMin();
@@ -137,7 +138,44 @@ namespace Editor
 			ImVec2 text_min(pos.x + lowSize, img_p.y + imgSize.y + spacing);
 			ImVec2 text_max(pos.x + highSize, text_min.y + text_size.y);
 
-			ImGui::RenderTextEllipsis(draw_list, text_min, text_max, text_max.x, text_max.x, label.c_str(), nullptr, nullptr);
+			if (!_edit)
+			{
+				ImGui::RenderTextEllipsis(draw_list, text_min, text_max, text_max.x, text_max.x, label.c_str(), nullptr, nullptr);
+			}
+			else
+			{
+				ImGui::SetCursorPos(ImVec2(cur.x + padding.x, cur.y + imgSize.y + spacing));
+				ImGui::SetNextItemWidth(_width - padding.x * 2.0f);
+				ImGui::SetScrollHereX();
+				ImGui::SetScrollHereY();
+				ImGui::SetKeyboardFocusHere(0);
+				ImGui::InputText(("##" + _id + "_ed").c_str(), &label);
+				_text = label;
+				if (!ImGui::IsItemHovered() && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)))
+				{
+					_edit = false;
+					if (label.empty())
+					{
+						if (_onEditCancelled != nullptr)
+						{
+							_onEditCancelled();
+						}
+					}
+					else if (_onEditComplete != nullptr)
+					{
+						_onEditComplete();
+					}
+				}
+				if (ImGui::IsKeyPressed(ImGuiKey_Enter))
+				{
+					_edit = false;
+					if (_onEditComplete != nullptr)
+					{
+						_onEditComplete();
+					}
+				}
+				ImGui::SetCursorPos(cur);
+			}
 
 			_actualWidth = w;
 			_actualHeight = h;

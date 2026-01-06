@@ -13,6 +13,7 @@
 #include "../../System/ThumbCacheManager.h"
 #include "../../System/ContentLoader.h"
 #include "../../Main/Editor.h"
+#include "../../Shared/IconsForkAwesome.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
@@ -30,6 +31,9 @@ namespace fs = std::filesystem;
 
 namespace Editor
 {
+	static int THUMB_W = 64;
+	static int THUMB_H = 80;
+
 	ContentWindow::ContentWindow(WindowManager* parent) : Window(parent, CONTENT_WINDOW)
 	{
 		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Vertical);
@@ -45,13 +49,30 @@ namespace Editor
 		_treeView = new TreeView();
 
 		Core::Texture* _addTex = loadEditorIcon(_parent->getContentLoader(), "editor/add.png");
-		Button* _createResourceBtn = new Button(_addTex);
+		_createResourceBtn = new Button(_addTex);
 		_createResourceBtn->setSize(30, 30);
 		_createResourceBtn->setUseContextMenu(true);
+		_createResourceBtn->setEnabled(false);
 
 		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
-		MenuItem* _materialMenuItem = new MenuItem("Material");
+		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE "Material");
 		_createResourceBtnCm->addControl(_materialMenuItem);
+
+		_materialMenuItem->setOnClick([this](){
+			_parent->getEventHandler()->addEvent([this](){
+				Button* thumbnail = createThumbnailForEdit(".mat");
+				thumbnail->setOnEditCancelled([this, thumbnail]() {
+					_parent->getEventHandler()->addEvent([this, thumbnail]() {
+						_rightPane->removeControl(thumbnail);
+						delete thumbnail;
+					});
+				});
+				thumbnail->setOnEditComplete([](){
+
+				});
+				_rightPane->addControl(thumbnail);
+			});
+		});
 
 		_toolbar->setHeight(30);
 		_toolbar->addControl(_createResourceBtn);
@@ -70,6 +91,7 @@ namespace Editor
 
 		_treeView->setOnSelectionChanged([this](Core::List<TreeNode*>& nodes) {
 			if (nodes.count() == 0) return;
+			_createResourceBtn->setEnabled(true);
 			setCurrentDir(nodes[0]->getStringTag(0));
 		});
 	}
@@ -111,7 +133,7 @@ namespace Editor
 			}
 
 			thumbnail->setImage(tex);
-			thumbnail->setSize(64, 80);
+			thumbnail->setSize(THUMB_W, THUMB_H);
 			thumbnail->setStringTag(0, it.generic_string());
 
 			if (fs::is_directory(it))
@@ -153,6 +175,10 @@ namespace Editor
 		{
 			iconName = "mesh.png";
 		}
+		else if (ext == ".mat")
+		{
+			iconName = "material.png";
+		}
 
 		if (iconName != Core::String::Empty)
 		{
@@ -160,6 +186,16 @@ namespace Editor
 		}
 
 		return nullptr;
+	}
+
+	Button* ContentWindow::createThumbnailForEdit(Core::String ext)
+	{
+		Button* thumbnail = new Button();
+		Core::Texture* tex = getIcon(ext);
+		thumbnail->setImage(tex);
+		thumbnail->setSize(THUMB_W, THUMB_H);
+		thumbnail->startEdit();
+		return thumbnail;
 	}
 
 	void ContentWindow::clearLoadedResources()
