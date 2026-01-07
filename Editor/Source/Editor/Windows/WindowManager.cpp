@@ -8,6 +8,7 @@
 
 #include "Window.h"
 #include "ContentWindow.h"
+#include "ContentImportWindow.h"
 #include "CSGEditWindow.h"
 #include "CSGObjectWindow.h"
 #include "GizmoWindow.h"
@@ -77,6 +78,10 @@ namespace Editor
 		if (name == CONTENT_WINDOW)
 		{
 			window = new ContentWindow(this);
+		}
+		else if (name == CONTENT_IMPORT_WINDOW)
+		{
+			window = new ContentImportWindow(this);
 		}
 		else if (name == CSG_EDIT_WINDOW)
 		{

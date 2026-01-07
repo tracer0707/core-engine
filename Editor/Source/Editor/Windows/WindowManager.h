@@ -23,6 +23,7 @@ namespace Editor
 	class MenuBar;
 	class Window;
 	class ContentWindow;
+	class ContentImportWindow;
 	class CSGEditWindow;
 	class CSGObjectWindow;
 	class GizmoWindow;
@@ -96,6 +97,12 @@ namespace Editor
 	inline ContentWindow* WindowManager::addWindow<ContentWindow*>()
 	{
 		return (ContentWindow*)addWindow(CONTENT_WINDOW);
+	}
+
+	template <>
+	inline ContentImportWindow* WindowManager::addWindow<ContentImportWindow*>()
+	{
+		return (ContentImportWindow*)addWindow(CONTENT_IMPORT_WINDOW);
 	}
 
 	template <>

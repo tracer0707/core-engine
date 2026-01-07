@@ -26,6 +26,7 @@
 #include "../Editor/Windows/ContentWindow.h"
 #include "../Editor/Windows/GizmoWindow.h"
 #include "../Editor/Windows/CSGEditWindow.h"
+#include "../Editor/Windows/ContentImportWindow.h"
 
 #include "../Editor/Modifiers/ModifierManager.h"
 #include "../Editor/Modifiers/CSGModifier.h"
@@ -81,6 +82,8 @@ namespace Editor
 		_inspectorWindow = _windowManager->addWindow<InspectorWindow*>();
 		_hierarchyWindow = _windowManager->addWindow<HierarchyWindow*>();
 		_contentWindow = _windowManager->addWindow<ContentWindow*>();
+		_contentImportWindow = _windowManager->addWindow<ContentImportWindow*>();
+		_contentImportWindow->setVisible(false);
 
 		_contentWindow->setContentDir(app->getContentPath());
 

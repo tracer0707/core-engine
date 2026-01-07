@@ -59,7 +59,7 @@ namespace Editor
 			listView->addControl(ll);
 		}
 
-		listView->setOnItemClick([=](Control* item) {
+		listView->setOnItemClick([this, app](Control* item) {
 			Core::String* path = (Core::String*)item->getObjectTag(0);
 			app->initProject(*path);
 			app->setSelectedProject(*path);
@@ -73,22 +73,22 @@ namespace Editor
 
 		_listLayout->addControl(listView);
 
-		_openBtn->setOnClick([=]() {
-			app->getEventHandler()->addEvent([=] {
+		_openBtn->setOnClick([this, app]() {
+			app->getEventHandler()->addEvent([this, app] {
 				if (_fsDlg != nullptr) return;
 
 				_fsDlg = new FileSystemDialog(app);
 				_fsDlg->setShowFiles(false);
 
-				_fsDlg->setOnClose([=]() { _fsDlg = nullptr; });
+				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
 
-				_fsDlg->setOnPathSelected([=](Core::String fileName) {
-					app->initProject(fileName);
-					app->setSelectedProject(fileName);
+				_fsDlg->setOnPathSelected([this, app](Core::List<Core::String> fileNames) {
+					app->initProject(fileNames[0]);
+					app->setSelectedProject(fileNames[0]);
 
-					if (!Serialization::RecentProjectList::getProjectList().contains(fileName))
+					if (!Serialization::RecentProjectList::getProjectList().contains(fileNames[0]))
 					{
-						Serialization::RecentProjectList::getProjectList().add(fileName);
+						Serialization::RecentProjectList::getProjectList().add(fileNames[0]);
 						Serialization::RecentProjectList::save();
 					}
 

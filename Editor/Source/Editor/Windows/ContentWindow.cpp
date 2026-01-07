@@ -25,7 +25,9 @@
 #include "../Controls/Separator.h"
 #include "../Controls/ContextMenu.h"
 #include "../Controls/MenuItem.h"
+#include "../Windows/WindowList.h"
 #include "../Windows/WindowManager.h"
+#include "../Windows/ContentImportWindow.h"
 
 #include <iostream>
 
@@ -70,11 +72,14 @@ namespace Editor
 				if (_fsDlg != nullptr) return;
 
 				_fsDlg = new FileSystemDialog(parent->getApplication());
+				_fsDlg->setIsMultiple(true);
 
-				_fsDlg->setOnClose([=]() { _fsDlg = nullptr; });
+				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
 
-				_fsDlg->setOnPathSelected([=](Core::String fileName) {
-
+				_fsDlg->setOnPathSelected([this, parent](Core::List<Core::String> fileNames) {
+					ContentImportWindow* wnd = (ContentImportWindow*)parent->getWindow(CONTENT_IMPORT_WINDOW);
+					wnd->setVisible(true);
+					wnd->setFiles(fileNames);
 				});
 			});
 		});

@@ -25,6 +25,7 @@ namespace Editor
 	class InspectorWindow;
 	class HierarchyWindow;
 	class ContentWindow;
+	class ContentImportWindow;
 	class GizmoWindow;
 	class CSGEditWindow;
 	class CSGModifier;
@@ -62,6 +63,7 @@ namespace Editor
 					InspectorWindow* _inspectorWindow = nullptr;
 					HierarchyWindow* _hierarchyWindow = nullptr;
 					ContentWindow* _contentWindow = nullptr;
+					ContentImportWindow* _contentImportWindow = nullptr;
 					GizmoWindow* _gizmoWindow = nullptr;
 					CSGEditWindow* _csgEditWindow = nullptr;
 
