@@ -16,6 +16,8 @@ namespace Editor
 
 			std::function<void(Core::List<TreeNode*>&)> _onSelectionChanged = nullptr;
 
+			bool _selectMultiple = false;
+
 		public:
 			TreeView();
 			virtual ~TreeView();
@@ -36,6 +38,9 @@ namespace Editor
 
 			void selectNode(TreeNode* value, bool byUser = true);
 			void clearSelection(bool byUser = true);
+
+			bool getSelectMultiple() { return _selectMultiple; }
+			void setSelectMultiple(bool value) { _selectMultiple = value; }
 
 			virtual void clear();
 	};

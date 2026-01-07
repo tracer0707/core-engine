@@ -2,6 +2,7 @@
 
 #include <Core/System/Window.h>
 #include <Core/Shared/String.h>
+#include <Core/Shared/List.h>
 
 #include <functional>
 
@@ -11,32 +12,43 @@ namespace Editor
 	class LinearLayout;
 	class Font;
 	class TreeView;
+	class TextInput;
+	class Label;
 
 	class FileSystemDialog : public Core::Window
 	{
-	private:
-		Font* _mainFont = nullptr;
-		FullscreenWindow* _wnd = nullptr;
-		LinearLayout* _layout = nullptr;
-		LinearLayout* _topLayout = nullptr;
-		LinearLayout* _bottomLayout = nullptr;
-		TreeView* _treeView = nullptr;
-		bool _showFiles = true;
+		private:
+			Font* _mainFont = nullptr;
+			FullscreenWindow* _wnd = nullptr;
+			LinearLayout* _layout = nullptr;
+			LinearLayout* _topLayout = nullptr;
+			LinearLayout* _bottomLayout = nullptr;
+			TreeView* _treeView = nullptr;
+			TextInput* _selectedPath = nullptr;
+			Label* _selectedCount = nullptr;
 
-		std::function<void(Core::String)> _onPathSelected = nullptr;
+			bool _showFiles = true;
+			bool _multiple = false;
 
-		void rescanFs();
+			Core::List<Core::String> _selected;
 
-		virtual void update();
-		virtual void render();
+			std::function<void(Core::List<Core::String>)> _onPathSelected = nullptr;
 
-	public:
-		FileSystemDialog(Core::Application* app);
-		virtual ~FileSystemDialog();
+			void rescanFs();
 
-		bool getShowFiles() { return _showFiles; }
-		void setShowFiles(bool value);
+			virtual void update();
+			virtual void render();
 
-		void setOnPathSelected(std::function<void(Core::String)> value) { _onPathSelected = value; }
+		public:
+			FileSystemDialog(Core::Application* app);
+			virtual ~FileSystemDialog();
+
+			bool getShowFiles() { return _showFiles; }
+			void setShowFiles(bool value);
+
+			bool getIsMultiple() { return _multiple; }
+			void setIsMultiple(bool value);
+
+			void setOnPathSelected(std::function<void(Core::List<Core::String>)> value) { _onPathSelected = value; }
 	};
-}
+} // namespace Editor

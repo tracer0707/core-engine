@@ -1,5 +1,7 @@
 #include "TreeView.h"
 
+#include <imgui.h>
+
 #include <Core/System/EventHandler.h>
 
 #include "ControlList.h"
@@ -94,10 +96,16 @@ namespace Editor
 
 	void TreeView::selectNode(TreeNode* value, bool byUser)
 	{
-		_selectedNodes.clear();
+		bool ctrlKey = ImGui::IsKeyDown(ImGuiKey_LeftCtrl);
+
+		if (!_selectMultiple || !ctrlKey) _selectedNodes.clear();
+
 		if (value != nullptr)
 		{
-			_selectedNodes.add(value);
+			if (!_selectedNodes.contains(value))
+				_selectedNodes.add(value);
+			else
+				_selectedNodes.remove(value);
 		}
 
 		if (byUser && _onSelectionChanged != nullptr)
@@ -126,4 +134,4 @@ namespace Editor
 	{
 		return _selectedNodes.contains(node);
 	}
-}
+} // namespace Editor

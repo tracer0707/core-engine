@@ -20,18 +20,14 @@ namespace Editor
 
 		_textInput = new TextInput();
 		Button* button = new Button("...");
-		
-		_layout->addControl(_textInput);
-        _layout->addControl(button);
 
-		button->setOnClick([=] {
-			application->getEventHandler()->addEvent([=]
-			{
+		_layout->addControl(_textInput);
+		_layout->addControl(button);
+
+		button->setOnClick([this, application] {
+			application->getEventHandler()->addEvent([this, application] {
 				FileSystemDialog* dlg = new FileSystemDialog(_application);
-				dlg->setOnPathSelected([=](Core::String fileName)
-				{
-					_textInput->setText(fileName);
-				});
+				dlg->setOnPathSelected([this](Core::List<Core::String> fileNames) { _textInput->setText(fileNames[0]); });
 			});
 		});
 
@@ -41,26 +37,26 @@ namespace Editor
 	FileInput::~FileInput()
 	{
 		_application = nullptr;
-    }
-
-    float FileInput::getWidth() const
-    {
-        return _layout->getWidth();
-    }
-
-    void FileInput::setWidth(float value)
-	{
-        _layout->setWidth(value);
 	}
 
-    float FileInput::getHeight() const
-    {
-        return _layout->getHeight();
-    }
-
-    void FileInput::setHeight(float value)
+	float FileInput::getWidth() const
 	{
-        _layout->setHeight(value);
+		return _layout->getWidth();
+	}
+
+	void FileInput::setWidth(float value)
+	{
+		_layout->setWidth(value);
+	}
+
+	float FileInput::getHeight() const
+	{
+		return _layout->getHeight();
+	}
+
+	void FileInput::setHeight(float value)
+	{
+		_layout->setHeight(value);
 	}
 
 	Core::String FileInput::getFilePath() const
@@ -87,4 +83,4 @@ namespace Editor
 			it->update();
 		}
 	}
-}
+} // namespace Editor
