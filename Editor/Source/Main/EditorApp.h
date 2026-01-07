@@ -31,15 +31,15 @@ namespace Editor
 	class Font;
 	class ThumbCacheManager;
 
-	class Editor : public Core::Application
+	class EditorApp : public Core::Application
 	{
 		private:
 			class MainWindow : public Core::Window
 			{
-					friend class Editor;
+					friend class EditorApp;
 
 				private:
-					MainWindow(Editor* app);
+					MainWindow(EditorApp* app);
 					virtual ~MainWindow();
 
 					virtual void update();

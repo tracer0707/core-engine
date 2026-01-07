@@ -18,7 +18,7 @@ namespace Core
 		_width = width;
 		_height = height;
 
-		_ctx = SDL_CreateWindow(title.std_str().c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height,
+		_ctx = SDL_CreateWindow(title.std_str().c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _width, _height,
 								SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
 
 		if (_ctx == NULL)

@@ -21,7 +21,7 @@
 #include <Core/Content/Material.h>
 #include <Core/Content/ContentManager.h>
 
-#include "../Main/Editor.h"
+#include "../Main/EditorApp.h"
 #include "../Utils/bc7compressor.h"
 #include "../Utils/TextureUtils.h"
 
@@ -32,7 +32,7 @@ namespace fs = std::filesystem;
 
 namespace Editor
 {
-	ContentImporter::ContentImporter(Editor* app)
+	ContentImporter::ContentImporter(EditorApp* app)
 	{
 		_app = app;
 

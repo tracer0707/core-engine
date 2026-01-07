@@ -11,17 +11,15 @@ namespace Core
 
 namespace Editor
 {
-	class Editor;
+	class EditorApp;
 
 	class ContentImporter
 	{
 		private:
-			Editor* _app = nullptr;
-
-			void loadTexture(Core::String fileName, Core::TextureFormat format, unsigned char** data, int& size, int& w, int& h);
+			EditorApp* _app = nullptr;
 
 		public:
-			ContentImporter(Editor* app);
+			ContentImporter(EditorApp* app);
 			~ContentImporter();
 
 			Core::Texture* importTexture(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format);

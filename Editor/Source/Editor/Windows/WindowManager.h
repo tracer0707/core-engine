@@ -19,6 +19,7 @@ namespace Core
 
 namespace Editor
 {
+	class EditorApp;
 	class MenuBar;
 	class Window;
 	class ContentWindow;
@@ -35,6 +36,7 @@ namespace Editor
 	class WindowManager
 	{
 		private:
+			EditorApp* _app = nullptr;
 			Core::Time* _time = nullptr;
 			Core::Renderer* _renderer = nullptr;
 			Core::InputManager* _inputManager = nullptr;
@@ -51,7 +53,7 @@ namespace Editor
 			Window* addWindow(std::string name);
 
 		public:
-			WindowManager();
+			WindowManager(EditorApp* ed);
 			~WindowManager();
 
 			void initWindows();
@@ -63,12 +65,14 @@ namespace Editor
 			void setContentManager(Core::ContentManager* value) { _contentManager = value; }
 			void setThumbCacheManager(ThumbCacheManager* value) { _thumbCacheManager = value; }
 
-			Core::Time* getTime() { return _time; }
-			Core::Renderer* getRenderer() { return _renderer; }
-			Core::InputManager* getInputManager() { return _inputManager; }
-			Core::EventHandler* getEventHandler() { return _eventHandler; }
-			Core::ContentManager* getContentManager() { return _contentManager; }
-			ThumbCacheManager* getThumbCacheManager() { return _thumbCacheManager; }
+			EditorApp* getApplication() const { return _app; }
+
+			Core::Time* getTime() const { return _time; }
+			Core::Renderer* getRenderer() const { return _renderer; }
+			Core::InputManager* getInputManager() const { return _inputManager; }
+			Core::EventHandler* getEventHandler() const { return _eventHandler; }
+			Core::ContentManager* getContentManager() const { return _contentManager; }
+			ThumbCacheManager* getThumbCacheManager() const { return _thumbCacheManager; }
 
 			void invalidateAll();
 

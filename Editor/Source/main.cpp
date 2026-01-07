@@ -1,4 +1,4 @@
-#include "Main/Editor.h"
+#include "Main/EditorApp.h"
 #include "Main/ProjectManager.h"
 
 #include <FreeImage.h>
@@ -12,7 +12,7 @@ int main(int argc, char* argv[])
 
 	if (projectManager.isForceClosed()) return 0;
 
-	Editor::Editor editor;
+	Editor::EditorApp editor;
 	editor.setRootPath(projectManager.getSelectedProject());
 	editor.run();
 

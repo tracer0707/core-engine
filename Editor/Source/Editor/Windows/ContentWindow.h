@@ -14,12 +14,15 @@ namespace Editor
 	class TreeView;
 	class LinearLayout;
 	class Button;
+	class FileSystemDialog;
 
 	class ContentWindow : public Window
 	{
 		private:
 			Core::String _contentDir = Core::String::Empty;
 			Core::String _currentDir = Core::String::Empty;
+
+			FileSystemDialog* _fsDlg = nullptr;
 
 			TreeView* _treeView = nullptr;
 			LinearLayout* _rightPane = nullptr;

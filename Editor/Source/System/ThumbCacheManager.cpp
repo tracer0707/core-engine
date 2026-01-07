@@ -7,14 +7,14 @@
 #include <Core/Shared/Path.h>
 #include <Core/Content/ContentManager.h>
 
-#include "../Main/Editor.h"
+#include "../Main/EditorApp.h"
 #include "../Utils/TextureUtils.h"
 
 namespace fs = std::filesystem;
 
 namespace Editor
 {
-	ThumbCacheManager::ThumbCacheManager(Editor* app)
+	ThumbCacheManager::ThumbCacheManager(EditorApp* app)
 	{
 		_app = app;
 	}

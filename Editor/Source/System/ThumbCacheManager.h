@@ -5,15 +5,15 @@
 
 namespace Editor
 {
-	class Editor;
+	class EditorApp;
 
 	class ThumbCacheManager
 	{
 		private:
-			Editor* _app = nullptr;
+			EditorApp* _app = nullptr;
 
 		public:
-			ThumbCacheManager(Editor* app);
+			ThumbCacheManager(EditorApp* app);
 			~ThumbCacheManager();
 
 			Core::Texture* get(Core::String filePath);

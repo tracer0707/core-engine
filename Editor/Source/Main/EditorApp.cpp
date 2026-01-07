@@ -1,4 +1,4 @@
-#include "Editor.h"
+#include "EditorApp.h"
 
 #include <iostream>
 #include <filesystem>
@@ -40,7 +40,7 @@ namespace Editor
 {
 	/* WINDOW */
 
-	Editor::MainWindow::MainWindow(Editor* app) : Window(app, "Project Manager", 1366, 768)
+	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Project Manager", 1366, 768)
 	{
 		_thumbCacheManager = new ThumbCacheManager(app);
 
@@ -60,7 +60,7 @@ namespace Editor
 
 		_gridBuffer = _renderer->createBuffer(2048, 0);
 
-		_windowManager = new WindowManager();
+		_windowManager = new WindowManager(app);
 		_windowManager->setTime(_time);
 		_windowManager->setRenderer(_renderer);
 		_windowManager->setContentManager(_contentManager);
@@ -118,7 +118,7 @@ namespace Editor
 		_windowManager->initWindows();
 	}
 
-	Editor::MainWindow::~MainWindow()
+	EditorApp::MainWindow::~MainWindow()
 	{
 		ModifierManager::singleton()->destroy();
 
@@ -132,12 +132,12 @@ namespace Editor
 		_scene = nullptr;
 	}
 
-	void Editor::MainWindow::update()
+	void EditorApp::MainWindow::update()
 	{
 		ModifierManager::singleton()->update();
 	}
 
-	void Editor::MainWindow::render()
+	void EditorApp::MainWindow::render()
 	{
 		//** Render scene begin **//
 		_camera->getRenderTexture()->bind();
@@ -169,7 +169,7 @@ namespace Editor
 
 	/* EDITOR */
 
-	void Editor::init()
+	void EditorApp::init()
 	{
 		_wnd = new MainWindow(this);
 
@@ -192,7 +192,7 @@ namespace Editor
 		_mainFont->setDefault();
 	}
 
-	void Editor::destroy()
+	void EditorApp::destroy()
 	{
 		delete _mainFont;
 

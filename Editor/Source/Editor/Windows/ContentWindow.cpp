@@ -13,7 +13,8 @@
 #include "../../Utils/FileSystemUtils.h"
 #include "../../Utils/TextureUtils.h"
 #include "../../System/ThumbCacheManager.h"
-#include "../../Main/Editor.h"
+#include "../../Main/EditorApp.h"
+#include "../../Main/FileSystemDialog.h"
 #include "../../Shared/IconsForkAwesome.h"
 
 #include "../Controls/LinearLayout.h"
@@ -51,10 +52,32 @@ namespace Editor
 
 		Core::Texture* _addTex = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), _parent->getContentManager());
+
+		Core::Texture* _importTex = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/down.png"), _parent->getContentManager());
+
 		_createResourceBtn = new Button(_addTex);
 		_createResourceBtn->setSize(30, 30);
 		_createResourceBtn->setUseContextMenu(true);
 		_createResourceBtn->setEnabled(false);
+
+		Button* _importResourceBtn = new Button(_importTex);
+		_importResourceBtn->setSize(30, 30);
+		_importResourceBtn->setEnabled(true);
+
+		_importResourceBtn->setOnClick([this, parent]() {
+			parent->getApplication()->getEventHandler()->addEvent([this, parent] {
+				if (_fsDlg != nullptr) return;
+
+				_fsDlg = new FileSystemDialog(parent->getApplication());
+
+				_fsDlg->setOnClose([=]() { _fsDlg = nullptr; });
+
+				_fsDlg->setOnPathSelected([=](Core::String fileName) {
+
+				});
+			});
+		});
 
 		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
 		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE "Material");
@@ -81,6 +104,7 @@ namespace Editor
 
 		_toolbar->setHeight(30);
 		_toolbar->addControl(_createResourceBtn);
+		_toolbar->addControl(_importResourceBtn);
 
 		_leftPane->addControl(_treeView);
 		_leftPane->setWidth(200);
