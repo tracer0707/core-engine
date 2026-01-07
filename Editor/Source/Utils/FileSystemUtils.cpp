@@ -6,6 +6,9 @@
 
 #include "../Editor/Controls/TreeView.h"
 #include "../Editor/Controls/TreeNode.h"
+#include "../Shared/IconsForkAwesome.h"
+
+namespace fs = std::filesystem;
 
 namespace Editor
 {
@@ -17,14 +20,14 @@ namespace Editor
 		for (char drive = 'A'; drive <= 'Z'; ++drive)
 		{
 			std::string drive_path = std::string(1, drive) + ":\\";
-			if (std::filesystem::exists(drive_path))
+			if (fs::exists(drive_path))
 			{
 				drives.add(Core::String(drive_path).replace('\\', '/'));
 			}
 		}
 #else
-		std::filesystem::path mount_path("/");
-		if (std::filesystem::exists(mount_path))
+		fs::path mount_path("/");
+		if (fs::exists(mount_path))
 		{
 			drives.add(mount_path.string());
 		}
@@ -32,7 +35,7 @@ namespace Editor
 		std::vector<std::string> common_mounts = {"/mnt", "/media", "/Volumes"};
 		for (const auto& mount : common_mounts)
 		{
-			if (std::filesystem::exists(mount) && std::filesystem::is_directory(mount))
+			if (fs::exists(mount) && fs::is_directory(mount))
 			{
 				drives.add(mount);
 			}
@@ -42,17 +45,17 @@ namespace Editor
 		return drives;
 	}
 
-	Core::List<std::filesystem::path> FileSystemUtils::getPathEntries(Core::String path)
+	Core::List<fs::path> FileSystemUtils::getPathEntries(Core::String path)
 	{
-		Core::List<std::filesystem::path> fs;
-		for (const auto& entry : std::filesystem::directory_iterator(path.std_str(), std::filesystem::directory_options::skip_permission_denied))
+		Core::List<fs::path> fs;
+		for (const auto& entry : fs::directory_iterator(path.std_str(), fs::directory_options::skip_permission_denied))
 		{
 			fs.add(entry.path());
 		}
 
-		fs.sort([](std::filesystem::path& a, std::filesystem::path& b) -> bool {
-			bool isDirA = std::filesystem::is_directory(a);
-			bool isDirB = std::filesystem::is_directory(b);
+		fs.sort([](fs::path& a, fs::path& b) -> bool {
+			bool isDirA = fs::is_directory(a);
+			bool isDirB = fs::is_directory(b);
 
 			std::string _a = a.generic_string();
 			std::string _b = b.generic_string();
@@ -70,9 +73,9 @@ namespace Editor
 		return fs;
 	}
 
-	void FileSystemUtils::enumerateFiles(const std::filesystem::path& root, Core::List<std::filesystem::path>& out)
+	void FileSystemUtils::enumerateFiles(const fs::path& root, Core::List<fs::path>& out)
 	{
-		for (const auto& entry : std::filesystem::recursive_directory_iterator(root))
+		for (const auto& entry : fs::recursive_directory_iterator(root))
 		{
 			Core::String _p = entry.path().generic_string();
 			if (entry.is_regular_file() && !Core::Path::isHiddenOrSystem(_p))
@@ -89,26 +92,40 @@ namespace Editor
 
 		if (!showRootNode)
 		{
-			Core::List<std::filesystem::path> fs = getPathEntries(_path);
+			Core::List<fs::path> fs = getPathEntries(_path);
 			for (const auto& entry : fs)
 			{
 				Core::String path = entry.generic_string();
 				if (Core::Path::isHiddenOrSystem(path)) continue;
-				if (!addFiles && !std::filesystem::is_directory(entry)) continue;
+				if (!addFiles && !fs::is_directory(entry)) continue;
 
 				fsToTreeView(path, treeView, nullptr, addFiles, true, lazyLoad);
 			}
 			return;
 		}
 
-		auto fs_path = std::filesystem::path(path.std_str());
+		auto fs_path = fs::path(path.std_str());
 
 		TreeNode* _node = treeView->createNode();
 
 		if (fs_path.has_filename())
-			_node->setText(fs_path.filename().generic_string());
+		{
+			std::string icon;
+			if (fs::is_directory(fs_path))
+			{
+				icon = ICON_FK_FOLDER;
+			}
+			else
+			{
+				icon = ICON_FK_FILE;
+			}
+
+			_node->setText(icon + " " + fs_path.filename().generic_string());
+		}
 		else
+		{
 			_node->setText(_path);
+		}
 
 		_node->setStringTag(0, fs_path.generic_string());
 
@@ -117,9 +134,9 @@ namespace Editor
 		else
 			treeView->addControl(_node);
 
-		if (std::filesystem::is_directory(_path))
+		if (fs::is_directory(_path))
 		{
-			Core::List<std::filesystem::path> fs = getPathEntries(_path);
+			Core::List<fs::path> fs = getPathEntries(_path);
 
 			if (addFiles)
 			{
@@ -130,7 +147,7 @@ namespace Editor
 				bool hasDir = false;
 				for (const auto& entry : fs)
 				{
-					if (std::filesystem::is_directory(entry))
+					if (fs::is_directory(entry))
 					{
 						hasDir = true;
 						break;
@@ -148,7 +165,7 @@ namespace Editor
 						{
 							Core::String path = entry.generic_string();
 							if (Core::Path::isHiddenOrSystem(path)) continue;
-							if (!addFiles && !std::filesystem::is_directory(entry)) continue;
+							if (!addFiles && !fs::is_directory(entry)) continue;
 
 							fsToTreeView(path, treeView, _node, addFiles, true, lazyLoad);
 						}
@@ -165,7 +182,7 @@ namespace Editor
 				{
 					Core::String path = entry.generic_string();
 					if (Core::Path::isHiddenOrSystem(path)) continue;
-					if (!addFiles && !std::filesystem::is_directory(entry)) continue;
+					if (!addFiles && !fs::is_directory(entry)) continue;
 
 					fsToTreeView(path, treeView, _node, addFiles, true, lazyLoad);
 				}
