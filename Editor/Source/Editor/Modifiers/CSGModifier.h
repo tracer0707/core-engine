@@ -7,7 +7,6 @@
 namespace Core
 {
 	class VertexBuffer;
-	class ContentManager;
 } // namespace Core
 
 namespace Editor
@@ -46,7 +45,6 @@ namespace Editor
 			CSGObjectWindow* _csgObjectWindow = nullptr;
 			CSGEditWindow* _csgEditWindow = nullptr;
 
-			Core::ContentManager* _contentManager = nullptr;
 			Core::List<CSGModel*> _models;
 
 			CSGModel* _currentModel = nullptr;
