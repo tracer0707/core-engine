@@ -6,51 +6,58 @@
 
 namespace Core
 {
-    class Content;
+	class Content;
 	class Renderer;
 	class Material;
 	class Texture;
 	class Mesh;
 	class Shader;
 	class RenderTexture;
+	class ContentDatabase;
+	class Application;
 
 	class ContentManager
 	{
-	private:
-		Renderer* _renderer = nullptr;
-		Material* _defaultMaterial = nullptr;
-		Shader* _defaultShader = nullptr;
+		private:
+			Renderer* _renderer = nullptr;
+			Material* _defaultMaterial = nullptr;
+			Shader* _defaultShader = nullptr;
 
-		List<Content*> _materials;
-        List<Content*> _textures;
-        List<Content*> _meshes;
-        List<Content*> _shaders;
-        List<Content*> _renderTextures;
+			Application* _app = nullptr;
+			ContentDatabase* _db = nullptr;
 
-		void destroyContent(Content* value, List<Content*>& _list);
+			List<Content*> _materials;
+			List<Content*> _textures;
+			List<Content*> _meshes;
+			List<Content*> _shaders;
+			List<Content*> _renderTextures;
 
-	public:
-        ContentManager(Renderer* renderer);
-        ~ContentManager();
+			void destroyContent(Content* value, List<Content*>& _list);
 
-		Renderer* getRenderer() { return _renderer; }
+		public:
+			ContentManager(Application* app, Renderer* renderer);
+			~ContentManager();
 
-		Material* getDefaultMaterial() { return _defaultMaterial; }
-		Shader* getDefaultShader() { return _defaultShader; }
+			Renderer* getRenderer() const { return _renderer; }
 
-		Material* createMaterial();
-		Mesh* createMesh(int subMeshesCount);
-		RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
+			Material* getDefaultMaterial() const { return _defaultMaterial; }
+			Shader* getDefaultShader() const { return _defaultShader; }
 
-		Texture* loadTextureFromFile(String fileName, TextureFormat fmt);
-		Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
-		Mesh* loadMeshFromFile(String fileName);
-		Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);
+			ContentDatabase* getContentDatabase() const { return _db; }
 
-		void destroy(Material* value);
-        void destroy(Mesh* value);
-        void destroy(Texture* value);
-        void destroy(Shader* value);
-        void destroy(RenderTexture* value);
+			Material* createMaterial();
+			Mesh* createMesh(int subMeshesCount);
+			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
+
+			Texture* loadTextureFromFile(String fileName, TextureFormat fmt);
+			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
+			Mesh* loadMeshFromFile(String fileName);
+			Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);
+
+			void destroy(Material* value);
+			void destroy(Mesh* value);
+			void destroy(Texture* value);
+			void destroy(Shader* value);
+			void destroy(RenderTexture* value);
 	};
-}
+} // namespace Core

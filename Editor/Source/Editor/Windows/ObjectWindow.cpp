@@ -2,6 +2,7 @@
 
 #include <filesystem>
 
+#include <Core/Content/ContentManager.h>
 #include <Core/Content/Texture.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
@@ -9,19 +10,20 @@
 
 #include "WindowManager.h"
 
-#include "../../System/ContentLoader.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
 #include "../Modifiers/ModifierManager.h"
 #include "../Modifiers/CSGModifier.h"
 
+#include "../../Utils/TextureUtils.h"
+
 namespace Editor
 {
 	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, OBJECT_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
-		ContentLoader* contentLoader = parent->getContentLoader();
+		Core::ContentManager* contentMgr = parent->getContentManager();
 
 		/* Layout */
 
@@ -32,9 +34,8 @@ namespace Editor
 		/* CSG tool */
 
 		Button* csgTool = new Button();
-		Core::Texture* csgToolImage =
-			contentLoader->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"),
-											   Core::TextureFormat::RGBA8, LoadMethod::Direct);
+		Core::Texture* csgToolImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"), contentMgr);
 		csgTool->setSize(32, 32);
 		csgTool->setImage(csgToolImage);
 
@@ -51,9 +52,8 @@ namespace Editor
 		/* Light tool */
 
 		Button* lightTool = new Button();
-		Core::Texture* lightToolImage = contentLoader->loadTextureFromFile(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), Core::TextureFormat::RGBA8,
-			LoadMethod::Direct);
+		Core::Texture* lightToolImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), contentMgr);
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
 
@@ -68,9 +68,8 @@ namespace Editor
 		/* Camera tool */
 
 		Button* cameraTool = new Button();
-		Core::Texture* cameraToolImage =
-			contentLoader->loadTextureFromFile(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"),
-											   Core::TextureFormat::RGBA8, LoadMethod::Direct);
+		Core::Texture* cameraToolImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"), contentMgr);
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);
 

@@ -1,16 +1,22 @@
 #include "Main/Editor.h"
 #include "Main/ProjectManager.h"
 
+#include <FreeImage.h>
+
 int main(int argc, char* argv[])
 {
-    Editor::ProjectManager projectManager;
-    projectManager.run();
+	FreeImage_Initialise();
 
-    if (projectManager.isForceClosed()) return 0;
+	Editor::ProjectManager projectManager;
+	projectManager.run();
 
-    Editor::Editor editor;
-    editor.setRootPath(projectManager.getSelectedProject());
-    editor.run();
+	if (projectManager.isForceClosed()) return 0;
 
-    return 0;
+	Editor::Editor editor;
+	editor.setRootPath(projectManager.getSelectedProject());
+	editor.run();
+
+	FreeImage_DeInitialise();
+
+	return 0;
 }

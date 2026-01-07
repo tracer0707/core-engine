@@ -7,82 +7,75 @@
 
 namespace Core
 {
-    class Object;
-    class Camera;
-    class Transform;
-    class Scene;
-    class RenderTexture;
-    class VertexBuffer;
+	class Object;
+	class Camera;
+	class Transform;
+	class Scene;
+	class RenderTexture;
+	class VertexBuffer;
 } // namespace Core
 
 namespace Editor
 {
-    class WindowManager;
-    class MainMenu;
-    class SceneWindow;
-    class ObjectWindow;
-    class CSGObjectWindow;
-    class InspectorWindow;
-    class HierarchyWindow;
-    class ContentWindow;
-    class GizmoWindow;
-    class CSGEditWindow;
-    class CSGModifier;
-    class Font;
-    class ContentDatabase;
-    class ContentLoader;
-    class ThumbCacheManager;
+	class WindowManager;
+	class MainMenu;
+	class SceneWindow;
+	class ObjectWindow;
+	class CSGObjectWindow;
+	class InspectorWindow;
+	class HierarchyWindow;
+	class ContentWindow;
+	class GizmoWindow;
+	class CSGEditWindow;
+	class CSGModifier;
+	class Font;
+	class ThumbCacheManager;
 
-    class Editor : public Core::Application
-    {
-    private:
-        class MainWindow : public Core::Window
-        {
-            friend class Editor;
+	class Editor : public Core::Application
+	{
+		private:
+			class MainWindow : public Core::Window
+			{
+					friend class Editor;
 
-          private:
-            MainWindow(Editor* app);
-            virtual ~MainWindow();
+				private:
+					MainWindow(Editor* app);
+					virtual ~MainWindow();
 
-            virtual void update();
-            virtual void render();
+					virtual void update();
+					virtual void render();
 
-            ContentDatabase* _contentDatabase = nullptr;
-            ContentLoader* _contentLoader = nullptr;
-            ThumbCacheManager* _thumbCacheManager = nullptr;
+					ThumbCacheManager* _thumbCacheManager = nullptr;
 
-            Core::Object* _cameraObject = nullptr;
-            Core::Camera* _camera = nullptr;
-            Core::Scene* _scene = nullptr;
-            Core::RenderTexture* _renderTexture = nullptr;
-            Core::VertexBuffer* _gridBuffer = nullptr;
+					Core::Object* _cameraObject = nullptr;
+					Core::Camera* _camera = nullptr;
+					Core::Scene* _scene = nullptr;
+					Core::RenderTexture* _renderTexture = nullptr;
+					Core::VertexBuffer* _gridBuffer = nullptr;
 
-            WindowManager* _windowManager = nullptr;
+					WindowManager* _windowManager = nullptr;
 
-            MainMenu* _mainMenu = nullptr;
-            SceneWindow* _sceneWindow = nullptr;
-            ObjectWindow* _objectWindow = nullptr;
-            CSGObjectWindow* _csgObjectWindow = nullptr;
-            InspectorWindow* _inspectorWindow = nullptr;
-            HierarchyWindow* _hierarchyWindow = nullptr;
-            ContentWindow* _contentWindow = nullptr;
-            GizmoWindow* _gizmoWindow = nullptr;
-            CSGEditWindow* _csgEditWindow = nullptr;
+					MainMenu* _mainMenu = nullptr;
+					SceneWindow* _sceneWindow = nullptr;
+					ObjectWindow* _objectWindow = nullptr;
+					CSGObjectWindow* _csgObjectWindow = nullptr;
+					InspectorWindow* _inspectorWindow = nullptr;
+					HierarchyWindow* _hierarchyWindow = nullptr;
+					ContentWindow* _contentWindow = nullptr;
+					GizmoWindow* _gizmoWindow = nullptr;
+					CSGEditWindow* _csgEditWindow = nullptr;
 
-            CSGModifier* _csgModifier = nullptr;
-        };
+					CSGModifier* _csgModifier = nullptr;
+			};
 
-        Font* _mainFont = nullptr;
-        MainWindow* _wnd = nullptr;
+			Font* _mainFont = nullptr;
+			MainWindow* _wnd = nullptr;
 
-        virtual void init();
-        virtual void destroy();
+			virtual void init();
+			virtual void destroy();
 
-    public:
-        Core::String getLibraryPath() { return Core::Path::combine(getRootPath(), "Library"); }
-        Core::String getLibraryContentPath() { return Core::Path::combine(getLibraryPath(), "Content"); }
-
-        Core::String getCachePath() { return Core::Path::combine(getLibraryPath(), "Cache"); }
-        Core::String getCacheThumbPath() { return Core::Path::combine(getCachePath(), "Thumbnails"); }
-    };
+		public:
+			Core::String getCachePath() { return Core::Path::combine(getRootPath(), "Cache"); }
+			Core::String getCacheThumbPath() { return Core::Path::combine(getCachePath(), "Thumbnails"); }
+	};
 } // namespace Editor

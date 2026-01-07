@@ -13,10 +13,10 @@ namespace Editor
 		_scene = nullptr;
 	}
 
-	void Modifier::init(Core::Renderer* renderer, Core::Scene* scene, ContentLoader* contentLoader)
+	void Modifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager)
 	{
 		_renderer = renderer;
 		_scene = scene;
-        _contentLoader = contentLoader;
+		_contentManager = contentManager;
 	}
-}
+} // namespace Editor

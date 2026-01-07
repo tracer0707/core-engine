@@ -6,16 +6,13 @@
 #include <Core/System/EventHandler.h>
 #include <Core/Content/Texture.h>
 #include <Core/Content/Material.h>
-#include <Core/Serialization/JsonSerialization.h>
 #include <Core/Content/ContentManager.h>
 
 #include "WindowList.h"
 
-#include "../../Serialization/JsonSerialization.h"
 #include "../../Utils/FileSystemUtils.h"
-#include "../../Utils/EditorIcons.h"
+#include "../../Utils/TextureUtils.h"
 #include "../../System/ThumbCacheManager.h"
-#include "../../System/ContentLoader.h"
 #include "../../Main/Editor.h"
 #include "../../Shared/IconsForkAwesome.h"
 
@@ -52,7 +49,8 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Core::Texture* _addTex = loadEditorIcon(_parent->getContentLoader(), "editor/add.png");
+		Core::Texture* _addTex = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), _parent->getContentManager());
 		_createResourceBtn = new Button(_addTex);
 		_createResourceBtn->setSize(30, 30);
 		_createResourceBtn->setUseContextMenu(true);
@@ -62,8 +60,8 @@ namespace Editor
 		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE "Material");
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
-		_materialMenuItem->setOnClick([this](){
-			_parent->getEventHandler()->addEvent([this](){
+		_materialMenuItem->setOnClick([this]() {
+			_parent->getEventHandler()->addEvent([this]() {
 				Button* thumbnail = createThumbnailForEdit(".mat");
 				thumbnail->setOnEditCancelled([this, thumbnail]() {
 					_parent->getEventHandler()->addEvent([this, thumbnail]() {
@@ -71,12 +69,11 @@ namespace Editor
 						delete thumbnail;
 					});
 				});
-				thumbnail->setOnEditComplete([this, thumbnail](){
-					if (!thumbnail->getText().endsWith(".mat"))
-						thumbnail->setText(thumbnail->getText().std_str() + ".mat");
-					Core::Material* mat = _parent->getContentLoader()->getContentManager()->createMaterial();
+				thumbnail->setOnEditComplete([this, thumbnail]() {
+					if (!thumbnail->getText().endsWith(".mat")) thumbnail->setText(thumbnail->getText().std_str() + ".mat");
+					Core::Material* mat = _parent->getContentManager()->createMaterial();
 					Core::String path = Core::Path::combine(_currentDir, thumbnail->getText());
-					nlohmann::serialize(mat, path);
+					// nlohmann::serialize(mat, path);
 				});
 				_rightPane->addControl(thumbnail);
 			});
@@ -133,7 +130,7 @@ namespace Editor
 		for (auto& it : entries)
 		{
 			Button* thumbnail = new Button(it.filename().generic_string());
-			Core::Texture* tex = _parent->getThumbCacheManager()->getOrCreate(it.generic_string());
+			Core::Texture* tex = _parent->getThumbCacheManager()->get(it.generic_string());
 
 			if (tex == nullptr)
 			{
@@ -146,7 +143,7 @@ namespace Editor
 
 			if (fs::is_directory(it))
 			{
-				thumbnail->setOnDoubleClick([=]() {
+				thumbnail->setOnDoubleClick([this, thumbnail]() {
 					Core::String p = thumbnail->getStringTag(0);
 					TreeNode* node = _treeView->findNodeByTag(0, p);
 					if (node != nullptr)
@@ -190,7 +187,9 @@ namespace Editor
 
 		if (iconName != Core::String::Empty)
 		{
-			return loadEditorIcon(_parent->getContentLoader(), Core::Path::combine("content", iconName));
+			return TextureUtils::loadCompressed(
+				Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/content", iconName),
+				_parent->getContentManager());
 		}
 
 		return nullptr;
@@ -210,7 +209,7 @@ namespace Editor
 	{
 		for (auto it : _loadedThumbs)
 		{
-			_parent->getContentLoader()->unload(it);
+			_parent->getContentManager()->destroy(it);
 		}
 
 		_loadedThumbs.clear();

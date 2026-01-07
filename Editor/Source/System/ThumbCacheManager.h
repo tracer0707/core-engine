@@ -5,19 +5,17 @@
 
 namespace Editor
 {
-    class Editor;
-    class ContentLoader;
+	class Editor;
 
-    class ThumbCacheManager
-    {
-      private:
-        Editor* _app = nullptr;
-        ContentLoader* _contentLoader = nullptr;
+	class ThumbCacheManager
+	{
+		private:
+			Editor* _app = nullptr;
 
-      public:
-        ThumbCacheManager(Editor* app, ContentLoader* contentLoader);
-        ~ThumbCacheManager();
+		public:
+			ThumbCacheManager(Editor* app);
+			~ThumbCacheManager();
 
-        Core::Texture* getOrCreate(Core::String filePath);
-    };
+			Core::Texture* get(Core::String filePath);
+	};
 } // namespace Editor

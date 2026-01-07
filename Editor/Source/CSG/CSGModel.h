@@ -15,58 +15,60 @@ namespace Core
 	class SubMesh;
 	class Scene;
 	class Renderer;
+	class ContentManager;
 	struct Vertex;
-}
+} // namespace Core
 
 namespace Editor
 {
 	class CSGBrush;
 	class CSGBrushCube;
-	class ContentLoader;
 
 	class CSGModel
 	{
-	private:
-		struct SubMeshInfo
-		{
-			Core::SubMesh* subMesh = nullptr;
-			Core::List<Core::Vertex> vertices;
-			Core::List<Core::Uuid> brushIds;
-		};
+		private:
+			struct SubMeshInfo
+			{
+					Core::SubMesh* subMesh = nullptr;
+					Core::List<Core::Vertex> vertices;
+					Core::List<Core::Uuid> brushIds;
+			};
 
-		Core::String _name = "";
-		Core::List<CSGBrush*> _brushes;
-		std::map<Core::Material*, SubMeshInfo*> _subMeshes;
+			Core::String _name = "";
+			Core::List<CSGBrush*> _brushes;
+			std::map<Core::Material*, SubMeshInfo*> _subMeshes;
 
-		Core::Renderer* _renderer = nullptr;
-		Core::Scene* _scene = nullptr;
-		Core::Object* _object = nullptr;
-		Core::MeshRenderer* _meshRenderer = nullptr;
-        ContentLoader* _contentLoader = nullptr;
+			Core::Renderer* _renderer = nullptr;
+			Core::Scene* _scene = nullptr;
+			Core::Object* _object = nullptr;
+			Core::MeshRenderer* _meshRenderer = nullptr;
+			Core::ContentManager* _contentManager = nullptr;
 
-		static Core::Material* _defaultMaterial;
+			static Core::Material* _defaultMaterial;
 
-		CSGBrush* _nullBrush = nullptr;
+			CSGBrush* _nullBrush = nullptr;
 
-	public:
-        CSGModel(Core::Renderer* renderer, Core::Scene* scene, ContentLoader* contentLoader);
-		~CSGModel();
+		public:
+			CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
+			~CSGModel();
 
-		Core::String getName() { return _name; }
-		void setName(Core::String value) { _name = value; }
+			Core::String getName() { return _name; }
+			void setName(Core::String value) { _name = value; }
 
-		Core::Object* getObject() { return _object; }
-		Core::MeshRenderer* getMeshRenderer() { return _meshRenderer; }
+			Core::Object* getObject() { return _object; }
+			Core::MeshRenderer* getMeshRenderer() { return _meshRenderer; }
 
-		CSGBrushCube* createCubeBrush();
+			Core::ContentManager* getContentManager() { return _contentManager; }
 
-		int getNumBrushes() { return _brushes.count(); }
-		CSGBrush* getBrush(int index) { return _brushes.get(index); }
-		CSGBrush* findBrush(Core::Uuid brushId);
-		bool removeBrush(CSGBrush* value);
+			CSGBrushCube* createCubeBrush();
 
-		Core::Uuid getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
+			int getNumBrushes() { return _brushes.count(); }
+			CSGBrush* getBrush(int index) { return _brushes.get(index); }
+			CSGBrush* findBrush(Core::Uuid brushId);
+			bool removeBrush(CSGBrush* value);
 
-		void rebuild();
+			Core::Uuid getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
+
+			void rebuild();
 	};
-}
+} // namespace Editor

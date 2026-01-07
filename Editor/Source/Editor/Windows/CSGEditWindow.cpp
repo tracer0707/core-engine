@@ -6,22 +6,24 @@
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 #include <Core/System/EventHandler.h>
+#include <Core/Content/ContentManager.h>
 
 #include "WindowManager.h"
 
-#include "../../System/ContentLoader.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
 #include "../Modifiers/ModifierManager.h"
 #include "../Modifiers/CSGModifier.h"
 
+#include "../../Utils/TextureUtils.h"
+
 namespace Editor
 {
 	CSGEditWindow::CSGEditWindow(WindowManager* parent) : Window(parent, CSG_EDIT_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
-        ContentLoader* contentLoader = parent->getContentLoader();
+		Core::ContentManager* contentMgr = parent->getContentManager();
 
 		_modifier = (CSGModifier*)modMgr->getModifier(CSGModifier::NAME);
 
@@ -34,8 +36,8 @@ namespace Editor
 		/* CSG select */
 
 		_csgSelectBtn = new Button();
-        Core::Texture* csgAddBtnImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), Core::TextureFormat::RGBA8, LoadMethod::Direct);
+		Core::Texture* csgAddBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
 		_csgSelectBtn->setSize(32, 32);
 		_csgSelectBtn->setImage(csgAddBtnImage);
 		_csgSelectBtn->setOnClick([=] {
@@ -49,9 +51,8 @@ namespace Editor
 		/* CSG edit points */
 
 		Button* csgEditPointsBtn = new Button();
-        Core::Texture* csgEditPointsBtnImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/points.png"), Core::TextureFormat::RGBA8,
-            LoadMethod::Direct);
+		Core::Texture* csgEditPointsBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/points.png"), contentMgr);
 		csgEditPointsBtn->setSize(32, 32);
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
 		csgEditPointsBtn->setOnClick([=] {
@@ -65,9 +66,8 @@ namespace Editor
 		/* CSG edit edges */
 
 		Button* csgEditEdgesBtn = new Button();
-        Core::Texture* csgEditEdgesBtnImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/edges.png"), Core::TextureFormat::RGBA8,
-            LoadMethod::Direct);
+		Core::Texture* csgEditEdgesBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/edges.png"), contentMgr);
 		csgEditEdgesBtn->setSize(32, 32);
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
 		csgEditEdgesBtn->setOnClick([=] {
@@ -81,9 +81,8 @@ namespace Editor
 		/* CSG edit faces */
 
 		Button* csgEditFacesBtn = new Button();
-        Core::Texture* csgEditFacesBtnImage = contentLoader->loadTextureFromFile(
-            Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/face.png"), Core::TextureFormat::RGBA8,
-            LoadMethod::Direct);
+		Core::Texture* csgEditFacesBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/face.png"), contentMgr);
 		csgEditFacesBtn->setSize(32, 32);
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
 		csgEditFacesBtn->setOnClick([=] {
@@ -101,9 +100,7 @@ namespace Editor
 		});
 	}
 
-	CSGEditWindow::~CSGEditWindow()
-	{
-	}
+	CSGEditWindow::~CSGEditWindow() {}
 
 	void CSGEditWindow::invalidate()
 	{
@@ -137,4 +134,4 @@ namespace Editor
 			button->setEnabled(enable);
 		}
 	}
-}
+} // namespace Editor
