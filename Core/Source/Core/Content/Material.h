@@ -19,13 +19,13 @@ namespace Core
 		Shader* _shader = nullptr;
 
 		Material(Renderer* renderer);
-		~Material();
+		virtual ~Material();
 
 	public:
-		Texture* getTexture() { return _texture; }
+		Texture* getTexture() const { return _texture; }
 		void setTexture(Texture* value) { _texture = value; }
 
-		Shader* getShader() { return _shader; }
+		Shader* getShader() const { return _shader; }
 		void setShader(Shader* value) { _shader = value; }
 
 		void bind();

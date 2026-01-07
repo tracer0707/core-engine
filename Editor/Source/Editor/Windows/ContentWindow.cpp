@@ -5,9 +5,13 @@
 
 #include <Core/System/EventHandler.h>
 #include <Core/Content/Texture.h>
+#include <Core/Content/Material.h>
+#include <Core/Serialization/JsonSerialization.h>
+#include <Core/Content/ContentManager.h>
 
 #include "WindowList.h"
 
+#include "../../Serialization/JsonSerialization.h"
 #include "../../Utils/FileSystemUtils.h"
 #include "../../Utils/EditorIcons.h"
 #include "../../System/ThumbCacheManager.h"
@@ -67,8 +71,12 @@ namespace Editor
 						delete thumbnail;
 					});
 				});
-				thumbnail->setOnEditComplete([](){
-
+				thumbnail->setOnEditComplete([this, thumbnail](){
+					if (!thumbnail->getText().endsWith(".mat"))
+						thumbnail->setText(thumbnail->getText().std_str() + ".mat");
+					Core::Material* mat = _parent->getContentLoader()->getContentManager()->createMaterial();
+					Core::String path = Core::Path::combine(_currentDir, thumbnail->getText());
+					nlohmann::serialize(mat, path);
 				});
 				_rightPane->addControl(thumbnail);
 			});

@@ -99,10 +99,20 @@ namespace Core
     bool String::startsWith(char val)
     {
         return _buffer.startsWith(val);
-    }
+	}
+
+	bool String::startsWith(Core::String val)
+	{
+		return _buffer.startsWith(val._buffer);
+	}
 
     bool String::endsWith(char val)
     {
         return _buffer.endsWith(val);
-    }
+	}
+
+	bool String::endsWith(Core::String val)
+	{
+		return _buffer.endsWith(val._buffer);
+	}
 } // namespace Core

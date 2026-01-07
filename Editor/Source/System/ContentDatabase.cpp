@@ -3,9 +3,9 @@
 #include <filesystem>
 
 #include <Core/Shared/Path.h>
+#include <Core/Serialization/JsonSerialization.h>
 
 #include "../Main/Editor.h"
-#include "../Serialization/ContentDb.h"
 #include "../Utils/FileSystemUtils.h"
 
 namespace Editor
@@ -18,7 +18,7 @@ namespace Editor
 
         if (std::filesystem::exists(dbPath.std_str()))
         {
-            _pathToUuid = Serialization::ContentDb::load(dbPath);
+			nlohmann::deserialize(_pathToUuid, dbPath);
 
             for (auto& p : _pathToUuid)
             {
@@ -56,7 +56,7 @@ namespace Editor
             _pathToUuid[pathStr] = id;
         }
 
-        Serialization::ContentDb::save(dbPath, _pathToUuid);
+        nlohmann::serialize(_pathToUuid, dbPath);
     }
 
     void ContentDatabase::update()

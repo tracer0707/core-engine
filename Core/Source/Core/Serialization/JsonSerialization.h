@@ -1,6 +1,8 @@
 #pragma once
 
 #include <stdexcept>
+#include <iostream>
+#include <fstream>
 
 #include "../Classes/json.hpp"
 #include "../Shared/String.h"
@@ -65,4 +67,38 @@ namespace nlohmann
             }
         }
     };
+
+    template <typename T>
+    void serialize(const T& obj, Core::String filename)
+	{
+		nlohmann::json j = nlohmann::json{{"data", obj}};
+
+		std::ofstream file(filename.std_str());
+		if (file.is_open())
+		{
+			file << j.dump(4);
+			file.close();
+		}
+		else
+		{
+			throw std::runtime_error("Error opening file for write");
+		}
+	}
+
+    template <typename T>
+    void deserialize(T& obj, Core::String filename)
+	{
+		std::ifstream file(filename.std_str());
+		if (file.is_open())
+		{
+			nlohmann::json j;
+			file >> j;
+			file.close();
+			obj = j["data"].get<T>();
+		}
+		else
+		{
+			throw std::runtime_error("Error opening file for read");
+		}
+	}
 } // namespace nlohmann
