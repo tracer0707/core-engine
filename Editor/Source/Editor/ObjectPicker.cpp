@@ -41,8 +41,7 @@ namespace Editor
 		_camera = camera;
 		_windowManager = windowManager;
 
-		_windowManager->getInputManager()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y)
-		{
+		_windowManager->getInputManager()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y) {
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
 				_isMouseWasMoved = false;
@@ -60,22 +59,16 @@ namespace Editor
 			}
 		});
 
-		_windowManager->getInputManager()->subscribeMouseMoveEvent([=](int x, int y)
-		{
+		_windowManager->getInputManager()->subscribeMouseMoveEvent([=](int x, int y) {
 			if (_isMouseLPressed)
 			{
 				_isMouseWasMoved = true;
 			}
 		});
 
-		_windowManager->getInputManager()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y)
-		{
-			if (mb == Core::InputManager::MouseButton::MBE_LEFT
-				&& !_isMouseRPressed
-				&& !_isMouseMPressed
-				&& !_isMouseWasMoved
-				&& !_isGizmoWasUsed
-				&& _isMouseInView)
+		_windowManager->getInputManager()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y) {
+			if (mb == Core::InputManager::MouseButton::MBE_LEFT && !_isMouseRPressed && !_isMouseMPressed && !_isMouseWasMoved && !_isGizmoWasUsed &&
+				_isMouseInView)
 			{
 				pickObject(x, y);
 
@@ -117,7 +110,7 @@ namespace Editor
 
 		if (hit.object != nullptr)
 		{
-			if (modMgr->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.is_nil())
+			if (modMgr->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.isNil())
 			{
 				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 
@@ -132,8 +125,8 @@ namespace Editor
 						mod->setCurrentBrush(brush);
 
 						Gizmo::singleton()->setTransform(brush->getTransform());
-						//TreeNode* node = treeView->findNodeByObject(brush->getObject());
-						//treeView->selectNode(node, false);
+						// TreeNode* node = treeView->findNodeByObject(brush->getObject());
+						// treeView->selectNode(node, false);
 
 						break;
 					}
@@ -156,4 +149,4 @@ namespace Editor
 
 		_windowManager->invalidateAll();
 	}
-}
+} // namespace Editor

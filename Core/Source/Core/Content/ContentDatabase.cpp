@@ -2,8 +2,8 @@
 
 #include <filesystem>
 
-#include "../System/Application.h"
 #include "../Shared/Path.h"
+#include "../System/Application.h"
 #include "../Serialization/JsonSerialization.h"
 
 namespace Core
@@ -12,7 +12,7 @@ namespace Core
 	{
 		_app = app;
 
-		Core::String dbPath = Core::Path::combine(_app->getRootPath(), "ContentDatabase.json");
+		String dbPath = Path::combine(_app->getRootPath(), "ContentDatabase.json");
 
 		if (std::filesystem::exists(dbPath.std_str()))
 		{
@@ -30,7 +30,7 @@ namespace Core
 		_app = nullptr;
 	}
 
-	Core::String ContentDatabase::getPath(Core::Uuid uuid)
+	String ContentDatabase::getPath(Uuid uuid)
 	{
 		if (_uuidToPath.find(uuid) != _uuidToPath.end())
 		{
@@ -42,7 +42,7 @@ namespace Core
 		}
 	}
 
-	Core::Uuid ContentDatabase::getUuid(Core::String path)
+	Uuid ContentDatabase::getUuid(String path)
 	{
 		if (_pathToUuid.find(path) != _pathToUuid.end())
 		{
@@ -54,8 +54,19 @@ namespace Core
 		}
 	}
 
-	void ContentDatabase::setPath(Core::Uuid uuid, Core::String sourcePath)
+	bool ContentDatabase::hasPath(Uuid uuid)
 	{
-		_uuidToPath[uuid] = sourcePath;
+		return _uuidToPath.find(uuid) != _uuidToPath.end();
+	}
+
+	bool ContentDatabase::hasUuid(String path)
+	{
+		return _pathToUuid.find(path) != _pathToUuid.end();
+	}
+
+	void ContentDatabase::setPath(Uuid uuid, String path)
+	{
+		_uuidToPath[uuid] = path;
+		_pathToUuid[path] = uuid;
 	}
 } // namespace Core

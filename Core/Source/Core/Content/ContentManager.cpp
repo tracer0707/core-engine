@@ -13,6 +13,7 @@
 #include "RenderTexture.h"
 
 #include "../Serialization/FlatBuffers/TextureSerializer_generated.h"
+#include "../Serialization/FlatBuffers/MaterialSerializer_generated.h"
 
 namespace Core
 {
@@ -74,7 +75,23 @@ namespace Core
 		_renderer = nullptr;
 	}
 
-	/* MATERIAL */
+	void ContentManager::createOrGetUuid(Content* content, Core::String path)
+	{
+		if (content->getUuid() != Uuid::Empty) return;
+
+		if (_db->hasUuid(path))
+		{
+			content->setUuid(_db->getUuid(path));
+		}
+		else
+		{
+			Uuid newUuid = Uuid::create();
+			content->setUuid(newUuid);
+			_db->setPath(newUuid, path);
+		}
+	}
+
+	// Create in memory
 
 	Material* ContentManager::createMaterial()
 	{
@@ -84,11 +101,53 @@ namespace Core
 		return value;
 	}
 
-	/* TEXTURE */
+	Mesh* ContentManager::createMesh(int subMeshesCount)
+	{
+		SubMesh** _subMeshes = new SubMesh*[subMeshesCount];
+		Mesh* _mesh = new Mesh(_subMeshes, subMeshesCount);
+
+		for (int i = 0; i < subMeshesCount; ++i)
+		{
+			_subMeshes[i] = new SubMesh(_renderer);
+		}
+
+		_meshes.add(_mesh);
+		return _mesh;
+	}
+
+	RenderTexture* ContentManager::createRenderTexture(unsigned int width, unsigned int height)
+	{
+		RenderTexture* renderTexture = new RenderTexture(_renderer, width, height);
+		_renderTextures.add(renderTexture);
+		return renderTexture;
+	}
+
+	// Load from files
 
 	Material* ContentManager::loadMaterialFromFile(String fileName)
 	{
-		return nullptr;
+		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
+		size_t fileSize = file.tellg();
+		file.seekg(0);
+
+		std::vector<uint8_t> data(fileSize);
+		file.read(reinterpret_cast<char*>(data.data()), fileSize);
+
+		auto materialSerialized = GetMaterialSerializer(data.data());
+
+		Texture* tex = nullptr;
+		String textureUuid = materialSerialized->texture_uuid()->c_str();
+		if (textureUuid != String::Empty)
+		{
+			// load texture by uuid
+		}
+
+		Material* result = createMaterial();
+		result->setTexture(tex);
+
+		createOrGetUuid(result, fileName);
+
+		return result;
 	}
 
 	Texture* ContentManager::loadTextureFromFile(String fileName)
@@ -107,9 +166,33 @@ namespace Core
 		Texture* result = new Texture(_renderer, textureSerialized->width(), textureSerialized->height(), dataRaw, textureSerialized->size(),
 									  static_cast<TextureFormat>(textureSerialized->format()));
 
+		createOrGetUuid(result, fileName);
+
 		_textures.add(result);
 		return result;
 	}
+
+	Mesh* ContentManager::loadMeshFromFile(String fileName)
+	{
+		// TODO
+		return nullptr;
+	}
+
+	// Load by uuids
+
+	Material* ContentManager::loadMaterialByUuid(Uuid uuid)
+	{
+		if (!_db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadMaterialFromFile(_db->getPath(uuid));
+	}
+
+	Texture* ContentManager::loadTextureByUuid(Uuid uuid)
+	{
+		if (!_db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadTextureFromFile(_db->getPath(uuid));
+	}
+
+	// Load from memory
 
 	Texture* ContentManager::loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt)
 	{
@@ -119,30 +202,6 @@ namespace Core
 		return result;
 	}
 
-	/* MESH */
-
-	Mesh* ContentManager::createMesh(int subMeshesCount)
-	{
-		SubMesh** _subMeshes = new SubMesh*[subMeshesCount];
-		Mesh* _mesh = new Mesh(_subMeshes, subMeshesCount);
-
-		for (int i = 0; i < subMeshesCount; ++i)
-		{
-			_subMeshes[i] = new SubMesh(_renderer);
-		}
-
-		_meshes.add(_mesh);
-		return _mesh;
-	}
-
-	Mesh* ContentManager::loadMeshFromFile(String fileName)
-	{
-		// TODO
-		return nullptr;
-	}
-
-	/* SHADER */
-
 	Shader* ContentManager::loadShaderFromString(String vertexSrc, String fragmentSrc)
 	{
 		Shader* shader = new Shader(_renderer, vertexSrc, fragmentSrc);
@@ -150,16 +209,7 @@ namespace Core
 		return shader;
 	}
 
-	/* RENDERTEXTURE */
-
-	RenderTexture* ContentManager::createRenderTexture(unsigned int width, unsigned int height)
-	{
-		RenderTexture* renderTexture = new RenderTexture(_renderer, width, height);
-		_renderTextures.add(renderTexture);
-		return renderTexture;
-	}
-
-	/* DESTRUCTORS */
+	// Destroy
 
 	void ContentManager::destroy(Material* value)
 	{

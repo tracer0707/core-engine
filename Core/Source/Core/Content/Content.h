@@ -7,7 +7,7 @@ namespace Core
 	class Content
 	{
 		private:
-			Core::Uuid _uuid;
+			Core::Uuid _uuid = Core::Uuid::Empty;
 
 		public:
 			Content();

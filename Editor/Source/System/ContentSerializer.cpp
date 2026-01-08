@@ -12,7 +12,7 @@ namespace Editor
 	{
 		flatbuffers::FlatBufferBuilder builder;
 
-		auto texUuid = builder.CreateString(value->getTexture() != nullptr ? value->getTexture()->getUuid().to_string() : "");
+		auto texUuid = builder.CreateString(value->getTexture() != nullptr ? value->getTexture()->getUuid().toString() : "");
 		auto material = Core::CreateMaterialSerializer(builder, texUuid);
 		builder.Finish(material);
 

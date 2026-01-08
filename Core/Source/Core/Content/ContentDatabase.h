@@ -14,16 +14,19 @@ namespace Core
 		private:
 			Application* _app = nullptr;
 
-			std::map<Core::String, Core::Uuid> _pathToUuid;
-			std::map<Core::Uuid, Core::String> _uuidToPath;
+			std::map<String, Uuid> _pathToUuid;
+			std::map<Uuid, String> _uuidToPath;
 
 		public:
 			ContentDatabase(Application* app);
 			~ContentDatabase();
 
-			Core::String getPath(Core::Uuid uuid);
-			Core::Uuid getUuid(Core::String path);
+			bool hasPath(Uuid uuid);
+			bool hasUuid(String path);
 
-			void setPath(Core::Uuid uuid, Core::String sourcePath);
+			String getPath(Uuid uuid);
+			Uuid getUuid(String path);
+
+			void setPath(Uuid uuid, String path);
 	};
 } // namespace Core

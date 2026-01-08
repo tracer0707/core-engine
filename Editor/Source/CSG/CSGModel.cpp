@@ -139,7 +139,7 @@ namespace Editor
 			int layer = 0;
 			bool castShadows = true;
 			bool smoothNormals = false;
-			Core::Uuid brushId = Core::Uuid::empty;
+			Core::Uuid brushId = Core::Uuid::Empty;
 
 			if (f_material.hasAttribute(f))
 			{
@@ -249,6 +249,6 @@ namespace Editor
 			}
 		}
 
-		return Core::Uuid::empty;
+		return Core::Uuid::Empty;
 	}
 } // namespace Editor

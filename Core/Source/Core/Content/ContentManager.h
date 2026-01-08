@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Shared/Uuid.h"
 #include "../Shared/String.h"
 #include "../Shared/List.h"
 #include "../Renderer/TextureFormat.h"
@@ -32,6 +33,7 @@ namespace Core
 			List<Content*> _shaders;
 			List<Content*> _renderTextures;
 
+			void createOrGetUuid(Content* content, Core::String path);
 			void destroyContent(Content* value, List<Content*>& _list);
 
 		public:
@@ -45,16 +47,25 @@ namespace Core
 
 			ContentDatabase* getContentDatabase() const { return _db; }
 
+			// Create in memory
 			Material* createMaterial();
 			Mesh* createMesh(int subMeshesCount);
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
+			// Load from files
 			Material* loadMaterialFromFile(String fileName);
 			Texture* loadTextureFromFile(String fileName);
-			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
 			Mesh* loadMeshFromFile(String fileName);
+
+			// Load by uuids
+			Material* loadMaterialByUuid(Uuid uuid);
+			Texture* loadTextureByUuid(Uuid uuid);
+
+			// Load from memory
+			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
 			Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);
 
+			// Destroy
 			void destroy(Material* value);
 			void destroy(Mesh* value);
 			void destroy(Texture* value);
