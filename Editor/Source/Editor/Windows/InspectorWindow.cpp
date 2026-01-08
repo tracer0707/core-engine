@@ -4,15 +4,25 @@
 
 #include "WindowList.h"
 
-#include "../Controls/Button.h"
+#include "Inspector/Inspector.h"
 
 namespace Editor
 {
-	InspectorWindow::InspectorWindow(WindowManager* parent) : Window(parent, INSPECTOR_WINDOW)
-	{
-		Button* btn = new Button();
-		btn->setText("Test button");
+	InspectorWindow::InspectorWindow(WindowManager* parent) : Window(parent, INSPECTOR_WINDOW) {}
 
-		addControl(btn);
+	void InspectorWindow::setInspector(Inspector* value)
+	{
+		if (_currentInspector != nullptr)
+		{
+			clear();
+			delete _currentInspector;
+			_currentInspector = nullptr;
+		}
+
+		if (value != nullptr)
+		{
+			_currentInspector = value;
+			addControl(_currentInspector->build());
+		}
 	}
-}
+} // namespace Editor

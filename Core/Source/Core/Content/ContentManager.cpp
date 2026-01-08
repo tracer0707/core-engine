@@ -86,6 +86,11 @@ namespace Core
 
 	/* TEXTURE */
 
+	Material* ContentManager::loadMaterialFromFile(String fileName)
+	{
+		return nullptr;
+	}
+
 	Texture* ContentManager::loadTextureFromFile(String fileName)
 	{
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);

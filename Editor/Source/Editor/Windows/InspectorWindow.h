@@ -4,11 +4,17 @@
 
 namespace Editor
 {
+	class Inspector;
+
 	class InspectorWindow : public Window
 	{
-	private:
-	public:
-		InspectorWindow(WindowManager* parent);
-		virtual ~InspectorWindow() = default;
+		private:
+			Inspector* _currentInspector = nullptr;
+
+		public:
+			InspectorWindow(WindowManager* parent);
+			virtual ~InspectorWindow() = default;
+
+			void setInspector(Inspector* value);
 	};
-}
+} // namespace Editor

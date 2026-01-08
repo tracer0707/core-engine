@@ -78,7 +78,6 @@ namespace Editor
 		if (!_visible) return;
 
 		bool hasClick = false;
-		bool hasDblClick = false;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
 
@@ -96,26 +95,17 @@ namespace Editor
 			ImGuiStyle& style = ImGui::GetStyle();
 			ImVec2 padding = style.FramePadding;
 
-			std::string label = _text.std_str();
-			float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0;
-			ImVec2 text_size = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
-
 			if (w == 0) w = _image->getWidth() + padding.x * 2.0f;
-			if (h == 0) h = _image->getHeight() + spacing + text_size.y + padding.y * 2.0f;
+			if (h == 0) h = _image->getHeight() + padding.y * 2.0f;
 
-			ImVec2 imgSize(w - padding.x * 2.0f, h - spacing - text_size.y - padding.y * 2.0f);
+			ImVec2 imgSize(w - padding.x * 2.0f, h - padding.y * 2.0f);
 
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-			if (text_size.x > w) text_size.x = w;
-			if (text_size.y > h) text_size.y = h;
-
 			ImVec2 total_size(w, h);
-			ImVec2 cur = ImGui::GetCursorPos();
 
 			ImGui::PushID(_id.c_str());
 			hasClick = ImGui::InvisibleButton("##ImageButtonWithText", total_size);
-			hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
 			bool hovered = ImGui::IsItemHovered();
 			bool active = ImGui::IsItemActive();
 			ImVec2 pos = ImGui::GetItemRectMin();
@@ -131,59 +121,12 @@ namespace Editor
 			draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1),
 								ImVec2(1, 0));
 
-			ImU32 text_col = ImGui::GetColorU32(ImGuiCol_Text);
-
-			float lowSize = (size.x - text_size.x) * 0.5f;
-			float highSize = (size.x + text_size.x) * 0.5f;
-			ImVec2 text_min(pos.x + lowSize, img_p.y + imgSize.y + spacing);
-			ImVec2 text_max(pos.x + highSize, text_min.y + text_size.y);
-
-			if (!_edit)
-			{
-				ImGui::RenderTextEllipsis(draw_list, text_min, text_max, text_max.x, text_max.x, label.c_str(), nullptr, nullptr);
-			}
-			else
-			{
-				ImGui::SetCursorPos(ImVec2(cur.x + padding.x, cur.y + imgSize.y + spacing));
-				ImGui::SetNextItemWidth(_width - padding.x * 2.0f);
-				ImGui::SetScrollHereX();
-				ImGui::SetScrollHereY();
-				ImGui::SetKeyboardFocusHere(0);
-				ImGui::InputText(("##" + _id + "_ed").c_str(), &label);
-				_text = label;
-				if (!ImGui::IsItemHovered() && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)))
-				{
-					_edit = false;
-					if (label.empty())
-					{
-						if (_onEditCancelled != nullptr)
-						{
-							_onEditCancelled();
-						}
-					}
-					else if (_onEditComplete != nullptr)
-					{
-						_onEditComplete();
-					}
-				}
-				if (ImGui::IsKeyPressed(ImGuiKey_Enter))
-				{
-					_edit = false;
-					if (_onEditComplete != nullptr)
-					{
-						_onEditComplete();
-					}
-				}
-				ImGui::SetCursorPos(cur);
-			}
-
 			_actualWidth = w;
 			_actualHeight = h;
 		}
 		else
 		{
 			hasClick = ImGui::Button(_text.std_str().c_str(), ImVec2(_width, _height));
-			hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
 
 			ImVec2 _actualSize = ImGui::GetItemRectSize();
 			_actualWidth = _actualSize.x;
@@ -210,14 +153,6 @@ namespace Editor
 				{
 					_onClick();
 				}
-			}
-		}
-
-		if (hasDblClick)
-		{
-			if (_onDblClick != nullptr)
-			{
-				_onDblClick();
 			}
 		}
 

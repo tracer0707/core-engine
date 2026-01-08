@@ -39,7 +39,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), contentMgr);
 		_csgAddModelBtn->setSize(32, 32);
 		_csgAddModelBtn->setImage(csgAddModelBtnImage);
-		_csgAddModelBtn->setOnClick([=] { _modifier->addModel(); });
+		_csgAddModelBtn->setOnClick([this] { _modifier->addModel(); });
 
 		_layoutMain->addControl(_csgAddModelBtn);
 
@@ -50,7 +50,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
-		csgCube->setOnClick([=] { _modifier->addBrush(CSGModifier::BrushType::Cube); });
+		csgCube->setOnClick([this] { _modifier->addBrush(CSGModifier::BrushType::Cube); });
 
 		_layoutMain->addControl(csgCube);
 
@@ -61,7 +61,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/sphere.png"), contentMgr);
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
-		csgSphere->setOnClick([=] { _modifier->addBrush(CSGModifier::BrushType::Sphere); });
+		csgSphere->setOnClick([this] { _modifier->addBrush(CSGModifier::BrushType::Sphere); });
 
 		_layoutMain->addControl(csgSphere);
 
@@ -72,7 +72,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cylinder.png"), contentMgr);
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
-		csgCylinder->setOnClick([=] { _modifier->addBrush(CSGModifier::BrushType::Cylinder); });
+		csgCylinder->setOnClick([this] { _modifier->addBrush(CSGModifier::BrushType::Cylinder); });
 
 		_layoutMain->addControl(csgCylinder);
 
@@ -83,7 +83,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cone.png"), contentMgr);
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
-		csgCone->setOnClick([=] { _modifier->addBrush(CSGModifier::BrushType::Cone); });
+		csgCone->setOnClick([this] { _modifier->addBrush(CSGModifier::BrushType::Cone); });
 
 		_layoutMain->addControl(csgCone);
 
@@ -94,7 +94,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/stairs.png"), contentMgr);
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
-		csgStair->setOnClick([=] { _modifier->addBrush(CSGModifier::BrushType::Stair); });
+		csgStair->setOnClick([this] { _modifier->addBrush(CSGModifier::BrushType::Stair); });
 
 		_layoutMain->addControl(csgStair);
 
@@ -105,7 +105,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/polygon.png"), contentMgr);
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);
-		csgPolygon->setOnClick([=] { _modifier->addBrush(CSGModifier::BrushType::Polygon); });
+		csgPolygon->setOnClick([this] { _modifier->addBrush(CSGModifier::BrushType::Polygon); });
 
 		_layoutMain->addControl(csgPolygon);
 

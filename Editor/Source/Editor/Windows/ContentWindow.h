@@ -14,6 +14,7 @@ namespace Editor
 	class TreeView;
 	class LinearLayout;
 	class Button;
+	class ResourceButton;
 	class FileSystemDialog;
 
 	class ContentWindow : public Window
@@ -29,14 +30,12 @@ namespace Editor
 			Button* _createResourceBtn = nullptr;
 			Button* _importResourceBtn = nullptr;
 
-			Core::List<Core::Texture*> _loadedThumbs;
-
 			void rescanContent();
 			void setCurrentDir(Core::String path);
 
-			void clearLoadedResources();
 			Core::Texture* getIcon(Core::String ext);
-			Button* createThumbnailForEdit(Core::String ext);
+			ResourceButton* createThumbnailForEdit(Core::String ext);
+			void setInspector(ResourceButton* thumbnail, Core::String ext);
 
 		public:
 			ContentWindow(WindowManager* parent);

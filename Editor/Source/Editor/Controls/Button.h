@@ -31,9 +31,6 @@ namespace Editor
 			ContextMenu* _contextMenu = nullptr;
 
 			std::function<void()> _onClick = nullptr;
-			std::function<void()> _onDblClick = nullptr;
-			std::function<void()> _onEditComplete = nullptr;
-			std::function<void()> _onEditCancelled = nullptr;
 
 		public:
 			Button();
@@ -62,11 +59,6 @@ namespace Editor
 
 			ContextMenu* getContextMenu() const { return _contextMenu; }
 
-			void startEdit() { _edit = true; }
-
 			void setOnClick(std::function<void()> callback) { _onClick = callback; }
-			void setOnDoubleClick(std::function<void()> callback) { _onDblClick = callback; }
-			void setOnEditComplete(std::function<void()> callback) { _onEditComplete = callback; }
-			void setOnEditCancelled(std::function<void()> callback) { _onEditCancelled = callback; }
 	};
 } // namespace Editor

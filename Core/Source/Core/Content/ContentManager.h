@@ -49,6 +49,7 @@ namespace Core
 			Mesh* createMesh(int subMeshesCount);
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
+			Material* loadMaterialFromFile(String fileName);
 			Texture* loadTextureFromFile(String fileName);
 			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
 			Mesh* loadMeshFromFile(String fileName);

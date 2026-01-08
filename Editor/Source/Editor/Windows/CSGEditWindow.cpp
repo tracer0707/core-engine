@@ -40,7 +40,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
 		_csgSelectBtn->setSize(32, 32);
 		_csgSelectBtn->setImage(csgAddBtnImage);
-		_csgSelectBtn->setOnClick([=] {
+		_csgSelectBtn->setOnClick([this] {
 			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::Select);
 			_csgSelectBtn->setActive(true);
@@ -55,7 +55,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/points.png"), contentMgr);
 		csgEditPointsBtn->setSize(32, 32);
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
-		csgEditPointsBtn->setOnClick([=] {
+		csgEditPointsBtn->setOnClick([this, csgEditPointsBtn] {
 			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::EditVertices);
 			csgEditPointsBtn->setActive(true);
@@ -70,7 +70,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/edges.png"), contentMgr);
 		csgEditEdgesBtn->setSize(32, 32);
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
-		csgEditEdgesBtn->setOnClick([=] {
+		csgEditEdgesBtn->setOnClick([this, csgEditEdgesBtn] {
 			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::EditEdges);
 			csgEditEdgesBtn->setActive(true);
@@ -85,7 +85,7 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/face.png"), contentMgr);
 		csgEditFacesBtn->setSize(32, 32);
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
-		csgEditFacesBtn->setOnClick([=] {
+		csgEditFacesBtn->setOnClick([this, csgEditFacesBtn] {
 			activateAll(false);
 			_modifier->setEditMode(CSGModifier::EditMode::EditFaces);
 			csgEditFacesBtn->setActive(true);

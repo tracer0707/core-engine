@@ -8,8 +8,6 @@
 #include <Core/Content/Material.h>
 #include <Core/Content/ContentManager.h>
 
-#include "WindowList.h"
-
 #include "../../Utils/FileSystemUtils.h"
 #include "../../Utils/TextureUtils.h"
 #include "../../Main/EditorApp.h"
@@ -20,14 +18,19 @@
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
 #include "../Controls/Button.h"
+#include "../Controls/ResourceButton.h"
 #include "../Controls/TreeView.h"
 #include "../Controls/TreeNode.h"
 #include "../Controls/Separator.h"
 #include "../Controls/ContextMenu.h"
 #include "../Controls/MenuItem.h"
-#include "../Windows/WindowList.h"
-#include "../Windows/WindowManager.h"
-#include "../Windows/ContentImportWindow.h"
+
+#include "WindowList.h"
+#include "WindowManager.h"
+#include "ContentImportWindow.h"
+#include "InspectorWindow.h"
+
+#include "Inspector/MaterialInspector.h"
 
 #include <iostream>
 
@@ -90,7 +93,7 @@ namespace Editor
 
 		_materialMenuItem->setOnClick([this]() {
 			_parent->getEventHandler()->addEvent([this]() {
-				Button* thumbnail = createThumbnailForEdit(".material");
+				ResourceButton* thumbnail = createThumbnailForEdit(".material");
 				thumbnail->setOnEditCancelled([this, thumbnail]() {
 					_parent->getEventHandler()->addEvent([this, thumbnail]() {
 						_rightPane->removeControl(thumbnail);
@@ -103,6 +106,11 @@ namespace Editor
 					Core::String path = Core::Path::combine(_currentDir, thumbnail->getText());
 					ContentSerializer::serializeMaterial(mat, path);
 					_parent->getContentManager()->destroy(mat);
+					_parent->getEventHandler()->addEvent([this, thumbnail]() {
+						_rightPane->removeControl(thumbnail);
+						delete thumbnail;
+						setCurrentDir(_currentDir);
+					});
 				});
 				_rightPane->addControl(thumbnail);
 			});
@@ -132,10 +140,7 @@ namespace Editor
 		});
 	}
 
-	ContentWindow::~ContentWindow()
-	{
-		clearLoadedResources();
-	}
+	ContentWindow::~ContentWindow() {}
 
 	void ContentWindow::init()
 	{
@@ -152,25 +157,31 @@ namespace Editor
 	{
 		_rightPane->clear();
 
-		clearLoadedResources();
-
 		_currentDir = path;
 
 		Core::List<std::filesystem::path> entries = FileSystemUtils::getPathEntries(path);
 
 		for (auto& it : entries)
 		{
-			Button* thumbnail = new Button(it.filename().generic_string());
-			Core::Texture* tex = _parent->getContentManager()->loadTextureFromFile(it.generic_string());
+			ResourceButton* thumbnail = new ResourceButton();
+			Core::Texture* tex = nullptr;
 
-			if (tex == nullptr)
+			Core::String ext = it.extension().generic_string();
+
+			if (ext == ".texture")
 			{
-				tex = getIcon(it.extension().generic_string());
+				tex = _parent->getContentManager()->loadTextureFromFile(it.generic_string());
+			}
+			else
+			{
+				tex = getIcon(ext);
 			}
 
+			thumbnail->setText(it.filename().generic_string());
 			thumbnail->setImage(tex);
 			thumbnail->setSize(THUMB_W, THUMB_H);
 			thumbnail->setStringTag(0, it.generic_string());
+			setInspector(thumbnail, ext);
 
 			if (fs::is_directory(it))
 			{
@@ -187,11 +198,6 @@ namespace Editor
 			}
 
 			_rightPane->addControl(thumbnail);
-
-			if (tex != nullptr)
-			{
-				_loadedThumbs.add(tex);
-			}
 		}
 	}
 
@@ -230,9 +236,9 @@ namespace Editor
 		return nullptr;
 	}
 
-	Button* ContentWindow::createThumbnailForEdit(Core::String ext)
+	ResourceButton* ContentWindow::createThumbnailForEdit(Core::String ext)
 	{
-		Button* thumbnail = new Button();
+		ResourceButton* thumbnail = new ResourceButton();
 		Core::Texture* tex = getIcon(ext);
 		thumbnail->setImage(tex);
 		thumbnail->setSize(THUMB_W, THUMB_H);
@@ -240,13 +246,18 @@ namespace Editor
 		return thumbnail;
 	}
 
-	void ContentWindow::clearLoadedResources()
+	void ContentWindow::setInspector(ResourceButton* thumbnail, Core::String ext)
 	{
-		for (auto it : _loadedThumbs)
+		if (ext == ".material")
 		{
-			_parent->getContentManager()->destroy(it);
-		}
+			InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
 
-		_loadedThumbs.clear();
+			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
+				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(0));
+				MaterialInspector* inspector = new MaterialInspector(mat);
+				inspector->setOnDestroy([this, mat]() { _parent->getContentManager()->destroy(mat); });
+				inspectorWnd->setInspector(inspector);
+			});
+		}
 	}
 } // namespace Editor
