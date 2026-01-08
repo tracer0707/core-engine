@@ -27,6 +27,7 @@ namespace Editor
 			TreeView* _treeView = nullptr;
 			LinearLayout* _rightPane = nullptr;
 			Button* _createResourceBtn = nullptr;
+			Button* _importResourceBtn = nullptr;
 
 			Core::List<Core::Texture*> _loadedThumbs;
 

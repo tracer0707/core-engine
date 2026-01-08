@@ -49,7 +49,7 @@ namespace Core
 			Mesh* createMesh(int subMeshesCount);
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
-			Texture* loadTextureFromFile(String fileName, TextureFormat fmt);
+			Texture* loadTextureFromFile(String fileName);
 			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
 			Mesh* loadMeshFromFile(String fileName);
 			Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);

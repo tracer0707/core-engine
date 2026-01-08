@@ -28,6 +28,8 @@
 #include "flatbuffers/flatbuffers.h"
 #include <Core/Serialization/FlatBuffers/TextureSerializer_generated.h>
 
+#include <iostream>
+
 namespace fs = std::filesystem;
 
 namespace Editor
@@ -46,7 +48,7 @@ namespace Editor
 		_app = nullptr;
 	}
 
-	Core::Texture* ContentImporter::importTexture(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format)
+	void ContentImporter::importTexture(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format)
 	{
 		int _width = 0;
 		int _height = 0;
@@ -100,29 +102,12 @@ namespace Editor
 			throw std::runtime_error("Texture format is unsupported");
 		}
 
-		convert = TextureUtils::rescale(texture, 128, 128);
-
-		auto parentPath = fs::path(sourceFileName.std_str()).parent_path().lexically_relative(_app->getContentPath().std_str());
-		auto relativePath = fs::path(sourceFileName.std_str()).lexically_relative(_app->getContentPath().std_str());
-		auto thumbPath = Core::Path::combine(_app->getCacheThumbPath(), relativePath.generic_string());
-		auto thumbDir = Core::Path::combine(_app->getCacheThumbPath(), parentPath.generic_string());
-
-		if (!fs::exists(thumbDir.std_str()))
-		{
-			fs::create_directories(thumbDir.std_str());
-		}
-
-		FreeImage_Save(_fmt, texture, thumbPath.std_str().c_str());
-
-		FreeImage_Unload(convert);
 		FreeImage_Unload(texture);
 
 		if (_data == nullptr)
 		{
 			throw std::runtime_error("Texture loading error");
 		}
-
-		Core::Texture* tex = nullptr;
 
 		flatbuffers::FlatBufferBuilder builder;
 
@@ -138,8 +123,6 @@ namespace Editor
 		file.close();
 
 		delete[] _data;
-
-		return tex;
 	}
 
 	// Core::Texture* ContentImporter::loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, Core::TextureFormat format)
@@ -168,7 +151,7 @@ namespace Editor
 	// 	return _contentMgr->loadTextureFromBytes(_data, w, h, size, format);
 	// }
 
-	Core::Mesh* ContentImporter::importMesh(Core::String sourceFileName, Core::String targetFileName)
+	void ContentImporter::importMesh(Core::String sourceFileName, Core::String targetFileName)
 	{
 		/*Assimp::Importer* importer = new Assimp::Importer();
 		importer->SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.0f);
@@ -227,7 +210,5 @@ namespace Editor
 
 		delete importer;
 		return _mesh;*/
-
-		return nullptr;
 	}
 } // namespace Editor

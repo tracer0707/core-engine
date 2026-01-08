@@ -34,7 +34,6 @@
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
 
-#include "../System/ThumbCacheManager.h"
 #include "../Shared/IconsForkAwesome.h"
 
 namespace Editor
@@ -43,8 +42,6 @@ namespace Editor
 
 	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Project Manager", 1366, 768)
 	{
-		_thumbCacheManager = new ThumbCacheManager(app);
-
 		_scene = new Core::Scene(_renderer);
 
 		_cameraObject = _scene->createObject();
@@ -67,7 +64,6 @@ namespace Editor
 		_windowManager->setContentManager(_contentManager);
 		_windowManager->setInputManager(_inputManager);
 		_windowManager->setEventHandler(_eventHandler);
-		_windowManager->setThumbCacheManager(_thumbCacheManager);
 
 		_csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
 

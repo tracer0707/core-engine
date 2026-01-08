@@ -86,7 +86,7 @@ namespace Core
 
 	/* TEXTURE */
 
-	Texture* ContentManager::loadTextureFromFile(String fileName, TextureFormat fmt)
+	Texture* ContentManager::loadTextureFromFile(String fileName)
 	{
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
 		size_t fileSize = file.tellg();

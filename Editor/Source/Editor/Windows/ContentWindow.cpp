@@ -12,7 +12,6 @@
 
 #include "../../Utils/FileSystemUtils.h"
 #include "../../Utils/TextureUtils.h"
-#include "../../System/ThumbCacheManager.h"
 #include "../../Main/EditorApp.h"
 #include "../../Main/FileSystemDialog.h"
 #include "../../Shared/IconsForkAwesome.h"
@@ -63,9 +62,9 @@ namespace Editor
 		_createResourceBtn->setUseContextMenu(true);
 		_createResourceBtn->setEnabled(false);
 
-		Button* _importResourceBtn = new Button(_importTex);
+		_importResourceBtn = new Button(_importTex);
 		_importResourceBtn->setSize(30, 30);
-		_importResourceBtn->setEnabled(true);
+		_importResourceBtn->setEnabled(false);
 
 		_importResourceBtn->setOnClick([this, parent]() {
 			parent->getApplication()->getEventHandler()->addEvent([this, parent] {
@@ -79,7 +78,7 @@ namespace Editor
 				_fsDlg->setOnPathSelected([this, parent](Core::List<Core::String> fileNames) {
 					ContentImportWindow* wnd = (ContentImportWindow*)parent->getWindow(CONTENT_IMPORT_WINDOW);
 					wnd->setVisible(true);
-					wnd->setFiles(fileNames);
+					wnd->import(fileNames, _currentDir);
 				});
 			});
 		});
@@ -90,7 +89,7 @@ namespace Editor
 
 		_materialMenuItem->setOnClick([this]() {
 			_parent->getEventHandler()->addEvent([this]() {
-				Button* thumbnail = createThumbnailForEdit(".mat");
+				Button* thumbnail = createThumbnailForEdit(".material");
 				thumbnail->setOnEditCancelled([this, thumbnail]() {
 					_parent->getEventHandler()->addEvent([this, thumbnail]() {
 						_rightPane->removeControl(thumbnail);
@@ -98,7 +97,7 @@ namespace Editor
 					});
 				});
 				thumbnail->setOnEditComplete([this, thumbnail]() {
-					if (!thumbnail->getText().endsWith(".mat")) thumbnail->setText(thumbnail->getText().std_str() + ".mat");
+					if (!thumbnail->getText().endsWith(".material")) thumbnail->setText(thumbnail->getText().std_str() + ".material");
 					Core::Material* mat = _parent->getContentManager()->createMaterial();
 					Core::String path = Core::Path::combine(_currentDir, thumbnail->getText());
 					// nlohmann::serialize(mat, path);
@@ -126,6 +125,7 @@ namespace Editor
 		_treeView->setOnSelectionChanged([this](Core::List<TreeNode*>& nodes) {
 			if (nodes.count() == 0) return;
 			_createResourceBtn->setEnabled(true);
+			_importResourceBtn->setEnabled(true);
 			setCurrentDir(nodes[0]->getStringTag(0));
 		});
 	}
@@ -159,7 +159,7 @@ namespace Editor
 		for (auto& it : entries)
 		{
 			Button* thumbnail = new Button(it.filename().generic_string());
-			Core::Texture* tex = _parent->getThumbCacheManager()->get(it.generic_string());
+			Core::Texture* tex = _parent->getContentManager()->loadTextureFromFile(it.generic_string());
 
 			if (tex == nullptr)
 			{
@@ -209,9 +209,13 @@ namespace Editor
 		{
 			iconName = "mesh.png";
 		}
-		else if (ext == ".mat")
+		else if (ext == ".material")
 		{
 			iconName = "material.png";
+		}
+		else
+		{
+			iconName = "fileEmpty.png";
 		}
 
 		if (iconName != Core::String::Empty)

@@ -169,13 +169,9 @@ namespace Editor
 	{
 		fs::path _rootPath = fs::path(value.std_str());
 		fs::path _contentPath = fs::path(Core::Path::combine(value, "Content").std_str());
-		fs::path _libCachePath = fs::path(Core::Path::combine(value, "Cache").std_str());
-		fs::path _libCacheThumbnailsPath = fs::path(Core::Path::combine(_libCachePath.generic_string(), "Thumbnails").std_str());
 
 		Core::List<fs::path> _dirsToCreate;
 		_dirsToCreate.add(_contentPath);
-		_dirsToCreate.add(_libCachePath);
-		_dirsToCreate.add(_libCacheThumbnailsPath);
 
 		for (auto& p : _dirsToCreate)
 		{

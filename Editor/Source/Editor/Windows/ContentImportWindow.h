@@ -8,11 +8,27 @@
 namespace Editor
 {
 	class WindowManager;
+	class Label;
+	class Button;
+	class LinearLayout;
 
 	class ContentImportWindow : public Window
 	{
 		private:
 			Core::List<Core::String> _filesToImport;
+
+			LinearLayout* _importLayout = nullptr;
+			Label* _currentFileLbl = nullptr;
+			Button* _importBtn = nullptr;
+
+			Core::String _targetPath = Core::String::Empty;
+
+			void importNext();
+			void prepareTextureLayout();
+
+		protected:
+			virtual void onClose();
+			virtual void onUpdate();
 
 		public:
 			ContentImportWindow(WindowManager* parent);
@@ -20,6 +36,6 @@ namespace Editor
 
 			virtual void init();
 
-			void setFiles(Core::List<Core::String> value) { _filesToImport = value; }
+			void import(Core::List<Core::String> value, Core::String targetPath);
 	};
 } // namespace Editor

@@ -32,7 +32,6 @@ namespace Editor
 	class ObjectWindow;
 	class SceneWindow;
 	class ProjectManagerWindow;
-	class ThumbCacheManager;
 
 	class WindowManager
 	{
@@ -43,8 +42,6 @@ namespace Editor
 			Core::InputManager* _inputManager = nullptr;
 			Core::EventHandler* _eventHandler = nullptr;
 			Core::ContentManager* _contentManager = nullptr;
-
-			ThumbCacheManager* _thumbCacheManager = nullptr;
 
 			Core::List<Window*> _windows;
 			std::function<void()> _onDock = nullptr;
@@ -64,7 +61,6 @@ namespace Editor
 			void setInputManager(Core::InputManager* value) { _inputManager = value; }
 			void setEventHandler(Core::EventHandler* value) { _eventHandler = value; }
 			void setContentManager(Core::ContentManager* value) { _contentManager = value; }
-			void setThumbCacheManager(ThumbCacheManager* value) { _thumbCacheManager = value; }
 
 			EditorApp* getApplication() const { return _app; }
 
@@ -73,7 +69,6 @@ namespace Editor
 			Core::InputManager* getInputManager() const { return _inputManager; }
 			Core::EventHandler* getEventHandler() const { return _eventHandler; }
 			Core::ContentManager* getContentManager() const { return _contentManager; }
-			ThumbCacheManager* getThumbCacheManager() const { return _thumbCacheManager; }
 
 			void invalidateAll();
 

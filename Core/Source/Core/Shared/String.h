@@ -22,6 +22,9 @@ namespace Core
 			String& operator=(const char* str);
 			String& operator+=(String& str);
 			String& operator+=(char str);
+			String operator+(const String& other) const;
+			String operator+(const char* str) const;
+			String operator+(const std::string& str) const;
 			bool operator<(const String& a) const;
 			bool operator>(const String& a) const;
 			bool operator!=(const char* str);

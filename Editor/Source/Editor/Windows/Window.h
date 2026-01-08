@@ -21,108 +21,110 @@ namespace Editor
 
 	class DockArea
 	{
-	public:
-		unsigned int area1 = 0;
-		unsigned int area2 = 0;
+		public:
+			unsigned int area1 = 0;
+			unsigned int area2 = 0;
 	};
 
 	class Control;
 	class WindowManager;
 
-	class Window: public Container
+	class Window : public Container
 	{
-		friend class WindowManager;
+			friend class WindowManager;
 
-	private:
-		Core::Uuid _id;
+		private:
+			Core::Uuid _id;
 
-		DockArea _dockArea;
+			DockArea _dockArea;
 
-		std::function<void(int, int)> _onResize = nullptr;
+			std::function<void(int, int)> _onResize = nullptr;
 
-		std::string _name = "";
+			std::string _name = "";
 
-		float _positionX = 0;
-		float _positionY = 0;
-		float _fixedPositionX = FLT_MAX;
-		float _fixedPositionY = FLT_MAX;
-		float _width = 0;
-		float _height = 0;
-		float _fixedWidth = FLT_MAX;
-		float _fixedHeight = FLT_MAX;
-		float _clientWidth = 0;
-		float _clientHeight = 0;
+			float _positionX = 0;
+			float _positionY = 0;
+			float _fixedPositionX = FLT_MAX;
+			float _fixedPositionY = FLT_MAX;
+			float _width = 0;
+			float _height = 0;
+			float _fixedWidth = FLT_MAX;
+			float _fixedHeight = FLT_MAX;
+			float _clientWidth = 0;
+			float _clientHeight = 0;
 
-		bool _visible = true;
-		bool _hasTitle = true;
-		bool _canAcceptDocking = true;
-		bool _canDock = true;
-		bool _isHovered = false;
-		bool _canResize = true;
-		bool _canMove = true;
+			bool _visible = true;
+			bool _hasTitle = true;
+			bool _canAcceptDocking = true;
+			bool _canDock = true;
+			bool _isHovered = false;
+			bool _canResize = true;
+			bool _canMove = true;
 
-		void update();
+			void update();
 
-	protected:
-		Style _style;
+		protected:
+			Style _style;
 
-		WindowManager* _parent = nullptr;
+			WindowManager* _parent = nullptr;
 
-		virtual void onResize(int newWidth, int newHeight) {}
-		virtual void onUpdate() {}
+			virtual void onResize(int newWidth, int newHeight) {}
+			virtual void onUpdate() {}
+			virtual void onClose() {}
 
-	public:
-		Window(WindowManager* parent, std::string name);
-		virtual ~Window();
+		public:
+			Window(WindowManager* parent, std::string name);
+			virtual ~Window();
 
-		virtual void init() {}
+			virtual void init() {}
 
-		WindowManager* getParent() { return _parent; }
-		std::string getName() { return _name; };
+			WindowManager* getParent() { return _parent; }
+			std::string getName() { return _name; };
 
-		void setVisible(bool value) { _visible = value; }
-		bool getVisible() { return _visible; }
+			void setVisible(bool value) { _visible = value; }
+			bool getVisible() { return _visible; }
 
-		float getWidth() { return _width; }
-		float getHeight() { return _height; }
+			float getWidth() { return _width; }
+			float getHeight() { return _height; }
 
-		void setWidth(float value) { _fixedWidth = value; }
-		void setHeight(float value) { _fixedHeight = value; }
+			void setWidth(float value) { _fixedWidth = value; }
+			void setHeight(float value) { _fixedHeight = value; }
 
-		float getClientWidth() { return _clientWidth; }
-		float getClientHeight() { return _clientHeight; }
+			float getClientWidth() { return _clientWidth; }
+			float getClientHeight() { return _clientHeight; }
 
-		float getPositionX() { return _positionX; }
-		float getPositionY() { return _positionY; }
+			float getPositionX() { return _positionX; }
+			float getPositionY() { return _positionY; }
 
-		void setPositionX(float value) { _fixedPositionX = value; }
-		void setPositionY(float value) { _fixedPositionY = value; }
+			void setPositionX(float value) { _fixedPositionX = value; }
+			void setPositionY(float value) { _fixedPositionY = value; }
 
-		bool getIsHovered() { return _isHovered; }
+			bool getIsHovered() { return _isHovered; }
 
-		void setHasTitle(bool value) { _hasTitle = value; }
-		bool getHasTitle() { return _hasTitle; }
+			void setHasTitle(bool value) { _hasTitle = value; }
+			bool getHasTitle() { return _hasTitle; }
 
-		void setCanAcceptDocking(bool value) { _canAcceptDocking = value; }
-		bool getCanAcceptDocking() { return _canAcceptDocking; }
+			void setCanAcceptDocking(bool value) { _canAcceptDocking = value; }
+			bool getCanAcceptDocking() { return _canAcceptDocking; }
 
-		void setCanDock(bool value) { _canDock = value; }
-		bool getCanDock() { return _canDock; }
+			void setCanDock(bool value) { _canDock = value; }
+			bool getCanDock() { return _canDock; }
 
-		void setCanResize(bool value) { _canResize = value; }
-		bool getCanResize() { return _canResize; }
+			void setCanResize(bool value) { _canResize = value; }
+			bool getCanResize() { return _canResize; }
 
-		void setCanMove(bool value) { _canMove = value; }
-		bool getCanMove() { return _canMove; }
+			void setCanMove(bool value) { _canMove = value; }
+			bool getCanMove() { return _canMove; }
 
-		void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
+			void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
+			void close();
 
-		Style& getStyle() { return _style; }
+			Style& getStyle() { return _style; }
 
-		Core::Uuid getId() { return _id; }
+			Core::Uuid getId() { return _id; }
 
-		DockArea dock(DockDirection dockDirection, unsigned int relativeTo, float splitSize);
+			DockArea dock(DockDirection dockDirection, unsigned int relativeTo, float splitSize);
 
-		virtual void invalidate() {}
+			virtual void invalidate() {}
 	};
-}
+} // namespace Editor

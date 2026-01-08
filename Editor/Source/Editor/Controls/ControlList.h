@@ -61,4 +61,8 @@ namespace Core
 #ifndef CONTROL_CONTEXT_MENU
 #define CONTROL_CONTEXT_MENU 14
 #endif
+
+#ifndef CONTROL_DROPDOWN
+#define CONTROL_DROPDOWN 15
+#endif
 }

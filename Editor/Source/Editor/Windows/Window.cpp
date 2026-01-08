@@ -22,10 +22,7 @@ namespace Editor
 		_style.paddingY = 4.0f;
 	}
 
-	Window::~Window()
-	{
-		
-	}
+	Window::~Window() {}
 
 	DockArea Window::dock(DockDirection dockDirection, unsigned int relativeTo, float splitSize)
 	{
@@ -33,12 +30,24 @@ namespace Editor
 
 		switch (dockDirection)
 		{
-			case DockDirection::None: dir = ImGuiDir_None; break;
-			case DockDirection::Left: dir = ImGuiDir_Left; break;
-			case DockDirection::Right: dir = ImGuiDir_Right; break;
-			case DockDirection::Up: dir = ImGuiDir_Up; break;
-			case DockDirection::Down: dir = ImGuiDir_Down; break;
-			default: dir = ImGuiDir_None; break;
+		case DockDirection::None:
+			dir = ImGuiDir_None;
+			break;
+		case DockDirection::Left:
+			dir = ImGuiDir_Left;
+			break;
+		case DockDirection::Right:
+			dir = ImGuiDir_Right;
+			break;
+		case DockDirection::Up:
+			dir = ImGuiDir_Up;
+			break;
+		case DockDirection::Down:
+			dir = ImGuiDir_Down;
+			break;
+		default:
+			dir = ImGuiDir_None;
+			break;
 		}
 
 		if (dockDirection == DockDirection::None)
@@ -113,15 +122,19 @@ namespace Editor
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, _style.borderSize);
+		bool prevVisible = _visible;
 		ImGui::Begin(_name.c_str(), &_visible, _flags);
-		
+		if (prevVisible != _visible && !_visible)
+		{
+			onClose();
+		}
+
 		int cw = ImGui::GetContentRegionAvail().x;
 		int ch = ImGui::GetContentRegionAvail().y;
 
 		if (cw != _clientWidth || ch != _clientHeight)
 		{
-			_parent->getEventHandler()->addEvent([=]
-			{
+			_parent->getEventHandler()->addEvent([=] {
 				onResize(cw, ch);
 
 				if (_onResize != nullptr)
@@ -155,4 +168,10 @@ namespace Editor
 		ImGui::End();
 		ImGui::PopStyleVar(2);
 	}
-}
+
+	void Window::close()
+	{
+		_visible = false;
+		onClose();
+	}
+} // namespace Editor
