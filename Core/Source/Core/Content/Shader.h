@@ -7,20 +7,22 @@
 
 namespace Core
 {
-    class Renderer;
+	class Renderer;
 
-    class Shader : public Content
-    {
-        friend class ContentManager;
+	class Shader : public Content
+	{
+			friend class ContentManager;
 
-      private:
-        Shader(Renderer* renderer, String vertexSrc, String fragmentSrc);
-        ~Shader();
+		private:
+			Shader(Renderer* renderer, String vertexSrc, String fragmentSrc);
+			~Shader();
 
-        Renderer* _renderer = nullptr;
-        Program* _nativeId = nullptr;
+			Renderer* _renderer = nullptr;
+			Program* _nativeId = nullptr;
 
-      public:
-        void bind();
-    };
+		public:
+			virtual int getContentType();
+
+			void bind();
+	};
 } // namespace Core

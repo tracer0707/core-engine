@@ -6,14 +6,16 @@ namespace Core
 {
 	class Content
 	{
-	  private:
-		Core::Uuid _uuid;
+		private:
+			Core::Uuid _uuid;
 
-	  public:
-		Content();
-		virtual ~Content();
+		public:
+			Content();
+			virtual ~Content();
 
-		const Core::Uuid& getUuid() const { return _uuid; }
-		void setUuid(Core::Uuid value) { _uuid = value; }
+			virtual int getContentType() = 0;
+
+			const Core::Uuid& getUuid() const { return _uuid; }
+			void setUuid(Core::Uuid value) { _uuid = value; }
 	};
 } // namespace Core

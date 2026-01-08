@@ -10,24 +10,26 @@ namespace Core
 
 	class Material : public Content
 	{
-	friend class Renderer;
-    friend class ContentManager;
+			friend class Renderer;
+			friend class ContentManager;
 
-	private:
-		Renderer* _renderer = nullptr;
-		Texture* _texture = nullptr;
-		Shader* _shader = nullptr;
+		private:
+			Renderer* _renderer = nullptr;
+			Texture* _texture = nullptr;
+			Shader* _shader = nullptr;
 
-		Material(Renderer* renderer);
-		virtual ~Material();
+			Material(Renderer* renderer);
+			virtual ~Material();
 
-	public:
-		Texture* getTexture() const { return _texture; }
-		void setTexture(Texture* value) { _texture = value; }
+		public:
+			virtual int getContentType();
 
-		Shader* getShader() const { return _shader; }
-		void setShader(Shader* value) { _shader = value; }
+			Texture* getTexture() const { return _texture; }
+			void setTexture(Texture* value) { _texture = value; }
 
-		void bind();
+			Shader* getShader() const { return _shader; }
+			void setShader(Shader* value) { _shader = value; }
+
+			void bind();
 	};
-}
+} // namespace Core

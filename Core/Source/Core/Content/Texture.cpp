@@ -1,7 +1,10 @@
 #include "Texture.h"
 
 #include <cstring>
+
 #include "../Renderer/Renderer.h"
+
+#include "ContentTypes.h"
 
 namespace Core
 {
@@ -39,6 +42,11 @@ namespace Core
 		_width = 0;
 		_height = 0;
 		_nativeId = 0;
+	}
+
+	int Texture::getContentType()
+	{
+		return CONTENT_TYPE_TEXTURE;
 	}
 
 	void Texture::bind(const char* name, int slot)

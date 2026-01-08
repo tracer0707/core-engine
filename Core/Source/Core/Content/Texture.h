@@ -12,29 +12,31 @@ namespace Core
 
 	class Texture : public Content
 	{
-    friend class ContentManager;
+			friend class ContentManager;
 
-	private:
-		Texture(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format);
-		~Texture();
+		private:
+			Texture(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format);
+			~Texture();
 
-		Renderer* _renderer = nullptr;
-        unsigned char* _data = nullptr;
-        int _size = 0;
-		
-		int _width = 0;
-		int _height = 0;
+			Renderer* _renderer = nullptr;
+			unsigned char* _data = nullptr;
+			int _size = 0;
 
-		unsigned int _nativeId = 0;
+			int _width = 0;
+			int _height = 0;
 
-		TextureFormat _format = TextureFormat::RGBA8;
+			unsigned int _nativeId = 0;
 
-	public:
-		unsigned int getNativeId() { return _nativeId; }
+			TextureFormat _format = TextureFormat::RGBA8;
 
-		int getWidth() { return _width; }
-		int getHeight() { return _height; }
+		public:
+			virtual int getContentType();
 
-		void bind(const char* name, int slot);
+			unsigned int getNativeId() { return _nativeId; }
+
+			int getWidth() { return _width; }
+			int getHeight() { return _height; }
+
+			void bind(const char* name, int slot);
 	};
-}
+} // namespace Core

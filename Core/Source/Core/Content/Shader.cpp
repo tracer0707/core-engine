@@ -2,27 +2,34 @@
 
 #include "../Renderer/Renderer.h"
 
+#include "ContentTypes.h"
+
 namespace Core
 {
-    Shader::Shader(Renderer* renderer, String vertexSrc, String fragmentSrc) : Content()
-    {
-        _renderer = renderer;
-        _nativeId = _renderer->createProgram(vertexSrc, fragmentSrc);
-    }
+	Shader::Shader(Renderer* renderer, String vertexSrc, String fragmentSrc) : Content()
+	{
+		_renderer = renderer;
+		_nativeId = _renderer->createProgram(vertexSrc, fragmentSrc);
+	}
 
-    Shader::~Shader()
-    {
-        if (_nativeId != nullptr)
-        {
-            _renderer->deleteProgram(_nativeId);
-            _nativeId = nullptr;
-        }
+	Shader::~Shader()
+	{
+		if (_nativeId != nullptr)
+		{
+			_renderer->deleteProgram(_nativeId);
+			_nativeId = nullptr;
+		}
 
-        _renderer = nullptr;
-    }
+		_renderer = nullptr;
+	}
 
-    void Shader::bind()
-    {
-        _renderer->bindProgram(_nativeId);
-    }
-}
+	int Shader::getContentType()
+	{
+		return CONTENT_TYPE_SHADER;
+	}
+
+	void Shader::bind()
+	{
+		_renderer->bindProgram(_nativeId);
+	}
+} // namespace Core

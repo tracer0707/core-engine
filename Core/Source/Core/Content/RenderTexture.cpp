@@ -3,59 +3,66 @@
 #include "../Renderer/Renderer.h"
 #include "../Renderer/FrameBuffer.h"
 
+#include "ContentTypes.h"
+
 namespace Core
 {
-    RenderTexture::RenderTexture(Renderer* renderer, unsigned int width, unsigned int height) : Content()
-    {
-        _renderer = renderer;
+	RenderTexture::RenderTexture(Renderer* renderer, unsigned int width, unsigned int height) : Content()
+	{
+		_renderer = renderer;
 
-        this->width = width;
-        this->height = height;
+		this->width = width;
+		this->height = height;
 
-        frameBuffer = _renderer->createFrameBuffer(width, height);
-    }
+		frameBuffer = _renderer->createFrameBuffer(width, height);
+	}
 
-    Core::RenderTexture::~RenderTexture()
-    {
-        if (frameBuffer != nullptr)
-        {
-            _renderer->deleteFrameBuffer(frameBuffer);
-            frameBuffer = nullptr;
-        }
+	Core::RenderTexture::~RenderTexture()
+	{
+		if (frameBuffer != nullptr)
+		{
+			_renderer->deleteFrameBuffer(frameBuffer);
+			frameBuffer = nullptr;
+		}
 
-        _renderer = nullptr;
-    }
+		_renderer = nullptr;
+	}
 
-    void RenderTexture::bind()
-    {
-        _renderer->bindFrameBuffer(frameBuffer);
-    }
+	int RenderTexture::getContentType()
+	{
+		return CONTENT_TYPE_RENDER_TEXTURE;
+	}
 
-    unsigned int RenderTexture::getNativeFrameBufferId()
-    {
-        return frameBuffer->frameBuffer;
-    }
+	void RenderTexture::bind()
+	{
+		_renderer->bindFrameBuffer(frameBuffer);
+	}
 
-    unsigned int RenderTexture::getNativeColorTextureId()
-    {
-        return frameBuffer->colorBuffer;
-    }
+	unsigned int RenderTexture::getNativeFrameBufferId()
+	{
+		return frameBuffer->frameBuffer;
+	}
 
-    unsigned int RenderTexture::getNativeDepthTextureId()
-    {
-        return frameBuffer->depthBuffer;
-    }
+	unsigned int RenderTexture::getNativeColorTextureId()
+	{
+		return frameBuffer->colorBuffer;
+	}
 
-    void RenderTexture::setSize(unsigned int width, unsigned int height)
-    {
-        this->width = width;
-        this->height = height;
+	unsigned int RenderTexture::getNativeDepthTextureId()
+	{
+		return frameBuffer->depthBuffer;
+	}
 
-        if (frameBuffer != nullptr)
-        {
-            _renderer->deleteFrameBuffer(frameBuffer);
-        }
+	void RenderTexture::setSize(unsigned int width, unsigned int height)
+	{
+		this->width = width;
+		this->height = height;
 
-        frameBuffer = _renderer->createFrameBuffer(width, height);
-    }
+		if (frameBuffer != nullptr)
+		{
+			_renderer->deleteFrameBuffer(frameBuffer);
+		}
+
+		frameBuffer = _renderer->createFrameBuffer(width, height);
+	}
 } // namespace Core

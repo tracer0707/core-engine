@@ -1,0 +1,24 @@
+#pragma once
+
+namespace Core
+{
+#ifndef CONTENT_TYPE_MATERIAL
+#define CONTENT_TYPE_MATERIAL 0
+#endif
+
+#ifndef CONTENT_TYPE_MESH
+#define CONTENT_TYPE_MESH 1
+#endif
+
+#ifndef CONTENT_TYPE_RENDER_TEXTURE
+#define CONTENT_TYPE_RENDER_TEXTURE 2
+#endif
+
+#ifndef CONTENT_TYPE_SHADER
+#define CONTENT_TYPE_SHADER 3
+#endif
+
+#ifndef CONTENT_TYPE_TEXTURE
+#define CONTENT_TYPE_TEXTURE 4
+#endif
+}

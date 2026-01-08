@@ -3,10 +3,11 @@
 #include <glm/glm.hpp>
 
 #include "../Renderer/VertexBuffer.h"
-#include "../Content/Material.h"
-#include "../Content/Texture.h"
-
 #include "../Renderer/Renderer.h"
+
+#include "ContentTypes.h"
+#include "Material.h"
+#include "Texture.h"
 
 namespace Core
 {
@@ -31,8 +32,7 @@ namespace Core
 
 	void SubMesh::updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
 	{
-		if (_vertexBuffer != nullptr)
-			_renderer->deleteBuffer(_vertexBuffer);
+		if (_vertexBuffer != nullptr) _renderer->deleteBuffer(_vertexBuffer);
 
 		_vertexBuffer = _renderer->createBuffer(vertexArray, vertexArraySize, indexArray, indexArraySize);
 	}
@@ -58,4 +58,9 @@ namespace Core
 		_subMeshes = nullptr;
 		_subMeshesCount = 0;
 	}
-}
+
+	int Mesh::getContentType()
+	{
+		return CONTENT_TYPE_MESH;
+	}
+} // namespace Core
