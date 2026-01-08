@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "../Shared/Uuid.h"
 #include "../Shared/String.h"
 #include "../Shared/List.h"
@@ -33,8 +35,14 @@ namespace Core
 			List<Content*> _shaders;
 			List<Content*> _renderTextures;
 
-			void createOrGetUuid(Content* content, Core::String path);
-			void destroyContent(Content* value, List<Content*>& _list);
+			std::map<Uuid, Content*> _materialsCache;
+			std::map<Uuid, Content*> _texturesCache;
+			std::map<Uuid, Content*> _meshesCache;
+
+			Uuid getOrCreateUuid(Core::String path);
+
+			void removeFromCache(Content* value, std::map<Uuid, Content*>& map);
+			void destroyContent(Content* value, List<Content*>& list);
 
 		public:
 			ContentManager(Application* app, Renderer* renderer);

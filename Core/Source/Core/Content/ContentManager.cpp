@@ -75,20 +75,21 @@ namespace Core
 		_renderer = nullptr;
 	}
 
-	void ContentManager::createOrGetUuid(Content* content, Core::String path)
+	Uuid ContentManager::getOrCreateUuid(Core::String path)
 	{
-		if (content->getUuid() != Uuid::Empty) return;
+		Uuid uuid;
 
 		if (_db->hasUuid(path))
 		{
-			content->setUuid(_db->getUuid(path));
+			uuid = _db->getUuid(path);
 		}
 		else
 		{
-			Uuid newUuid = Uuid::create();
-			content->setUuid(newUuid);
-			_db->setPath(newUuid, path);
+			uuid = Uuid::create();
+			_db->setPath(uuid, path);
 		}
+
+		return uuid;
 	}
 
 	// Create in memory
@@ -126,6 +127,11 @@ namespace Core
 
 	Material* ContentManager::loadMaterialFromFile(String fileName)
 	{
+		Uuid uuid = getOrCreateUuid(fileName);
+
+		auto it = _materialsCache.find(uuid);
+		if (it != _materialsCache.end()) return (Material*)it->second;
+
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
 		size_t fileSize = file.tellg();
 		file.seekg(0);
@@ -144,14 +150,21 @@ namespace Core
 
 		Material* result = createMaterial();
 		result->setTexture(tex);
+		result->setUuid(uuid);
 
-		createOrGetUuid(result, fileName);
+		_materials.add(result);
+		_materialsCache[uuid] = result;
 
 		return result;
 	}
 
 	Texture* ContentManager::loadTextureFromFile(String fileName)
 	{
+		Uuid uuid = getOrCreateUuid(fileName);
+
+		auto it = _texturesCache.find(uuid);
+		if (it != _texturesCache.end()) return (Texture*)it->second;
+
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
 		size_t fileSize = file.tellg();
 		file.seekg(0);
@@ -166,9 +179,11 @@ namespace Core
 		Texture* result = new Texture(_renderer, textureSerialized->width(), textureSerialized->height(), dataRaw, textureSerialized->size(),
 									  static_cast<TextureFormat>(textureSerialized->format()));
 
-		createOrGetUuid(result, fileName);
+		result->setUuid(uuid);
 
 		_textures.add(result);
+		_texturesCache[uuid] = result;
+
 		return result;
 	}
 
@@ -213,16 +228,19 @@ namespace Core
 
 	void ContentManager::destroy(Material* value)
 	{
+		removeFromCache(value, _materialsCache);
 		destroyContent(value, _materials);
 	}
 
 	void ContentManager::destroy(Mesh* value)
 	{
+		removeFromCache(value, _meshesCache);
 		destroyContent(value, _meshes);
 	}
 
 	void ContentManager::destroy(Texture* value)
 	{
+		removeFromCache(value, _texturesCache);
 		destroyContent(value, _textures);
 	}
 
@@ -236,11 +254,22 @@ namespace Core
 		destroyContent(value, _renderTextures);
 	}
 
-	void ContentManager::destroyContent(Content* value, List<Content*>& _list)
+	void ContentManager::removeFromCache(Content* value, std::map<Uuid, Content*>& map) 
 	{
-		if (_list.contains(value))
+		auto it = std::find_if(map.begin(), map.end(),
+							   [value](const std::pair<Uuid, Content*>& pair) { return pair.second == value; });
+
+		if (it != map.end())
 		{
-			_list.remove(value);
+			map.erase(it);
+		}
+	}
+
+	void ContentManager::destroyContent(Content* value, List<Content*>& list)
+	{
+		if (list.contains(value))
+		{
+			list.remove(value);
 		}
 
 		delete value;
