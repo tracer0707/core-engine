@@ -1,0 +1,7 @@
+namespace Core;
+
+table MaterialSerializer {
+	texture_uuid:string;
+}
+
+root_type MaterialSerializer;

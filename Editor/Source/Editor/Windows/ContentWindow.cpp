@@ -15,6 +15,7 @@
 #include "../../Main/EditorApp.h"
 #include "../../Main/FileSystemDialog.h"
 #include "../../Shared/IconsForkAwesome.h"
+#include "../../System/ContentSerializer.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
@@ -100,7 +101,8 @@ namespace Editor
 					if (!thumbnail->getText().endsWith(".material")) thumbnail->setText(thumbnail->getText().std_str() + ".material");
 					Core::Material* mat = _parent->getContentManager()->createMaterial();
 					Core::String path = Core::Path::combine(_currentDir, thumbnail->getText());
-					// nlohmann::serialize(mat, path);
+					ContentSerializer::serializeMaterial(mat, path);
+					_parent->getContentManager()->destroy(mat);
 				});
 				_rightPane->addControl(thumbnail);
 			});

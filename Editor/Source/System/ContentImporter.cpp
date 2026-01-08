@@ -28,8 +28,6 @@
 #include "flatbuffers/flatbuffers.h"
 #include <Core/Serialization/FlatBuffers/TextureSerializer_generated.h>
 
-#include <iostream>
-
 namespace fs = std::filesystem;
 
 namespace Editor
