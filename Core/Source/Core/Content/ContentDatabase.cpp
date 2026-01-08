@@ -6,6 +6,8 @@
 #include "../System/Application.h"
 #include "../Serialization/JsonSerialization.h"
 
+namespace fs = std::filesystem;
+
 namespace Core
 {
 	ContentDatabase::ContentDatabase(Application* app)
@@ -30,11 +32,23 @@ namespace Core
 		_app = nullptr;
 	}
 
+	String ContentDatabase::getRelativePath(String absolutePath)
+	{
+		String contentPath = _app->getContentPath();
+		return Path::relative(absolutePath, contentPath);
+	}
+
+	String ContentDatabase::getAbsolutePath(String relativePath)
+	{
+		String contentPath = _app->getContentPath();
+		return Path::combine(relativePath, contentPath);
+	}
+
 	String ContentDatabase::getPath(Uuid uuid)
 	{
 		if (_uuidToPath.find(uuid) != _uuidToPath.end())
 		{
-			return _uuidToPath[uuid];
+			return getAbsolutePath(_uuidToPath[uuid]);
 		}
 		else
 		{
@@ -44,9 +58,11 @@ namespace Core
 
 	Uuid ContentDatabase::getUuid(String path)
 	{
-		if (_pathToUuid.find(path) != _pathToUuid.end())
+		String relativePath = getRelativePath(path);
+
+		if (_pathToUuid.find(relativePath) != _pathToUuid.end())
 		{
-			return _pathToUuid[path];
+			return _pathToUuid[relativePath];
 		}
 		else
 		{
@@ -61,12 +77,20 @@ namespace Core
 
 	bool ContentDatabase::hasUuid(String path)
 	{
-		return _pathToUuid.find(path) != _pathToUuid.end();
+		String relativePath = getRelativePath(path);
+		return _pathToUuid.find(relativePath) != _pathToUuid.end();
 	}
 
 	void ContentDatabase::setPath(Uuid uuid, String path)
 	{
-		_uuidToPath[uuid] = path;
-		_pathToUuid[path] = uuid;
+		String relativePath = getRelativePath(path);
+
+		_uuidToPath[uuid] = relativePath;
+		_pathToUuid[relativePath] = uuid;
+	}
+
+	void ContentDatabase::dump(Core::String path) const
+	{
+		nlohmann::serialize(_pathToUuid, path);
 	}
 } // namespace Core

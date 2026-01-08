@@ -30,7 +30,6 @@ namespace Editor
 	class CSGEditWindow;
 	class CSGModifier;
 	class Font;
-	class ThumbCacheManager;
 
 	class EditorApp : public Core::Application
 	{
@@ -45,8 +44,6 @@ namespace Editor
 
 					virtual void update();
 					virtual void render();
-
-					ThumbCacheManager* _thumbCacheManager = nullptr;
 
 					Core::Object* _cameraObject = nullptr;
 					Core::Camera* _camera = nullptr;
@@ -77,7 +74,6 @@ namespace Editor
 			virtual void destroy();
 
 		public:
-			Core::String getCachePath() { return Core::Path::combine(getRootPath(), "Cache"); }
-			Core::String getCacheThumbPath() { return Core::Path::combine(getCachePath(), "Thumbnails"); }
+			
 	};
 } // namespace Editor

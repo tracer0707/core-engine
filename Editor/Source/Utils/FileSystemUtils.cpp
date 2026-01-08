@@ -80,7 +80,7 @@ namespace Editor
 			Core::String _p = entry.path().generic_string();
 			if (entry.is_regular_file() && !Core::Path::isHiddenOrSystem(_p))
 			{
-				_p = entry.path().lexically_relative(root).generic_string();
+				_p = Core::Path::relative(entry.path().generic_string(), root.generic_string());
 				out.add(_p.std_str());
 			}
 		}

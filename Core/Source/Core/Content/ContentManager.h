@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <functional>
 
 #include "../Shared/Uuid.h"
 #include "../Shared/String.h"
@@ -29,6 +30,8 @@ namespace Core
 			Application* _app = nullptr;
 			ContentDatabase* _db = nullptr;
 
+			std::function<void(Content*)> _onResourceLoaded = nullptr;
+
 			List<Content*> _materials;
 			List<Content*> _textures;
 			List<Content*> _meshes;
@@ -54,6 +57,8 @@ namespace Core
 			Shader* getDefaultShader() const { return _defaultShader; }
 
 			ContentDatabase* getContentDatabase() const { return _db; }
+
+			void setOnResourceLoaded(std::function<void(Content*)> value) { _onResourceLoaded = value; }
 
 			// Create in memory
 			Material* createMaterial();

@@ -148,12 +148,18 @@ namespace Core
 			// load texture by uuid
 		}
 
-		Material* result = createMaterial();
+		Material* result = new Material(_renderer);
+		result->setShader(_defaultShader);
 		result->setTexture(tex);
 		result->setUuid(uuid);
 
 		_materials.add(result);
 		_materialsCache[uuid] = result;
+
+		if (_onResourceLoaded != nullptr)
+		{
+			_onResourceLoaded(result);
+		}
 
 		return result;
 	}
@@ -183,6 +189,11 @@ namespace Core
 
 		_textures.add(result);
 		_texturesCache[uuid] = result;
+
+		if (_onResourceLoaded != nullptr)
+		{
+			_onResourceLoaded(result);
+		}
 
 		return result;
 	}

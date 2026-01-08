@@ -20,6 +20,8 @@
 #include <sys/stat.h>
 #endif
 
+namespace fs = std::filesystem;
+
 namespace Core
 {
     String Path::combine(String part0, String part1)
@@ -41,11 +43,17 @@ namespace Core
     String Path::combine(String part0, String part1, String part2)
     {
         return combine(combine(part0, part1), part2);
-    }
+	}
+
+	String Path::relative(String target, String base)
+	{
+		fs::path p = fs::relative(target.std_str(), base.std_str());
+		return p.generic_string();
+	}
 
     bool Path::isHiddenOrSystem(String& path)
     {
-        std::filesystem::path _path = std::filesystem::path(path.std_str());
+        fs::path _path = fs::path(path.std_str());
 
         std::string filename = _path.filename().string();
         if (!filename.empty() && filename[0] == '.')

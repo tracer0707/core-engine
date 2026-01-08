@@ -17,6 +17,9 @@ namespace Core
 			std::map<String, Uuid> _pathToUuid;
 			std::map<Uuid, String> _uuidToPath;
 
+			String getRelativePath(String absolutePath);
+			String getAbsolutePath(String relativePath);
+
 		public:
 			ContentDatabase(Application* app);
 			~ContentDatabase();
@@ -28,5 +31,7 @@ namespace Core
 			Uuid getUuid(String path);
 
 			void setPath(Uuid uuid, String path);
+
+			void dump(Core::String path) const;
 	};
 } // namespace Core

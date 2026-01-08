@@ -6,7 +6,7 @@
 
 #include "WindowList.h"
 
-#include "../../System/ContentImporter.h"
+#include "../../Content/ContentImporter.h"
 #include "WindowManager.h"
 
 #include "../Controls/LinearLayout.h"

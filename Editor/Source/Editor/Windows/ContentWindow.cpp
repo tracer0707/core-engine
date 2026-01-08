@@ -7,13 +7,14 @@
 #include <Core/Content/Texture.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/ContentManager.h>
+#include <Core/Content/ContentDatabase.h>
 
 #include "../../Utils/FileSystemUtils.h"
 #include "../../Utils/TextureUtils.h"
 #include "../../Main/EditorApp.h"
 #include "../../Main/FileSystemDialog.h"
 #include "../../Shared/IconsForkAwesome.h"
-#include "../../System/ContentSerializer.h"
+#include "../../Content/ContentSerializer.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
@@ -138,6 +139,11 @@ namespace Editor
 			_importResourceBtn->setEnabled(true);
 			setCurrentDir(nodes[0]->getStringTag(0));
 		});
+
+		_parent->getContentManager()->setOnResourceLoaded([this](Core::Content*) {
+			Core::String dbPath = Core::Path::combine(_parent->getApplication()->getRootPath(), "ContentDatabase.json");
+			_parent->getContentManager()->getContentDatabase()->dump(dbPath);
+		});
 	}
 
 	ContentWindow::~ContentWindow() {}
@@ -201,6 +207,30 @@ namespace Editor
 		}
 	}
 
+	ResourceButton* ContentWindow::createThumbnailForEdit(Core::String ext)
+	{
+		ResourceButton* thumbnail = new ResourceButton();
+		Core::Texture* tex = getIcon(ext);
+		thumbnail->setImage(tex);
+		thumbnail->setSize(THUMB_W, THUMB_H);
+		thumbnail->startEdit();
+		return thumbnail;
+	}
+
+	void ContentWindow::setInspector(ResourceButton* thumbnail, Core::String ext)
+	{
+		if (ext == ".material")
+		{
+			InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
+
+			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
+				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(0));
+				MaterialInspector* inspector = new MaterialInspector(mat);
+				inspectorWnd->setInspector(inspector);
+			});
+		}
+	}
+
 	Core::Texture* ContentWindow::getIcon(Core::String ext)
 	{
 		Core::String iconName = Core::String::Empty;
@@ -234,30 +264,5 @@ namespace Editor
 		}
 
 		return nullptr;
-	}
-
-	ResourceButton* ContentWindow::createThumbnailForEdit(Core::String ext)
-	{
-		ResourceButton* thumbnail = new ResourceButton();
-		Core::Texture* tex = getIcon(ext);
-		thumbnail->setImage(tex);
-		thumbnail->setSize(THUMB_W, THUMB_H);
-		thumbnail->startEdit();
-		return thumbnail;
-	}
-
-	void ContentWindow::setInspector(ResourceButton* thumbnail, Core::String ext)
-	{
-		if (ext == ".material")
-		{
-			InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
-
-			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
-				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(0));
-				MaterialInspector* inspector = new MaterialInspector(mat);
-				inspector->setOnDestroy([this, mat]() { _parent->getContentManager()->destroy(mat); });
-				inspectorWnd->setInspector(inspector);
-			});
-		}
 	}
 } // namespace Editor
