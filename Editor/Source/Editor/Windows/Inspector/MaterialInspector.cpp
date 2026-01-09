@@ -2,8 +2,11 @@
 
 #include <stdexcept>
 
+#include "../../Controls/Table.h"
 #include "../../Controls/LinearLayout.h"
+#include "../../Controls/Label.h"
 #include "../../Controls/Button.h"
+#include "../../Controls/ResourceSelect.h"
 
 namespace Editor
 {
@@ -21,8 +24,14 @@ namespace Editor
 	Control* MaterialInspector::build()
 	{
 		LinearLayout* _mainLayout = new LinearLayout();
-		Button* btn = new Button("Test inspector");
-		_mainLayout->addControl(btn);
+		Table* table = new Table();
+		table->setColumnsCount(2);
+
+		ResourceSelect* textureSelect = new ResourceSelect();
+		table->addControl(new Label("Texture"));
+		table->addControl(textureSelect);
+
+		_mainLayout->addControl(table);
 
 		return _mainLayout;
 	}

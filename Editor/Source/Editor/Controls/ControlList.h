@@ -65,4 +65,16 @@ namespace Core
 #ifndef CONTROL_DROPDOWN
 #define CONTROL_DROPDOWN 15
 #endif
+
+#ifndef CONTROL_RESOURCE_SELECT
+#define CONTROL_RESOURCE_SELECT 16
+#endif
+
+#ifndef CONTROL_RESOURCE_BUTTON
+#define CONTROL_RESOURCE_BUTTON 17
+#endif
+
+#ifndef CONTROL_TABLE
+#define CONTROL_TABLE 18
+#endif
 }

@@ -67,10 +67,6 @@ namespace Editor
 	{
 		if (!_visible || _image == nullptr || _text == Core::String::Empty) return;
 
-		bool hasClick = false;
-		bool hasRightClick = false;
-		bool hasDblClick = false;
-
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
 
 		if (!_style.enabled)
@@ -103,9 +99,9 @@ namespace Editor
 		ImVec2 cur = ImGui::GetCursorPos();
 
 		ImGui::PushID(_id.c_str());
-		hasClick = ImGui::InvisibleButton("##ImageButtonWithText", total_size);
-		hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
-		hasRightClick = ImGui::IsItemHovered() && ImGui::IsMouseClicked(1);
+		bool hasClick = ImGui::InvisibleButton("##ResourceButton", total_size);
+		bool hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
+		bool hasRightClick = ImGui::IsItemHovered() && ImGui::IsMouseClicked(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
 		ImVec2 pos = ImGui::GetItemRectMin();
@@ -206,7 +202,7 @@ namespace Editor
 
 	int ResourceButton::getControlType() const
 	{
-		return CONTROL_BUTTON;
+		return CONTROL_RESOURCE_BUTTON;
 	}
 
 	void ResourceButton::setActive(bool value)
