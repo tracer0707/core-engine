@@ -1,4 +1,4 @@
-#include "ResourceButton.h"
+#include "ContentButton.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -11,20 +11,20 @@
 
 namespace Editor
 {
-	ResourceButton::ResourceButton() : Control() {}
+	ContentButton::ContentButton() : Control() {}
 
-	ResourceButton::ResourceButton(Core::String text, Core::Texture* image)
+	ContentButton::ContentButton(Core::String text, Core::Texture* image)
 	{
 		_text = text;
 		_image = image;
 	}
 
-	ResourceButton::~ResourceButton()
+	ContentButton::~ContentButton()
 	{
 		setUseContextMenu(false);
 	}
 
-	void ResourceButton::setUseContextMenu(bool value)
+	void ContentButton::setUseContextMenu(bool value)
 	{
 		if (value)
 		{
@@ -43,7 +43,7 @@ namespace Editor
 		}
 	}
 
-	float ResourceButton::getWidth() const
+	float ContentButton::getWidth() const
 	{
 		if (_width == 0.0f)
 		{
@@ -53,7 +53,7 @@ namespace Editor
 		return _width;
 	}
 
-	float ResourceButton::getHeight() const
+	float ContentButton::getHeight() const
 	{
 		if (_height == 0.0f)
 		{
@@ -63,7 +63,7 @@ namespace Editor
 		return _height;
 	}
 
-	void ResourceButton::update()
+	void ContentButton::update()
 	{
 		if (!_visible || _image == nullptr || _text == Core::String::Empty) return;
 
@@ -99,7 +99,7 @@ namespace Editor
 		ImVec2 cur = ImGui::GetCursorPos();
 
 		ImGui::PushID(_id.c_str());
-		bool hasClick = ImGui::InvisibleButton("##ResourceButton", total_size);
+		bool hasClick = ImGui::InvisibleButton("##ContentButton", total_size);
 		bool hasDblClick = ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0);
 		bool hasRightClick = ImGui::IsItemHovered() && ImGui::IsMouseClicked(1);
 		bool hovered = ImGui::IsItemHovered();
@@ -200,12 +200,12 @@ namespace Editor
 		}
 	}
 
-	int ResourceButton::getControlType() const
+	int ContentButton::getControlType() const
 	{
-		return CONTROL_RESOURCE_BUTTON;
+		return CONTROL_CONTENT_BUTTON;
 	}
 
-	void ResourceButton::setActive(bool value)
+	void ContentButton::setActive(bool value)
 	{
 		_active = value;
 

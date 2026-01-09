@@ -4,15 +4,15 @@
 
 namespace Editor
 {
-	class ResourceSelect : public Control
+	class ContentSelect : public Control
 	{
 		private:
 			float _actualWidth = 0.0f;
 			float _actualHeight = 0.0f;
 
 		public:
-			ResourceSelect();
-			virtual ~ResourceSelect();
+			ContentSelect();
+			virtual ~ContentSelect();
 
 			virtual float getWidth() const;
 			virtual float getHeight() const;

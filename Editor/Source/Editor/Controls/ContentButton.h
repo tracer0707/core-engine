@@ -16,7 +16,7 @@ namespace Editor
 {
 	class ContextMenu;
 
-	class ResourceButton : public Control
+	class ContentButton : public Control
 	{
 		private:
 			Core::String _text = Core::String::Empty;
@@ -36,9 +36,9 @@ namespace Editor
 			std::function<void()> _onEditCancelled = nullptr;
 
 		public:
-			ResourceButton();
-			ResourceButton(Core::String text, Core::Texture* image);
-			virtual ~ResourceButton();
+			ContentButton();
+			ContentButton(Core::String text, Core::Texture* image);
+			virtual ~ContentButton();
 
 			virtual float getWidth() const;
 			virtual float getHeight() const;

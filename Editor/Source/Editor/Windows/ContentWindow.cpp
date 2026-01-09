@@ -19,7 +19,7 @@
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
 #include "../Controls/Button.h"
-#include "../Controls/ResourceButton.h"
+#include "../Controls/ContentButton.h"
 #include "../Controls/TreeView.h"
 #include "../Controls/TreeNode.h"
 #include "../Controls/Separator.h"
@@ -94,7 +94,7 @@ namespace Editor
 
 		_materialMenuItem->setOnClick([this]() {
 			_parent->getEventHandler()->addEvent([this]() {
-				ResourceButton* thumbnail = createThumbnailForEdit(".material");
+				ContentButton* thumbnail = createThumbnailForEdit(".material");
 				thumbnail->setOnEditCancelled([this, thumbnail]() {
 					_parent->getEventHandler()->addEvent([this, thumbnail]() {
 						_rightPane->removeControl(thumbnail);
@@ -169,7 +169,7 @@ namespace Editor
 
 		for (auto& it : entries)
 		{
-			ResourceButton* thumbnail = new ResourceButton();
+			ContentButton* thumbnail = new ContentButton();
 			Core::Texture* tex = nullptr;
 
 			Core::String ext = it.extension().generic_string();
@@ -207,9 +207,9 @@ namespace Editor
 		}
 	}
 
-	ResourceButton* ContentWindow::createThumbnailForEdit(Core::String ext)
+	ContentButton* ContentWindow::createThumbnailForEdit(Core::String ext)
 	{
-		ResourceButton* thumbnail = new ResourceButton();
+		ContentButton* thumbnail = new ContentButton();
 		Core::Texture* tex = getIcon(ext);
 		thumbnail->setImage(tex);
 		thumbnail->setSize(THUMB_W, THUMB_H);
@@ -217,7 +217,7 @@ namespace Editor
 		return thumbnail;
 	}
 
-	void ContentWindow::setInspector(ResourceButton* thumbnail, Core::String ext)
+	void ContentWindow::setInspector(ContentButton* thumbnail, Core::String ext)
 	{
 		if (ext == ".material")
 		{

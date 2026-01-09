@@ -1,4 +1,4 @@
-#include "ResourceSelect.h"
+#include "ContentSelect.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -7,14 +7,14 @@
 
 namespace Editor
 {
-	ResourceSelect::ResourceSelect() : Control() {}
+	ContentSelect::ContentSelect() : Control() {}
 
-	ResourceSelect::~ResourceSelect()
+	ContentSelect::~ContentSelect()
 	{
 
 	}
 
-	float ResourceSelect::getWidth() const
+	float ContentSelect::getWidth() const
 	{
 		if (_width == 0.0f)
 		{
@@ -24,7 +24,7 @@ namespace Editor
 		return _width;
 	}
 
-	float ResourceSelect::getHeight() const
+	float ContentSelect::getHeight() const
 	{
 		if (_height == 0.0f)
 		{
@@ -34,12 +34,12 @@ namespace Editor
 		return _height;
 	}
 
-	int ResourceSelect::getControlType() const
+	int ContentSelect::getControlType() const
 	{
-		return CONTROL_RESOURCE_SELECT;
+		return CONTROL_CONTENT_SELECT;
 	}
 
-	void ResourceSelect::update()
+	void ContentSelect::update()
 	{
 		if (!_visible) return;
 
@@ -49,7 +49,7 @@ namespace Editor
 		ImVec2 total_size(_width > 0 ? _width : -1, _height > 0 ? _height : 24.0f);
 
 		ImGui::PushID(_id.c_str());
-		bool hasClick = ImGui::InvisibleButton("##ResourceSelect", total_size);
+		bool hasClick = ImGui::InvisibleButton("##ContentSelect", total_size);
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
 		ImVec2 pos = ImGui::GetItemRectMin();

@@ -6,7 +6,7 @@
 #include "../../Controls/LinearLayout.h"
 #include "../../Controls/Label.h"
 #include "../../Controls/Button.h"
-#include "../../Controls/ResourceSelect.h"
+#include "../../Controls/ContentSelect.h"
 
 namespace Editor
 {
@@ -27,7 +27,7 @@ namespace Editor
 		Table* table = new Table();
 		table->setColumnsCount(2);
 
-		ResourceSelect* textureSelect = new ResourceSelect();
+		ContentSelect* textureSelect = new ContentSelect();
 		table->addControl(new Label("Texture"));
 		table->addControl(textureSelect);
 

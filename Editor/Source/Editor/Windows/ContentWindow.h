@@ -14,7 +14,7 @@ namespace Editor
 	class TreeView;
 	class LinearLayout;
 	class Button;
-	class ResourceButton;
+	class ContentButton;
 	class FileSystemDialog;
 
 	class ContentWindow : public Window
@@ -34,8 +34,8 @@ namespace Editor
 			void setCurrentDir(Core::String path);
 
 			Core::Texture* getIcon(Core::String ext);
-			ResourceButton* createThumbnailForEdit(Core::String ext);
-			void setInspector(ResourceButton* thumbnail, Core::String ext);
+			ContentButton* createThumbnailForEdit(Core::String ext);
+			void setInspector(ContentButton* thumbnail, Core::String ext);
 
 		public:
 			ContentWindow(WindowManager* parent);
