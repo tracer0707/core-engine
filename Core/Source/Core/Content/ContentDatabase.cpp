@@ -28,7 +28,7 @@ namespace Core
 	String ContentDatabase::getAbsolutePath(String relativePath)
 	{
 		String contentPath = _app->getContentPath();
-		return Path::combine(relativePath, contentPath);
+		return Path::combine(contentPath, relativePath);
 	}
 
 	String ContentDatabase::getPath(Uuid uuid)
@@ -53,7 +53,11 @@ namespace Core
 		}
 		else
 		{
-			throw std::runtime_error("Resource not found");
+			Uuid uuid = Uuid::create();
+			_pathToUuid[relativePath] = uuid;
+			_uuidToPath[uuid] = relativePath;
+
+			return uuid;
 		}
 	}
 

@@ -81,24 +81,6 @@ namespace Core
 		_renderer = nullptr;
 	}
 
-	Uuid ContentManager::getOrCreateUuid(Core::String path)
-	{
-		Uuid uuid;
-		ContentDatabase* db = ContentDatabase::singleton();
-
-		if (db->hasUuid(path))
-		{
-			uuid = db->getUuid(path);
-		}
-		else
-		{
-			uuid = Uuid::create();
-			db->setPath(uuid, path);
-		}
-
-		return uuid;
-	}
-
 	// Create in memory
 
 	Material* ContentManager::createMaterial()
@@ -134,7 +116,7 @@ namespace Core
 
 	Material* ContentManager::loadMaterialFromFile(String fileName)
 	{
-		Uuid uuid = getOrCreateUuid(fileName);
+		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
 
 		auto it = _materialsCache.find(uuid);
 		if (it != _materialsCache.end()) return (Material*)it->second;
@@ -173,7 +155,7 @@ namespace Core
 
 	Texture* ContentManager::loadTextureFromFile(String fileName)
 	{
-		Uuid uuid = getOrCreateUuid(fileName);
+		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
 
 		auto it = _texturesCache.find(uuid);
 		if (it != _texturesCache.end()) return (Texture*)it->second;

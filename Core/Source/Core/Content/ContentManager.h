@@ -40,8 +40,6 @@ namespace Core
 			std::map<Uuid, Content*> _texturesCache;
 			std::map<Uuid, Content*> _meshesCache;
 
-			Uuid getOrCreateUuid(Core::String path);
-
 			void removeFromCache(Content* value, std::map<Uuid, Content*>& map);
 			void destroyContent(Content* value, List<Content*>& list);
 
