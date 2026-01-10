@@ -214,7 +214,6 @@ namespace Core
 	Texture* ContentManager::loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt)
 	{
 		Texture* result = new Texture(_renderer, w, h, data, size, fmt);
-
 		_textures.add(result);
 		return result;
 	}
@@ -258,8 +257,7 @@ namespace Core
 
 	void ContentManager::removeFromCache(Content* value, std::map<Uuid, Content*>& map) 
 	{
-		auto it = std::find_if(map.begin(), map.end(),
-							   [value](const std::pair<Uuid, Content*>& pair) { return pair.second == value; });
+		auto it = std::find_if(map.begin(), map.end(), [value](const std::pair<Uuid, Content*>& pair) { return pair.second == value; });
 
 		if (it != map.end())
 		{

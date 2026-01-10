@@ -32,10 +32,10 @@ namespace Core
 		public:
 			virtual int getContentType();
 
-			unsigned int getNativeId() { return _nativeId; }
+			unsigned int getNativeId() const { return _nativeId; }
 
-			int getWidth() { return _width; }
-			int getHeight() { return _height; }
+			int getWidth() const { return _width; }
+			int getHeight() const { return _height; }
 
 			void bind(const char* name, int slot);
 	};

@@ -2,6 +2,9 @@
 
 #include <stdexcept>
 
+#include <Core/Content/ContentTypes.h>
+#include <Core/Content/Material.h>
+
 #include "../../Controls/Table.h"
 #include "../../Controls/LinearLayout.h"
 #include "../../Controls/Label.h"
@@ -28,11 +31,13 @@ namespace Editor
 		table->setColumnsCount(2);
 
 		ContentSelect* textureSelect = new ContentSelect();
+		textureSelect->setContentType(CONTENT_TYPE_TEXTURE);
+		textureSelect->setContent((Core::Content*)_material->getTexture());
+
 		table->addControl(new Label("Texture"));
 		table->addControl(textureSelect);
 
 		_mainLayout->addControl(table);
-
 		return _mainLayout;
 	}
 } // namespace Editor

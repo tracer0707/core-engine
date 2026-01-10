@@ -1,21 +1,25 @@
 #include "ContentButton.h"
 
+#include <filesystem>
+
 #include <imgui.h>
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 
+#include <Core/Content/ContentDatabase.h>
 #include <Core/Content/Texture.h>
 
 #include "ControlList.h"
 #include "ContextMenu.h"
 
+namespace fs = std::filesystem;
+
 namespace Editor
 {
 	ContentButton::ContentButton() : Control() {}
 
-	ContentButton::ContentButton(Core::String text, Core::Texture* image)
+	ContentButton::ContentButton(Core::Texture* image)
 	{
-		_text = text;
 		_image = image;
 	}
 
@@ -63,9 +67,33 @@ namespace Editor
 		return _height;
 	}
 
+	Core::String ContentButton::getContentName() const
+	{
+		if (_content != nullptr)
+		{
+			Core::String path = Core::ContentDatabase::singleton()->getPath(_content->getUuid());
+			return fs::path(path.std_str()).filename().stem().generic_string();
+		}
+
+		return Core::String::Empty;
+	}
+
+	void ContentButton::startEdit()
+	{
+		_edit = true;
+		_editValue = Core::String::Empty;
+
+		if (_content != nullptr)
+		{
+			_editValue = getContentName();
+		}
+	}
+
 	void ContentButton::update()
 	{
-		if (!_visible || _image == nullptr || _text == Core::String::Empty) return;
+		if (!_visible || _image == nullptr) return;
+
+		Core::String contentName = getContentName();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
 
@@ -81,7 +109,8 @@ namespace Editor
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 padding = style.FramePadding;
 
-		std::string label = _text.std_str();
+		std::string label = contentName.std_str();
+		std::string editLabel = _editValue.std_str();
 		float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0;
 		ImVec2 text_size = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
 
@@ -126,6 +155,14 @@ namespace Editor
 		if (!_edit)
 		{
 			ImGui::RenderTextEllipsis(draw_list, text_min, text_max, text_max.x, text_max.x, label.c_str(), nullptr, nullptr);
+
+			if (_content != nullptr && ImGui::BeginDragDropSource())
+			{
+				void* data = reinterpret_cast<void*>(_content);
+				ImGui::SetDragDropPayload(("CONTENT_" + std::to_string(_content->getContentType())).c_str(), &data, sizeof(void*));
+				ImGui::Text(contentName.std_str().c_str());
+				ImGui::EndDragDropSource();
+			}
 		}
 		else
 		{
@@ -134,8 +171,8 @@ namespace Editor
 			ImGui::SetScrollHereX();
 			ImGui::SetScrollHereY();
 			ImGui::SetKeyboardFocusHere(0);
-			ImGui::InputText(("##" + _id + "_ed").c_str(), &label);
-			_text = label;
+			ImGui::InputText(("##" + _id + "_edit").c_str(), &editLabel);
+			_editValue = editLabel;
 			if (!ImGui::IsItemHovered() && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)))
 			{
 				_edit = false;
@@ -148,7 +185,7 @@ namespace Editor
 				}
 				else if (_onEditComplete != nullptr)
 				{
-					_onEditComplete();
+					_onEditComplete(_editValue);
 				}
 			}
 			if (ImGui::IsKeyPressed(ImGuiKey_Enter))
@@ -156,7 +193,7 @@ namespace Editor
 				_edit = false;
 				if (_onEditComplete != nullptr)
 				{
-					_onEditComplete();
+					_onEditComplete(_editValue);
 				}
 			}
 			ImGui::SetCursorPos(cur);

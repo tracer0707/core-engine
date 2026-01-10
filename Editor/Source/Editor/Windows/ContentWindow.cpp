@@ -101,10 +101,11 @@ namespace Editor
 						delete thumbnail;
 					});
 				});
-				thumbnail->setOnEditComplete([this, thumbnail]() {
-					if (!thumbnail->getText().endsWith(".material")) thumbnail->setText(thumbnail->getText().std_str() + ".material");
+				thumbnail->setOnEditComplete([this, thumbnail](Core::String newName) {
+					Core::String _newName = newName;
+					if (!_newName.endsWith(".material")) _newName = _newName + ".material";
 					Core::Material* mat = _parent->getContentManager()->createMaterial();
-					Core::String path = Core::Path::combine(_currentDir, thumbnail->getText());
+					Core::String path = Core::Path::combine(_currentDir, _newName);
 					ContentSerializer::serializeMaterial(mat, path);
 					_parent->getContentManager()->destroy(mat);
 					_parent->getEventHandler()->addEvent([this, thumbnail]() {
@@ -161,34 +162,46 @@ namespace Editor
 	void ContentWindow::setCurrentDir(Core::String path)
 	{
 		_rightPane->clear();
-
 		_currentDir = path;
 
 		Core::List<std::filesystem::path> entries = FileSystemUtils::getPathEntries(path);
 
 		for (auto& it : entries)
 		{
-			ContentButton* thumbnail = new ContentButton();
+			if (fs::is_directory(it)) continue;
+
 			Core::Texture* tex = nullptr;
-
+			Core::Content* content = nullptr;
 			Core::String ext = it.extension().generic_string();
-
+			
 			if (ext == ".texture")
 			{
 				tex = _parent->getContentManager()->loadTextureFromFile(it.generic_string());
+				content = tex;
+			}
+			else if (ext == ".material")
+			{
+				tex = getIcon(ext);
+				content = _parent->getContentManager()->loadMaterialFromFile(it.generic_string());
 			}
 			else
 			{
 				tex = getIcon(ext);
 			}
 
-			thumbnail->setText(it.filename().generic_string());
-			thumbnail->setImage(tex);
-			thumbnail->setSize(THUMB_W, THUMB_H);
-			thumbnail->setStringTag(0, it.generic_string());
-			setInspector(thumbnail, ext);
+			if (content != nullptr)
+			{
+				ContentButton* thumbnail = new ContentButton();
+				thumbnail->setImage(tex);
+				thumbnail->setContent(content);
+				thumbnail->setSize(THUMB_W, THUMB_H);
+				thumbnail->setStringTag(0, it.generic_string());
+				setInspector(thumbnail, ext);
 
-			if (fs::is_directory(it))
+				_rightPane->addControl(thumbnail);
+			}
+
+			/*if (fs::is_directory(it))
 			{
 				thumbnail->setOnDoubleClick([this, thumbnail]() {
 					Core::String p = thumbnail->getStringTag(0);
@@ -200,9 +213,7 @@ namespace Editor
 					}
 					_parent->getEventHandler()->addEvent([this, p]() { setCurrentDir(p); });
 				});
-			}
-
-			_rightPane->addControl(thumbnail);
+			}*/
 		}
 	}
 
