@@ -140,9 +140,8 @@ namespace Editor
 			setCurrentDir(nodes[0]->getStringTag(0));
 		});
 
-		_parent->getContentManager()->setOnResourceLoaded([this](Core::Content*) {
-			Core::String dbPath = Core::Path::combine(_parent->getApplication()->getRootPath(), "ContentDatabase.json");
-			_parent->getContentManager()->getContentDatabase()->dump(dbPath);
+		_parent->getContentManager()->setOnResourceLoaded([](Core::Content*) {
+			Core::ContentDatabase::singleton()->save();
 		});
 	}
 

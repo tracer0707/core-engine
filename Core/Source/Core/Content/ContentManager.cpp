@@ -2,6 +2,8 @@
 
 #include <fstream>
 
+#include "../Shared/Path.h"
+#include "../System/Application.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
 
@@ -22,7 +24,11 @@ namespace Core
 		_app = app;
 		_renderer = renderer;
 
-		_db = new ContentDatabase(_app);
+		String dbPath = Path::combine(_app->getRootPath(), "ContentDatabase.json");
+		ContentDatabase* db = ContentDatabase::singleton();
+		db->setApplication(app);
+		db->setFilePath(dbPath);
+		db->load();
 
 		_defaultShader = loadShaderFromString("#version 400\n"
 											  "layout (location = 0) in vec3 position;"
@@ -78,15 +84,16 @@ namespace Core
 	Uuid ContentManager::getOrCreateUuid(Core::String path)
 	{
 		Uuid uuid;
+		ContentDatabase* db = ContentDatabase::singleton();
 
-		if (_db->hasUuid(path))
+		if (db->hasUuid(path))
 		{
-			uuid = _db->getUuid(path);
+			uuid = db->getUuid(path);
 		}
 		else
 		{
 			uuid = Uuid::create();
-			_db->setPath(uuid, path);
+			db->setPath(uuid, path);
 		}
 
 		return uuid;
@@ -208,14 +215,16 @@ namespace Core
 
 	Material* ContentManager::loadMaterialByUuid(Uuid uuid)
 	{
-		if (!_db->hasPath(uuid)) throw std::runtime_error("Resource not found");
-		return loadMaterialFromFile(_db->getPath(uuid));
+		ContentDatabase* db = ContentDatabase::singleton();
+		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadMaterialFromFile(db->getPath(uuid));
 	}
 
 	Texture* ContentManager::loadTextureByUuid(Uuid uuid)
 	{
-		if (!_db->hasPath(uuid)) throw std::runtime_error("Resource not found");
-		return loadTextureFromFile(_db->getPath(uuid));
+		ContentDatabase* db = ContentDatabase::singleton();
+		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadTextureFromFile(db->getPath(uuid));
 	}
 
 	// Load from memory

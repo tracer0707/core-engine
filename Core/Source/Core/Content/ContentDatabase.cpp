@@ -10,22 +10,9 @@ namespace fs = std::filesystem;
 
 namespace Core
 {
-	ContentDatabase::ContentDatabase(Application* app)
-	{
-		_app = app;
+	ContentDatabase ContentDatabase::_singleton;
 
-		String dbPath = Path::combine(_app->getRootPath(), "ContentDatabase.json");
-
-		if (std::filesystem::exists(dbPath.std_str()))
-		{
-			nlohmann::deserialize(_pathToUuid, dbPath);
-
-			for (auto& p : _pathToUuid)
-			{
-				_uuidToPath[p.second] = p.first;
-			}
-		}
-	}
+	ContentDatabase::ContentDatabase() {}
 
 	ContentDatabase::~ContentDatabase()
 	{
@@ -89,8 +76,21 @@ namespace Core
 		_pathToUuid[relativePath] = uuid;
 	}
 
-	void ContentDatabase::dump(Core::String path) const
+	void ContentDatabase::load()
 	{
-		nlohmann::serialize(_pathToUuid, path);
+		if (std::filesystem::exists(_filePath.std_str()))
+		{
+			nlohmann::deserialize(_pathToUuid, _filePath);
+
+			for (auto& p : _pathToUuid)
+			{
+				_uuidToPath[p.second] = p.first;
+			}
+		}
+	}
+
+	void ContentDatabase::save() const
+	{
+		nlohmann::serialize(_pathToUuid, _filePath);
 	}
 } // namespace Core

@@ -17,7 +17,6 @@ namespace Core
 	class Mesh;
 	class Shader;
 	class RenderTexture;
-	class ContentDatabase;
 	class Application;
 
 	class ContentManager
@@ -28,8 +27,7 @@ namespace Core
 			Shader* _defaultShader = nullptr;
 
 			Application* _app = nullptr;
-			ContentDatabase* _db = nullptr;
-
+			
 			std::function<void(Content*)> _onResourceLoaded = nullptr;
 
 			List<Content*> _materials;
@@ -55,8 +53,6 @@ namespace Core
 
 			Material* getDefaultMaterial() const { return _defaultMaterial; }
 			Shader* getDefaultShader() const { return _defaultShader; }
-
-			ContentDatabase* getContentDatabase() const { return _db; }
 
 			void setOnResourceLoaded(std::function<void(Content*)> value) { _onResourceLoaded = value; }
 

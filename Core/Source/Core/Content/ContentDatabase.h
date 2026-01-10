@@ -11,8 +11,14 @@ namespace Core
 
 	class ContentDatabase
 	{
+			friend class ContentManager;
+
 		private:
+			ContentDatabase();
+			~ContentDatabase();
+
 			Application* _app = nullptr;
+			Core::String _filePath = Core::String::Empty;
 
 			std::map<String, Uuid> _pathToUuid;
 			std::map<Uuid, String> _uuidToPath;
@@ -20,9 +26,13 @@ namespace Core
 			String getRelativePath(String absolutePath);
 			String getAbsolutePath(String relativePath);
 
+			void setApplication(Application* value) { _app = value; }
+			void setFilePath(Core::String value) { _filePath = value; }
+
+			static ContentDatabase _singleton;
+
 		public:
-			ContentDatabase(Application* app);
-			~ContentDatabase();
+			static ContentDatabase* singleton() { return &_singleton; }
 
 			bool hasPath(Uuid uuid);
 			bool hasUuid(String path);
@@ -32,6 +42,7 @@ namespace Core
 
 			void setPath(Uuid uuid, String path);
 
-			void dump(Core::String path) const;
+			void load();
+			void save() const;
 	};
 } // namespace Core
