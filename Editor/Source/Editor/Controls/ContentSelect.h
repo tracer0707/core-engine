@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <Core/Shared/String.h>
 #include <Core/Shared/Uuid.h>
 
@@ -21,6 +23,8 @@ namespace Editor
 			Core::Content* _content = nullptr;
 			int _contentType = INT_MAX;
 
+			std::function<void(Core::Content*)> _onChange = nullptr;
+
 			Core::String getContentName() const;
 
 		public:
@@ -38,5 +42,7 @@ namespace Editor
 
 			int getContentType() const { return _contentType; }
 			void setContentType(int value) { _contentType = value; }
+
+			void setOnChange(std::function<void(Core::Content*)> value) { _onChange = value; }
 	};
 }
