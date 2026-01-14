@@ -86,6 +86,11 @@ namespace Core
 		return dst;
 	}
 
+	bool String::empty() const
+	{
+		return _buffer.isEmpty();
+	}
+
 	String String::replace(char src, char dst)
 	{
 		String s;
@@ -107,32 +112,32 @@ namespace Core
 		return s;
 	}
 
-	int String::lastIndexOf(char src)
+	int String::lastIndexOf(char src) const
 	{
 		return _buffer.lastIndexOf(src);
 	}
 
-	int String::length()
+	int String::length() const
 	{
-		return _buffer.length();
+		return _buffer.countChar32();
 	}
 
-	bool String::startsWith(char val)
+	bool String::startsWith(char val) const
 	{
 		return _buffer.startsWith(val);
 	}
 
-	bool String::startsWith(Core::String val)
+	bool String::startsWith(Core::String val) const
 	{
 		return _buffer.startsWith(val._buffer);
 	}
 
-	bool String::endsWith(char val)
+	bool String::endsWith(char val) const
 	{
 		return _buffer.endsWith(val);
 	}
 
-	bool String::endsWith(Core::String val)
+	bool String::endsWith(Core::String val) const
 	{
 		return _buffer.endsWith(val._buffer);
 	}

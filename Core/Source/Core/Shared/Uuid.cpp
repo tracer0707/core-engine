@@ -140,7 +140,7 @@ namespace Core
 		return true;
 	}
 
-	Uuid Uuid::fromString(std::string& str)
+	Uuid Uuid::fromString(std::string str)
 	{
 		bool firstDigit = true;
 		size_t hasBraces = 0;

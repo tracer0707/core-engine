@@ -5,9 +5,16 @@
 #include <Core/Serialization/FlatBuffers/MaterialSerializer_generated.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/Texture.h>
+#include <Core/Content/ContentDatabase.h>
 
 namespace Editor
 {
+	void ContentSerializer::serializeMaterial(Core::Material* value)
+	{
+		Core::String path = Core::ContentDatabase::singleton()->getPath(value->getUuid());
+		serializeMaterial(value, path);
+	}
+
 	void ContentSerializer::serializeMaterial(Core::Material* value, Core::String path)
 	{
 		flatbuffers::FlatBufferBuilder builder;

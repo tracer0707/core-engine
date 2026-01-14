@@ -11,6 +11,8 @@
 #include "../../Controls/Button.h"
 #include "../../Controls/ContentSelect.h"
 
+#include "../../../Content/ContentSerializer.h"
+
 namespace Editor
 {
 	MaterialInspector::MaterialInspector(Core::Material* material) : Inspector()
@@ -34,7 +36,8 @@ namespace Editor
 		textureSelect->setContentType(CONTENT_TYPE_TEXTURE);
 		textureSelect->setContent((Core::Content*)_material->getTexture());
 		textureSelect->setOnChange([this](Core::Content* value) {
-
+			_material->setTexture((Core::Texture*)value);
+			ContentSerializer::serializeMaterial(_material);
 		});
 
 		table->addControl(new Label("Texture"));

@@ -12,6 +12,7 @@ namespace Editor
 	class ContentSerializer
 	{
 		public:
+			static void serializeMaterial(Core::Material* value);
 			static void serializeMaterial(Core::Material* value, Core::String path);
 	};
 } // namespace Editor

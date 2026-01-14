@@ -26,7 +26,7 @@ namespace Core
 
 			static Uuid create();
 			static bool isValidUuid(std::string& str);
-			static Uuid fromString(std::string& str);
+			static Uuid fromString(std::string str);
 
 			bool isNil();
 

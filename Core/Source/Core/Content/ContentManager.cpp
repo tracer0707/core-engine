@@ -134,7 +134,7 @@ namespace Core
 		String textureUuid = materialSerialized->texture_uuid()->c_str();
 		if (textureUuid != String::Empty)
 		{
-			// load texture by uuid
+			tex = loadTextureByUuid(Core::Uuid::fromString(textureUuid.std_str()));
 		}
 
 		Material* result = new Material(_renderer);

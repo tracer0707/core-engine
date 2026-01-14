@@ -35,11 +35,12 @@ namespace Core
 			String replace(char src, char dst);
 			String substring(int start);
 			String substring(int start, int length);
-			int lastIndexOf(char src);
-			int length();
-			bool startsWith(char val);
-			bool startsWith(Core::String val);
-			bool endsWith(char val);
-			bool endsWith(Core::String val);
+			int lastIndexOf(char src) const;
+			int length() const;
+			bool startsWith(char val) const;
+			bool startsWith(Core::String val) const;
+			bool endsWith(char val) const;
+			bool endsWith(Core::String val) const;
+			bool empty() const;
 	};
 } // namespace Core
