@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <climits>
 
 #include <Core/Shared/String.h>
 #include <Core/Shared/Uuid.h>

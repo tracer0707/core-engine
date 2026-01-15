@@ -14,6 +14,7 @@
 #include "Modifiers/CSGModifier.h"
 #include "Controls/TreeView.h"
 
+#include "../Shared/Tags.h"
 #include "../SceneUtils/Raycast.h"
 #include "../CSG/CSGModel.h"
 #include "../CSG/CSGBrush.h"
@@ -125,8 +126,8 @@ namespace Editor
 						mod->setCurrentBrush(brush);
 
 						Gizmo::singleton()->setTransform(brush->getTransform());
-						// TreeNode* node = treeView->findNodeByObject(brush->getObject());
-						// treeView->selectNode(node, false);
+						TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
+						treeView->selectNode(node, false);
 
 						break;
 					}

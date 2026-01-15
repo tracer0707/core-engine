@@ -2,23 +2,17 @@
 
 namespace Core
 {
-    Component::Component(Object* owner)
-    {
-        this->owner = owner;
-    }
+	Component::Component(Object* owner)
+	{
+		_owner = owner;
+	}
 
-    Component::~Component()
-    {
-        owner = nullptr;
-    }
+	Component::~Component()
+	{
+		_owner = nullptr;
+	}
 
-    void Component::update(float& dt)
-    {
+	void Component::update(float& dt) {}
 
-    }
-
-    void Component::render(Camera* camera)
-    {
-
-    }
-}
+	void Component::render(Camera* camera) {}
+} // namespace Core

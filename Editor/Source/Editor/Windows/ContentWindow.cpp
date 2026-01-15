@@ -14,6 +14,7 @@
 #include "../../Main/EditorApp.h"
 #include "../../Main/FileSystemDialog.h"
 #include "../../Shared/IconsForkAwesome.h"
+#include "../../Shared/Tags.h"
 #include "../../Content/ContentSerializer.h"
 
 #include "../Controls/LinearLayout.h"
@@ -138,12 +139,10 @@ namespace Editor
 			if (nodes.count() == 0) return;
 			_createResourceBtn->setEnabled(true);
 			_importResourceBtn->setEnabled(true);
-			setCurrentDir(nodes[0]->getStringTag(0));
+			setCurrentDir(nodes[0]->getStringTag(TAG_FULL_PATH));
 		});
 
-		_parent->getContentManager()->setOnResourceLoaded([](Core::Content*) {
-			Core::ContentDatabase::singleton()->save();
-		});
+		_parent->getContentManager()->setOnResourceLoaded([](Core::Content*) { Core::ContentDatabase::singleton()->save(); });
 	}
 
 	ContentWindow::~ContentWindow() {}
@@ -173,7 +172,7 @@ namespace Editor
 			Core::Texture* tex = nullptr;
 			Core::Content* content = nullptr;
 			Core::String ext = it.extension().generic_string();
-			
+
 			if (ext == ".texture")
 			{
 				tex = _parent->getContentManager()->loadTextureFromFile(it.generic_string());
@@ -195,7 +194,7 @@ namespace Editor
 				thumbnail->setImage(tex);
 				thumbnail->setContent(content);
 				thumbnail->setSize(THUMB_W, THUMB_H);
-				thumbnail->setStringTag(0, it.generic_string());
+				thumbnail->setStringTag(TAG_FULL_PATH, it.generic_string());
 				setInspector(thumbnail, ext);
 
 				_rightPane->addControl(thumbnail);
@@ -204,7 +203,7 @@ namespace Editor
 			/*if (fs::is_directory(it))
 			{
 				thumbnail->setOnDoubleClick([this, thumbnail]() {
-					Core::String p = thumbnail->getStringTag(0);
+					Core::String p = thumbnail->getStringTag(TAG_FULL_PATH);
 					TreeNode* node = _treeView->findNodeByTag(0, p);
 					if (node != nullptr)
 					{

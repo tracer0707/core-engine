@@ -7,20 +7,20 @@ namespace Core
 
 	class Component
 	{
-		friend class Object;
+			friend class Object;
 
-	protected:
-		Object* owner = nullptr;
+		protected:
+			Object* _owner = nullptr;
 
-	public:
-		Component(Object* owner);
-		virtual ~Component();
+		public:
+			Component(Object* owner);
+			virtual ~Component();
 
-		virtual unsigned int getComponentType() = 0;
+			virtual unsigned int getComponentType() = 0;
 
-		virtual void update(float& dt);
-		virtual void render(Camera* camera);
+			virtual void update(float& dt);
+			virtual void render(Camera* camera);
 
-		Object* getOwner() { return owner; }
+			Object* getOwner() { return _owner; }
 	};
-}
+} // namespace Core

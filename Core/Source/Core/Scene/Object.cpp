@@ -18,7 +18,6 @@ namespace Core
 		for (int i = 0; i < _components.count(); ++i)
 		{
 			Component* component = _components.get(i);
-			component->owner = nullptr;
 			delete component;
 		}
 
@@ -49,8 +48,7 @@ namespace Core
 		for (int i = 0; i < _components.count(); ++i)
 		{
 			Component* component = _components.get(i);
-			if (component->getComponentType() == type)
-				return component;
+			if (component->getComponentType() == type) return component;
 		}
 
 		return nullptr;
@@ -100,4 +98,4 @@ namespace Core
 			_components.removeAt(idx);
 		}
 	}
-}
+} // namespace Core

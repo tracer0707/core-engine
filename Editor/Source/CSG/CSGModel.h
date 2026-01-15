@@ -34,7 +34,7 @@ namespace Editor
 					Core::List<Core::Uuid> brushIds;
 			};
 
-			Core::String _name = "";
+			Core::String _name = Core::String::Empty;
 			Core::List<CSGBrush*> _brushes;
 			std::map<Core::Material*, SubMeshInfo*> _subMeshes;
 
@@ -52,18 +52,18 @@ namespace Editor
 			CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
 			~CSGModel();
 
-			Core::String getName() { return _name; }
+			Core::String getName() const { return _name; }
 			void setName(Core::String value) { _name = value; }
 
-			Core::Object* getObject() { return _object; }
-			Core::MeshRenderer* getMeshRenderer() { return _meshRenderer; }
+			Core::Object* getObject() const { return _object; }
+			Core::MeshRenderer* getMeshRenderer() const { return _meshRenderer; }
 
-			Core::ContentManager* getContentManager() { return _contentManager; }
+			Core::ContentManager* getContentManager() const { return _contentManager; }
 
 			CSGBrushCube* createCubeBrush();
 
-			int getNumBrushes() { return _brushes.count(); }
-			CSGBrush* getBrush(int index) { return _brushes.get(index); }
+			int getNumBrushes() const { return _brushes.count(); }
+			CSGBrush* getBrush(int index) const { return _brushes.get(index); }
 			CSGBrush* findBrush(Core::Uuid brushId);
 			bool removeBrush(CSGBrush* value);
 

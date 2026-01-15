@@ -12,53 +12,53 @@
 
 namespace Core
 {
-    MeshRenderer::MeshRenderer(Object* owner, Renderer* renderer) : Component(owner)
-    {
-        _renderer = renderer;
-    }
+	MeshRenderer::MeshRenderer(Object* owner, Renderer* renderer) : Component(owner)
+	{
+		_renderer = renderer;
+	}
 
-    MeshRenderer::~MeshRenderer()
-    {
-        mesh = nullptr;
-    }
+	MeshRenderer::~MeshRenderer()
+	{
+		mesh = nullptr;
+	}
 
-    unsigned int MeshRenderer::getComponentType()
-    {
-        return COMPONENT_MESHRENDERER;
-    }
+	unsigned int MeshRenderer::getComponentType()
+	{
+		return COMPONENT_MESHRENDERER;
+	}
 
-    AxisAlignedBox MeshRenderer::getWorldBoundingBox()
-    {
-        if (mesh == nullptr) return AxisAlignedBox::BOX_NULL;
+	AxisAlignedBox MeshRenderer::getWorldBoundingBox()
+	{
+		if (mesh == nullptr) return AxisAlignedBox::BOX_NULL;
 
-        Transform* transform = owner->findComponent<Transform*>();
+		Transform* transform = _owner->findComponent<Transform*>();
 
-        AxisAlignedBox aab = mesh->getBoundingBox();
-        aab.transform(transform->getTransformMatrix());
+		AxisAlignedBox aab = mesh->getBoundingBox();
+		aab.transform(transform->getTransformMatrix());
 
-        return aab;
-    }
+		return aab;
+	}
 
-    void MeshRenderer::render(Camera* camera)
-    {
-        if (mesh == nullptr) return;
+	void MeshRenderer::render(Camera* camera)
+	{
+		if (mesh == nullptr) return;
 
-        Transform* transform = owner->findComponent<Transform*>();
+		Transform* transform = _owner->findComponent<Transform*>();
 
-        glm::mat4 view = camera->getViewMatrix();
-        glm::mat4 proj = camera->getProjectionMatrix();
+		glm::mat4 view = camera->getViewMatrix();
+		glm::mat4 proj = camera->getProjectionMatrix();
 
-        for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
-        {
-            SubMesh* subMesh = mesh->getSubMesh(i);
-            Material* material = subMesh->getMaterial();
+		for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
+		{
+			SubMesh* subMesh = mesh->getSubMesh(i);
+			Material* material = subMesh->getMaterial();
 
-            glm::mat4 model = transform->getTransformMatrix();
+			glm::mat4 model = transform->getTransformMatrix();
 
-            if (material != nullptr) material->bind();
-            _renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,
-                                  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
-                                  model);
-        }
-    }
+			if (material != nullptr) material->bind();
+			_renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,
+								  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
+								  model);
+		}
+	}
 } // namespace Core

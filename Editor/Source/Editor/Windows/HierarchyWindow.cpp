@@ -16,18 +16,19 @@
 #include "../../CSG/CSGBrush.h"
 #include "../../Shared/Tags.h"
 
+#include <Core/Components/Transform.h>
 #include <Core/Scene/Object.h>
 
 namespace Editor
 {
-	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
+	__attribute__((optimize("O0"))) HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
 		_linearLayout = new LinearLayout(LayoutDirection::Vertical);
-		
+
 		_objectTree = new TreeView();
 
-		_objectTree->setOnSelectionChanged([=] (Core::List<TreeNode*>& selected) {
+		_objectTree->setOnSelectionChanged([this, modMgr](Core::List<TreeNode*>& selected) {
 			if (selected.count() == 0)
 			{
 				Gizmo::singleton()->setTransform(nullptr);
@@ -35,44 +36,45 @@ namespace Editor
 			else if (selected.count() == 1)
 			{
 				TreeNode* node = selected.get(0);
-				/*Core::Object* obj = (Core::Object*)node->getObject();
-				Core::Transform* transform = obj->findComponent<Core::Transform*>();
 
-				Gizmo::singleton()->setTransform((Core::Transformable*)transform);*/
-
-				/*if (modMgr->getCurrentModifierName() == CSGModifier::NAME && obj->getFlags().getBit(LAYER_CSG))
+				if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
 				{
-					CSGBrush* brush = (CSGBrush*)node->getTag(TAG_CSG_BRUSH);
-					CSGModel* model = (CSGModel*)node->getTag(TAG_CSG_MODEL);
+					Core::Transformable* transform = nullptr;
+
+					CSGBrush* brush = (CSGBrush*)node->getObjectTag(TAG_CSG_BRUSH);
+					CSGModel* model = (CSGModel*)node->getObjectTag(TAG_CSG_MODEL);
 
 					CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
 
 					if (brush != nullptr)
 					{
+						transform = brush->getTransform();
 						mod->setCurrentModel(brush->getParent());
 						mod->setCurrentBrush(brush);
 					}
 					else if (model != nullptr)
 					{
+						Core::Transform* t = model->getObject()->findComponent<Core::Transform*>();
+						transform = (Core::Transformable*)t;
 						mod->setCurrentModel(model);
 					}
 
+					Gizmo::singleton()->setTransform(transform);
+
 					_parent->invalidateAll();
-				}*/
+				}
 			}
 		});
 
 		_linearLayout->addControl(_objectTree);
-		
+
 		addControl(_linearLayout);
 	}
 
-	HierarchyWindow::~HierarchyWindow()
-	{
-	}
+	HierarchyWindow::~HierarchyWindow() {}
 
 	void HierarchyWindow::onUpdate()
 	{
 		_linearLayout->setWidth(getClientWidth());
 	}
-}
+} // namespace Editor

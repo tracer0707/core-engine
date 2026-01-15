@@ -1,5 +1,7 @@
 #include "CSGBrush.h"
 
+#include "CSGModel.h"
+
 #include <carve/carve.hpp>
 #include <carve/csg.hpp>
 #include <carve/input.hpp>
@@ -9,7 +11,7 @@
 
 #include <Core/Math/Mathf.h>
 #include <Core/Scene/Object.h>
-#include <Core/Interface/Transformable.h>
+#include <Core/Components/Transform.h>
 
 namespace Editor
 {
@@ -18,6 +20,8 @@ namespace Editor
 		this->parent = parent;
 
 		transform = new Core::Transformable();
+		Core::Transform* t = parent->getObject()->findComponent<Core::Transform*>();
+		transform->setParent(t);
 	}
 
 	CSGBrush::~CSGBrush()
@@ -42,8 +46,7 @@ namespace Editor
 
 	void CSGBrush::destroy()
 	{
-		if (brushPtr != nullptr)
-			delete brushPtr;
+		if (brushPtr != nullptr) delete brushPtr;
 
 		brushPtr = nullptr;
 	}
@@ -85,12 +88,9 @@ namespace Editor
 		rebuild();
 	}
 
-	void CSGBrush::bind(carve::interpolate::FaceVertexAttr<uv_t>* fv_uv,
-		carve::interpolate::FaceAttr<Core::Material*>* f_material,
-		carve::interpolate::FaceAttr<int>* f_layer,
-		carve::interpolate::FaceAttr<bool>* f_castShadows,
-		carve::interpolate::FaceAttr<bool>* f_smoothNormals,
-		carve::interpolate::FaceAttr<Core::Uuid>* f_brushId)
+	void CSGBrush::bind(carve::interpolate::FaceVertexAttr<uv_t>* fv_uv, carve::interpolate::FaceAttr<Core::Material*>* f_material,
+						carve::interpolate::FaceAttr<int>* f_layer, carve::interpolate::FaceAttr<bool>* f_castShadows,
+						carve::interpolate::FaceAttr<bool>* f_smoothNormals, carve::interpolate::FaceAttr<Core::Uuid>* f_brushId)
 	{
 		for (int i = 0; i < faces.count(); ++i)
 		{
@@ -139,16 +139,14 @@ namespace Editor
 
 	Core::Material* CSGBrush::getMaterial(int faceIndex)
 	{
-		if (faceIndex < faces.count())
-			return faces.get(faceIndex).material;
+		if (faceIndex < faces.count()) return faces.get(faceIndex).material;
 
 		return nullptr;
 	}
 
 	void CSGBrush::setMaterial(int faceIndex, Core::Material* value)
 	{
-		if (faceIndex < faces.count())
-			faces.get(faceIndex).material = value;
+		if (faceIndex < faces.count()) faces.get(faceIndex).material = value;
 	}
 
 	glm::vec2 CSGBrush::getUV(int faceIndex, int vertIndex)
@@ -157,8 +155,7 @@ namespace Editor
 		{
 			FaceInfo& face = faces.get(faceIndex);
 
-			if (vertIndex < face.texCoords.count())
-				return face.texCoords.get(vertIndex);
+			if (vertIndex < face.texCoords.count()) return face.texCoords.get(vertIndex);
 		}
 
 		return glm::vec2(0.0f);
@@ -170,8 +167,7 @@ namespace Editor
 		{
 			FaceInfo& face = faces.get(faceIndex);
 
-			if (vertIndex < face.texCoords.count())
-				face.texCoords.get(vertIndex) = value;
+			if (vertIndex < face.texCoords.count()) face.texCoords.get(vertIndex) = value;
 		}
 	}
 
@@ -254,4 +250,4 @@ namespace Editor
 			face.smoothNormals = value;
 		}
 	}
-}
+} // namespace Editor

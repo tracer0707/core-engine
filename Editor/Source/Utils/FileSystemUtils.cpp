@@ -7,6 +7,7 @@
 #include "../Editor/Controls/TreeView.h"
 #include "../Editor/Controls/TreeNode.h"
 #include "../Shared/IconsForkAwesome.h"
+#include "../Shared/Tags.h"
 
 namespace fs = std::filesystem;
 
@@ -127,7 +128,7 @@ namespace Editor
 			_node->setText(_path);
 		}
 
-		_node->setStringTag(0, fs_path.generic_string());
+		_node->setStringTag(TAG_FULL_PATH, fs_path.generic_string());
 
 		if (rootNode != nullptr)
 			rootNode->addControl(_node);
