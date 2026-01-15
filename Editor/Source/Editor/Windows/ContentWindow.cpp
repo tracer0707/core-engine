@@ -233,7 +233,7 @@ namespace Editor
 			InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
 
 			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
-				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(0));
+				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(TAG_FULL_PATH));
 				MaterialInspector* inspector = new MaterialInspector(mat);
 				inspectorWnd->setInspector(inspector);
 			});

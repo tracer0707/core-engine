@@ -21,7 +21,7 @@
 
 namespace Editor
 {
-	__attribute__((optimize("O0"))) HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
+	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
 	{
 		ModifierManager* modMgr = ModifierManager::singleton();
 		_linearLayout = new LinearLayout(LayoutDirection::Vertical);

@@ -67,32 +67,32 @@ namespace Editor
 
 			if (_inputManager->getKey(SDL_SCANCODE_W))
 			{
-				t->translate(-t->getForward() * cameraSpeed * dt);
+				t->translate(t->getForward() * cameraSpeed * dt, true);
 			}
 
 			if (_inputManager->getKey(SDL_SCANCODE_S))
 			{
-				t->translate(t->getForward() * cameraSpeed * dt);
+				t->translate(-t->getForward() * cameraSpeed * dt, true);
 			}
 
 			if (_inputManager->getKey(SDL_SCANCODE_A))
 			{
-				t->translate(-t->getRight() * cameraSpeed * dt);
+				t->translate(-t->getRight() * cameraSpeed * dt, true);
 			}
 
 			if (_inputManager->getKey(SDL_SCANCODE_D))
 			{
-				t->translate(t->getRight() * cameraSpeed * dt);
+				t->translate(t->getRight() * cameraSpeed * dt, true);
 			}
 
 			if (_inputManager->getKey(SDL_SCANCODE_Q))
 			{
-				t->translate(-t->getUp() * cameraSpeed * dt);
+				t->translate(t->getUp() * cameraSpeed * dt, true);
 			}
 
 			if (_inputManager->getKey(SDL_SCANCODE_E))
 			{
-				t->translate(t->getUp() * cameraSpeed * dt);
+				t->translate(-t->getUp() * cameraSpeed * dt, true);
 			}
 		}
 	}
