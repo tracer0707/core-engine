@@ -10,53 +10,56 @@
 
 namespace Editor
 {
-    class Window;
-    class Container;
+	class Window;
+	class Container;
 
-    class Control : public Container
-    {
-        friend class Container;
+	class Control : public Container
+	{
+			friend class Container;
 
-      protected:
-        std::string _id = "";
-        Container* _parent = nullptr;
-        Style _style;
-        bool _visible = true;
-        std::map<int, void*> _objectTags;
-        std::map<int, Core::String> _stringTags;
+		protected:
+			std::string _id = "";
+			Container* _parent = nullptr;
+			Style _style;
+			bool _visible = true;
+			std::map<int, void*> _objectTags;
+			std::map<int, Core::String> _stringTags;
 
-        float _width = 0;
-        float _height = 0;
+			float _width = 0;
+			float _height = 0;
 
-      public:
-        Control();
-        virtual ~Control();
+		public:
+			Control();
+			virtual ~Control();
 
-        std::string getId() { return _id; }
-        Style& getStyle() { return _style; }
+			std::string getId() { return _id; }
+			Style& getStyle() { return _style; }
 
-        virtual void setWidth(float value) { _width = value; }
-        virtual float getWidth() const { return _width; }
+			virtual void setWidth(float value) { _width = value; }
+			virtual float getWidth() const { return _width; }
 
-        virtual void setHeight(float value) { _height = value; }
-        virtual float getHeight() const { return _height; }
+			virtual void setHeight(float value) { _height = value; }
+			virtual float getHeight() const { return _height; }
 
-        void setSize(float width, float height);
+			void setSize(float width, float height);
 
-        void setVisible(bool value) { _visible = value; }
-        bool getVisible() const { return _visible; }
+			void setVisible(bool value) { _visible = value; }
+			bool getVisible() const { return _visible; }
 
-        void setEnabled(bool value) { _style.enabled = value; }
-        bool getEnabled() const { return _style.enabled; }
+			void setEnabled(bool value) { _style.enabled = value; }
+			bool getEnabled() const { return _style.enabled; }
 
-        void setObjectTag(int key, void* value);
-        void* getObjectTag(int key) const;
+			void setObjectTag(int key, void* value);
+			void* getObjectTag(int key) const;
 
-        void setStringTag(int key, Core::String value);
-        Core::String getStringTag(int key) const;
+			void setStringTag(int key, Core::String value);
+			Core::String getStringTag(int key) const;
 
-        virtual int getControlType() const = 0;
+			const std::map<int, void*>& getObjectTags() const { return _objectTags; }
+			const std::map<int, Core::String>& getStringTags() const { return _stringTags; }
 
-        virtual void update() = 0;
-    };
+			virtual int getControlType() const = 0;
+
+			virtual void update() = 0;
+	};
 } // namespace Editor

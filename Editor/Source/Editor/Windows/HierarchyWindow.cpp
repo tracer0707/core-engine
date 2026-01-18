@@ -9,6 +9,10 @@
 #include "../Modifiers/CSGModifier.h"
 
 #include "../Windows/WindowManager.h"
+#include "../Windows/WindowList.h"
+#include "../Windows/InspectorWindow.h"
+
+#include "../Windows/Inspector/CSGBrushInspector.h"
 
 #include "../Gizmo.h"
 
@@ -54,11 +58,11 @@ namespace Editor
 					}
 					else if (model != nullptr)
 					{
-						Core::Transform* t = model->getObject()->findComponent<Core::Transform*>();
-						transform = (Core::Transformable*)t;
+						transform = (Core::Transformable*)model->getObject()->findComponent<Core::Transform*>();
 						mod->setCurrentModel(model);
 					}
 
+					setInspector(node);
 					Gizmo::singleton()->setTransform(transform);
 
 					_parent->invalidateAll();
@@ -72,6 +76,20 @@ namespace Editor
 	}
 
 	HierarchyWindow::~HierarchyWindow() {}
+
+	void HierarchyWindow::setInspector(TreeNode* node)
+	{
+		InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
+
+		for (const auto& it : node->getObjectTags())
+		{
+			if (it.first == TAG_CSG_BRUSH)
+			{
+				CSGBrushInspector* inspector = new CSGBrushInspector((CSGBrush*)it.second);
+				inspectorWnd->setInspector(inspector);
+			}
+		}
+	}
 
 	void HierarchyWindow::onUpdate()
 	{

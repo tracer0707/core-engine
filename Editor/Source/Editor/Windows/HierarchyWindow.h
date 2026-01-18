@@ -7,20 +7,23 @@
 namespace Editor
 {
 	class TreeView;
+	class TreeNode;
 	class LinearLayout;
 
 	class HierarchyWindow : public Window
 	{
-	private:
-		TreeView* _objectTree = nullptr;
-		LinearLayout* _linearLayout = nullptr;
+		private:
+			TreeView* _objectTree = nullptr;
+			LinearLayout* _linearLayout = nullptr;
 
-	public:
-		HierarchyWindow(WindowManager* parent);
-		virtual ~HierarchyWindow();
+			void setInspector(TreeNode* node);
 
-		virtual void onUpdate();
+		public:
+			HierarchyWindow(WindowManager* parent);
+			virtual ~HierarchyWindow();
 
-		TreeView* getTreeView() { return _objectTree; }
+			virtual void onUpdate();
+
+			TreeView* getTreeView() { return _objectTree; }
 	};
-}
+} // namespace Editor

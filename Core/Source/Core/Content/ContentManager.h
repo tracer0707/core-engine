@@ -24,10 +24,11 @@ namespace Core
 		private:
 			Renderer* _renderer = nullptr;
 			Material* _defaultMaterial = nullptr;
-			Shader* _defaultShader = nullptr;
+			Shader* _defaultShaderUnlitColor = nullptr;
+			Shader* _defaultShaderUnlitTexture = nullptr;
 
 			Application* _app = nullptr;
-			
+
 			std::function<void(Content*)> _onResourceLoaded = nullptr;
 
 			List<Content*> _materials;
@@ -50,7 +51,8 @@ namespace Core
 			Renderer* getRenderer() const { return _renderer; }
 
 			Material* getDefaultMaterial() const { return _defaultMaterial; }
-			Shader* getDefaultShader() const { return _defaultShader; }
+			Shader* getDefaultShaderUnlitColor() const { return _defaultShaderUnlitColor; }
+			Shader* getDefaultShaderUnlitTexture() const { return _defaultShaderUnlitTexture; }
 
 			void setOnResourceLoaded(std::function<void(Content*)> value) { _onResourceLoaded = value; }
 

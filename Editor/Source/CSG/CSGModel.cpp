@@ -175,7 +175,7 @@ namespace Editor
 				Core::Vertex vtx{};
 
 				vtx.position = glm::vec3((float)v.x, (float)v.y, (float)v.z);
-				vtx.uv = glm::vec2(uv.u);
+				vtx.uv = glm::vec2(uv.u, uv.v);
 				vtx.color = Core::Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 				aab.merge(vtx.position);

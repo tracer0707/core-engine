@@ -7,6 +7,9 @@
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
 
+#include "../Renderer/Shaders/GL4/ShaderDefaultUnlitColor.h"
+#include "../Renderer/Shaders/GL4/ShaderDefaultUnlitTexture.h"
+
 #include "ContentDatabase.h"
 #include "Material.h"
 #include "Texture.h"
@@ -30,29 +33,8 @@ namespace Core
 		db->setFilePath(dbPath);
 		db->load();
 
-		_defaultShader = loadShaderFromString("#version 400\n"
-											  "layout (location = 0) in vec3 position;"
-											  "layout (location = 1) in vec2 uv0;"
-											  "layout (location = 2) in vec4 color0;"
-											  "out vec2 f_uv0;"
-											  "out vec4 f_color0;"
-											  "uniform mat4 u_viewMtx;"
-											  "uniform mat4 u_projMtx;"
-											  "uniform mat4 u_modelMtx;"
-											  "void main() {"
-											  "  f_uv0 = uv0;"
-											  "  f_color0 = color0;"
-											  "  gl_Position = u_projMtx * u_viewMtx * u_modelMtx * vec4(position, 1.0);"
-											  "}",
-											  "#version 400\n"
-											  "in vec2 f_uv0;"
-											  "in vec4 f_color0;"
-											  "out vec4 frag_colour;"
-											  "uniform sampler2D u_diffuseTex;"
-											  "void main() {"
-											  "  vec4 out_color = texture2D(u_diffuseTex, f_uv0);"
-											  "  frag_colour = vec4(f_color0.rgb, 1.0);"
-											  "}");
+		_defaultShaderUnlitColor = loadShaderFromString(ShaderDefaultUnlitColor::vertex.c_str(), ShaderDefaultUnlitColor::fragment.c_str());
+		_defaultShaderUnlitTexture = loadShaderFromString(ShaderDefaultUnlitTexture::vertex.c_str(), ShaderDefaultUnlitTexture::fragment.c_str());
 
 		_defaultMaterial = createMaterial();
 	}
@@ -76,9 +58,10 @@ namespace Core
 		_meshes.clear();
 		_renderTextures.clear();
 
-		_defaultMaterial = nullptr;
-		_defaultShader = nullptr;
 		_renderer = nullptr;
+		_defaultMaterial = nullptr;
+		_defaultShaderUnlitColor = nullptr;
+		_defaultShaderUnlitTexture = nullptr;
 	}
 
 	// Create in memory
@@ -86,7 +69,7 @@ namespace Core
 	Material* ContentManager::createMaterial()
 	{
 		Material* value = new Material(_renderer);
-		value->setShader(_defaultShader);
+		value->setShader(_defaultShaderUnlitColor);
 		_materials.add(value);
 		return value;
 	}
@@ -138,7 +121,7 @@ namespace Core
 		}
 
 		Material* result = new Material(_renderer);
-		result->setShader(_defaultShader);
+		result->setShader(_defaultShaderUnlitColor);
 		result->setTexture(tex);
 		result->setUuid(uuid);
 
@@ -255,7 +238,7 @@ namespace Core
 		destroyContent(value, _renderTextures);
 	}
 
-	void ContentManager::removeFromCache(Content* value, std::map<Uuid, Content*>& map) 
+	void ContentManager::removeFromCache(Content* value, std::map<Uuid, Content*>& map)
 	{
 		auto it = std::find_if(map.begin(), map.end(), [value](const std::pair<Uuid, Content*>& pair) { return pair.second == value; });
 
