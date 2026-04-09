@@ -10,6 +10,7 @@
 
 #include "../Utils/FileSystemUtils.h"
 #include "../Shared/IconsForkAwesome.h"
+#include "../Shared/Tags.h"
 #include "../Editor/Font.h"
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
@@ -81,7 +82,7 @@ namespace Editor
 			{
 				if (lst.count() > 0)
 				{
-					_selectedPath->setText(lst.get(0)->getStringTag(0));
+					_selectedPath->setText(lst.get(0)->getStringTag(TAG_FULL_PATH));
 					okBtn->setEnabled(true);
 				}
 				else
@@ -95,7 +96,7 @@ namespace Editor
 				bool valid = true;
 				for (auto& p : lst)
 				{
-					auto path = std::filesystem::path(p->getStringTag(0).std_str());
+					auto path = std::filesystem::path(p->getStringTag(TAG_FULL_PATH).std_str());
 					if (!std::filesystem::exists(path))
 					{
 						valid = false;
@@ -114,7 +115,7 @@ namespace Editor
 					_selected.clear();
 					for (auto& p : lst)
 					{
-						_selected.add(p->getStringTag(0).std_str());
+						_selected.add(p->getStringTag(TAG_FULL_PATH).std_str());
 					}
 				}
 

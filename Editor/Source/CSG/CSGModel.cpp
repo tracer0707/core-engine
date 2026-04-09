@@ -24,8 +24,6 @@
 
 namespace Editor
 {
-	Core::Material* CSGModel::_defaultMaterial = nullptr;
-
 	CSGModel::CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager)
 	{
 		_renderer = renderer;
@@ -35,8 +33,6 @@ namespace Editor
 		_meshRenderer = _object->addComponent<Core::MeshRenderer*>();
 
 		_nullBrush = new CSGBrush(this);
-
-		if (_defaultMaterial == nullptr) _defaultMaterial = _contentManager->createMaterial();
 	}
 
 	CSGModel::~CSGModel()
@@ -135,7 +131,7 @@ namespace Editor
 		{
 			auto* f = &csgGeom->faces[i];
 
-			Core::Material* mat = _defaultMaterial;
+			Core::Material* mat = nullptr;
 			int layer = 0;
 			bool castShadows = true;
 			bool smoothNormals = false;

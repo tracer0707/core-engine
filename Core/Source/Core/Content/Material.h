@@ -5,7 +5,6 @@
 namespace Core
 {
 	class Renderer;
-	class Texture;
 	class Shader;
 
 	class Material : public Content
@@ -15,7 +14,6 @@ namespace Core
 
 		private:
 			Renderer* _renderer = nullptr;
-			Texture* _texture = nullptr;
 			Shader* _shader = nullptr;
 
 			Material(Renderer* renderer);
@@ -24,10 +22,7 @@ namespace Core
 		public:
 			virtual int getContentType();
 
-			Texture* getTexture() const { return _texture; }
-			void setTexture(Texture* value) { _texture = value; }
-
-			Shader* getShader() const { return _shader; }
+			const Shader* getShader() const { return _shader; }
 			void setShader(Shader* value) { _shader = value; }
 
 			void bind();

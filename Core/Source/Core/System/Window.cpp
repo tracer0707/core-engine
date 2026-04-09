@@ -5,6 +5,8 @@
 #include <SDL/SDL.h>
 
 #include "../Content/ContentManager.h"
+#include "../Content/Material.h"
+#include "../ShaderGraph/Shader.h"
 #include "../Renderer/Renderer.h"
 #include "../System/Application.h"
 #include "../System/EventHandler.h"
@@ -33,6 +35,12 @@ namespace Core
 		_inputManager = new InputManager();
 		_eventHandler = new EventHandler();
 		_opened = true;
+
+		Shader* _defaultShader = _contentManager->createShader();
+		Material* _defaultMaterial = _contentManager->createMaterial();
+		_defaultShader->compile();
+		_defaultMaterial->setShader(_defaultShader);
+		_renderer->setDefaultMaterial(_defaultMaterial);
 
 		_application->addWindow(this);
 	}

@@ -34,11 +34,11 @@ namespace Editor
 
 		ContentSelect* textureSelect = new ContentSelect();
 		textureSelect->setContentType(CONTENT_TYPE_TEXTURE);
-		textureSelect->setContent((Core::Content*)_material->getTexture());
-		textureSelect->setOnChange([this](Core::Content* value) {
-			_material->setTexture((Core::Texture*)value);
-			ContentSerializer::serializeMaterial(_material);
-		});
+		// textureSelect->setContent((Core::Content*)_material->getTexture());
+		//  textureSelect->setOnChange([this](Core::Content* value) {
+		//  	_material->setTexture((Core::Texture*)value);
+		//  	ContentSerializer::serializeMaterial(_material);
+		//  });
 
 		table->addControl(new Label("Texture"));
 		table->addControl(textureSelect);

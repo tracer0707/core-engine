@@ -44,8 +44,6 @@ namespace Editor
 			Core::MeshRenderer* _meshRenderer = nullptr;
 			Core::ContentManager* _contentManager = nullptr;
 
-			static Core::Material* _defaultMaterial;
-
 			CSGBrush* _nullBrush = nullptr;
 
 		public:

@@ -19,15 +19,15 @@ namespace Editor
 	{
 		flatbuffers::FlatBufferBuilder builder;
 
-		auto texUuid = builder.CreateString(value->getTexture() != nullptr ? value->getTexture()->getUuid().toString() : "");
-		auto material = Core::CreateMaterialSerializer(builder, texUuid);
-		builder.Finish(material);
+		// auto texUuid = builder.CreateString(value->getTexture() != nullptr ? value->getTexture()->getUuid().toString() : "");
+		//  auto material = Core::CreateMaterialSerializer(builder, texUuid);
+		//  builder.Finish(material);
 
-		uint8_t* buf = builder.GetBufferPointer();
-		size_t size = builder.GetSize();
+		// uint8_t* buf = builder.GetBufferPointer();
+		// size_t size = builder.GetSize();
 
-		std::ofstream file(path.std_str(), std::ios::binary);
-		file.write(reinterpret_cast<const char*>(buf), size);
-		file.close();
+		// std::ofstream file(path.std_str(), std::ios::binary);
+		// file.write(reinterpret_cast<const char*>(buf), size);
+		// file.close();
 	}
 } // namespace Editor

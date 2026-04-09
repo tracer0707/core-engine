@@ -38,6 +38,7 @@ namespace Core
 {
     class DeviceContext;
     class Program;
+	class Material;
 
     enum class PrimitiveType
     {
@@ -50,6 +51,8 @@ namespace Core
         friend class Window;
 
       private:
+		Material* _defaultMaterial = nullptr;
+
         static Renderer* init(void* windowCtx);
         static void destroy(Renderer* renderer);
 
@@ -80,6 +83,9 @@ namespace Core
         virtual void setViewportSize(int w, int h) = 0;
         virtual void beginUI() = 0;
         virtual void endUI() = 0;
+
+        void setDefaultMaterial(Material* value) { _defaultMaterial = value; }
+        Material* getDefaultMaterial() const { return _defaultMaterial; }
 
         virtual Program* createProgram(String vertexSrc, String fragmentSrc) = 0;
         virtual void deleteProgram(Program* program) = 0;

@@ -13,9 +13,9 @@ namespace Core
 	class Content;
 	class Renderer;
 	class Material;
+	class Shader;
 	class Texture;
 	class Mesh;
-	class Shader;
 	class RenderTexture;
 	class Application;
 
@@ -23,10 +23,7 @@ namespace Core
 	{
 		private:
 			Renderer* _renderer = nullptr;
-			Material* _defaultMaterial = nullptr;
-			Shader* _defaultShaderUnlitColor = nullptr;
-			Shader* _defaultShaderUnlitTexture = nullptr;
-
+			
 			Application* _app = nullptr;
 
 			std::function<void(Content*)> _onResourceLoaded = nullptr;
@@ -38,6 +35,7 @@ namespace Core
 			List<Content*> _renderTextures;
 
 			std::map<Uuid, Content*> _materialsCache;
+			std::map<Uuid, Content*> _shadersCache;
 			std::map<Uuid, Content*> _texturesCache;
 			std::map<Uuid, Content*> _meshesCache;
 
@@ -50,14 +48,11 @@ namespace Core
 
 			Renderer* getRenderer() const { return _renderer; }
 
-			Material* getDefaultMaterial() const { return _defaultMaterial; }
-			Shader* getDefaultShaderUnlitColor() const { return _defaultShaderUnlitColor; }
-			Shader* getDefaultShaderUnlitTexture() const { return _defaultShaderUnlitTexture; }
-
 			void setOnResourceLoaded(std::function<void(Content*)> value) { _onResourceLoaded = value; }
 
 			// Create in memory
 			Material* createMaterial();
+			Shader* createShader();
 			Mesh* createMesh(int subMeshesCount);
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
@@ -72,7 +67,6 @@ namespace Core
 
 			// Load from memory
 			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
-			Shader* loadShaderFromString(String vertexSrc, String fragmentSrc);
 
 			// Destroy
 			void destroy(Material* value);

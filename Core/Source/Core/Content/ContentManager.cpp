@@ -6,6 +6,7 @@
 #include "../System/Application.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
+#include "../ShaderGraph/Shader.h"
 
 #include "../Renderer/Shaders/GL4/ShaderDefaultUnlitColor.h"
 #include "../Renderer/Shaders/GL4/ShaderDefaultUnlitTexture.h"
@@ -14,7 +15,6 @@
 #include "Material.h"
 #include "Texture.h"
 #include "Mesh.h"
-#include "Shader.h"
 #include "RenderTexture.h"
 
 #include "../Serialization/FlatBuffers/TextureSerializer_generated.h"
@@ -32,11 +32,6 @@ namespace Core
 		db->setApplication(app);
 		db->setFilePath(dbPath);
 		db->load();
-
-		_defaultShaderUnlitColor = loadShaderFromString(ShaderDefaultUnlitColor::vertex.c_str(), ShaderDefaultUnlitColor::fragment.c_str());
-		_defaultShaderUnlitTexture = loadShaderFromString(ShaderDefaultUnlitTexture::vertex.c_str(), ShaderDefaultUnlitTexture::fragment.c_str());
-
-		_defaultMaterial = createMaterial();
 	}
 
 	ContentManager::~ContentManager()
@@ -58,10 +53,12 @@ namespace Core
 		_meshes.clear();
 		_renderTextures.clear();
 
+		_materialsCache.clear();
+		_shadersCache.clear();
+		_texturesCache.clear();
+		_meshesCache.clear();
+
 		_renderer = nullptr;
-		_defaultMaterial = nullptr;
-		_defaultShaderUnlitColor = nullptr;
-		_defaultShaderUnlitTexture = nullptr;
 	}
 
 	// Create in memory
@@ -69,8 +66,14 @@ namespace Core
 	Material* ContentManager::createMaterial()
 	{
 		Material* value = new Material(_renderer);
-		value->setShader(_defaultShaderUnlitColor);
 		_materials.add(value);
+		return value;
+	}
+
+	Shader* ContentManager::createShader()
+	{
+		Shader* value = new Shader(_renderer);
+		_shaders.add(value);
 		return value;
 	}
 
@@ -113,16 +116,14 @@ namespace Core
 
 		auto materialSerialized = GetMaterialSerializer(data.data());
 
-		Texture* tex = nullptr;
-		String textureUuid = materialSerialized->texture_uuid()->c_str();
-		if (textureUuid != String::Empty)
-		{
-			tex = loadTextureByUuid(Core::Uuid::fromString(textureUuid.std_str()));
-		}
+		// Texture* tex = nullptr;
+		// String textureUuid = materialSerialized->texture_uuid()->c_str();
+		// if (textureUuid != String::Empty)
+		// {
+		// 	tex = loadTextureByUuid(Core::Uuid::fromString(textureUuid.std_str()));
+		// }
 
 		Material* result = new Material(_renderer);
-		result->setShader(_defaultShaderUnlitColor);
-		result->setTexture(tex);
 		result->setUuid(uuid);
 
 		_materials.add(result);
@@ -201,13 +202,6 @@ namespace Core
 		return result;
 	}
 
-	Shader* ContentManager::loadShaderFromString(String vertexSrc, String fragmentSrc)
-	{
-		Shader* shader = new Shader(_renderer, vertexSrc, fragmentSrc);
-		_shaders.add(shader);
-		return shader;
-	}
-
 	// Destroy
 
 	void ContentManager::destroy(Material* value)
@@ -230,6 +224,7 @@ namespace Core
 
 	void ContentManager::destroy(Shader* value)
 	{
+		removeFromCache(value, _shadersCache);
 		destroyContent(value, _shaders);
 	}
 

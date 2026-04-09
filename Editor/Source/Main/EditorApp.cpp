@@ -147,7 +147,7 @@ namespace Editor
 		_renderer->setViewportSize(viewportWidth, viewportHeight);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
-		Rendering::renderGrid(_renderer, _gridBuffer, _contentManager->getDefaultMaterial(), _camera);
+		Rendering::renderGrid(_renderer, _gridBuffer, _renderer->getDefaultMaterial(), _camera);
 		ModifierManager::singleton()->render();
 		_scene->render();
 
