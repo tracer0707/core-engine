@@ -4,11 +4,11 @@
 
 namespace Core
 {
-	class Shader;
+	class ShaderGraph;
 
 	class ShaderCompilerGLSL
 	{
 		public:
-			static void compile(Shader* shader, String* outVertex, String* outFragment);
+			static void compile(ShaderGraph* shaderGraph, String* outVertex, String* outFragment);
 	};
 } // namespace Core

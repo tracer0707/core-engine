@@ -16,6 +16,9 @@
                 "type": "equals",
                 "lhs": "${hostSystemName}",
                 "rhs": "Windows"
+            },
+            "environment": {
+                "VSLANG": "1033"
             }
         },
         {

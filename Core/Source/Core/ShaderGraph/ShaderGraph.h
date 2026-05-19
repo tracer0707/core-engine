@@ -8,7 +8,7 @@ namespace Core
 	class Renderer;
 	class ShaderNode;
 
-	class Shader : public Content
+	class ShaderGraph : public Content
 	{
 		private:
 			Renderer* _renderer = nullptr;
@@ -18,8 +18,8 @@ namespace Core
 			ShaderNode* _fragmentNode;
 
 		public:
-			Shader(Renderer* renderer);
-			~Shader();
+			ShaderGraph(Renderer* renderer);
+			~ShaderGraph();
 
 			virtual int getContentType();
 

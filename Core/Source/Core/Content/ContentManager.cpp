@@ -6,10 +6,7 @@
 #include "../System/Application.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
-#include "../ShaderGraph/Shader.h"
-
-#include "../Renderer/Shaders/GL4/ShaderDefaultUnlitColor.h"
-#include "../Renderer/Shaders/GL4/ShaderDefaultUnlitTexture.h"
+#include "../ShaderGraph/ShaderGraph.h"
 
 #include "ContentDatabase.h"
 #include "Material.h"
@@ -70,9 +67,9 @@ namespace Core
 		return value;
 	}
 
-	Shader* ContentManager::createShader()
+	ShaderGraph* ContentManager::createShaderGraph()
 	{
-		Shader* value = new Shader(_renderer);
+		ShaderGraph* value = new ShaderGraph(_renderer);
 		_shaders.add(value);
 		return value;
 	}
@@ -222,7 +219,7 @@ namespace Core
 		destroyContent(value, _textures);
 	}
 
-	void ContentManager::destroy(Shader* value)
+	void ContentManager::destroy(ShaderGraph* value)
 	{
 		removeFromCache(value, _shadersCache);
 		destroyContent(value, _shaders);

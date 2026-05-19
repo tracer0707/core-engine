@@ -1,4 +1,4 @@
-#include "Shader.h"
+#include "ShaderGraph.h"
 
 #include "../Config.h"
 #include "../Shared/String.h"
@@ -12,7 +12,7 @@
 
 namespace Core
 {
-	Shader::Shader(Renderer* renderer) : Content()
+	ShaderGraph::ShaderGraph(Renderer* renderer) : Content()
 	{
 		_renderer = renderer;
 
@@ -20,7 +20,7 @@ namespace Core
 		_fragmentNode = new ShaderNodeVec4();
 	}
 
-	Shader::~Shader()
+	ShaderGraph::~ShaderGraph()
 	{
 		if (_nativeId != nullptr)
 		{
@@ -36,12 +36,12 @@ namespace Core
 		_renderer = nullptr;
 	}
 
-	int Shader::getContentType()
+	int ShaderGraph::getContentType()
 	{
 		return CONTENT_TYPE_SHADER;
 	}
 
-	void Shader::compile()
+	void ShaderGraph::compile()
 	{
 		String vertexSrc;
 		String fragmentSrc;
@@ -58,7 +58,7 @@ namespace Core
 		_nativeId = _renderer->createProgram(vertexSrc, fragmentSrc);
 	}
 
-	void Shader::bind()
+	void ShaderGraph::bind()
 	{
 		_renderer->bindProgram(_nativeId);
 	}

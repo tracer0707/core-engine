@@ -43,7 +43,6 @@ namespace Editor
 					virtual ~MainWindow();
 
 					virtual void update();
-					virtual void render();
 
 					Core::Object* _cameraObject = nullptr;
 					Core::Camera* _camera = nullptr;
@@ -74,6 +73,5 @@ namespace Editor
 			virtual void destroy();
 
 		public:
-			
-	};
+		};
 } // namespace Editor

@@ -6,7 +6,7 @@
 
 #include "../Content/ContentManager.h"
 #include "../Content/Material.h"
-#include "../ShaderGraph/Shader.h"
+#include "../ShaderGraph/ShaderGraph.h"
 #include "../Renderer/Renderer.h"
 #include "../System/Application.h"
 #include "../System/EventHandler.h"
@@ -36,10 +36,10 @@ namespace Core
 		_eventHandler = new EventHandler();
 		_opened = true;
 
-		Shader* _defaultShader = _contentManager->createShader();
+		ShaderGraph* _defaultShaderGraph = _contentManager->createShaderGraph();
 		Material* _defaultMaterial = _contentManager->createMaterial();
-		_defaultShader->compile();
-		_defaultMaterial->setShader(_defaultShader);
+		_defaultShaderGraph->compile();
+		_defaultMaterial->setShaderGraph(_defaultShaderGraph);
 		_renderer->setDefaultMaterial(_defaultMaterial);
 
 		_application->addWindow(this);
@@ -126,7 +126,6 @@ namespace Core
 		_eventHandler->processEvents();
 
 		update();
-		render();
 
 		_inputManager->reset();
 		_renderer->swapBuffers();

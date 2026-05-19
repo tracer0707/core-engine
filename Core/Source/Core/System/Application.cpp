@@ -10,140 +10,166 @@
 
 namespace Core
 {
-    void Application::run()
-    {
-        SDL_SetMainReady();
-        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
+	int ResizingEventWatcher(void* data, SDL_Event* event)
+	{
+		if (event->type == SDL_WINDOWEVENT && (event->window.event == SDL_WINDOWEVENT_RESIZED || event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED))
+		{
+			Application* app = (Application*)data;
+			app->updateWindowByEvent(event);
+		}
+		return 0;
+	}
 
-        std::cout << "Video driver: " << SDL_GetCurrentVideoDriver() << std::endl;
+	void Application::run()
+	{
+		SDL_SetMainReady();
+		SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER);
 
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
 
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-        SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        internalInit();
-        internalLoop();
-        internalDestroy();
+		internalInit();
+		internalLoop();
+		internalDestroy();
 
-        SDL_Quit();
-    }
+		SDL_Quit();
+	}
 
-    void Application::stop(bool forceClose)
-    {
-        _isRunning = false;
-        _forceClosed = forceClose;
-    }
+	void Application::stop(bool forceClose)
+	{
+		_isRunning = false;
+		_forceClosed = forceClose;
+	}
 
-    void Application::internalInit()
-    {
-        _eventHandler = new EventHandler();
+	void Application::internalInit()
+	{
+		_eventHandler = new EventHandler();
 
-        init();
+		init();
 
-        if (!_windows.isEmpty())
-        {
-            _isRunning = true;
-        }
-    }
+		if (!_windows.isEmpty())
+		{
+			_isRunning = true;
+		}
 
-    void Application::internalLoop()
-    {
-        while (_isRunning)
-        {
-            List<Window*> windowsToClose;
+		SDL_AddEventWatch(ResizingEventWatcher, this);
+	}
 
-            SDL_Event event;
-            while (SDL_PollEvent(&event))
-            {
-                for (Window* wnd : _windows)
-                {
-                    void* wndCtx = SDL_GetWindowFromID(event.window.windowID);
-                    if (wndCtx != wnd->_ctx) continue;
+	void Application::internalLoop()
+	{
+		while (_isRunning)
+		{
+			List<Window*> windowsToClose;
 
-                    wnd->processEvents(&event);
-                }
-            }
+			SDL_Event event;
+			while (SDL_PollEvent(&event))
+			{
+				Uint32 id = event.window.windowID;
 
-            for (Window* wnd : _windows)
-            {
-                wnd->internalUpdate();
-            }
+				for (Window* wnd : _windows)
+				{
+					if (SDL_GetWindowID((SDL_Window*)wnd->_ctx) != id) continue;
+					wnd->processEvents(&event);
+				}
+			}
 
-            _eventHandler->processEvents();
+			for (Window* wnd : _windows)
+			{
+				wnd->internalUpdate();
+			}
 
-            for (Window* wnd : _windows)
-            {
-                if (!wnd->_opened)
-                {
-                    windowsToClose.add(wnd);
-                }
-            }
+			_eventHandler->processEvents();
 
-            for (Window* wnd : windowsToClose)
-            {
-                if (_mainWindow == wnd)
-                {
-                    _isRunning = false;
-                }
+			for (Window* wnd : _windows)
+			{
+				if (!wnd->_opened)
+				{
+					windowsToClose.add(wnd);
+				}
+			}
 
-                removeWindow(wnd);
-            }
+			for (Window* wnd : windowsToClose)
+			{
+				if (_mainWindow == wnd)
+				{
+					_isRunning = false;
+				}
 
-            windowsToClose.clear();
+				removeWindow(wnd);
+			}
 
-            if (_windows.isEmpty())
-            {
-                _isRunning = false;
-            }
+			windowsToClose.clear();
 
-            if (!_isRunning) break;
-        }
-    }
+			if (_windows.isEmpty())
+			{
+				_isRunning = false;
+			}
 
-    void Application::internalDestroy()
-    {
-        destroy();
+			if (!_isRunning) break;
+		}
+	}
 
-        for (Window* wnd : _windows)
-        {
-            delete wnd;
-        }
+	void Application::updateWindowByEvent(void* event)
+	{
+		SDL_Event& evt = *(SDL_Event*)event;
+		Uint32 id = evt.window.windowID;
 
-        _windows.clear();
+		for (Window* wnd : _windows)
+		{
+			if (SDL_GetWindowID((SDL_Window*)wnd->_ctx) != id) continue;
+			wnd->processEvents(event);
+			wnd->internalUpdate();
+			break;
+		}
+	}
 
-        delete _eventHandler;
+	void Application::internalDestroy()
+	{
+		SDL_DelEventWatch(ResizingEventWatcher, this);
 
-        _eventHandler = nullptr;
-        _mainWindow = nullptr;
-    }
+		destroy();
 
-    void Application::addWindow(Window* value)
-    {
-        _windows.add(value);
+		for (Window* wnd : _windows)
+		{
+			delete wnd;
+		}
 
-        if (_mainWindow == nullptr)
-        {
-            _mainWindow = value;
-        }
-    }
+		_windows.clear();
 
-    void Application::removeWindow(Window* value)
-    {
-        if (_mainWindow == value)
-        {
-            _mainWindow = nullptr;
-        }
+		delete _eventHandler;
 
-        _windows.remove(value);
-        delete value;
-    }
+		_eventHandler = nullptr;
+		_mainWindow = nullptr;
+	}
 
-    String Application::getContentPath()
-    {
-        return Path::combine(_rootPath, _contentPath);
-    }
+	void Application::addWindow(Window* value)
+	{
+		_windows.add(value);
+
+		if (_mainWindow == nullptr)
+		{
+			_mainWindow = value;
+		}
+	}
+
+	void Application::removeWindow(Window* value)
+	{
+		if (_mainWindow == value)
+		{
+			_mainWindow = nullptr;
+		}
+
+		_windows.remove(value);
+		delete value;
+	}
+
+	String Application::getContentPath()
+	{
+		return Path::combine(_rootPath, _contentPath);
+	}
 } // namespace Core

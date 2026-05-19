@@ -1,11 +1,11 @@
 #include "ShaderCompilerGLSL.h"
 
-#include "../Shader.h"
+#include "../ShaderGraph.h"
 #include "../Nodes/ShaderNode.h"
 
 namespace Core
 {
-	void ShaderCompilerGLSL::compile(Shader* shader, String* outVertex, String* outFragment)
+	void ShaderCompilerGLSL::compile(ShaderGraph* shaderGraph, String* outVertex, String* outFragment)
 	{
 		std::string _vertex = R"(
 			#version 400
@@ -37,7 +37,7 @@ namespace Core
 		*outVertex = _vertex;
 		*outFragment = _fragment;
 
-		//for (auto it : shader->getNodes())
+		// for (auto it : shader->getNodes())
 		//{
 		//	switch (it->getType())
 		//	{

@@ -134,10 +134,7 @@ namespace Editor
 	void EditorApp::MainWindow::update()
 	{
 		ModifierManager::singleton()->update();
-	}
 
-	void EditorApp::MainWindow::render()
-	{
 		//** Render scene begin **//
 		_camera->getRenderTexture()->bind();
 

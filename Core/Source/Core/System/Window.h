@@ -7,7 +7,7 @@
 namespace Core
 {
 	class Renderer;
-    class ContentManager;
+	class ContentManager;
 	class Time;
 	class InputManager;
 	class EventHandler;
@@ -15,46 +15,45 @@ namespace Core
 
 	class Window
 	{
-		friend class Application;
+			friend class Application;
 
-	private:
-		bool _opened = false;
+		private:
+			bool _opened = false;
 
-		std::function<void()> _onClose = nullptr;
+			std::function<void()> _onClose = nullptr;
 
-		void processEvents(void* event);
-		void internalUpdate();
-		
-		virtual void update() {}
-		virtual void render() {}
+			void processEvents(void* event);
+			void internalUpdate();
 
-	protected:
-		Window(Application* application, String title, int width, int height);
-		virtual ~Window();
+			virtual void update() {}
 
-		void* _ctx = nullptr;
-		Application* _application = nullptr;
-		Renderer* _renderer = nullptr;
-        ContentManager* _contentManager = nullptr;
-		Time* _time = nullptr;
-		InputManager* _inputManager = nullptr;
-		EventHandler* _eventHandler = nullptr;
+		protected:
+			Window(Application* application, String title, int width, int height);
+			virtual ~Window();
 
-		int _width = 0;
-		int _height = 0;
+			void* _ctx = nullptr;
+			Application* _application = nullptr;
+			Renderer* _renderer = nullptr;
+			ContentManager* _contentManager = nullptr;
+			Time* _time = nullptr;
+			InputManager* _inputManager = nullptr;
+			EventHandler* _eventHandler = nullptr;
 
-	public:
-		void* getContext() { return _ctx; }
-		Renderer* getRenderer() { return _renderer; }
-        ContentManager* getContentManager() { return _contentManager; }
+			int _width = 0;
+			int _height = 0;
 
-		void setTitle(String title);
-		
-		int getWidth() { return _width; }
-		int getHeight() { return _height; }
+		public:
+			void* getContext() { return _ctx; }
+			Renderer* getRenderer() { return _renderer; }
+			ContentManager* getContentManager() { return _contentManager; }
 
-		void setOnClose(std::function<void()> event) { _onClose = event; }
+			void setTitle(String title);
 
-		void close();
+			int getWidth() { return _width; }
+			int getHeight() { return _height; }
+
+			void setOnClose(std::function<void()> event) { _onClose = event; }
+
+			void close();
 	};
-}
+} // namespace Core

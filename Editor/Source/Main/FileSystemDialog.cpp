@@ -204,12 +204,9 @@ namespace Editor
 
 	void FileSystemDialog::update()
 	{
-		_layout->setHeight(_height);
-		_topLayout->setHeight(_height - 65);
-	}
+		_layout->setHeight((float)_height);
+		_topLayout->setHeight((float)_height - 65.0f);
 
-	void FileSystemDialog::render()
-	{
 		_renderer->setViewportSize(_width, _height);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 

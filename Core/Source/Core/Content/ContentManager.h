@@ -13,7 +13,7 @@ namespace Core
 	class Content;
 	class Renderer;
 	class Material;
-	class Shader;
+	class ShaderGraph;
 	class Texture;
 	class Mesh;
 	class RenderTexture;
@@ -23,7 +23,7 @@ namespace Core
 	{
 		private:
 			Renderer* _renderer = nullptr;
-			
+
 			Application* _app = nullptr;
 
 			std::function<void(Content*)> _onResourceLoaded = nullptr;
@@ -52,7 +52,7 @@ namespace Core
 
 			// Create in memory
 			Material* createMaterial();
-			Shader* createShader();
+			ShaderGraph* createShaderGraph();
 			Mesh* createMesh(int subMeshesCount);
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
@@ -72,7 +72,7 @@ namespace Core
 			void destroy(Material* value);
 			void destroy(Mesh* value);
 			void destroy(Texture* value);
-			void destroy(Shader* value);
+			void destroy(ShaderGraph* value);
 			void destroy(RenderTexture* value);
 	};
 } // namespace Core

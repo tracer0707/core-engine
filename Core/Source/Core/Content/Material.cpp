@@ -2,7 +2,7 @@
 
 #include "ContentTypes.h"
 
-#include "../ShaderGraph/Shader.h"
+#include "../ShaderGraph/ShaderGraph.h"
 
 namespace Core
 {
@@ -13,7 +13,7 @@ namespace Core
 
 	Material::~Material()
 	{
-		_shader = nullptr;
+		_shaderGraph = nullptr;
 		_renderer = nullptr;
 	}
 
@@ -24,6 +24,6 @@ namespace Core
 
 	void Material::bind()
 	{
-		if (_shader != nullptr) _shader->bind();
+		if (_shaderGraph != nullptr) _shaderGraph->bind();
 	}
 } // namespace Core

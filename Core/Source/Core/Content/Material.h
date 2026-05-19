@@ -5,7 +5,7 @@
 namespace Core
 {
 	class Renderer;
-	class Shader;
+	class ShaderGraph;
 
 	class Material : public Content
 	{
@@ -14,7 +14,7 @@ namespace Core
 
 		private:
 			Renderer* _renderer = nullptr;
-			Shader* _shader = nullptr;
+			ShaderGraph* _shaderGraph = nullptr;
 
 			Material(Renderer* renderer);
 			virtual ~Material();
@@ -22,8 +22,8 @@ namespace Core
 		public:
 			virtual int getContentType();
 
-			const Shader* getShader() const { return _shader; }
-			void setShader(Shader* value) { _shader = value; }
+			const ShaderGraph* getShaderGraph() const { return _shaderGraph; }
+			void setShaderGraph(ShaderGraph* value) { _shaderGraph = value; }
 
 			void bind();
 	};

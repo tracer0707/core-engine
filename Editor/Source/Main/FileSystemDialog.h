@@ -37,7 +37,6 @@ namespace Editor
 			void rescanFs();
 
 			virtual void update();
-			virtual void render();
 
 		public:
 			FileSystemDialog(Core::Application* app);

@@ -3,6 +3,8 @@
 #include "../Shared/List.h"
 #include "../Shared/String.h"
 
+typedef union SDL_Event;
+
 namespace Core
 {
 	class Window;
@@ -10,44 +12,47 @@ namespace Core
 
 	class Application
 	{
-		friend class Window;
+			friend class Window;
+			friend int ResizingEventWatcher(void* data, SDL_Event* event);
 
-	private:
-		void internalInit();
-		void internalLoop();
-		void internalDestroy();
+		private:
+			void internalInit();
+			void internalLoop();
+			void internalDestroy();
 
-		void addWindow(Window* value);
-		void removeWindow(Window* value);
+			void addWindow(Window* value);
+			void removeWindow(Window* value);
 
-	protected:
-		bool _isRunning = false;
-		bool _forceClosed = false;
+			void updateWindowByEvent(void* event);
 
-		String _rootPath = String::Empty;
-        String _contentPath = "Content";
+		protected:
+			bool _isRunning = false;
+			bool _forceClosed = false;
 
-		List<Window*> _windows;
+			String _rootPath = String::Empty;
+			String _contentPath = "Content";
 
-		EventHandler* _eventHandler = nullptr;
-		Window* _mainWindow = nullptr;
+			List<Window*> _windows;
 
-		virtual void init() {}
-		virtual void destroy() {}
+			EventHandler* _eventHandler = nullptr;
+			Window* _mainWindow = nullptr;
 
-	public:
-		Window* getMainWindow() { return _mainWindow; }
-		void setMainWindow(Window* value) { _mainWindow = value; }
+			virtual void init() {}
+			virtual void destroy() {}
 
-		EventHandler* getEventHandler() { return _eventHandler; }
-		bool isForceClosed() { return _forceClosed; }
+		public:
+			Window* getMainWindow() { return _mainWindow; }
+			void setMainWindow(Window* value) { _mainWindow = value; }
 
-		String getRootPath() { return _rootPath; }
-		void setRootPath(String value) { _rootPath = value; }
+			EventHandler* getEventHandler() { return _eventHandler; }
+			bool isForceClosed() { return _forceClosed; }
 
-		String getContentPath();
+			String getRootPath() { return _rootPath; }
+			void setRootPath(String value) { _rootPath = value; }
 
-		void run();
-		void stop(bool forceClose);
+			String getContentPath();
+
+			void run();
+			void stop(bool forceClose);
 	};
-}
+} // namespace Core

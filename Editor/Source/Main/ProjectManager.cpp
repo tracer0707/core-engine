@@ -114,12 +114,9 @@ namespace Editor
 
 	void ProjectManager::MainWindow::update()
 	{
-		_mainLayout->setHeight(_height);
-		_listLayout->setHeight(_height - 85.0f);
-	}
+		_mainLayout->setHeight((float)_height);
+		_listLayout->setHeight((float)_height - 85.0f);
 
-	void ProjectManager::MainWindow::render()
-	{
 		_renderer->setViewportSize(_width, _height);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
