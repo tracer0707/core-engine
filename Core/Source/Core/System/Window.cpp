@@ -129,7 +129,6 @@ namespace Core
 
 		_inputManager->reset();
 		_renderer->swapBuffers();
-		_time->endTimer();
 	}
 
 	void Window::close()

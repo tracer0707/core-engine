@@ -40,7 +40,7 @@ namespace Editor
 {
 	/* WINDOW */
 
-	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Project Manager", 1366, 768)
+	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Engine", 1366, 768)
 	{
 		_scene = new Core::Scene(_renderer);
 
@@ -160,7 +160,14 @@ namespace Editor
 		_renderer->endUI();
 		//** Render UI end **//
 
-		setTitle(("Core Engine: " + std::to_string(_time->getFramesPerSecond()) + "fps").c_str());
+		timeAccumulator += _time->getDeltaTime();
+
+		if (timeAccumulator >= 0.5f)
+		{
+			timeAccumulator = 0.0f;
+			setTitle(("Core Engine: " + std::to_string(_time->getFramesPerSecond()) + " FPS | " + std::to_string(_time->getFrameTimeMs()) + " ms")
+						 .c_str());
+		}
 	}
 
 	/* EDITOR */

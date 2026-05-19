@@ -44,6 +44,8 @@ namespace Editor
 
 					virtual void update();
 
+					float timeAccumulator = 0.0f;
+
 					Core::Object* _cameraObject = nullptr;
 					Core::Camera* _camera = nullptr;
 					Core::Scene* _scene = nullptr;
@@ -73,5 +75,5 @@ namespace Editor
 			virtual void destroy();
 
 		public:
-		};
+	};
 } // namespace Editor
