@@ -16,8 +16,8 @@ namespace Core
 	{
 		_renderer = renderer;
 
-		_vertexNode = new ShaderNodeVec4();
-		_fragmentNode = new ShaderNodeVec4();
+		_vertexOutNode = new ShaderNodeVec4();
+		_fragmentOutNode = new ShaderNodeVec4();
 	}
 
 	ShaderGraph::~ShaderGraph()
@@ -28,11 +28,11 @@ namespace Core
 			_nativeId = nullptr;
 		}
 
-		delete _vertexNode;
-		delete _fragmentNode;
+		delete _vertexOutNode;
+		delete _fragmentOutNode;
 
-		_vertexNode = nullptr;
-		_fragmentNode = nullptr;
+		_vertexOutNode = nullptr;
+		_fragmentOutNode = nullptr;
 		_renderer = nullptr;
 	}
 

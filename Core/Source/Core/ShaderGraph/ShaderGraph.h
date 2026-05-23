@@ -14,8 +14,8 @@ namespace Core
 			Renderer* _renderer = nullptr;
 			Program* _nativeId = nullptr;
 
-			ShaderNode* _vertexNode;
-			ShaderNode* _fragmentNode;
+			ShaderNode* _vertexOutNode;
+			ShaderNode* _fragmentOutNode;
 
 		public:
 			ShaderGraph(Renderer* renderer);
@@ -23,8 +23,8 @@ namespace Core
 
 			virtual int getContentType();
 
-			const ShaderNode* getVertexNode() const { return _vertexNode; }
-			const ShaderNode* getFragmentNode() const { return _fragmentNode; }
+			const ShaderNode* getVertexOutNode() const { return _vertexOutNode; }
+			const ShaderNode* getFragmentOutNode() const { return _fragmentOutNode; }
 
 			void compile();
 			void bind();

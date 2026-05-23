@@ -160,11 +160,11 @@ namespace Editor
 		_renderer->endUI();
 		//** Render UI end **//
 
-		timeAccumulator += _time->getDeltaTime();
+		_timeAccumulator += _time->getDeltaTime();
 
-		if (timeAccumulator >= 0.5f)
+		if (_timeAccumulator >= 0.5f)
 		{
-			timeAccumulator = 0.0f;
+			_timeAccumulator = 0.0f;
 			setTitle(("Core Engine: " + std::to_string(_time->getFramesPerSecond()) + " FPS | " + std::to_string(_time->getFrameTimeMs()) + " ms")
 						 .c_str());
 		}
