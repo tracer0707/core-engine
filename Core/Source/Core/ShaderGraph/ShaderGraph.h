@@ -12,7 +12,7 @@ namespace Core
 	{
 		private:
 			Renderer* _renderer = nullptr;
-			Program* _nativeId = nullptr;
+			Program* _program = nullptr;
 
 			ShaderNode* _vertexOutNode;
 			ShaderNode* _fragmentOutNode;

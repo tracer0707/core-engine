@@ -5,7 +5,7 @@
 #include "../Renderer/Renderer.h"
 #include "../Content/ContentTypes.h"
 
-#include "Nodes/ShaderNodeVec4.h"
+#include "Nodes/ShaderNode.h"
 #if CURRENT_RENDERER == GL4
 #include "Compilers/ShaderCompilerGLSL.h"
 #endif
@@ -16,16 +16,16 @@ namespace Core
 	{
 		_renderer = renderer;
 
-		_vertexOutNode = new ShaderNodeVec4();
-		_fragmentOutNode = new ShaderNodeVec4();
+		_vertexOutNode = new ShaderNode();
+		_fragmentOutNode = new ShaderNode();
 	}
 
 	ShaderGraph::~ShaderGraph()
 	{
-		if (_nativeId != nullptr)
+		if (_program != nullptr)
 		{
-			_renderer->deleteProgram(_nativeId);
-			_nativeId = nullptr;
+			_renderer->deleteProgram(_program);
+			_program = nullptr;
 		}
 
 		delete _vertexOutNode;
@@ -50,16 +50,16 @@ namespace Core
 		ShaderCompilerGLSL::compile(this, &vertexSrc, &fragmentSrc);
 #endif
 
-		if (_nativeId != nullptr)
+		if (_program != nullptr)
 		{
-			_renderer->deleteProgram(_nativeId);
+			_renderer->deleteProgram(_program);
 		}
 
-		_nativeId = _renderer->createProgram(vertexSrc, fragmentSrc);
+		_program = _renderer->createProgram(vertexSrc, fragmentSrc);
 	}
 
 	void ShaderGraph::bind()
 	{
-		_renderer->bindProgram(_nativeId);
+		_renderer->bindProgram(_program);
 	}
 } // namespace Core
