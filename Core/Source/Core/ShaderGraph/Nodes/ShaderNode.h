@@ -8,70 +8,32 @@
 
 #include "../../Shared/String.h"
 
+#include "ShaderNodeTypes.h"
+
 namespace Core
 {
-	enum class ShaderNodeType
-	{
-		None = 0,
-
-		// Data types - 1..99
-		Int32 = 1,
-		Float = 2,
-		Vec2 = 3,
-		Vec3 = 4,
-		Vec4 = 5,
-		Mat3 = 6,
-		Mat4 = 7,
-		Sampler2D = 8,
-		SamplerCube = 9,
-
-		// Attributes - 100...199
-		Position = 100,
-		Normal = 101,
-		Tangent = 102,
-		Bitangent = 103,
-		Binormal = 104,
-		UV0 = 105,
-		UV1 = 106,
-		Color0 = 107,
-		Color1 = 108,
-
-		// Functions - 200..999
-		Add = 200,
-		Subtract = 201,
-		Multiply = 202,
-		Divide = 203,
-	};
-
-	enum class ShaderParameterName
-	{
-		None = 0,
-		Position = 1,
-		UV = 2,
-		Color = 3,
-		Result = 4,
-	};
+	class ShaderGraph;
 
 	class ShaderNode
 	{
-		private:
-			ShaderNodeType _type = ShaderNodeType::None;
+			friend class ShaderGraph;
 
+		protected:
+			String _varName;
 			int _intValue = 0;
 			float _floatValue = 0.0f;
 			glm::vec2 _vec2Value = glm::vec2(0.0f);
 			glm::vec3 _vec3Value = glm::vec3(0.0f);
 			glm::vec4 _vec4Value = glm::vec4(0.0f);
 
-			std::map<ShaderParameterName, ShaderNode*> _inputs;
-			std::map<ShaderParameterName, ShaderNode*> _outputs;
-
-		public:
-			ShaderNode() = default;
+			ShaderNode(const String& varName) { _varName = varName; }
 			virtual ~ShaderNode() = default;
 
-			ShaderNodeType getType() const { return _type; }
-			void setType(ShaderNodeType type) { _type = type; }
+		public:
+			virtual ShaderNodeType getType() const = 0;
+
+			const String& getVarName() const { return _varName; }
+			void setVarName(const String& varName) { _varName = varName; }
 
 			int getIntValue() const { return _intValue; }
 			float getFloatValue() const { return _floatValue; }

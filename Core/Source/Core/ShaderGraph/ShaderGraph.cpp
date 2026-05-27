@@ -5,7 +5,11 @@
 #include "../Renderer/Renderer.h"
 #include "../Content/ContentTypes.h"
 
-#include "Nodes/ShaderNode.h"
+#include "Nodes/ShaderNodeVertexOutput.h"
+#include "Nodes/ShaderNodeFragmentOutput.h"
+#include "Nodes/ShaderNodeVec4.h"
+#include "Nodes/ShaderNodeMultiply.h"
+
 #if CURRENT_RENDERER == GL4
 #include "Compilers/ShaderCompilerGLSL.h"
 #endif
@@ -16,8 +20,8 @@ namespace Core
 	{
 		_renderer = renderer;
 
-		_vertexOutNode = new ShaderNode();
-		_fragmentOutNode = new ShaderNode();
+		_vertexOutputNode = createNode<ShaderNodeVertexOutput*>();
+		_fragmentOutputNode = createNode<ShaderNodeFragmentOutput*>();
 	}
 
 	ShaderGraph::~ShaderGraph()
@@ -28,11 +32,11 @@ namespace Core
 			_program = nullptr;
 		}
 
-		delete _vertexOutNode;
-		delete _fragmentOutNode;
+		delete _vertexOutputNode;
+		delete _fragmentOutputNode;
 
-		_vertexOutNode = nullptr;
-		_fragmentOutNode = nullptr;
+		_vertexOutputNode = nullptr;
+		_fragmentOutputNode = nullptr;
 		_renderer = nullptr;
 	}
 
@@ -61,5 +65,24 @@ namespace Core
 	void ShaderGraph::bind()
 	{
 		_renderer->bindProgram(_program);
+	}
+
+	ShaderNode* ShaderGraph::createNode(ShaderNodeType type)
+	{
+		String varName = "var" + std::to_string(_varCounter++);
+
+		switch (type)
+		{
+		case ShaderNodeType::Vec4:
+			return new ShaderNodeVec4(varName);
+		case ShaderNodeType::Multiply:
+			return new ShaderNodeMultiply(varName);
+		case ShaderNodeType::VertexOutput:
+			return new ShaderNodeVertexOutput(varName);
+		case ShaderNodeType::FragmentOutput:
+			return new ShaderNodeFragmentOutput(varName);
+		default:
+			return nullptr;
+		}
 	}
 } // namespace Core

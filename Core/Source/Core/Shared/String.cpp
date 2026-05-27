@@ -26,7 +26,7 @@ namespace Core
 		return *this;
 	}
 
-	String& String::operator+=(String& str)
+	String& String::operator+=(String str)
 	{
 		_buffer += str._buffer;
 		return *this;

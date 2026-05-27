@@ -7,6 +7,11 @@
 #include "../Content/ContentManager.h"
 #include "../Content/Material.h"
 #include "../ShaderGraph/ShaderGraph.h"
+#include "../ShaderGraph/Nodes/ShaderNode.h"
+#include "../ShaderGraph/Nodes/ShaderNodeVertexOutput.h"
+#include "../ShaderGraph/Nodes/ShaderNodeFragmentOutput.h"
+#include "../ShaderGraph/Nodes/ShaderNodeVec4.h"
+#include "../ShaderGraph/Nodes/ShaderNodeMultiply.h"
 #include "../Renderer/Renderer.h"
 #include "../System/Application.h"
 #include "../System/EventHandler.h"
@@ -37,6 +42,9 @@ namespace Core
 		_opened = true;
 
 		ShaderGraph* _defaultShaderGraph = _contentManager->createShaderGraph();
+		ShaderNodeVec4* _vec4Node = _defaultShaderGraph->createNode<ShaderNodeVec4*>();
+		_defaultShaderGraph->getFragmentOutputNode()->setColorNode(_vec4Node);
+
 		_defaultShaderGraph->compile();
 
 		Material* _defaultMaterial = _contentManager->createMaterial();

@@ -20,7 +20,7 @@ namespace Core
 
 			String& operator=(std::string str);
 			String& operator=(const char* str);
-			String& operator+=(String& str);
+			String& operator+=(String str);
 			String& operator+=(char str);
 			String operator+(const String& other) const;
 			String operator+(const char* str) const;
