@@ -13,7 +13,9 @@ namespace Core
 	class Application
 	{
 			friend class Window;
+#ifdef _WIN32
 			friend int ResizingEventWatcher(void* data, SDL_Event* event);
+#endif
 
 		private:
 			void internalInit();
@@ -23,7 +25,9 @@ namespace Core
 			void addWindow(Window* value);
 			void removeWindow(Window* value);
 
+#ifdef _WIN32
 			void updateWindowByEvent(void* event);
+#endif
 
 		protected:
 			bool _isRunning = false;

@@ -10,6 +10,7 @@
 
 namespace Core
 {
+#ifdef _WIN32
 	int ResizingEventWatcher(void* data, SDL_Event* event)
 	{
 		if (event->type == SDL_WINDOWEVENT && (event->window.event == SDL_WINDOWEVENT_RESIZED || event->window.event == SDL_WINDOWEVENT_SIZE_CHANGED))
@@ -19,6 +20,7 @@ namespace Core
 		}
 		return 0;
 	}
+#endif
 
 	void Application::run()
 	{
@@ -57,7 +59,9 @@ namespace Core
 			_isRunning = true;
 		}
 
+#ifdef _WIN32
 		SDL_AddEventWatch(ResizingEventWatcher, this);
+#endif
 	}
 
 	void Application::internalLoop()
@@ -114,6 +118,7 @@ namespace Core
 		}
 	}
 
+#ifdef _WIN32
 	void Application::updateWindowByEvent(void* event)
 	{
 		SDL_Event& evt = *(SDL_Event*)event;
@@ -127,10 +132,13 @@ namespace Core
 			break;
 		}
 	}
+#endif
 
 	void Application::internalDestroy()
 	{
+#ifdef _WIN32
 		SDL_DelEventWatch(ResizingEventWatcher, this);
+#endif
 
 		destroy();
 

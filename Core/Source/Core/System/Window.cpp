@@ -37,8 +37,9 @@ namespace Core
 		_opened = true;
 
 		ShaderGraph* _defaultShaderGraph = _contentManager->createShaderGraph();
-		Material* _defaultMaterial = _contentManager->createMaterial();
 		_defaultShaderGraph->compile();
+
+		Material* _defaultMaterial = _contentManager->createMaterial();
 		_defaultMaterial->setShaderGraph(_defaultShaderGraph);
 		_renderer->setDefaultMaterial(_defaultMaterial);
 
