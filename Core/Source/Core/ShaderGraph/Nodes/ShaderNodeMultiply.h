@@ -9,12 +9,13 @@ namespace Core
 	{
 			friend class ShaderGraph;
 
+		private:
+			ShaderNode* _operandA = nullptr;
+			ShaderNode* _operandB = nullptr;
+
 		protected:
 			ShaderNodeMultiply(const String& varName) : ShaderNode(varName) {}
 			virtual ~ShaderNodeMultiply() = default;
-
-			ShaderNode* _operandA = nullptr;
-			ShaderNode* _operandB = nullptr;
 
 		public:
 			virtual ShaderNodeType getType() const { return ShaderNodeType::Multiply; };
@@ -25,4 +26,4 @@ namespace Core
 			ShaderNode* getOperandB() const { return _operandB; }
 			void setOperandB(ShaderNode* node) { _operandB = node; }
 	};
-}
+} // namespace Core

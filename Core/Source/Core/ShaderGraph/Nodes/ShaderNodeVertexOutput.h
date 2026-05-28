@@ -9,10 +9,7 @@ namespace Core
 	{
 			friend class ShaderGraph;
 
-		protected:
-			ShaderNodeVertexOutput(const String& varName) : ShaderNode(varName) {}
-			virtual ~ShaderNodeVertexOutput() = default;
-
+		private:
 			ShaderNode* _positionNode = nullptr;
 			ShaderNode* _normalNode = nullptr;
 			ShaderNode* _tangentNode = nullptr;
@@ -22,6 +19,10 @@ namespace Core
 			ShaderNode* _uv1Node = nullptr;
 			ShaderNode* _color0Node = nullptr;
 			ShaderNode* _color1Node = nullptr;
+
+		protected:
+			ShaderNodeVertexOutput(const String& varName) : ShaderNode(varName) {}
+			virtual ~ShaderNodeVertexOutput() = default;
 
 		public:
 			virtual ShaderNodeType getType() const { return ShaderNodeType::VertexOutput; };
@@ -53,4 +54,4 @@ namespace Core
 			ShaderNode* getColor1Node() const { return _color1Node; }
 			void setColor1Node(ShaderNode* node) { _color1Node = node; }
 	};
-}
+} // namespace Core

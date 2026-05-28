@@ -9,11 +9,12 @@ namespace Core
 	{
 			friend class ShaderGraph;
 
+		private:
+			ShaderNode* _colorNode = nullptr;
+
 		protected:
 			ShaderNodeFragmentOutput(const String& varName) : ShaderNode(varName) {}
 			virtual ~ShaderNodeFragmentOutput() = default;
-
-			ShaderNode* _colorNode = nullptr;
 
 		public:
 			virtual ShaderNodeType getType() const { return ShaderNodeType::FragmentOutput; };
@@ -21,4 +22,4 @@ namespace Core
 			ShaderNode* getColorNode() const { return _colorNode; }
 			void setColorNode(ShaderNode* node) { _colorNode = node; }
 	};
-}
+} // namespace Core

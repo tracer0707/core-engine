@@ -15,25 +15,22 @@ namespace Core
 {
 	void BuildNode(ShaderNode* node, String* outSrc)
 	{
-		ShaderNodeFragmentOutput* fragmentOutputNode;
-
 		switch (node->getType())
 		{
 		case ShaderNodeType::Vec4:
-			*outSrc += String("vec4 ") + node->getVarName() + " = vec4(" + std::to_string(node->getVec4Value().x) + ", " +
-					   std::to_string(node->getVec4Value().y) + ", " + std::to_string(node->getVec4Value().z) + ", " +
-					   std::to_string(node->getVec4Value().w) + ");\n";
+			*outSrc += String("vec4 ") + node->getVarName() + " = vec4(" + std::to_string(((ShaderNodeVec4*)node)->getValue().x) + ", " +
+					   std::to_string(((ShaderNodeVec4*)node)->getValue().y) + ", " + std::to_string(((ShaderNodeVec4*)node)->getValue().z) + ", " +
+					   std::to_string(((ShaderNodeVec4*)node)->getValue().w) + ");\n";
 			break;
 		case ShaderNodeType::Multiply:
 			break;
 		case ShaderNodeType::VertexOutput:
 			break;
 		case ShaderNodeType::FragmentOutput:
-			fragmentOutputNode = (ShaderNodeFragmentOutput*)node;
-			if (fragmentOutputNode->getColorNode() != nullptr)
+			if (((ShaderNodeFragmentOutput*)node)->getColorNode() != nullptr)
 			{
-				BuildNode(fragmentOutputNode->getColorNode(), outSrc);
-				*outSrc += String("frag_color = ") + fragmentOutputNode->getColorNode()->getVarName() + ";\n";
+				BuildNode(((ShaderNodeFragmentOutput*)node)->getColorNode(), outSrc);
+				*outSrc += String("frag_color = ") + ((ShaderNodeFragmentOutput*)node)->getColorNode()->getVarName() + ";\n";
 			}
 			break;
 		default:
