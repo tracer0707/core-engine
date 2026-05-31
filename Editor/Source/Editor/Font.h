@@ -2,21 +2,21 @@
 
 #include <Core/Shared/String.h>
 
-class ImFont;
+struct ImFont;
 
 namespace Editor
 {
 	class Font
 	{
-	private:
-		ImFont* _font = nullptr;
+		private:
+			ImFont* _font = nullptr;
 
-	public:
-		Font(Core::String path, float size);
-		~Font();
+		public:
+			Font(Core::String path, float size);
+			~Font();
 
-		static void rebuildFonts();
+			static void rebuildFonts();
 
-		void setDefault();
+			void setDefault();
 	};
-}
+} // namespace Editor

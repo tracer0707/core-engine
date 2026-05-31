@@ -13,7 +13,6 @@ namespace Core
 	class Content;
 	class Renderer;
 	class Material;
-	class ShaderGraph;
 	class Texture;
 	class Mesh;
 	class RenderTexture;
@@ -31,11 +30,9 @@ namespace Core
 			List<Content*> _materials;
 			List<Content*> _textures;
 			List<Content*> _meshes;
-			List<Content*> _shaders;
 			List<Content*> _renderTextures;
 
 			std::map<Uuid, Content*> _materialsCache;
-			std::map<Uuid, Content*> _shadersCache;
 			std::map<Uuid, Content*> _texturesCache;
 			std::map<Uuid, Content*> _meshesCache;
 
@@ -52,7 +49,6 @@ namespace Core
 
 			// Create in memory
 			Material* createMaterial();
-			ShaderGraph* createShaderGraph();
 			Mesh* createMesh(int subMeshesCount);
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
@@ -72,7 +68,6 @@ namespace Core
 			void destroy(Material* value);
 			void destroy(Mesh* value);
 			void destroy(Texture* value);
-			void destroy(ShaderGraph* value);
 			void destroy(RenderTexture* value);
 	};
 } // namespace Core

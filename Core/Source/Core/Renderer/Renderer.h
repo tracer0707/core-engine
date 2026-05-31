@@ -36,86 +36,88 @@ struct ImGuiContext;
 
 namespace Core
 {
-    class DeviceContext;
-    class Program;
+	class DeviceContext;
+	class Program;
 	class Material;
 
-    enum class PrimitiveType
-    {
-        Triangle,
-        Line
-    };
+	enum class PrimitiveType
+	{
+		Triangle,
+		Line
+	};
 
-    class Renderer
-    {
-        friend class Window;
+	class Renderer
+	{
+			friend class Window;
 
-      private:
-		Material* _defaultMaterial = nullptr;
+		private:
+			Material* _defaultMaterial = nullptr;
 
-        static Renderer* init(void* windowCtx);
-        static void destroy(Renderer* renderer);
+			static Renderer* init(void* windowCtx);
+			static void destroy(Renderer* renderer);
 
-      protected:
-        Renderer(void* windowCtx);
-        virtual ~Renderer();
+		protected:
+			Renderer(void* windowCtx);
+			virtual ~Renderer();
 
-        void* _windowCtx = nullptr;
-        void* _renderCtx = nullptr;
-        ImGuiContext* _imguiCtx = nullptr;
+			void* _windowCtx = nullptr;
+			void* _renderCtx = nullptr;
+			ImGuiContext* _imguiCtx = nullptr;
 
-        virtual void makeCurrent() = 0;
-        virtual void swapBuffers() = 0;
-        virtual void processEvents(void* event) = 0;
+			virtual void makeCurrent() = 0;
+			virtual void swapBuffers() = 0;
+			virtual void processEvents(void* event) = 0;
 
-        Program* _defaultProgram = nullptr;
-        std::vector<Program*> _shaderPrograms;
+			Program* _defaultProgram = nullptr;
+			Program* _unlitColorProgram = nullptr;
 
-        Program* _currentProgram = nullptr;
+			Program* _currentProgram = nullptr;
 
-        unsigned int _width = 0;
-        unsigned int _height = 0;
+			std::vector<Program*> _shaderPrograms;
 
-      public:
-        unsigned int getWidth() { return _width; }
-        unsigned int getHeight() { return _height; }
+			unsigned int _width = 0;
+			unsigned int _height = 0;
 
-        virtual void setViewportSize(int w, int h) = 0;
-        virtual void beginUI() = 0;
-        virtual void endUI() = 0;
+		public:
+			unsigned int getWidth() { return _width; }
+			unsigned int getHeight() { return _height; }
 
-        void setDefaultMaterial(Material* value) { _defaultMaterial = value; }
-        Material* getDefaultMaterial() const { return _defaultMaterial; }
+			virtual void setViewportSize(int w, int h) = 0;
+			virtual void beginUI() = 0;
+			virtual void endUI() = 0;
 
-        virtual Program* createProgram(String vertexSrc, String fragmentSrc) = 0;
-        virtual void deleteProgram(Program* program) = 0;
-        virtual void bindProgram(Program* program) = 0;
-        virtual std::string checkProgramErrors(unsigned int program) = 0;
+			virtual Program* createProgram(String vertexSrc, String fragmentSrc) = 0;
+			virtual void deleteProgram(Program* program) = 0;
+			virtual void bindProgram(Program* program) = 0;
+			virtual std::string checkProgramErrors(unsigned int program) = 0;
 
-        // Create dynamic buffer
-        virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;
+			Program* getDefaultProgram() { return _defaultProgram; }
+			Program* getUnlitColorProgram() { return _unlitColorProgram; }
 
-        // Create static buffer
-        virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-                                           unsigned int indexArraySize) = 0;
+			// Create dynamic buffer
+			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;
 
-        virtual void deleteBuffer(VertexBuffer* buffer) = 0;
+			// Create static buffer
+			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+											   unsigned int indexArraySize) = 0;
 
-        virtual void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
-                                glm::mat4& model) = 0;
+			virtual void deleteBuffer(VertexBuffer* buffer) = 0;
 
-        virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-                                  unsigned int indexArraySize) = 0;
+			virtual void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
+									glm::mat4& model) = 0;
 
-        virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
-        virtual void deleteFrameBuffer(const FrameBuffer* buffer) = 0;
-        virtual void bindFrameBuffer(const FrameBuffer* buffer) = 0;
+			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+									  unsigned int indexArraySize) = 0;
 
-        virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
-                                                 TextureFormat format) = 0;
-        virtual void bindTexture(unsigned int id, const char* name, unsigned int slot) = 0;
-        virtual void deleteTexture(unsigned int id) = 0;
+			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
+			virtual void deleteFrameBuffer(const FrameBuffer* buffer) = 0;
+			virtual void bindFrameBuffer(const FrameBuffer* buffer) = 0;
 
-        virtual void clear(unsigned int flags, Color color) = 0;
-    };
+			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
+													 TextureFormat format) = 0;
+			virtual void bindTexture(unsigned int id, const char* name, unsigned int slot) = 0;
+			virtual void deleteTexture(unsigned int id) = 0;
+
+			virtual void clear(unsigned int flags, Color color) = 0;
+	};
 } // namespace Core

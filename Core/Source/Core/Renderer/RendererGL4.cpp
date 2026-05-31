@@ -17,6 +17,9 @@
 #include "Program.h"
 #include "../Components/Camera.h"
 
+#include "Shaders/GL4/Default.h"
+#include "Shaders/GL4/UnlitColor.h"
+
 namespace Core
 {
 	void debugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
@@ -54,6 +57,9 @@ namespace Core
 
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(debugMessageCallback, nullptr);
+
+		_defaultProgram = createProgram(Shaders::Default::getVertexSource(), Shaders::Default::getFragmentSource());
+		_unlitColorProgram = createProgram(Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
 	}
 
 	RendererGL4::~RendererGL4()

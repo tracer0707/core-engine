@@ -127,8 +127,8 @@ namespace Editor
 		Core::List<int> inds = _currentBrush->getFlatIndices();
 		Core::List<glm::vec3>& verts = _currentBrush->getVertices();
 
-		Core::Primitives::wireMesh(_renderer, _wireframeBuffer, _renderer->getDefaultMaterial(), view, proj, model, verts, inds,
-								   Core::Color::RED, Core::Primitives::WireframeMode::Polygon,
+		Core::Primitives::wireMesh(_renderer, _wireframeBuffer, view, proj, model, verts, inds, Core::Color::RED,
+								   Core::Primitives::WireframeMode::Polygon,
 								   C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
 	}
 } // namespace Editor

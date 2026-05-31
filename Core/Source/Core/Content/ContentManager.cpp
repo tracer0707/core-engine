@@ -6,7 +6,6 @@
 #include "../System/Application.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
-#include "../ShaderGraph/ShaderGraph.h"
 
 #include "ContentDatabase.h"
 #include "Material.h"
@@ -35,8 +34,6 @@ namespace Core
 	{
 		for (auto it : _materials)
 			delete it;
-		for (auto it : _shaders)
-			delete it;
 		for (auto it : _textures)
 			delete it;
 		for (auto it : _meshes)
@@ -45,13 +42,11 @@ namespace Core
 			delete it;
 
 		_materials.clear();
-		_shaders.clear();
 		_textures.clear();
 		_meshes.clear();
 		_renderTextures.clear();
 
 		_materialsCache.clear();
-		_shadersCache.clear();
 		_texturesCache.clear();
 		_meshesCache.clear();
 
@@ -64,13 +59,6 @@ namespace Core
 	{
 		Material* value = new Material(_renderer);
 		_materials.add(value);
-		return value;
-	}
-
-	ShaderGraph* ContentManager::createShaderGraph()
-	{
-		ShaderGraph* value = new ShaderGraph(_renderer);
-		_shaders.add(value);
 		return value;
 	}
 
@@ -217,12 +205,6 @@ namespace Core
 	{
 		removeFromCache(value, _texturesCache);
 		destroyContent(value, _textures);
-	}
-
-	void ContentManager::destroy(ShaderGraph* value)
-	{
-		removeFromCache(value, _shadersCache);
-		destroyContent(value, _shaders);
 	}
 
 	void ContentManager::destroy(RenderTexture* value)

@@ -1,40 +1,37 @@
 #include "Renderer.h"
-#include "RendererGL4.h"
 
+#include "RendererGL4.h"
 #include "Program.h"
+
 #include "../Config.h"
 #include "../Components/Camera.h"
 
 namespace Core
 {
-    Renderer* Renderer::init(void* windowCtx)
-    {
-        Renderer* renderer = nullptr;
+	Renderer* Renderer::init(void* windowCtx)
+	{
+		Renderer* renderer = nullptr;
 
 #if CURRENT_RENDERER == GL4
-        renderer = new RendererGL4(windowCtx);
+		renderer = new RendererGL4(windowCtx);
 #endif
 
-        return renderer;
-    }
+		return renderer;
+	}
 
-    void Renderer::destroy(Renderer* renderer)
-    {
-        delete renderer;
-    }
+	void Renderer::destroy(Renderer* renderer)
+	{
+		delete renderer;
+	}
 
-    Renderer::Renderer(void* windowCtx)
-    {
-        _windowCtx = windowCtx;
-        _defaultProgram = new Program();
-    }
+	Renderer::Renderer(void* windowCtx)
+	{
+		_windowCtx = windowCtx;
+	}
 
-    Renderer::~Renderer()
-    {
-        delete _defaultProgram;
-
-        _windowCtx = nullptr;
-        _renderCtx = nullptr;
-        _defaultProgram = nullptr;
-    }
+	Renderer::~Renderer()
+	{
+		_windowCtx = nullptr;
+		_renderCtx = nullptr;
+	}
 } // namespace Core

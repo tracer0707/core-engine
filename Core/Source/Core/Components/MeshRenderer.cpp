@@ -47,17 +47,21 @@ namespace Core
 
 		glm::mat4 view = camera->getViewMatrix();
 		glm::mat4 proj = camera->getProjectionMatrix();
+		glm::mat4 model = transform->getTransformMatrix();
 
 		for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
 		{
 			SubMesh* subMesh = mesh->getSubMesh(i);
 			Material* material = subMesh->getMaterial();
 
-			glm::mat4 model = transform->getTransformMatrix();
-
-			Material* mat = material;
-			if (mat == nullptr) mat = _renderer->getDefaultMaterial();
-			if (mat != nullptr) mat->bind();
+			if (material != nullptr)
+			{
+				material->bind();
+			}
+			else
+			{
+				_renderer->bindProgram(nullptr);
+			}
 
 			_renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,
 								  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
