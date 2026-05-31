@@ -42,6 +42,8 @@ namespace Core
 			template <typename T>
 			T createNode() {};
 
+			const List<ShaderNode*>& getNodes() { return _nodes; }
+
 			void compile();
 			void bind();
 	};

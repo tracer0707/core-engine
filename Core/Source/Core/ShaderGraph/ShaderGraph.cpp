@@ -70,19 +70,31 @@ namespace Core
 	ShaderNode* ShaderGraph::createNode(ShaderNodeType type)
 	{
 		String varName = "var" + std::to_string(_varCounter++);
+		ShaderNode* node = nullptr;
 
 		switch (type)
 		{
 		case ShaderNodeType::Vec4:
-			return new ShaderNodeVec4(varName);
+			node = new ShaderNodeVec4(varName);
+			break;
 		case ShaderNodeType::Multiply:
-			return new ShaderNodeMultiply(varName);
+			node = new ShaderNodeMultiply(varName);
+			break;
 		case ShaderNodeType::VertexOutput:
-			return new ShaderNodeVertexOutput(varName);
+			node = new ShaderNodeVertexOutput(varName);
+			break;
 		case ShaderNodeType::FragmentOutput:
-			return new ShaderNodeFragmentOutput(varName);
+			node = new ShaderNodeFragmentOutput(varName);
+			break;
 		default:
-			return nullptr;
+			break;
 		}
+
+		if (node != nullptr)
+		{
+			_nodes.add(node);
+		}
+
+		return node;
 	}
 } // namespace Core

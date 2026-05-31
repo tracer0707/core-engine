@@ -13,28 +13,64 @@
 
 namespace Core
 {
-	void BuildNode(ShaderNode* node, String* outSrc)
+	void WriteVertexDeclaration(ShaderGraph* graph, String* outSrc)
 	{
-		switch (node->getType())
+		for (ShaderNode* node : graph->getNodes())
 		{
-		case ShaderNodeType::Vec4:
-			*outSrc += String("vec4 ") + node->getVarName() + " = vec4(" + std::to_string(((ShaderNodeVec4*)node)->getValue().x) + ", " +
-					   std::to_string(((ShaderNodeVec4*)node)->getValue().y) + ", " + std::to_string(((ShaderNodeVec4*)node)->getValue().z) + ", " +
-					   std::to_string(((ShaderNodeVec4*)node)->getValue().w) + ");\n";
-			break;
-		case ShaderNodeType::Multiply:
-			break;
-		case ShaderNodeType::VertexOutput:
-			break;
-		case ShaderNodeType::FragmentOutput:
-			if (((ShaderNodeFragmentOutput*)node)->getColorNode() != nullptr)
+			if (node->getType() == ShaderNodeType::Vec4)
 			{
-				BuildNode(((ShaderNodeFragmentOutput*)node)->getColorNode(), outSrc);
-				*outSrc += String("frag_color = ") + ((ShaderNodeFragmentOutput*)node)->getColorNode()->getVarName() + ";\n";
+				ShaderNodeVec4* vec4Node = (ShaderNodeVec4*)node;
+
+				*outSrc += String("vec4 ") + node->getVarName() + " = vec4(" + std::to_string(vec4Node->getValue().x) + ", " +
+						   std::to_string(vec4Node->getValue().y) + ", " + std::to_string(vec4Node->getValue().z) + ", " +
+						   std::to_string(vec4Node->getValue().w) + ");\n";
 			}
-			break;
-		default:
-			break;
+			else if (node->getType() == ShaderNodeType::Position)
+			{
+				// Handle position node
+			}
+			else if (node->getType() == ShaderNodeType::UV0)
+			{
+				// Handle UV node
+			}
+			else if (node->getType() == ShaderNodeType::Color0)
+			{
+				// Handle color node
+			}
+		}
+	}
+
+	void WriteFragmentDeclaration(ShaderGraph* graph, String* outSrc) {}
+
+	void WriteNode(ShaderNode* node, String* outSrc)
+	{
+		if (node->getType() == ShaderNodeType::Vec4)
+		{
+		}
+		else if (node->getType() == ShaderNodeType::Multiply)
+		{
+			ShaderNodeMultiply* multiplyNode = (ShaderNodeMultiply*)node;
+			ShaderNode* operandA = multiplyNode->getOperandA();
+			ShaderNode* operandB = multiplyNode->getOperandB();
+			if (operandA != nullptr && operandB != nullptr)
+			{
+				WriteNode(operandA, outSrc);
+				WriteNode(operandB, outSrc);
+				*outSrc += operandA->getVarName() + " * " + operandB->getVarName() + ";\n";
+			}
+		}
+		else if (node->getType() == ShaderNodeType::VertexOutput)
+		{
+			// Handle vertex output node
+		}
+		else if (node->getType() == ShaderNodeType::FragmentOutput)
+		{
+			ShaderNodeFragmentOutput* fragmentOutputNode = (ShaderNodeFragmentOutput*)node;
+			if (fragmentOutputNode->getColorNode() != nullptr)
+			{
+				WriteNode(fragmentOutputNode->getColorNode(), outSrc);
+				*outSrc += String("frag_color = ") + fragmentOutputNode->getColorNode()->getVarName() + ";\n";
+			}
 		}
 	}
 
@@ -65,7 +101,13 @@ namespace Core
 		void main() {
 		)";
 
-		BuildNode(shaderGraph->getFragmentOutputNode(), &_fragment);
+		WriteVertexDeclaration(shaderGraph, &_vertex);
+		WriteNode(shaderGraph->getVertexOutputNode(), &_vertex);
+
+		_vertex += "}";
+
+		WriteFragmentDeclaration(shaderGraph, &_fragment);
+		WriteNode(shaderGraph->getFragmentOutputNode(), &_fragment);
 
 		_fragment += "}";
 
