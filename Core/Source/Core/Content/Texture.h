@@ -37,6 +37,6 @@ namespace Core
 			int getWidth() const { return _width; }
 			int getHeight() const { return _height; }
 
-			void bind(const char* name, int slot);
+			void bind(int slot);
 	};
 } // namespace Core

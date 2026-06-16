@@ -19,6 +19,7 @@
 
 #include "Shaders/GL4/Default.h"
 #include "Shaders/GL4/UnlitColor.h"
+#include "Shaders/GL4/UnlitTexture.h"
 
 namespace Core
 {
@@ -60,6 +61,7 @@ namespace Core
 
 		_defaultProgram = createProgram(Shaders::Default::getVertexSource(), Shaders::Default::getFragmentSource());
 		_unlitColorProgram = createProgram(Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
+		_unlitTextureProgram = createProgram(Shaders::UnlitTexture::getVertexSource(), Shaders::UnlitTexture::getFragmentSource());
 	}
 
 	RendererGL4::~RendererGL4()
@@ -73,11 +75,10 @@ namespace Core
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 
-		for (auto* p : _shaderPrograms)
+		while (!_shaderPrograms.empty())
 		{
-			if (p != nullptr) deleteProgram(p);
+			deleteProgram(_shaderPrograms.back());
 		}
-		_shaderPrograms.clear();
 
 		SDL_GL_DeleteContext(_renderCtx);
 
@@ -176,6 +177,63 @@ namespace Core
 		program->vertexShader = vs;
 		program->fragmentShader = fs;
 
+		GLint uniformCount = 0;
+		glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &uniformCount);
+
+		for (GLint i = 0; i < uniformCount; i++)
+		{
+			GLchar name[256];
+			GLsizei length;
+			GLint size;
+			GLenum type;
+
+			glGetActiveUniform(programId, i, sizeof(name), &length, &size, &type, name);
+
+			GLint location = glGetUniformLocation(programId, name);
+
+			UniformType uniformType;
+			switch (type)
+			{
+			case GL_FLOAT:
+				uniformType = UniformType::Float;
+				break;
+			case GL_INT:
+				uniformType = UniformType::Int;
+				break;
+			case GL_FLOAT_VEC2:
+				uniformType = UniformType::Vec2;
+				break;
+			case GL_FLOAT_VEC3:
+				uniformType = UniformType::Vec3;
+				break;
+			case GL_FLOAT_VEC4:
+				uniformType = UniformType::Vec4;
+				break;
+			case GL_FLOAT_MAT3:
+				uniformType = UniformType::Mat3;
+				break;
+			case GL_FLOAT_MAT4:
+				uniformType = UniformType::Mat4;
+				break;
+			case GL_SAMPLER_2D:
+				uniformType = UniformType::Sampler2D;
+				break;
+			case GL_SAMPLER_CUBE:
+				uniformType = UniformType::SamplerCube;
+				break;
+			default:
+				uniformType = UniformType::Unknown;
+				break;
+			}
+
+			UniformInfo info;
+			info.name = name;
+			info.type = uniformType;
+			info.location = location;
+			info.size = size;
+			program->uniforms[name] = info;
+		}
+
 		_shaderPrograms.push_back(program);
 
 		return program;
@@ -186,7 +244,7 @@ namespace Core
 		const auto& it =
 			std::find_if(_shaderPrograms.begin(), _shaderPrograms.end(), [=](Program* a) -> bool { return program->program == a->program; });
 
-		if (it == _shaderPrograms.end()) throw std::invalid_argument("Попытка удалить несуществующую программу");
+		if (it == _shaderPrograms.end()) throw std::invalid_argument("An attempt was made to delete a program that does not exist");
 
 		if ((*it)->vertexShader > 0) glDeleteShader((*it)->vertexShader);
 		if ((*it)->fragmentShader > 0) glDeleteShader((*it)->fragmentShader);
@@ -500,18 +558,50 @@ namespace Core
 		return tex;
 	}
 
-	void RendererGL4::bindTexture(unsigned int id, const char* name, unsigned int slot)
+	void RendererGL4::bindTexture(unsigned int id, unsigned int slot)
 	{
-		GLuint texId = glGetUniformLocation(_currentProgram->program, name);
-
 		glActiveTexture(GL_TEXTURE0 + slot);
 		glBindTexture(GL_TEXTURE_2D, id);
-		if (texId >= 0) glUniform1i(texId, slot);
 	}
 
 	void RendererGL4::deleteTexture(unsigned int id)
 	{
 		glDeleteTextures(1, &id);
+	}
+
+	void RendererGL4::setUniform(int location, int value)
+	{
+		glUniform1i(location, value);
+	}
+
+	void RendererGL4::setUniform(int location, float value)
+	{
+		glUniform1f(location, value);
+	}
+
+	void RendererGL4::setUniform(int location, glm::vec2 value)
+	{
+		glUniform2fv(location, 1, glm::value_ptr(value));
+	}
+
+	void RendererGL4::setUniform(int location, glm::vec3 value)
+	{
+		glUniform3fv(location, 1, glm::value_ptr(value));
+	}
+
+	void RendererGL4::setUniform(int location, glm::vec4 value)
+	{
+		glUniform4fv(location, 1, glm::value_ptr(value));
+	}
+
+	void RendererGL4::setUniform(int location, glm::mat3 value)
+	{
+		glUniformMatrix3fv(location, 1, false, glm::value_ptr(value));
+	}
+
+	void RendererGL4::setUniform(int location, glm::mat4 value)
+	{
+		glUniformMatrix4fv(location, 1, false, glm::value_ptr(value));
 	}
 
 	void RendererGL4::clear(unsigned int flags, Color color)

@@ -3,6 +3,10 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <glm/vec4.hpp>
+#include <glm/mat3x3.hpp>
 #include <glm/mat4x4.hpp>
 
 #include "../Shared/String.h"
@@ -70,6 +74,7 @@ namespace Core
 
 			Program* _defaultProgram = nullptr;
 			Program* _unlitColorProgram = nullptr;
+			Program* _unlitTextureProgram = nullptr;
 
 			Program* _currentProgram = nullptr;
 
@@ -93,6 +98,7 @@ namespace Core
 
 			Program* getDefaultProgram() { return _defaultProgram; }
 			Program* getUnlitColorProgram() { return _unlitColorProgram; }
+			Program* getUnlitTextureProgram() { return _unlitTextureProgram; }
 
 			// Create dynamic buffer
 			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;
@@ -115,8 +121,16 @@ namespace Core
 
 			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
 													 TextureFormat format) = 0;
-			virtual void bindTexture(unsigned int id, const char* name, unsigned int slot) = 0;
+			virtual void bindTexture(unsigned int id, unsigned int slot) = 0;
 			virtual void deleteTexture(unsigned int id) = 0;
+
+			virtual void setUniform(int location, int value) = 0;
+			virtual void setUniform(int location, float value) = 0;
+			virtual void setUniform(int location, glm::vec2 value) = 0;
+			virtual void setUniform(int location, glm::vec3 value) = 0;
+			virtual void setUniform(int location, glm::vec4 value) = 0;
+			virtual void setUniform(int location, glm::mat3 value) = 0;
+			virtual void setUniform(int location, glm::mat4 value) = 0;
 
 			virtual void clear(unsigned int flags, Color color) = 0;
 	};

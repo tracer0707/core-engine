@@ -7,46 +7,57 @@
 
 namespace Core
 {
-    class RendererGL4 : public Renderer
-    {
-        friend class Renderer;
+	class RendererGL4 : public Renderer
+	{
+			friend class Renderer;
 
-      protected:
-        RendererGL4(void* windowCtx);
-        virtual ~RendererGL4();
+		protected:
+			RendererGL4(void* windowCtx);
+			virtual ~RendererGL4();
 
-        virtual void makeCurrent();
-        virtual void swapBuffers();
-        virtual void processEvents(void* event);
+			virtual void makeCurrent();
+			virtual void swapBuffers();
+			virtual void processEvents(void* event);
 
-      public:
-        void setViewportSize(int w, int h);
-        void beginUI();
-        void endUI();
+		public:
+			virtual void setViewportSize(int w, int h);
+			virtual void beginUI();
+			virtual void endUI();
 
-        Program* createProgram(String vertexSrc, String fragmentSrc);
-        void deleteProgram(Program* programId);
-        void bindProgram(Program* programId);
-        std::string checkProgramErrors(unsigned int program);
+			virtual Program* createProgram(String vertexSrc, String fragmentSrc);
+			virtual void deleteProgram(Program* programId);
+			virtual void bindProgram(Program* programId);
+			virtual std::string checkProgramErrors(unsigned int program);
 
-        VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize);
-        VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
+			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize);
+			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+											   unsigned int indexArraySize);
 
-        void deleteBuffer(VertexBuffer* buffer);
+			virtual void deleteBuffer(VertexBuffer* buffer);
 
-        void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
+			virtual void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
+									glm::mat4& model);
 
-        virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-                                  unsigned int indexArraySize);
+			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
+									  unsigned int indexArraySize);
 
-        const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
-        void deleteFrameBuffer(const FrameBuffer* buffer);
-        void bindFrameBuffer(const FrameBuffer* buffer);
+			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
+			virtual void deleteFrameBuffer(const FrameBuffer* buffer);
+			virtual void bindFrameBuffer(const FrameBuffer* buffer);
 
-        const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format);
-        void bindTexture(unsigned int id, const char* name, unsigned int slot);
-        void deleteTexture(unsigned int id);
+			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
+													 TextureFormat format);
+			virtual void bindTexture(unsigned int id, unsigned int slot);
+			virtual void deleteTexture(unsigned int id);
 
-        void clear(unsigned int flags, Color color);
-    };
+			virtual void setUniform(int location, int value);
+			virtual void setUniform(int location, float value);
+			virtual void setUniform(int location, glm::vec2 value);
+			virtual void setUniform(int location, glm::vec3 value);
+			virtual void setUniform(int location, glm::vec4 value);
+			virtual void setUniform(int location, glm::mat3 value);
+			virtual void setUniform(int location, glm::mat4 value);
+
+			virtual void clear(unsigned int flags, Color color);
+	};
 } // namespace Core

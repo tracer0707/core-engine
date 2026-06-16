@@ -1,17 +1,44 @@
-#pragma
+#pragma once
+
+#include <unordered_map>
+#include <string>
 
 namespace Core
 {
-    class Program
-    {
-      public:
-        unsigned int program = 0;
-        unsigned int vertexShader = 0;
-        unsigned int fragmentShader = 0;
-        unsigned int geometryShader = 0;
-        unsigned int computeShader = 0;
+	enum class UniformType
+	{
+		Float,
+		Int,
+		Vec2,
+		Vec3,
+		Vec4,
+		Mat3,
+		Mat4,
+		Sampler2D,
+		SamplerCube,
+		Unknown
+	};
 
-        Program& operator=(Program& left);
-        bool operator==(Program& left);
-    };
+	struct UniformInfo
+	{
+			std::string name;
+			UniformType type;
+			int location;
+			int size;
+	};
+
+	class Program
+	{
+		public:
+			unsigned int program = 0;
+			unsigned int vertexShader = 0;
+			unsigned int fragmentShader = 0;
+			unsigned int geometryShader = 0;
+			unsigned int computeShader = 0;
+
+			std::unordered_map<std::string, UniformInfo> uniforms;
+
+			Program& operator=(const Program& left);
+			bool operator==(const Program& left);
+	};
 } // namespace Core

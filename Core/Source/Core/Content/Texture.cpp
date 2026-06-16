@@ -49,8 +49,8 @@ namespace Core
 		return CONTENT_TYPE_TEXTURE;
 	}
 
-	void Texture::bind(const char* name, int slot)
+	void Texture::bind(int slot)
 	{
-		_renderer->bindTexture(_nativeId, name, slot);
+		_renderer->bindTexture(_nativeId, slot);
 	}
 } // namespace Core
