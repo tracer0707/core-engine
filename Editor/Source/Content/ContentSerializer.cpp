@@ -4,7 +4,7 @@
 
 #include <Core/Serialization/FlatBuffers/MaterialSerializer_generated.h>
 #include <Core/Content/Material.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Content/ContentDatabase.h>
 
 namespace Editor

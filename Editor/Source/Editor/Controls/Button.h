@@ -9,7 +9,7 @@
 
 namespace Core
 {
-	class Texture;
+	class Texture2D;
 }
 
 namespace Editor
@@ -21,7 +21,7 @@ namespace Editor
 		private:
 			Core::String _text = "";
 
-			Core::Texture* _image = nullptr;
+			Core::Texture2D* _image = nullptr;
 
 			bool _active = true;
 			bool _edit = false;
@@ -35,8 +35,8 @@ namespace Editor
 		public:
 			Button();
 			Button(Core::String text);
-			Button(Core::Texture* image);
-			Button(Core::String text, Core::Texture* image);
+			Button(Core::Texture2D* image);
+			Button(Core::String text, Core::Texture2D* image);
 			virtual ~Button();
 
 			virtual float getWidth() const;
@@ -48,8 +48,8 @@ namespace Editor
 			Core::String getText() const { return _text; }
 			void setText(Core::String value) { _text = value; }
 
-			void setImage(Core::Texture* value) { _image = value; }
-			Core::Texture* getImage() { return _image; }
+			void setImage(Core::Texture2D* value) { _image = value; }
+			Core::Texture2D* getImage() { return _image; }
 
 			bool getActive() const { return _active; }
 			void setActive(bool value);

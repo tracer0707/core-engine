@@ -16,7 +16,7 @@
 #include <Core/Math/AxisAlignedBox.h>
 #include <Core/Renderer/Color.h>
 #include <Core/Renderer/VertexBuffer.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/ContentManager.h>
@@ -46,7 +46,7 @@ namespace Editor
 		_app = nullptr;
 	}
 
-	void ContentImporter::importTexture(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format)
+	void ContentImporter::importTexture2D(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format)
 	{
 		int _width = 0;
 		int _height = 0;
@@ -123,7 +123,7 @@ namespace Editor
 		delete[] _data;
 	}
 
-	// Core::Texture* ContentImporter::loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, Core::TextureFormat format)
+	// Core::Texture2D* ContentImporter::loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, Core::TextureFormat format)
 	// {
 	// 	FIBITMAP* texture = FreeImage_Allocate(w, h, bpp * 8, 8, 8, 8);
 	// 	for (std::int32_t i = 0; i < h; ++i)
@@ -197,7 +197,7 @@ namespace Editor
 			}
 
 			Core::Material* material = createMaterial();
-			Core::Texture* texture = loadTextureFromFile("D:/Dev/C++/core-engine/x64/Release/Test Project/diffuse.jpg", Core::TextureFormat::BC7);
+			Core::Texture2D* texture = loadTextureFromFile("D:/Dev/C++/core-engine/x64/Release/Test Project/diffuse.jpg", Core::TextureFormat::BC7);
 			material->setTexture(texture);
 
 			_subMeshes[i]->setMaterial(material);

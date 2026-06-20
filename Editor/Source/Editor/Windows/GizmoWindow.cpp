@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include <Core/Content/ContentManager.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 
@@ -29,7 +29,7 @@ namespace Editor
 		/* Undo */
 
 		Button* undoBtn = new Button();
-		Core::Texture* undoBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* undoBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/undo.png"), contentMgr);
 		undoBtn->setSize(32, 32);
 		undoBtn->setImage(undoBtnImage);
@@ -39,7 +39,7 @@ namespace Editor
 		/* Redo */
 
 		Button* redoBtn = new Button();
-		Core::Texture* redoBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* redoBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/redo.png"), contentMgr);
 		redoBtn->setSize(32, 32);
 		redoBtn->setImage(redoBtnImage);
@@ -49,7 +49,7 @@ namespace Editor
 		/* Select */
 
 		Button* selectBtn = new Button();
-		Core::Texture* selectBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* selectBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/select.png"), contentMgr);
 		selectBtn->setSize(32, 32);
 		selectBtn->setImage(selectBtnImage);
@@ -59,7 +59,7 @@ namespace Editor
 		/* Move */
 
 		Button* moveBtn = new Button();
-		Core::Texture* moveBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* moveBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"), contentMgr);
 		moveBtn->setSize(32, 32);
 		moveBtn->setImage(moveBtnImage);
@@ -69,7 +69,7 @@ namespace Editor
 		/* Rotate */
 
 		Button* rotateBtn = new Button();
-		Core::Texture* rotateBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* rotateBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"), contentMgr);
 		rotateBtn->setSize(32, 32);
 		rotateBtn->setImage(rotateBtnImage);
@@ -79,7 +79,7 @@ namespace Editor
 		/* Scale */
 
 		Button* scaleBtn = new Button();
-		Core::Texture* scaleBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* scaleBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"), contentMgr);
 		scaleBtn->setSize(32, 32);
 		scaleBtn->setImage(scaleBtnImage);

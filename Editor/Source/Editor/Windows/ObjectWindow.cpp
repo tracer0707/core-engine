@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include <Core/Content/ContentManager.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 #include <Core/System/EventHandler.h>
@@ -34,7 +34,7 @@ namespace Editor
 		/* CSG tool */
 
 		Button* csgTool = new Button();
-		Core::Texture* csgToolImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgToolImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"), contentMgr);
 		csgTool->setSize(32, 32);
 		csgTool->setImage(csgToolImage);
@@ -52,7 +52,7 @@ namespace Editor
 		/* Light tool */
 
 		Button* lightTool = new Button();
-		Core::Texture* lightToolImage = TextureUtils::loadCompressed(
+		Core::Texture2D* lightToolImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), contentMgr);
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
@@ -68,7 +68,7 @@ namespace Editor
 		/* Camera tool */
 
 		Button* cameraTool = new Button();
-		Core::Texture* cameraToolImage = TextureUtils::loadCompressed(
+		Core::Texture2D* cameraToolImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"), contentMgr);
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);

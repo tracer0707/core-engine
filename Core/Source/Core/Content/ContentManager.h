@@ -13,7 +13,7 @@ namespace Core
 	class Content;
 	class Renderer;
 	class Material;
-	class Texture;
+	class Texture2D;
 	class Mesh;
 	class RenderTexture;
 	class Application;
@@ -33,7 +33,7 @@ namespace Core
 			List<Content*> _renderTextures;
 
 			std::map<Uuid, Content*> _materialsCache;
-			std::map<Uuid, Content*> _texturesCache;
+			std::map<Uuid, Content*> _textures2DCache;
 			std::map<Uuid, Content*> _meshesCache;
 
 			void removeFromCache(Content* value, std::map<Uuid, Content*>& map);
@@ -54,20 +54,20 @@ namespace Core
 
 			// Load from files
 			Material* loadMaterialFromFile(String fileName);
-			Texture* loadTextureFromFile(String fileName);
+			Texture2D* loadTexture2DFromFile(String fileName);
 			Mesh* loadMeshFromFile(String fileName);
 
 			// Load by uuids
 			Material* loadMaterialByUuid(Uuid uuid);
-			Texture* loadTextureByUuid(Uuid uuid);
+			Texture2D* loadTexture2DByUuid(Uuid uuid);
 
 			// Load from memory
-			Texture* loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
+			Texture2D* loadTexture2DFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);
 
 			// Destroy
 			void destroy(Material* value);
 			void destroy(Mesh* value);
-			void destroy(Texture* value);
+			void destroy(Texture2D* value);
 			void destroy(RenderTexture* value);
 	};
 } // namespace Core

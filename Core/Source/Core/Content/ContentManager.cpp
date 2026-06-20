@@ -9,7 +9,7 @@
 
 #include "ContentDatabase.h"
 #include "Material.h"
-#include "Texture.h"
+#include "Texture2D.h"
 #include "Mesh.h"
 #include "RenderTexture.h"
 
@@ -47,7 +47,7 @@ namespace Core
 		_renderTextures.clear();
 
 		_materialsCache.clear();
-		_texturesCache.clear();
+		_textures2DCache.clear();
 		_meshesCache.clear();
 
 		_renderer = nullptr;
@@ -105,7 +105,7 @@ namespace Core
 		// String textureUuid = materialSerialized->texture_uuid()->c_str();
 		// if (textureUuid != String::Empty)
 		// {
-		// 	tex = loadTextureByUuid(Core::Uuid::fromString(textureUuid.std_str()));
+		// 	tex = loadTexture2DByUuid(Core::Uuid::fromString(textureUuid.std_str()));
 		// }
 
 		Material* result = new Material(_renderer);
@@ -122,12 +122,12 @@ namespace Core
 		return result;
 	}
 
-	Texture* ContentManager::loadTextureFromFile(String fileName)
+	Texture2D* ContentManager::loadTexture2DFromFile(String fileName)
 	{
 		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
 
-		auto it = _texturesCache.find(uuid);
-		if (it != _texturesCache.end()) return (Texture*)it->second;
+		auto it = _textures2DCache.find(uuid);
+		if (it != _textures2DCache.end()) return (Texture2D*)it->second;
 
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
 		size_t fileSize = file.tellg();
@@ -136,17 +136,17 @@ namespace Core
 		std::vector<uint8_t> data(fileSize);
 		file.read(reinterpret_cast<char*>(data.data()), fileSize);
 
-		auto textureSerialized = GetTextureSerializer(data.data());
+		auto texture2DSerialized = GetTextureSerializer(data.data());
 
-		unsigned char* dataRaw = const_cast<unsigned char*>(textureSerialized->data()->data());
+		unsigned char* dataRaw = const_cast<unsigned char*>(texture2DSerialized->data()->data());
 
-		Texture* result = new Texture(_renderer, textureSerialized->width(), textureSerialized->height(), dataRaw, textureSerialized->size(),
-									  static_cast<TextureFormat>(textureSerialized->format()));
+		Texture2D* result = new Texture2D(_renderer, texture2DSerialized->width(), texture2DSerialized->height(), dataRaw,
+										  texture2DSerialized->size(), static_cast<TextureFormat>(texture2DSerialized->format()));
 
 		result->setUuid(uuid);
 
 		_textures.add(result);
-		_texturesCache[uuid] = result;
+		_textures2DCache[uuid] = result;
 
 		if (_onResourceLoaded != nullptr)
 		{
@@ -171,18 +171,18 @@ namespace Core
 		return loadMaterialFromFile(db->getPath(uuid));
 	}
 
-	Texture* ContentManager::loadTextureByUuid(Uuid uuid)
+	Texture2D* ContentManager::loadTexture2DByUuid(Uuid uuid)
 	{
 		ContentDatabase* db = ContentDatabase::singleton();
 		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
-		return loadTextureFromFile(db->getPath(uuid));
+		return loadTexture2DFromFile(db->getPath(uuid));
 	}
 
 	// Load from memory
 
-	Texture* ContentManager::loadTextureFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt)
+	Texture2D* ContentManager::loadTexture2DFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt)
 	{
-		Texture* result = new Texture(_renderer, w, h, data, size, fmt);
+		Texture2D* result = new Texture2D(_renderer, w, h, data, size, fmt);
 		_textures.add(result);
 		return result;
 	}
@@ -201,9 +201,9 @@ namespace Core
 		destroyContent(value, _meshes);
 	}
 
-	void ContentManager::destroy(Texture* value)
+	void ContentManager::destroy(Texture2D* value)
 	{
-		removeFromCache(value, _texturesCache);
+		removeFromCache(value, _textures2DCache);
 		destroyContent(value, _textures);
 	}
 

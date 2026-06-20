@@ -4,7 +4,7 @@
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 
 #include "ControlList.h"
 #include "ContextMenu.h"
@@ -18,12 +18,12 @@ namespace Editor
 		_text = text;
 	}
 
-	Button::Button(Core::Texture* image)
+	Button::Button(Core::Texture2D* image)
 	{
 		_image = image;
 	}
 
-	Button::Button(Core::String text, Core::Texture* image)
+	Button::Button(Core::String text, Core::Texture2D* image)
 	{
 		_text = text;
 		_image = image;

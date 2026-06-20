@@ -2,7 +2,7 @@
 
 #include <filesystem>
 
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 #include <Core/System/EventHandler.h>
@@ -36,7 +36,7 @@ namespace Editor
 		/* CSG select */
 
 		_csgSelectBtn = new Button();
-		Core::Texture* csgAddBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgAddBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
 		_csgSelectBtn->setSize(32, 32);
 		_csgSelectBtn->setImage(csgAddBtnImage);
@@ -51,7 +51,7 @@ namespace Editor
 		/* CSG edit points */
 
 		Button* csgEditPointsBtn = new Button();
-		Core::Texture* csgEditPointsBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgEditPointsBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/points.png"), contentMgr);
 		csgEditPointsBtn->setSize(32, 32);
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
@@ -66,7 +66,7 @@ namespace Editor
 		/* CSG edit edges */
 
 		Button* csgEditEdgesBtn = new Button();
-		Core::Texture* csgEditEdgesBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgEditEdgesBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/edges.png"), contentMgr);
 		csgEditEdgesBtn->setSize(32, 32);
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
@@ -81,7 +81,7 @@ namespace Editor
 		/* CSG edit faces */
 
 		Button* csgEditFacesBtn = new Button();
-		Core::Texture* csgEditFacesBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgEditFacesBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/face.png"), contentMgr);
 		csgEditFacesBtn->setSize(32, 32);
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);

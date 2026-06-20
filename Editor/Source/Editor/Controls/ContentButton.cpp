@@ -7,7 +7,7 @@
 #include <imgui_stdlib.h>
 
 #include <Core/Content/ContentDatabase.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 
 #include "ControlList.h"
 #include "ContextMenu.h"
@@ -18,7 +18,7 @@ namespace Editor
 {
 	ContentButton::ContentButton() : Control() {}
 
-	ContentButton::ContentButton(Core::Texture* image)
+	ContentButton::ContentButton(Core::Texture2D* image)
 	{
 		_image = image;
 	}

@@ -22,7 +22,7 @@ namespace Editor
 			ContentImporter(EditorApp* app);
 			~ContentImporter();
 
-			void importTexture(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format);
+			void importTexture2D(Core::String sourceFileName, Core::String targetFileName, Core::TextureFormat format);
 			void importMesh(Core::String sourceFileName, Core::String targetFileName);
 	};
 } // namespace Editor

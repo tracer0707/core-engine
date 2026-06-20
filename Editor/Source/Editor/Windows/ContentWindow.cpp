@@ -4,7 +4,7 @@
 #include <imgui.h>
 
 #include <Core/System/EventHandler.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/ContentManager.h>
 #include <Core/Content/ContentDatabase.h>
@@ -57,10 +57,10 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Core::Texture* _addTex = TextureUtils::loadCompressed(
+		Core::Texture2D* _addTex = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), _parent->getContentManager());
 
-		Core::Texture* _importTex = TextureUtils::loadCompressed(
+		Core::Texture2D* _importTex = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/down.png"), _parent->getContentManager());
 
 		_createResourceBtn = new Button(_addTex);
@@ -169,13 +169,13 @@ namespace Editor
 		{
 			if (fs::is_directory(it)) continue;
 
-			Core::Texture* tex = nullptr;
+			Core::Texture2D* tex = nullptr;
 			Core::Content* content = nullptr;
 			Core::String ext = it.extension().generic_string();
 
 			if (ext == ".texture")
 			{
-				tex = _parent->getContentManager()->loadTextureFromFile(it.generic_string());
+				tex = _parent->getContentManager()->loadTexture2DFromFile(it.generic_string());
 				content = tex;
 			}
 			else if (ext == ".material")
@@ -219,7 +219,7 @@ namespace Editor
 	ContentButton* ContentWindow::createThumbnailForEdit(Core::String ext)
 	{
 		ContentButton* thumbnail = new ContentButton();
-		Core::Texture* tex = getIcon(ext);
+		Core::Texture2D* tex = getIcon(ext);
 		thumbnail->setImage(tex);
 		thumbnail->setSize(THUMB_W, THUMB_H);
 		thumbnail->startEdit();
@@ -240,7 +240,7 @@ namespace Editor
 		}
 	}
 
-	Core::Texture* ContentWindow::getIcon(Core::String ext)
+	Core::Texture2D* ContentWindow::getIcon(Core::String ext)
 	{
 		Core::String iconName = Core::String::Empty;
 

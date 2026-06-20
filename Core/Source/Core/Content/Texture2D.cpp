@@ -1,4 +1,4 @@
-#include "Texture.h"
+#include "Texture2D.h"
 
 #include <cstring>
 
@@ -8,7 +8,7 @@
 
 namespace Core
 {
-	Texture::Texture(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format) : Content()
+	Texture2D::Texture2D(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format) : Content()
 	{
 		_renderer = renderer;
 		_format = format;
@@ -32,7 +32,7 @@ namespace Core
 		}
 	}
 
-	Texture::~Texture()
+	Texture2D::~Texture2D()
 	{
 		if (_data != nullptr) delete[] _data;
 
@@ -44,12 +44,12 @@ namespace Core
 		_nativeId = 0;
 	}
 
-	int Texture::getContentType()
+	int Texture2D::getContentType()
 	{
 		return CONTENT_TYPE_TEXTURE;
 	}
 
-	void Texture::bind(int slot)
+	void Texture2D::bind(int slot)
 	{
 		_renderer->bindTexture(_nativeId, slot);
 	}

@@ -111,7 +111,7 @@ namespace Editor
 			else
 				fmt = Core::TextureFormat::BC7;
 
-			importer.importTexture(srcFileName, dstFileName, fmt);
+			importer.importTexture2D(srcFileName, dstFileName, fmt);
 
 			_filesToImport.removeAt(0);
 			importNext();

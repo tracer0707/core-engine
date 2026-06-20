@@ -11,8 +11,8 @@
 namespace Core
 {
 	class Content;
-	class Texture;
-}
+	class Texture2D;
+} // namespace Core
 
 namespace Editor
 {
@@ -22,7 +22,7 @@ namespace Editor
 	{
 		private:
 			Core::Content* _content = nullptr;
-			Core::Texture* _image = nullptr;
+			Core::Texture2D* _image = nullptr;
 
 			bool _active = true;
 			bool _edit = false;
@@ -31,7 +31,7 @@ namespace Editor
 			Core::String _editValue = Core::String::Empty;
 
 			ContextMenu* _contextMenu = nullptr;
-			
+
 			std::function<void()> _onClick = nullptr;
 			std::function<void()> _onDblClick = nullptr;
 			std::function<void()> _onEditCancelled = nullptr;
@@ -41,7 +41,7 @@ namespace Editor
 
 		public:
 			ContentButton();
-			ContentButton(Core::Texture* image);
+			ContentButton(Core::Texture2D* image);
 			virtual ~ContentButton();
 
 			virtual float getWidth() const;
@@ -53,8 +53,8 @@ namespace Editor
 			Core::Content* getContent() const { return _content; }
 			void setContent(Core::Content* value) { _content = value; }
 
-			Core::Texture* getImage() { return _image; }
-			void setImage(Core::Texture* value) { _image = value; }
+			Core::Texture2D* getImage() { return _image; }
+			void setImage(Core::Texture2D* value) { _image = value; }
 
 			bool getActive() const { return _active; }
 			void setActive(bool value);

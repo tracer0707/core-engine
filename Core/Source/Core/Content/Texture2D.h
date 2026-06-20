@@ -10,13 +10,13 @@ namespace Core
 {
 	class Renderer;
 
-	class Texture : public Content
+	class Texture2D : public Content
 	{
 			friend class ContentManager;
 
 		private:
-			Texture(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format);
-			~Texture();
+			Texture2D(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format);
+			~Texture2D();
 
 			Renderer* _renderer = nullptr;
 			unsigned char* _data = nullptr;

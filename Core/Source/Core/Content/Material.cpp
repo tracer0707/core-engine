@@ -4,7 +4,7 @@
 
 #include "../Renderer/Renderer.h"
 #include "../Renderer/Program.h"
-#include "../Content/Texture.h"
+#include "../Content/Texture2D.h"
 
 namespace Core
 {
@@ -66,7 +66,7 @@ namespace Core
 		return it != _mat4Values.end() ? it->second : glm::mat4(1.0f);
 	}
 
-	Texture* Material::getTexture(std::string name) const
+	Texture2D* Material::getTexture2D(std::string name) const
 	{
 		auto it = _textureValues.find(name);
 		return it != _textureValues.end() ? it->second : nullptr;
@@ -111,7 +111,7 @@ namespace Core
 			}
 			else if (uniform.second.type == UniformType::Sampler2D)
 			{
-				Texture* texture = getTexture(uniform.first);
+				Texture2D* texture = getTexture2D(uniform.first);
 				if (texture != nullptr)
 				{
 					_renderer->bindTexture(texture->getNativeId(), texture2dSlot);

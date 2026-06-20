@@ -3,7 +3,7 @@
 #include <filesystem>
 
 #include <Core/Content/ContentManager.h>
-#include <Core/Content/Texture.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 #include <Core/System/EventHandler.h>
@@ -35,7 +35,7 @@ namespace Editor
 		/* CSG add model */
 
 		_csgAddModelBtn = new Button();
-		Core::Texture* csgAddModelBtnImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgAddModelBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), contentMgr);
 		_csgAddModelBtn->setSize(32, 32);
 		_csgAddModelBtn->setImage(csgAddModelBtnImage);
@@ -46,7 +46,7 @@ namespace Editor
 		/* CSG cube */
 
 		Button* csgCube = new Button();
-		Core::Texture* csgCubeImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgCubeImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
@@ -57,7 +57,7 @@ namespace Editor
 		/* CSG sphere */
 
 		Button* csgSphere = new Button();
-		Core::Texture* csgSphereImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgSphereImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/sphere.png"), contentMgr);
 		csgSphere->setSize(32, 32);
 		csgSphere->setImage(csgSphereImage);
@@ -68,7 +68,7 @@ namespace Editor
 		/* CSG cylinder */
 
 		Button* csgCylinder = new Button();
-		Core::Texture* csgCylinderImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgCylinderImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cylinder.png"), contentMgr);
 		csgCylinder->setSize(32, 32);
 		csgCylinder->setImage(csgCylinderImage);
@@ -79,7 +79,7 @@ namespace Editor
 		/* CSG cone */
 
 		Button* csgCone = new Button();
-		Core::Texture* csgConeImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgConeImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cone.png"), contentMgr);
 		csgCone->setSize(32, 32);
 		csgCone->setImage(csgConeImage);
@@ -90,7 +90,7 @@ namespace Editor
 		/* CSG stair */
 
 		Button* csgStair = new Button();
-		Core::Texture* csgStairImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgStairImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/stairs.png"), contentMgr);
 		csgStair->setSize(32, 32);
 		csgStair->setImage(csgStairImage);
@@ -101,7 +101,7 @@ namespace Editor
 		/* CSG polygon */
 
 		Button* csgPolygon = new Button();
-		Core::Texture* csgPolygonImage = TextureUtils::loadCompressed(
+		Core::Texture2D* csgPolygonImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/polygon.png"), contentMgr);
 		csgPolygon->setSize(32, 32);
 		csgPolygon->setImage(csgPolygonImage);

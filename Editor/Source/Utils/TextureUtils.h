@@ -9,7 +9,7 @@ struct color_quad_u8;
 
 namespace Core
 {
-	class Texture;
+	class Texture2D;
 	class ContentManager;
 } // namespace Core
 
@@ -21,6 +21,6 @@ namespace Editor
 			static FIBITMAP* makeSquare(FIBITMAP* src);
 			static FIBITMAP* rescale(FIBITMAP* src, int newW, int newH);
 			static void copyPixels(std::vector<color_quad_u8>& dst, FIBITMAP* src, int width, int height);
-			static Core::Texture* loadCompressed(Core::String fileName, Core::ContentManager* mgr);
+			static Core::Texture2D* loadCompressed(Core::String fileName, Core::ContentManager* mgr);
 	};
 } // namespace Editor

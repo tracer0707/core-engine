@@ -6,7 +6,7 @@
 
 namespace Core
 {
-	class Texture;
+	class Texture2D;
 }
 
 namespace Editor
@@ -33,7 +33,7 @@ namespace Editor
 			void rescanContent();
 			void setCurrentDir(Core::String path);
 
-			Core::Texture* getIcon(Core::String ext);
+			Core::Texture2D* getIcon(Core::String ext);
 			ContentButton* createThumbnailForEdit(Core::String ext);
 			void setInspector(ContentButton* thumbnail, Core::String ext);
 

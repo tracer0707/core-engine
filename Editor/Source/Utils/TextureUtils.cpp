@@ -74,7 +74,7 @@ namespace Editor
 		if (alphaChannel != nullptr) FreeImage_Unload(alphaChannel);
 	}
 
-	Core::Texture* TextureUtils::loadCompressed(Core::String fileName, Core::ContentManager* mgr)
+	Core::Texture2D* TextureUtils::loadCompressed(Core::String fileName, Core::ContentManager* mgr)
 	{
 		int w, h, size;
 
@@ -106,8 +106,6 @@ namespace Editor
 			memcpy(dst + y * w * bpp, src + y * pitch, w * bpp);
 		}
 
-		Core::Texture* tex = mgr->loadTextureFromBytes(dst, w, h, size, Core::TextureFormat::RGBA8);
-
-		return tex;
+		return mgr->loadTexture2DFromBytes(dst, w, h, size, Core::TextureFormat::RGBA8);
 	}
 } // namespace Editor

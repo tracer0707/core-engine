@@ -14,7 +14,7 @@ namespace Core
 {
 	class Renderer;
 	class Program;
-	class Texture;
+	class Texture2D;
 
 	class Material : public Content
 	{
@@ -32,7 +32,7 @@ namespace Core
 			std::unordered_map<std::string, glm::vec4> _vec4Values;
 			std::unordered_map<std::string, glm::mat3> _mat3Values;
 			std::unordered_map<std::string, glm::mat4> _mat4Values;
-			std::unordered_map<std::string, Texture*> _textureValues;
+			std::unordered_map<std::string, Texture2D*> _textureValues;
 
 			Material(Renderer* renderer);
 			virtual ~Material();
@@ -64,8 +64,8 @@ namespace Core
 			glm::mat4 getMat4(std::string name) const;
 			void setMat4(std::string name, glm::mat4 value) { _mat4Values[name] = value; }
 
-			Texture* getTexture(std::string name) const;
-			void setTexture(std::string name, Texture* value) { _textureValues[name] = value; }
+			Texture2D* getTexture2D(std::string name) const;
+			void setTexture2D(std::string name, Texture2D* value) { _textureValues[name] = value; }
 
 			void bind();
 	};
