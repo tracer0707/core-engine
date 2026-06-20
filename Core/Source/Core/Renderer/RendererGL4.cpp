@@ -15,6 +15,7 @@
 #include <imgui_impl_opengl3.h>
 
 #include "Program.h"
+#include "../Shared/Hash.h"
 #include "../Components/Camera.h"
 
 #include "Shaders/GL4/Default.h"
@@ -228,10 +229,11 @@ namespace Core
 
 			UniformInfo info;
 			info.name = name;
+			info.nameHash = Hash(info.name);
 			info.type = uniformType;
 			info.location = location;
 			info.size = size;
-			program->uniforms[name] = info;
+			program->uniforms.add(info);
 		}
 
 		_shaderPrograms.push_back(program);

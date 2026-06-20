@@ -1,7 +1,7 @@
 #pragma once
 
-#include <unordered_map>
 #include <string>
+#include "../Shared/List.h"
 
 namespace Core
 {
@@ -22,6 +22,7 @@ namespace Core
 	struct UniformInfo
 	{
 			std::string name;
+			uint64_t nameHash;
 			UniformType type;
 			int location;
 			int size;
@@ -36,7 +37,7 @@ namespace Core
 			unsigned int geometryShader = 0;
 			unsigned int computeShader = 0;
 
-			std::unordered_map<std::string, UniformInfo> uniforms;
+			Core::List<UniformInfo> uniforms;
 
 			Program& operator=(const Program& left);
 			bool operator==(const Program& left);

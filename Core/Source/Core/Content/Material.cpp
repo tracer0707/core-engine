@@ -24,49 +24,49 @@ namespace Core
 		return CONTENT_TYPE_MATERIAL;
 	}
 
-	int Material::getInt(std::string name) const
+	int Material::getInt(uint64_t name) const
 	{
 		auto it = _intValues.find(name);
 		return it != _intValues.end() ? it->second : 0;
 	}
 
-	float Material::getFloat(std::string name) const
+	float Material::getFloat(uint64_t name) const
 	{
 		auto it = _floatValues.find(name);
 		return it != _floatValues.end() ? it->second : 0.0f;
 	}
 
-	glm::vec2 Material::getVec2(std::string name) const
+	glm::vec2 Material::getVec2(uint64_t name) const
 	{
 		auto it = _vec2Values.find(name);
 		return it != _vec2Values.end() ? it->second : glm::vec2(0.0f);
 	}
 
-	glm::vec3 Material::getVec3(std::string name) const
+	glm::vec3 Material::getVec3(uint64_t name) const
 	{
 		auto it = _vec3Values.find(name);
 		return it != _vec3Values.end() ? it->second : glm::vec3(0.0f);
 	}
 
-	glm::vec4 Material::getVec4(std::string name) const
+	glm::vec4 Material::getVec4(uint64_t name) const
 	{
 		auto it = _vec4Values.find(name);
 		return it != _vec4Values.end() ? it->second : glm::vec4(0.0f);
 	}
 
-	glm::mat3 Material::getMat3(std::string name) const
+	glm::mat3 Material::getMat3(uint64_t name) const
 	{
 		auto it = _mat3Values.find(name);
 		return it != _mat3Values.end() ? it->second : glm::mat3(1.0f);
 	}
 
-	glm::mat4 Material::getMat4(std::string name) const
+	glm::mat4 Material::getMat4(uint64_t name) const
 	{
 		auto it = _mat4Values.find(name);
 		return it != _mat4Values.end() ? it->second : glm::mat4(1.0f);
 	}
 
-	Texture2D* Material::getTexture2D(std::string name) const
+	Texture2D* Material::getTexture2D(uint64_t name) const
 	{
 		auto it = _textureValues.find(name);
 		return it != _textureValues.end() ? it->second : nullptr;
@@ -81,41 +81,41 @@ namespace Core
 		int texture2dSlot = 0;
 		for (const auto& uniform : _program->uniforms)
 		{
-			if (uniform.second.type == UniformType::Int)
+			if (uniform.type == UniformType::Int)
 			{
-				_renderer->setUniform(uniform.second.location, getInt(uniform.first));
+				_renderer->setUniform(uniform.location, getInt(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Float)
+			else if (uniform.type == UniformType::Float)
 			{
-				_renderer->setUniform(uniform.second.location, getFloat(uniform.first));
+				_renderer->setUniform(uniform.location, getFloat(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Vec2)
+			else if (uniform.type == UniformType::Vec2)
 			{
-				_renderer->setUniform(uniform.second.location, getVec2(uniform.first));
+				_renderer->setUniform(uniform.location, getVec2(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Vec3)
+			else if (uniform.type == UniformType::Vec3)
 			{
-				_renderer->setUniform(uniform.second.location, getVec3(uniform.first));
+				_renderer->setUniform(uniform.location, getVec3(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Vec4)
+			else if (uniform.type == UniformType::Vec4)
 			{
-				_renderer->setUniform(uniform.second.location, getVec4(uniform.first));
+				_renderer->setUniform(uniform.location, getVec4(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Mat3)
+			else if (uniform.type == UniformType::Mat3)
 			{
-				_renderer->setUniform(uniform.second.location, getMat3(uniform.first));
+				_renderer->setUniform(uniform.location, getMat3(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Mat4)
+			else if (uniform.type == UniformType::Mat4)
 			{
-				_renderer->setUniform(uniform.second.location, getMat4(uniform.first));
+				_renderer->setUniform(uniform.location, getMat4(uniform.nameHash));
 			}
-			else if (uniform.second.type == UniformType::Sampler2D)
+			else if (uniform.type == UniformType::Sampler2D)
 			{
-				Texture2D* texture = getTexture2D(uniform.first);
+				Texture2D* texture = getTexture2D(uniform.nameHash);
 				if (texture != nullptr)
 				{
 					_renderer->bindTexture(texture->getNativeId(), texture2dSlot);
-					_renderer->setUniform(uniform.second.location, texture2dSlot);
+					_renderer->setUniform(uniform.location, texture2dSlot);
 					texture2dSlot++;
 				}
 			}
