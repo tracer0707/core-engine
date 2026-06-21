@@ -5,6 +5,7 @@
 namespace Editor
 {
 	class Control;
+	class InspectorWindow;
 
 	class Inspector
 	{
