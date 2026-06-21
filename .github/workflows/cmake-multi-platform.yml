@@ -54,7 +54,6 @@ jobs:
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
 
-    # УСТАНОВКА ЗАВИСИМОСТЕЙ OPENGL ДЛЯ LINUX
     - name: Install OpenGL Dependencies (Linux)
       if: matrix.os == 'ubuntu-latest'
       run: |
@@ -88,23 +87,12 @@ jobs:
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
       run: ctest --build-config ${{ matrix.build_type }} --output-on-failure
 
-    - name: Upload Test Screenshots
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: screenshots-${{ matrix.os }}-${{ matrix.c_compiler }}
-        path: |
-          ${{ steps.strings.outputs.build-output-dir }}/**/*.png
-          ${{ steps.strings.outputs.build-output-dir }}/**/*.jpg
-        if-no-files-found: ignore
-
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4
       with:
         name: build-${{ matrix.os }}-${{ matrix.c_compiler }}
         path: |
-          ${{ steps.strings.outputs.build-output-dir }}/**/*.exe
-          ${{ steps.strings.outputs.build-output-dir }}/**/RelWithDebInfo/*
+          ${{ steps.strings.outputs.build-output-dir }}/**/*
           !${{ steps.strings.outputs.build-output-dir }}/**/*.dir/
           !${{ steps.strings.outputs.build-output-dir }}/**/CMakeFiles/
         if-no-files-found: warn
