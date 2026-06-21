@@ -44,3 +44,15 @@ namespace Core
 			bool empty() const;
 	};
 } // namespace Core
+
+namespace std
+{
+	template <>
+	struct hash<Core::String>
+	{
+		size_t operator()(const Core::String& s) const
+		{
+			return hash<string>()(s.std_str());
+		}
+	};
+} // namespace std

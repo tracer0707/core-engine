@@ -34,4 +34,14 @@ namespace Core
 		_windowCtx = nullptr;
 		_renderCtx = nullptr;
 	}
+
+	Program* Renderer::getShaderProgram(String name) const
+	{
+		auto it = _shaderPrograms.find(name);
+		if (it != _shaderPrograms.end())
+		{
+			return it->second;
+		}
+		return nullptr;
+	}
 } // namespace Core

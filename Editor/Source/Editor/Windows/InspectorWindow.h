@@ -16,5 +16,6 @@ namespace Editor
 			virtual ~InspectorWindow() = default;
 
 			void setInspector(Inspector* value);
+			void rebuildInspector();
 	};
 } // namespace Editor

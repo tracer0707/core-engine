@@ -2,6 +2,7 @@
 
 #include <string>
 #include "../Shared/List.h"
+#include "../Shared/String.h"
 
 namespace Core
 {
@@ -21,7 +22,7 @@ namespace Core
 
 	struct UniformInfo
 	{
-			std::string name;
+			String name;
 			uint64_t nameHash;
 			UniformType type;
 			int location;
@@ -31,6 +32,8 @@ namespace Core
 	class Program
 	{
 		public:
+			String name = String::Empty;
+
 			unsigned int program = 0;
 			unsigned int vertexShader = 0;
 			unsigned int fragmentShader = 0;

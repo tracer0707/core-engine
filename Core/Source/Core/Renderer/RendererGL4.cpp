@@ -60,9 +60,9 @@ namespace Core
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback(debugMessageCallback, nullptr);
 
-		_defaultProgram = createProgram(Shaders::Default::getVertexSource(), Shaders::Default::getFragmentSource());
-		_unlitColorProgram = createProgram(Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
-		_unlitTextureProgram = createProgram(Shaders::UnlitTexture::getVertexSource(), Shaders::UnlitTexture::getFragmentSource());
+		_defaultProgram = createProgram("Builtin/Default", Shaders::Default::getVertexSource(), Shaders::Default::getFragmentSource());
+		_unlitColorProgram = createProgram("Builtin/UnlitColor", Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
+		_unlitTextureProgram = createProgram("Builtin/UnlitTexture", Shaders::UnlitTexture::getVertexSource(), Shaders::UnlitTexture::getFragmentSource());
 	}
 
 	RendererGL4::~RendererGL4()
@@ -76,9 +76,9 @@ namespace Core
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
 
-		while (!_shaderPrograms.empty())
+		while (_shaderPrograms.size() > 0)
 		{
-			deleteProgram(_shaderPrograms.back());
+			deleteProgram(_shaderPrograms.begin()->second);
 		}
 
 		SDL_GL_DeleteContext(_renderCtx);
@@ -125,8 +125,13 @@ namespace Core
 		SDL_GL_SwapWindow((SDL_Window*)_windowCtx);
 	}
 
-	Program* RendererGL4::createProgram(String vertexSrc, String fragmentSrc)
+	Program* RendererGL4::createProgram(String name, String vertexSrc, String fragmentSrc)
 	{
+		if (_shaderPrograms.contains(name))
+		{
+			throw std::runtime_error("A program with the name \"" + name.std_str() + "\" already exists");
+		}
+		
 		std::string vertexSrcUtf8 = vertexSrc.std_str();
 		std::string fragmentSrcUtf8 = fragmentSrc.std_str();
 
@@ -174,6 +179,7 @@ namespace Core
 		glDetachShader(programId, fs);
 
 		Program* program = new Program();
+		program->name = name;
 		program->program = programId;
 		program->vertexShader = vs;
 		program->fragmentShader = fs;
@@ -229,29 +235,32 @@ namespace Core
 
 			UniformInfo info;
 			info.name = name;
-			info.nameHash = Hash(info.name);
+			info.nameHash = Hash(info.name.std_str());
 			info.type = uniformType;
 			info.location = location;
 			info.size = size;
 			program->uniforms.add(info);
 		}
 
-		_shaderPrograms.push_back(program);
+		_shaderPrograms[name] = program;
 
 		return program;
 	}
 
 	void RendererGL4::deleteProgram(Program* program)
 	{
-		const auto& it =
-			std::find_if(_shaderPrograms.begin(), _shaderPrograms.end(), [=](Program* a) -> bool { return program->program == a->program; });
+		auto it = std::find_if(_shaderPrograms.begin(), _shaderPrograms.end(), [program](const auto& pair)
+		{
+			return pair.second == program;
+		});
 
-		if (it == _shaderPrograms.end()) throw std::invalid_argument("An attempt was made to delete a program that does not exist");
+		if (program == nullptr || it == _shaderPrograms.end())
+			throw std::invalid_argument("An attempt was made to delete a program that does not exist");
 
-		if ((*it)->vertexShader > 0) glDeleteShader((*it)->vertexShader);
-		if ((*it)->fragmentShader > 0) glDeleteShader((*it)->fragmentShader);
-		if ((*it)->geometryShader > 0) glDeleteShader((*it)->geometryShader);
-		if ((*it)->computeShader > 0) glDeleteShader((*it)->computeShader);
+		if (program->vertexShader > 0) glDeleteShader(program->vertexShader);
+		if (program->fragmentShader > 0) glDeleteShader(program->fragmentShader);
+		if (program->geometryShader > 0) glDeleteShader(program->geometryShader);
+		if (program->computeShader > 0) glDeleteShader(program->computeShader);
 
 		_shaderPrograms.erase(it);
 

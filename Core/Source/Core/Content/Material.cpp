@@ -11,6 +11,7 @@ namespace Core
 	Material::Material(Renderer* renderer) : Content()
 	{
 		_renderer = renderer;
+		_program = renderer->getDefaultProgram();
 	}
 
 	Material::~Material()

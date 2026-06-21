@@ -40,7 +40,7 @@ namespace Core
 		public:
 			virtual int getContentType();
 
-			const Program* getProgram() const { return _program; }
+			Program* getProgram() const { return _program; }
 			void setProgram(Program* value) { _program = value; }
 
 			int getInt(uint64_t name) const;

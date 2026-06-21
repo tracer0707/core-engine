@@ -51,6 +51,7 @@ namespace Core
 			std::vector<T>::const_iterator end() const { return list.end(); }
 			std::vector<T>::const_iterator cbegin() const { return list.cbegin(); }
 			std::vector<T>::const_iterator cend() const { return list.cend(); }
+			T& back() { return list.back(); }
 
 			bool tryFind(T& out, std::function<bool(T&)> func);
 			bool contains(const T& value) const;

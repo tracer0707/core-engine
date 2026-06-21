@@ -22,6 +22,16 @@ namespace Editor
 		if (value != nullptr)
 		{
 			_currentInspector = value;
+			_currentInspector->_parent = this;
+			addControl(_currentInspector->build());
+		}
+	}
+
+	void InspectorWindow::rebuildInspector()
+	{
+		if (_currentInspector != nullptr)
+		{
+			clear();
 			addControl(_currentInspector->build());
 		}
 	}

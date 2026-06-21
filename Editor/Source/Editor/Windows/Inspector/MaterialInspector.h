@@ -5,7 +5,8 @@
 namespace Core
 {
 	class Material;
-}
+	class Renderer;
+} // namespace Core
 
 namespace Editor
 {
@@ -13,9 +14,10 @@ namespace Editor
 	{
 		private:
 			Core::Material* _material = nullptr;
+			Core::Renderer* _renderer = nullptr;
 
 		public:
-			MaterialInspector(Core::Material* material);
+			MaterialInspector(Core::Material* material, Core::Renderer* renderer);
 			virtual ~MaterialInspector();
 
 			virtual Control* build();

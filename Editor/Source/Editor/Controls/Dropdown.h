@@ -28,7 +28,9 @@ namespace Editor
 
 			void setOnSelectItem(std::function<void(int)> value) { _onSelectItem = value; }
 			void setItems(Core::List<Core::String> value) { _items = value; }
+
 			int getSelectedIndex() { return current_item_index; }
+			void setSelectedIndex(int value) { current_item_index = value; }
 
 			virtual float getWidth() const;
 			virtual float getHeight() const;

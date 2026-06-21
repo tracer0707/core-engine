@@ -24,9 +24,9 @@ namespace Core
 			virtual void beginUI();
 			virtual void endUI();
 
-			virtual Program* createProgram(String vertexSrc, String fragmentSrc);
-			virtual void deleteProgram(Program* programId);
-			virtual void bindProgram(Program* programId);
+			virtual Program* createProgram(String name, String vertexSrc, String fragmentSrc);
+			virtual void deleteProgram(Program* program);
+			virtual void bindProgram(Program* program);
 			virtual std::string checkProgramErrors(unsigned int program);
 
 			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize);

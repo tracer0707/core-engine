@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-#include <vector>
-#include <map>
+#include <unordered_map>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -78,7 +77,7 @@ namespace Core
 
 			Program* _currentProgram = nullptr;
 
-			std::vector<Program*> _shaderPrograms;
+			std::unordered_map<String, Program*> _shaderPrograms;
 
 			unsigned int _width = 0;
 			unsigned int _height = 0;
@@ -91,7 +90,7 @@ namespace Core
 			virtual void beginUI() = 0;
 			virtual void endUI() = 0;
 
-			virtual Program* createProgram(String vertexSrc, String fragmentSrc) = 0;
+			virtual Program* createProgram(String name, String vertexSrc, String fragmentSrc) = 0;
 			virtual void deleteProgram(Program* program) = 0;
 			virtual void bindProgram(Program* program) = 0;
 			virtual std::string checkProgramErrors(unsigned int program) = 0;
@@ -99,6 +98,9 @@ namespace Core
 			Program* getDefaultProgram() { return _defaultProgram; }
 			Program* getUnlitColorProgram() { return _unlitColorProgram; }
 			Program* getUnlitTextureProgram() { return _unlitTextureProgram; }
+
+			const std::unordered_map<String, Program*>& getShaderPrograms() const { return _shaderPrograms; }
+			Program* getShaderProgram(String name) const;
 
 			// Create dynamic buffer
 			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;

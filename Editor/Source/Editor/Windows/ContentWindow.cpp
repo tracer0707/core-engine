@@ -234,7 +234,7 @@ namespace Editor
 
 			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
 				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(TAG_FULL_PATH));
-				MaterialInspector* inspector = new MaterialInspector(mat);
+				MaterialInspector* inspector = new MaterialInspector(mat, _parent->getRenderer());
 				inspectorWnd->setInspector(inspector);
 			});
 		}
