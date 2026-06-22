@@ -50,7 +50,7 @@ namespace Editor
 		_csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSG_OBJECT_WINDOW);
 		_csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSG_EDIT_WINDOW);
 
-		_wireframeBuffer = renderer->createBuffer(2048, 0);
+		_wireframeBuffer = renderer->createBuffer(nullptr, 2048, nullptr, 0);
 	}
 
 	void CSGModifier::enableWindows(bool enable)

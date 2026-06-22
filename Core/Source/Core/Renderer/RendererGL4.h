@@ -29,7 +29,6 @@ namespace Core
 			virtual void bindProgram(Program* program);
 			virtual std::string checkProgramErrors(unsigned int program);
 
-			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize);
 			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
 											   unsigned int indexArraySize);
 

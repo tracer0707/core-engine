@@ -309,45 +309,9 @@ namespace Core
 		return "";
 	}
 
-	VertexBuffer* RendererGL4::createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize)
-	{
-		assert(maxVertexSize > 0);
-
-		GLuint vao = 0, vbo = 0, ibo = 0;
-
-		glGenVertexArrays(1, &vao);
-		glBindVertexArray(vao);
-
-		glGenBuffers(1, &vbo);
-		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, maxVertexSize * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
-
-		if (maxIndexSize > 0)
-		{
-			glGenBuffers(1, &ibo);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, maxIndexSize * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
-		}
-
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
-		glEnableVertexAttribArray(0);
-
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
-
-		glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(5 * sizeof(float)));
-		glEnableVertexAttribArray(2);
-
-		glBindVertexArray(0);
-
-		VertexBuffer* buffer = new VertexBuffer{vao, vbo, ibo, nullptr, maxVertexSize, nullptr, maxIndexSize};
-
-		return buffer;
-	}
-
 	VertexBuffer* RendererGL4::createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
 	{
-		assert(vertexArray != nullptr && vertexArraySize > 0);
+		assert(vertexArraySize > 0);
 
 		GLuint vao = 0, vbo = 0, ibo = 0;
 
@@ -356,7 +320,7 @@ namespace Core
 
 		glGenBuffers(1, &vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, vertexArraySize * sizeof(Vertex), vertexArray, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vertexArraySize * sizeof(Vertex), vertexArray, vertexArray != nullptr ? GL_STATIC_DRAW : GL_DYNAMIC_DRAW);
 
 		if (indexArray != nullptr)
 		{
@@ -366,6 +330,12 @@ namespace Core
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(unsigned int), indexArray, GL_STATIC_DRAW);
 		}
+		else if (indexArraySize > 0)
+		{
+			glGenBuffers(1, &ibo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+		}
 
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
 		glEnableVertexAttribArray(0);
@@ -378,7 +348,17 @@ namespace Core
 
 		glBindVertexArray(0);
 
-		VertexBuffer* buffer = new VertexBuffer{vao, vbo, ibo, vertexArray, vertexArraySize, indexArray, indexArraySize};
+		VertexBuffer* buffer = new VertexBuffer();
+		buffer->vao = vao;
+		buffer->vbo = vbo;
+		buffer->ibo = ibo;
+		buffer->type = vertexArray != nullptr ? VertexBufferType::Static : VertexBufferType::Dynamic;
+		buffer->vertexArray = vertexArray;
+		buffer->vertexArraySize = vertexArraySize;
+		buffer->maxVertexArraySize = vertexArraySize;
+		buffer->indexArray = indexArray;
+		buffer->indexArraySize = indexArraySize;
+		buffer->maxIndexArraySize = indexArraySize;
 
 		return buffer;
 	}
@@ -386,7 +366,8 @@ namespace Core
 	void RendererGL4::updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
 								   unsigned int indexArraySize)
 	{
-		assert(vertexArraySize <= buffer->vertexArraySize);
+		assert(buffer->type == VertexBufferType::Dynamic && "Only dynamic vertex buffers can be updated");
+		assert(vertexArraySize <= buffer->maxVertexArraySize && "Vertex array size exceeds maximum");
 
 		glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
 		void* vptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, vertexArraySize * sizeof(Vertex), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
@@ -402,7 +383,7 @@ namespace Core
 		if (indexArray != nullptr)
 		{
 			assert(indexArraySize > 0);
-			assert(indexArraySize <= buffer->indexArraySize);
+			assert(indexArraySize <= buffer->maxIndexArraySize && "Index array size exceeds maximum");
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
 			void* iptr =

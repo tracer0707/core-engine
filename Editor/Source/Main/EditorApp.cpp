@@ -56,7 +56,7 @@ namespace Editor
 		cameraTransform->setPosition(glm::vec3(0.0f, 5.0f, 5.0f));
 		cameraTransform->setRotation(glm::vec3(-10.0f, 0, 0));
 
-		_gridBuffer = _renderer->createBuffer(2048, 0);
+		_gridBuffer = _renderer->createBuffer(nullptr, 2048, nullptr, 0);
 
 		_windowManager = new WindowManager(app);
 		_windowManager->setTime(_time);

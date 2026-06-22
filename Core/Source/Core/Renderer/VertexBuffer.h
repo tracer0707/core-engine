@@ -6,6 +6,8 @@
 
 namespace Core
 {
+	class Renderer;
+
     struct Vertex
     {
         glm::vec3 position;
@@ -18,20 +20,30 @@ namespace Core
         void make(glm::vec3 pos, glm::vec2 uvs, Color col);
     };
 
+    enum class VertexBufferType
+	{
+		Static,
+		Dynamic
+	};
+
     class VertexBuffer
     {
-      public:
-        unsigned int vao = 0;
-        unsigned int vbo = 0;
-        unsigned int ibo = 0;
+		public:
+		    unsigned int vao = 0;
+		    unsigned int vbo = 0;
+		    unsigned int ibo = 0;
 
-        Vertex* vertexArray = nullptr;
-        unsigned int vertexArraySize = 0;
+		    VertexBufferType type = VertexBufferType::Static;
 
-        unsigned int* indexArray = nullptr;
-        unsigned int indexArraySize = 0;
+		    Vertex* vertexArray = nullptr;
+		    unsigned int vertexArraySize = 0;
+		    unsigned int maxVertexArraySize = 0;
 
-        VertexBuffer& operator=(VertexBuffer& left);
-        bool operator==(VertexBuffer& left);
+		    unsigned int* indexArray = nullptr;
+		    unsigned int indexArraySize = 0;
+		    unsigned int maxIndexArraySize = 0;
+
+            VertexBuffer& operator=(VertexBuffer& left);
+            bool operator==(VertexBuffer& left);
     };
 } // namespace Core

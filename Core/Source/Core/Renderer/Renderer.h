@@ -102,10 +102,6 @@ namespace Core
 			const std::unordered_map<String, Program*>& getShaderPrograms() const { return _shaderPrograms; }
 			Program* getShaderProgram(String name) const;
 
-			// Create dynamic buffer
-			virtual VertexBuffer* createBuffer(unsigned int maxVertexSize, unsigned int maxIndexSize) = 0;
-
-			// Create static buffer
 			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
 											   unsigned int indexArraySize) = 0;
 
