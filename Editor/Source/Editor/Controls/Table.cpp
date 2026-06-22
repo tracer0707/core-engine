@@ -35,23 +35,25 @@ namespace Editor
 	{
 		if (!_visible) return;
 
-		if (ImGui::BeginTable(_id.c_str(), _colCount, ImGuiTableFlags_Resizable))
+		if (ImGui::BeginTable(_id.c_str(), _colCount, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY, ImVec2(0, 0)))
 		{
 			if (_controls.count() % _colCount != 0)
 			{
 				throw std::runtime_error("Controls count must fill columns entirely");
 			}
 
-			for (int i = 0; i < _controls.count() / _colCount + 1; i += _colCount)
+			for (int i = 0, j = 0; i < _controls.count(); ++i, ++j)
 			{
-				ImGui::TableNextRow();
-
-				for (int j = 0; j < _colCount; ++j)
+				if (i % _colCount == 0)
 				{
-					Control* control = _controls[i + j];
-					ImGui::TableSetColumnIndex(j);
-					control->update();
+					ImGui::TableNextRow();
+					j = 0;
 				}
+
+				Control* control = _controls[i];
+				ImGui::TableSetColumnIndex(j);
+				ImGui::SetNextItemWidth(-FLT_MIN);
+				control->update();
 			}
 
 			ImGui::EndTable();

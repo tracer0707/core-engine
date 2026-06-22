@@ -22,7 +22,7 @@ namespace Editor
 			virtual ControlType getControlType() const { return ControlType::Table; }
 			virtual void update();
 
-			bool getColumnsCount() { return _colCount; }
+			bool getColumnsCount() const { return _colCount; }
 			void setColumnsCount(int value) { _colCount = value; }
 	};
 }

@@ -18,12 +18,12 @@ namespace Core
 
                 layout (location = 0) in vec3 position;
 
-                uniform mat4 u_viewMtx;
-                uniform mat4 u_projMtx;
-                uniform mat4 u_modelMtx;
+                uniform mat4 _u_viewMtx;
+                uniform mat4 _u_projMtx;
+                uniform mat4 _u_modelMtx;
 
                 void main() {
-                    gl_Position = u_projMtx * u_viewMtx * u_modelMtx * vec4(position, 1.0);
+                    gl_Position = _u_projMtx * _u_viewMtx * _u_modelMtx * vec4(position, 1.0);
                 }
             )";
 		}

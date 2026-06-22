@@ -36,7 +36,7 @@ namespace Editor
 
 	Control* MaterialInspector::build()
 	{
-		LinearLayout* _mainLayout = new LinearLayout();
+		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		Table* table = new Table();
 		table->setColumnsCount(2);
 

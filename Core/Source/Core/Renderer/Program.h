@@ -40,6 +40,10 @@ namespace Core
 			unsigned int geometryShader = 0;
 			unsigned int computeShader = 0;
 
+			uint64_t u_viewMtxLocation = 0;
+			uint64_t u_projMtxLocation = 0;
+			uint64_t u_modelMtxLocation = 0;
+
 			Core::List<UniformInfo> uniforms;
 
 			Program& operator=(const Program& left);

@@ -23,14 +23,14 @@ namespace Core
                 out vec2 f_uv0;
                 out vec4 f_color0;
 
-                uniform mat4 u_viewMtx;
-                uniform mat4 u_projMtx;
-                uniform mat4 u_modelMtx;
+                uniform mat4 _u_viewMtx;
+                uniform mat4 _u_projMtx;
+                uniform mat4 _u_modelMtx;
 
                 void main() {
                     f_uv0 = uv0;
                     f_color0 = color0;
-                    gl_Position = u_projMtx * u_viewMtx * u_modelMtx * vec4(position, 1.0);
+                    gl_Position = _u_projMtx * _u_viewMtx * _u_modelMtx * vec4(position, 1.0);
                 }
             )";
 		}
@@ -45,10 +45,11 @@ namespace Core
 		        
                 out vec4 frag_color;
 
+                uniform vec4 u_color;
                 uniform sampler2D u_texture;
 
 		        void main() {
-                    frag_color = f_color0 * texture(u_texture, f_uv0);
+                    frag_color = f_color0 * u_color * texture(u_texture, f_uv0);
                 }
             )";
 		}

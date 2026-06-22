@@ -3,18 +3,30 @@
 #include <stdexcept>
 
 #include "Renderer.h"
+#include "Program.h"
 #include "VertexBuffer.h"
 #include "../Shared/List.h"
+#include "../Shared/Hash.h"
 
 #include "../Content/Material.h"
 
 namespace Core
 {
+	uint64_t u_color_Hash = Hash("u_color");
+
 	void Primitives::lines(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model, Vertex* points,
 						   int pointsCount, unsigned int flags)
 	{
 		renderer->updateBuffer(buffer, points, pointsCount, nullptr, 0);
 		renderer->bindProgram(renderer->getUnlitColorProgram());
+		for (auto& uniform : renderer->getUnlitColorProgram()->uniforms)
+		{
+			if (uniform.nameHash == u_color_Hash)
+			{
+				renderer->setUniform(uniform.location, glm::vec4(1.0f));
+				break;
+			}
+		}
 		renderer->drawBuffer(buffer, PrimitiveType::Line, flags, view, proj, model);
 	}
 

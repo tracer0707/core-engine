@@ -184,22 +184,28 @@ namespace Core
 		program->vertexShader = vs;
 		program->fragmentShader = fs;
 
+		program->u_viewMtxLocation = glGetUniformLocation(programId, "_u_viewMtx");
+		program->u_projMtxLocation = glGetUniformLocation(programId, "_u_projMtx");
+		program->u_modelMtxLocation = glGetUniformLocation(programId, "_u_modelMtx");
+
 		GLint uniformCount = 0;
 		glGetProgramiv(programId, GL_ACTIVE_UNIFORMS, &uniformCount);
 
 		for (GLint i = 0; i < uniformCount; i++)
 		{
-			GLchar name[256];
-			GLsizei length;
-			GLint size;
-			GLenum type;
+			GLchar u_name[256];
+			GLsizei u_length;
+			GLint u_size;
+			GLenum u_type;
 
-			glGetActiveUniform(programId, i, sizeof(name), &length, &size, &type, name);
+			glGetActiveUniform(programId, i, sizeof(u_name), &u_length, &u_size, &u_type, u_name);
 
-			GLint location = glGetUniformLocation(programId, name);
+			if (String(u_name).startsWith("_")) continue;
+
+			GLint location = glGetUniformLocation(programId, u_name);
 
 			UniformType uniformType;
-			switch (type)
+			switch (u_type)
 			{
 			case GL_FLOAT:
 				uniformType = UniformType::Float;
@@ -234,11 +240,11 @@ namespace Core
 			}
 
 			UniformInfo info;
-			info.name = name;
+			info.name = u_name;
 			info.nameHash = Hash(info.name.std_str());
 			info.type = uniformType;
 			info.location = location;
-			info.size = size;
+			info.size = u_size;
 			program->uniforms.add(info);
 		}
 
@@ -433,13 +439,9 @@ namespace Core
 	void RendererGL4::drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
 								 glm::mat4& model)
 	{
-		GLuint viewMtxId = glGetUniformLocation(_currentProgram->program, "u_viewMtx");
-		GLuint projMtxId = glGetUniformLocation(_currentProgram->program, "u_projMtx");
-		GLuint modelMtxId = glGetUniformLocation(_currentProgram->program, "u_modelMtx");
-
-		glUniformMatrix4fv(viewMtxId, 1, false, glm::value_ptr(view));
-		glUniformMatrix4fv(projMtxId, 1, false, glm::value_ptr(proj));
-		glUniformMatrix4fv(modelMtxId, 1, false, glm::value_ptr(model));
+		glUniformMatrix4fv(_currentProgram->u_viewMtxLocation, 1, false, glm::value_ptr(view));
+		glUniformMatrix4fv(_currentProgram->u_projMtxLocation, 1, false, glm::value_ptr(proj));
+		glUniformMatrix4fv(_currentProgram->u_modelMtxLocation, 1, false, glm::value_ptr(model));
 
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
