@@ -3,8 +3,6 @@
 #include <imgui.h>
 #include <Core/System/EventHandler.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
     ListView::ListView() : Control()
@@ -32,11 +30,6 @@ namespace Editor
         }
 
         return _height;
-    }
-
-    int ListView::getControlType() const
-    {
-        return CONTROL_LIST_VIEW;
     }
 
 	void ListView::selectItem(Control* value, bool byUser)

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Layout.h"
+#include "Control.h"
 
 #include <vector>
 #include <imgui.h>
@@ -34,7 +34,7 @@ namespace Editor
 		WrapReverse
 	};
 
-	class LinearLayout : public Layout
+	class LinearLayout : public Control
 	{
 		private:
 			LayoutDirection _direction = LayoutDirection::Horizontal;
@@ -80,7 +80,7 @@ namespace Editor
 			virtual float getWidth() const;
 			virtual float getHeight() const;
 
-			virtual int getControlType() const;
+			virtual ControlType getControlType() const { return ControlType::LinearLayout; }
 			virtual void update();
 
 			void setDirection(LayoutDirection value) { _direction = value; }

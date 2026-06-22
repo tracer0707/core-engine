@@ -2,8 +2,6 @@
 
 #include <imgui.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
 	Dropdown::Dropdown(Core::List<Core::String> items) : Control()
@@ -31,11 +29,6 @@ namespace Editor
 		}
 
 		return _height;
-	}
-
-	int Dropdown::getControlType() const
-	{
-		return CONTROL_DROPDOWN;
 	}
 
 	void Dropdown::update()

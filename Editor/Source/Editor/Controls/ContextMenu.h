@@ -18,7 +18,7 @@ namespace Editor
 			ContextMenu();
 			virtual ~ContextMenu();
 
-			virtual int getControlType() const;
+			virtual ControlType getControlType() const { return ControlType::ContextMenu; }
 			virtual void update();
 
 			void open();

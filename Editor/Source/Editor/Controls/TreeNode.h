@@ -29,7 +29,7 @@ namespace Editor
 			virtual ~TreeNode();
 
 		public:
-			virtual int getControlType() const;
+			virtual ControlType getControlType() const { return ControlType::TreeNode; }
 			virtual void update();
 
 			void setText(Core::String value) { _text = value; }

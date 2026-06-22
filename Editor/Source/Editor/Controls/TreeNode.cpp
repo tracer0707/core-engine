@@ -4,7 +4,6 @@
 
 #include <Core/Shared/List.h>
 
-#include "ControlList.h"
 #include "TreeView.h"
 
 namespace Editor
@@ -17,11 +16,6 @@ namespace Editor
 	TreeNode::~TreeNode()
 	{
 		_tree = nullptr;
-	}
-
-	int TreeNode::getControlType() const
-	{
-		return CONTROL_TREE_NODE;
 	}
 
 	void TreeNode::update()
@@ -69,7 +63,7 @@ namespace Editor
 		{
 			for (auto it : _controls)
 			{
-				if (((Control*)it)->getControlType() != CONTROL_TREE_NODE) return;
+				if (((Control*)it)->getControlType() != ControlType::TreeNode) return;
 				TreeNode* _childNode = (TreeNode*)it;
 				_childNode->open(true);
 			}
@@ -80,7 +74,7 @@ namespace Editor
 	{
 		if (_parent == nullptr) return;
 		if (!dynamic_cast<Control*>(_parent)) return;
-		if (((Control*)_parent)->getControlType() != CONTROL_TREE_NODE) return;
+		if (((Control*)_parent)->getControlType() != ControlType::TreeNode) return;
 		TreeNode* _parentNode = (TreeNode*)_parent;
 		_parentNode->open();
 		_parentNode->openParents();
@@ -94,7 +88,7 @@ namespace Editor
 		{
 			for (auto it : _controls)
 			{
-				if (((Control*)it)->getControlType() != CONTROL_TREE_NODE) return;
+				if (((Control*)it)->getControlType() != ControlType::TreeNode) return;
 				TreeNode* _childNode = (TreeNode*)it;
 				_childNode->close(true);
 			}

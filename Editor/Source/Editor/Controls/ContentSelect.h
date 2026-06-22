@@ -35,7 +35,7 @@ namespace Editor
 			virtual float getWidth() const;
 			virtual float getHeight() const;
 
-			virtual int getControlType() const;
+			virtual ControlType getControlType() const { return ControlType::ContentSelect; }
 			virtual void update();
 
 			Core::Content* getContent() const { return _content; }

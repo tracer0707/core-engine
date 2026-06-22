@@ -16,7 +16,7 @@ namespace Editor
 		MenuBar();
 		virtual ~MenuBar();
 
-		virtual int getControlType() const;
+		virtual ControlType getControlType() const { return ControlType::MenuBar; }
 		virtual void update();
 
 		void setIsMainMenu(bool value) { _isMainMenu = value; }

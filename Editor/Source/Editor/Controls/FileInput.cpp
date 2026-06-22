@@ -3,7 +3,6 @@
 #include <Core/System/Application.h>
 #include <Core/System/EventHandler.h>
 
-#include "ControlList.h"
 #include "LinearLayout.h"
 #include "TextInput.h"
 #include "Button.h"
@@ -67,11 +66,6 @@ namespace Editor
 	void FileInput::setFilePath(Core::String value)
 	{
 		_textInput->setText(value);
-	}
-
-	int FileInput::getControlType() const
-	{
-		return CONTROL_FILE_INPUT;
 	}
 
 	void FileInput::update()

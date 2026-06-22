@@ -3,9 +3,6 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include "Layout.h"
-#include "ControlList.h"
-
 namespace Editor
 {
     SplitPanel::SplitPanel() : Control() {}
@@ -35,11 +32,6 @@ namespace Editor
         }
 
         return _height;
-    }
-
-    int SplitPanel::getControlType() const
-    {
-        return CONTROL_SPLITTER;
     }
 
     void SplitPanel::update()

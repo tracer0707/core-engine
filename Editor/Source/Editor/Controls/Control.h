@@ -5,6 +5,7 @@
 
 #include "Container.h"
 #include "Style.h"
+#include "ControlType.h"
 
 #include <Core/Shared/String.h>
 
@@ -58,7 +59,7 @@ namespace Editor
 			const std::map<int, void*>& getObjectTags() const { return _objectTags; }
 			const std::map<int, Core::String>& getStringTags() const { return _stringTags; }
 
-			virtual int getControlType() const = 0;
+			virtual ControlType getControlType() const = 0;
 
 			virtual void update() = 0;
 	};

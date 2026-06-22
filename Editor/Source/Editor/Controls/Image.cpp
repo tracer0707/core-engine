@@ -5,8 +5,6 @@
 
 #include <Core/Content/Texture2D.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
 	Image::Image() : Control() {}
@@ -33,10 +31,5 @@ namespace Editor
 		if (texture != nullptr) texId = texture->getNativeId();
 
 		ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
-	}
-
-	int Image::getControlType() const
-	{
-		return CONTROL_IMAGE;
 	}
 } // namespace Editor

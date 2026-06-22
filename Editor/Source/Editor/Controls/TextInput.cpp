@@ -4,8 +4,6 @@
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
 	TextInput::TextInput() : Control() {}
@@ -73,10 +71,5 @@ namespace Editor
 			ImGui::PopItemFlag();
 			ImGui::PopStyleVar();
 		}
-	}
-
-	int TextInput::getControlType() const
-	{
-		return CONTROL_TEXT_INPUT;
 	}
 }

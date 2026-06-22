@@ -22,7 +22,7 @@ namespace Editor
 			TreeView();
 			virtual ~TreeView();
 
-			virtual int getControlType() const;
+			virtual ControlType getControlType() const { return ControlType::TreeView; }
 			virtual void update();
 
 			TreeNode* createNode();

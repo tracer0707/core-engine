@@ -8,8 +8,6 @@
 #include <Core/Content/Content.h>
 #include <Core/Content/ContentDatabase.h>
 
-#include "ControlList.h"
-
 namespace fs = std::filesystem;
 
 namespace Editor
@@ -39,11 +37,6 @@ namespace Editor
 		}
 
 		return _height;
-	}
-
-	int ContentSelect::getControlType() const
-	{
-		return CONTROL_CONTENT_SELECT;
 	}
 
 	Core::String ContentSelect::getContentName() const

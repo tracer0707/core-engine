@@ -34,7 +34,7 @@ namespace Editor
 		Core::String getFilePath() const;
 		void setFilePath(Core::String value);
 
-		virtual int getControlType() const;
+		virtual ControlType getControlType() const { return ControlType::FileInput; }
 		virtual void update();
 	};
 }

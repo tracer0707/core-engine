@@ -5,8 +5,6 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
 	Table::Table() {}
@@ -31,11 +29,6 @@ namespace Editor
 		}
 
 		return _height;
-	}
-
-	int Table::getControlType() const
-	{
-		return CONTROL_TABLE;
 	}
 
 	void Table::update()

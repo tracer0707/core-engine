@@ -4,7 +4,6 @@
 
 #include <Core/System/EventHandler.h>
 
-#include "ControlList.h"
 #include "TreeNode.h"
 
 namespace Editor
@@ -12,11 +11,6 @@ namespace Editor
 	TreeView::TreeView() : Control() {}
 
 	TreeView::~TreeView() {}
-
-	int TreeView::getControlType() const
-	{
-		return CONTROL_TREE_VIEW;
-	}
 
 	void TreeView::update()
 	{

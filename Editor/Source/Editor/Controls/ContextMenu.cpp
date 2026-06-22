@@ -2,8 +2,6 @@
 
 #include <imgui.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
 	ContextMenu::ContextMenu()
@@ -13,11 +11,6 @@ namespace Editor
 	}
 
 	ContextMenu::~ContextMenu() {}
-
-	int ContextMenu::getControlType() const
-	{
-		return CONTROL_CONTEXT_MENU;
-	}
 
 	void ContextMenu::update()
 	{

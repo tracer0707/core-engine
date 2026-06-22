@@ -2,13 +2,11 @@
 
 #include <imgui_internal.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
-	LinearLayout::LinearLayout() : Layout() {}
+	LinearLayout::LinearLayout() : Control() {}
 
-	LinearLayout::LinearLayout(LayoutDirection direction) : Layout()
+	LinearLayout::LinearLayout(LayoutDirection direction) : Control()
 	{
 		_direction = direction;
 	}
@@ -436,10 +434,5 @@ namespace Editor
 		ImVec2 _actualSize = ImGui::GetWindowSize();
 		_actualWidth = _actualSize.x;
 		_actualHeight = _actualSize.y;
-	}
-
-	int LinearLayout::getControlType() const
-	{
-		return CONTROL_LINEAR_LAYOUT;
 	}
 } // namespace Editor

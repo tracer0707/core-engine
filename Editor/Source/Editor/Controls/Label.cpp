@@ -3,8 +3,6 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include "ControlList.h"
-
 namespace Editor
 {
 	Label::Label() : Control() {}
@@ -47,9 +45,4 @@ namespace Editor
 
         return _height;
     }
-
-    int Label::getControlType() const
-	{
-		return CONTROL_LABEL;
-	}
 }

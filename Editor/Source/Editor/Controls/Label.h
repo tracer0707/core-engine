@@ -22,7 +22,7 @@ namespace Editor
         virtual float getWidth() const;
         virtual float getHeight() const;
 
-		virtual int getControlType() const;
+		virtual ControlType getControlType() const { return ControlType::Label; }
 		virtual void update();
 	};
 }

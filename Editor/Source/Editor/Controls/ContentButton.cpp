@@ -9,7 +9,6 @@
 #include <Core/Content/ContentDatabase.h>
 #include <Core/Content/Texture2D.h>
 
-#include "ControlList.h"
 #include "ContextMenu.h"
 
 namespace fs = std::filesystem;
@@ -235,11 +234,6 @@ namespace Editor
 		{
 			_contextMenu->update();
 		}
-	}
-
-	int ContentButton::getControlType() const
-	{
-		return CONTROL_CONTENT_BUTTON;
 	}
 
 	void ContentButton::setActive(bool value)

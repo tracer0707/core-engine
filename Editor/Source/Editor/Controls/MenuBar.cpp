@@ -4,7 +4,6 @@
 
 #include <Core/System/EventHandler.h>
 
-#include "ControlList.h"
 #include "MenuItem.h"
 
 namespace Editor
@@ -35,10 +34,5 @@ namespace Editor
 			else
 				ImGui::EndMenuBar();
 		}
-	}
-
-	int MenuBar::getControlType() const
-	{
-		return CONTROL_MENU_BAR;
 	}
 }

@@ -6,7 +6,6 @@
 
 #include <Core/Content/Texture2D.h>
 
-#include "ControlList.h"
 #include "ContextMenu.h"
 
 namespace Editor
@@ -160,11 +159,6 @@ namespace Editor
 		{
 			_contextMenu->update();
 		}
-	}
-
-	int Button::getControlType() const
-	{
-		return CONTROL_BUTTON;
 	}
 
 	void Button::setActive(bool value)
