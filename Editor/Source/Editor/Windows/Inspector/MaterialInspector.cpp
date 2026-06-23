@@ -3,7 +3,6 @@
 #include <stdexcept>
 
 #include <Core/Shared/List.h>
-#include <Core/Content/ContentTypes.h>
 #include <Core/Content/Material.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Program.h>
@@ -77,7 +76,7 @@ namespace Editor
 				if (uniform.type == Core::UniformType::Sampler2D)
 				{
 					ContentSelect* textureSelect = new ContentSelect();
-					textureSelect->setContentType(CONTENT_TYPE_TEXTURE);
+					textureSelect->setContentType(Core::ContentType::Texture2D);
 					textureSelect->setContent((Core::Content*)_material->getTexture2D(uniform.nameHash));
 					textureSelect->setOnContentChanged([this, uniform](Core::Content* value) {
 						_material->setTexture2D(uniform.nameHash, (Core::Texture2D*)value);

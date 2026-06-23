@@ -1,7 +1,5 @@
 #include "Material.h"
 
-#include "ContentTypes.h"
-
 #include "../Renderer/Renderer.h"
 #include "../Renderer/Program.h"
 #include "../Content/Texture2D.h"
@@ -18,11 +16,6 @@ namespace Core
 	{
 		_program = nullptr;
 		_renderer = nullptr;
-	}
-
-	int Material::getContentType()
-	{
-		return CONTENT_TYPE_MATERIAL;
 	}
 
 	int Material::getInt(uint64_t name) const

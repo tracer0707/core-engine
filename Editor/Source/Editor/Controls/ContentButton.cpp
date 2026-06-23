@@ -157,8 +157,9 @@ namespace Editor
 
 			if (_content != nullptr && ImGui::BeginDragDropSource())
 			{
+				int contentType = static_cast<int>(_content->getContentType());
 				void* data = reinterpret_cast<void*>(_content);
-				ImGui::SetDragDropPayload(("CONTENT_" + std::to_string(_content->getContentType())).c_str(), &data, sizeof(void*));
+				ImGui::SetDragDropPayload(("CONTENT_" + std::to_string(contentType)).c_str(), &data, sizeof(void*));
 				ImGui::Text(contentName.std_str().c_str());
 				ImGui::EndDragDropSource();
 			}

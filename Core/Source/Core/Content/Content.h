@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Shared/Uuid.h"
+#include "ContentType.h"
 
 namespace Core
 {
@@ -13,7 +14,7 @@ namespace Core
 			Content();
 			virtual ~Content();
 
-			virtual int getContentType() = 0;
+			virtual ContentType getContentType() const = 0;
 
 			const Core::Uuid& getUuid() const { return _uuid; }
 			void setUuid(Core::Uuid value) { _uuid = value; }

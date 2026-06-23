@@ -5,6 +5,7 @@
 
 #include <Core/Shared/String.h>
 #include <Core/Shared/Uuid.h>
+#include <Core/Content/ContentType.h>
 
 #include "Control.h"
 
@@ -22,7 +23,7 @@ namespace Editor
 			float _actualHeight = 0.0f;
 
 			Core::Content* _content = nullptr;
-			int _contentType = INT_MAX;
+			Core::ContentType _contentType = Core::ContentType::None;
 
 			std::function<void(Core::Content*)> _onContentChanged = nullptr;
 
@@ -41,8 +42,8 @@ namespace Editor
 			Core::Content* getContent() const { return _content; }
 			void setContent(Core::Content* value) { _content = value; }
 
-			int getContentType() const { return _contentType; }
-			void setContentType(int value) { _contentType = value; }
+			Core::ContentType getContentType() const { return _contentType; }
+			void setContentType(Core::ContentType value) { _contentType = value; }
 
 			void setOnContentChanged(std::function<void(Core::Content*)> value) { _onContentChanged = value; }
 	};

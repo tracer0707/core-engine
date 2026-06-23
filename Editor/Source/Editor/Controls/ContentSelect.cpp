@@ -76,7 +76,8 @@ namespace Editor
 
 		if (ImGui::BeginDragDropTarget())
 		{
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(("CONTENT_" + std::to_string(_contentType)).c_str()))
+			int contentTypeInt = static_cast<int>(_contentType);
+			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(("CONTENT_" + std::to_string(contentTypeInt)).c_str()))
 			{
 				_content = reinterpret_cast<Core::Content*>(*(void**)payload->Data);
 				if (_onContentChanged != nullptr)

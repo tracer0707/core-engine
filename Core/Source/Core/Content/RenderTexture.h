@@ -22,7 +22,7 @@ namespace Core
 			unsigned int height = 0;
 
 		public:
-			virtual int getContentType();
+			virtual ContentType getContentType() const { return ContentType::RenderTexture; }
 
 			void bind();
 

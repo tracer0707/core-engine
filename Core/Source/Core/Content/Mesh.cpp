@@ -5,7 +5,6 @@
 #include "../Renderer/VertexBuffer.h"
 #include "../Renderer/Renderer.h"
 
-#include "ContentTypes.h"
 #include "Material.h"
 
 namespace Core
@@ -56,10 +55,5 @@ namespace Core
 
 		_subMeshes = nullptr;
 		_subMeshesCount = 0;
-	}
-
-	int Mesh::getContentType()
-	{
-		return CONTENT_TYPE_MESH;
 	}
 } // namespace Core

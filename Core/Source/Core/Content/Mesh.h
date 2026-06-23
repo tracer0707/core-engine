@@ -42,10 +42,10 @@ namespace Core
 			AxisAlignedBox aab = AxisAlignedBox::BOX_NULL;
 
 			Mesh(SubMesh** subMeshes, int subMeshesCount);
-			~Mesh();
+			virtual ~Mesh();
 
 		public:
-			virtual int getContentType();
+			virtual ContentType getContentType() const { return ContentType::Mesh; }
 
 			SubMesh** getSubMeshes() { return _subMeshes; }
 			SubMesh* getSubMesh(int index) { return _subMeshes[index]; }

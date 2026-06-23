@@ -3,8 +3,6 @@
 #include "../Renderer/Renderer.h"
 #include "../Renderer/FrameBuffer.h"
 
-#include "ContentTypes.h"
-
 namespace Core
 {
 	RenderTexture::RenderTexture(Renderer* renderer, unsigned int width, unsigned int height) : Content()
@@ -26,11 +24,6 @@ namespace Core
 		}
 
 		_renderer = nullptr;
-	}
-
-	int RenderTexture::getContentType()
-	{
-		return CONTENT_TYPE_RENDER_TEXTURE;
 	}
 
 	void RenderTexture::bind()

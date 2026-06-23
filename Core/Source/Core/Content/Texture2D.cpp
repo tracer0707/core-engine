@@ -4,8 +4,6 @@
 
 #include "../Renderer/Renderer.h"
 
-#include "ContentTypes.h"
-
 namespace Core
 {
 	Texture2D::Texture2D(Renderer* renderer, int width, int height, unsigned char* data, int size, TextureFormat format) : Content()
@@ -42,11 +40,6 @@ namespace Core
 		_width = 0;
 		_height = 0;
 		_nativeId = 0;
-	}
-
-	int Texture2D::getContentType()
-	{
-		return CONTENT_TYPE_TEXTURE;
 	}
 
 	void Texture2D::bind(int slot)

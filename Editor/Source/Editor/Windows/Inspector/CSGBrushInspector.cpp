@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-#include <Core/Content/ContentTypes.h>
+#include <Core/Content/ContentType.h>
 #include <Core/Content/Material.h>
 
 #include "../../../CSG/CSGBrush.h"
@@ -33,7 +33,7 @@ namespace Editor
 		table->setColumnsCount(2);
 
 		ContentSelect* materialSelect = new ContentSelect();
-		materialSelect->setContentType(CONTENT_TYPE_MATERIAL);
+		materialSelect->setContentType(Core::ContentType::Material);
 		materialSelect->setContent((Core::Content*)_brush->getMaterial(0));
 		materialSelect->setOnContentChanged([this](Core::Content* value) { _brush->setMaterial(0, (Core::Material*)value); });
 

@@ -38,7 +38,7 @@ namespace Core
 			virtual ~Material();
 
 		public:
-			virtual int getContentType();
+			virtual ContentType getContentType() const { return ContentType::Material; }
 
 			Program* getProgram() const { return _program; }
 			void setProgram(Program* value) { _program = value; }

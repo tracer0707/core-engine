@@ -30,7 +30,7 @@ namespace Core
 			TextureFormat _format = TextureFormat::RGBA8;
 
 		public:
-			virtual int getContentType();
+			virtual ContentType getContentType() const { return ContentType::Texture2D; }
 
 			unsigned int getNativeId() const { return _nativeId; }
 
