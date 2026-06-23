@@ -1,23 +1,23 @@
-#include "FileInput.h"
+#include "InputFile.h"
 
 #include <Core/System/Application.h>
 #include <Core/System/EventHandler.h>
 
 #include "LinearLayout.h"
-#include "TextInput.h"
+#include "InputText.h"
 #include "Button.h"
 
 #include "../../Main/FileSystemDialog.h"
 
 namespace Editor
 {
-	FileInput::FileInput(Core::Application* application) : Control()
+	InputFile::InputFile(Core::Application* application) : Control()
 	{
 		_application = application;
 
 		_layout = new LinearLayout(LayoutDirection::Horizontal);
 
-		_textInput = new TextInput();
+		_textInput = new InputText();
 		Button* button = new Button("...");
 
 		_layout->addControl(_textInput);
@@ -26,49 +26,49 @@ namespace Editor
 		button->setOnClick([this, application] {
 			application->getEventHandler()->addEvent([this, application] {
 				FileSystemDialog* dlg = new FileSystemDialog(_application);
-				dlg->setOnPathSelected([this](Core::List<Core::String> fileNames) { _textInput->setText(fileNames[0]); });
+				dlg->setOnPathSelected([this](Core::List<Core::String> fileNames) { _textInput->setValue(fileNames[0]); });
 			});
 		});
 
 		addControl(_layout);
 	}
 
-	FileInput::~FileInput()
+	InputFile::~InputFile()
 	{
 		_application = nullptr;
 	}
 
-	float FileInput::getWidth() const
+	float InputFile::getWidth() const
 	{
 		return _layout->getWidth();
 	}
 
-	void FileInput::setWidth(float value)
+	void InputFile::setWidth(float value)
 	{
 		_layout->setWidth(value);
 	}
 
-	float FileInput::getHeight() const
+	float InputFile::getHeight() const
 	{
 		return _layout->getHeight();
 	}
 
-	void FileInput::setHeight(float value)
+	void InputFile::setHeight(float value)
 	{
 		_layout->setHeight(value);
 	}
 
-	Core::String FileInput::getFilePath() const
+	Core::String InputFile::getFilePath() const
 	{
-		return _textInput->getText();
+		return _textInput->getValue();
 	}
 
-	void FileInput::setFilePath(Core::String value)
+	void InputFile::setFilePath(Core::String value)
 	{
-		_textInput->setText(value);
+		_textInput->setValue(value);
 	}
 
-	void FileInput::update()
+	void InputFile::update()
 	{
 		if (!_visible) return;
 

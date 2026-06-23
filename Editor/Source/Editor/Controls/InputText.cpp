@@ -1,4 +1,4 @@
-#include "TextInput.h"
+#include "InputText.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -6,11 +6,11 @@
 
 namespace Editor
 {
-	TextInput::TextInput() : Control() {}
+	InputText::InputText() : Control() {}
 
-	TextInput::~TextInput() {}
+	InputText::~InputText() {}
 
-    float TextInput::getWidth() const
+    float InputText::getWidth() const
     {
         if (_width == 0.0f)
         {
@@ -20,7 +20,7 @@ namespace Editor
         return _width;
     }
 
-    float TextInput::getHeight() const
+    float InputText::getHeight() const
     {
         if (_height == 0.0f)
         {
@@ -30,17 +30,7 @@ namespace Editor
         return _height;
     }
 
-	Core::String TextInput::getText() const
-	{
-		return _text;
-	}
-
-	void TextInput::setText(Core::String value)
-	{
-		_text = value.std_str();
-	}
-
-	void TextInput::update()
+	void InputText::update()
 	{
 		if (!_visible) return;
 
@@ -58,9 +48,9 @@ namespace Editor
         _actualWidth = _actualSize.x;
         _actualHeight = _actualSize.y;
 
-		if (_text != _prevText && _onTextChanged != nullptr)
+		if (_text != _prevText && _onValueChanged != nullptr)
 		{
-			_onTextChanged(_text);
+			_onValueChanged(_text);
 			_prevText = _text;
 		}
 

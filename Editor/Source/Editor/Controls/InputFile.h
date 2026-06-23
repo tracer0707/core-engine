@@ -11,19 +11,19 @@ namespace Core
 
 namespace Editor
 {
-	class TextInput;
+	class InputText;
     class LinearLayout;
 
-	class FileInput : public Control
+	class InputFile : public Control
 	{
 	private:
 		Core::Application* _application = nullptr;
-		TextInput* _textInput = nullptr;
+		InputText* _textInput = nullptr;
         LinearLayout* _layout = nullptr;
 
 	public:
-		FileInput(Core::Application* application);
-		virtual ~FileInput();
+		InputFile(Core::Application* application);
+		virtual ~InputFile();
 
 		virtual float getWidth() const;
         virtual void setWidth(float value);
@@ -34,7 +34,7 @@ namespace Editor
 		Core::String getFilePath() const;
 		void setFilePath(Core::String value);
 
-		virtual ControlType getControlType() const { return ControlType::FileInput; }
+		virtual ControlType getControlType() const { return ControlType::InputFile; }
 		virtual void update();
 	};
 }

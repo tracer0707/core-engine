@@ -14,6 +14,7 @@
 #include "../../Controls/Button.h"
 #include "../../Controls/ContentSelect.h"
 #include "../../Controls/Dropdown.h"
+#include "../../Controls/InputVec4.h"
 
 #include "../InspectorWindow.h"
 
@@ -72,24 +73,34 @@ namespace Editor
 			for (const auto& uniform : program->uniforms)
 			{
 				table->addControl(new Label(uniform.name));
-				table->addControl(new Label("test"));
-
-				if (uniform.type == Core::UniformType::Int)
+				
+				if (uniform.type == Core::UniformType::Sampler2D)
 				{
+					ContentSelect* textureSelect = new ContentSelect();
+					textureSelect->setContentType(CONTENT_TYPE_TEXTURE);
+					textureSelect->setContent((Core::Content*)_material->getTexture2D(uniform.nameHash));
+					textureSelect->setOnContentChanged([this, uniform](Core::Content* value) {
+						_material->setTexture2D(uniform.nameHash, (Core::Texture2D*)value);
+						ContentSerializer::serializeMaterial(_material);
+					});
+					table->addControl(textureSelect);
+				}
+				else if (uniform.type == Core::UniformType::Vec4)
+				{
+					InputVec4* vec4Input = new InputVec4();
+					vec4Input->setValue(_material->getVec4(uniform.nameHash));
+					vec4Input->setOnValueChanged([this, uniform](glm::vec4 value) {
+						_material->setVec4(uniform.nameHash, value);
+						ContentSerializer::serializeMaterial(_material);
+					});
+					table->addControl(vec4Input);
+				}
+				else
+				{
+					table->addControl(new Label("Element is not editable"));
 				}
 			}
 		}
-
-		// ContentSelect* textureSelect = new ContentSelect();
-		// textureSelect->setContentType(CONTENT_TYPE_TEXTURE);
-		// textureSelect->setContent((Core::Content*)_material->getTexture());
-		//  textureSelect->setOnChange([this](Core::Content* value) {
-		//  	_material->setTexture((Core::Texture*)value);
-		//  	ContentSerializer::serializeMaterial(_material);
-		//  });
-
-		// table->addControl(new Label("Texture"));
-		// table->addControl(textureSelect);
 
 		_mainLayout->addControl(table);
 		return _mainLayout;

@@ -12,7 +12,7 @@ namespace Editor
 	class LinearLayout;
 	class Font;
 	class TreeView;
-	class TextInput;
+	class InputText;
 	class Label;
 
 	class FileSystemDialog : public Core::Window
@@ -24,7 +24,7 @@ namespace Editor
 			LinearLayout* _topLayout = nullptr;
 			LinearLayout* _bottomLayout = nullptr;
 			TreeView* _treeView = nullptr;
-			TextInput* _selectedPath = nullptr;
+			InputText* _selectedPath = nullptr;
 			Label* _selectedCount = nullptr;
 
 			bool _showFiles = true;

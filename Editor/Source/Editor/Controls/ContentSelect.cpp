@@ -79,9 +79,9 @@ namespace Editor
 			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(("CONTENT_" + std::to_string(_contentType)).c_str()))
 			{
 				_content = reinterpret_cast<Core::Content*>(*(void**)payload->Data);
-				if (_onChange != nullptr)
+				if (_onContentChanged != nullptr)
 				{
-					_onChange(_content);
+					_onContentChanged(_content);
 				}
 			}
 			ImGui::EndDragDropTarget();

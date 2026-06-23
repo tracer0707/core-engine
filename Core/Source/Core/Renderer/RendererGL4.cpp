@@ -543,7 +543,7 @@ namespace Core
 		}
 		else
 		{
-			throw std::runtime_error("Texture format is unsupported");
+			throw std::runtime_error("Texture format is not supported");
 		}
 
 		glGenerateMipmap(GL_TEXTURE_2D);

@@ -24,7 +24,7 @@ namespace Editor
 			Core::Content* _content = nullptr;
 			int _contentType = INT_MAX;
 
-			std::function<void(Core::Content*)> _onChange = nullptr;
+			std::function<void(Core::Content*)> _onContentChanged = nullptr;
 
 			Core::String getContentName() const;
 
@@ -44,6 +44,6 @@ namespace Editor
 			int getContentType() const { return _contentType; }
 			void setContentType(int value) { _contentType = value; }
 
-			void setOnChange(std::function<void(Core::Content*)> value) { _onChange = value; }
+			void setOnContentChanged(std::function<void(Core::Content*)> value) { _onContentChanged = value; }
 	};
 }

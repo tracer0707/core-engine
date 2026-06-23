@@ -6,14 +6,12 @@ namespace Editor
 	{
 		Base,
 		Button,
-		FileInput,
 		Image,
 		Label,
 		LinearLayout,
 		MenuBar,
 		MenuItem,
 		Separator,
-		TextInput,
 		TreeNode,
 		TreeView,
 		ListView,
@@ -23,6 +21,9 @@ namespace Editor
 		ContentSelect,
 		ContentButton,
 		Table,
-		InputInt
+		InputFile,
+		InputText,
+		InputInt,
+		InputVec4
 	};
 }

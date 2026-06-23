@@ -35,7 +35,7 @@ namespace Editor
 		ContentSelect* materialSelect = new ContentSelect();
 		materialSelect->setContentType(CONTENT_TYPE_MATERIAL);
 		materialSelect->setContent((Core::Content*)_brush->getMaterial(0));
-		materialSelect->setOnChange([this](Core::Content* value) { _brush->setMaterial(0, (Core::Material*)value); });
+		materialSelect->setOnContentChanged([this](Core::Content* value) { _brush->setMaterial(0, (Core::Material*)value); });
 
 		table->addControl(new Label("Material"));
 		table->addControl(materialSelect);

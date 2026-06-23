@@ -15,7 +15,7 @@
 #include "../Editor/Windows/FullscreenWindow.h"
 #include "../Editor/Controls/LinearLayout.h"
 #include "../Editor/Controls/Button.h"
-#include "../Editor/Controls/TextInput.h"
+#include "../Editor/Controls/InputText.h"
 #include "../Editor/Controls/TreeView.h"
 #include "../Editor/Controls/TreeNode.h"
 #include "../Editor/Controls/Label.h"
@@ -55,7 +55,7 @@ namespace Editor
 		_bottomLayout = new LinearLayout(LayoutDirection::Horizontal);
 		_bottomLayout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
 
-		_selectedPath = new TextInput();
+		_selectedPath = new InputText();
 		_selectedCount = new Label();
 		_selectedCount->setVisible(false);
 
@@ -82,12 +82,12 @@ namespace Editor
 			{
 				if (lst.count() > 0)
 				{
-					_selectedPath->setText(lst.get(0)->getStringTag(TAG_FULL_PATH));
+					_selectedPath->setValue(lst.get(0)->getStringTag(TAG_FULL_PATH));
 					okBtn->setEnabled(true);
 				}
 				else
 				{
-					_selectedPath->setText(Core::String::Empty);
+					_selectedPath->setValue(Core::String::Empty);
 					okBtn->setEnabled(false);
 				}
 			}
@@ -132,7 +132,7 @@ namespace Editor
 			}
 		});
 
-		_selectedPath->setOnTextChanged([this, okBtn](Core::String value) {
+		_selectedPath->setOnValueChanged([this, okBtn](Core::String value) {
 			if (_multiple) return;
 
 			auto path = std::filesystem::path(value.std_str());
@@ -154,9 +154,9 @@ namespace Editor
 			{
 				if (!_multiple)
 				{
-					if (_selectedPath->getText() != Core::String::Empty)
+					if (_selectedPath->getValue() != Core::String::Empty)
 					{
-						_onPathSelected({_selectedPath->getText()});
+						_onPathSelected({_selectedPath->getValue()});
 					}
 				}
 				else if (!_selected.isEmpty())
