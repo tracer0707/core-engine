@@ -3,6 +3,7 @@
 #include <fstream>
 
 #include <Core/Serialization/FlatBuffers/MaterialSerializer_generated.h>
+#include <Core/Renderer/Program.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/ContentDatabase.h>
@@ -19,15 +20,85 @@ namespace Editor
 	{
 		flatbuffers::FlatBufferBuilder builder;
 
-		// auto texUuid = builder.CreateString(value->getTexture() != nullptr ? value->getTexture()->getUuid().toString() : "");
-		//  auto material = Core::CreateMaterialSerializer(builder, texUuid);
-		//  builder.Finish(material);
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryInt>> ints;
+		ints.reserve(value->getIntValues().size());
 
-		// uint8_t* buf = builder.GetBufferPointer();
-		// size_t size = builder.GetSize();
+		for (const auto& [key, value] : value->getIntValues())
+		{
+			ints.push_back(Core::Base::CreateMapEntryInt(builder, key, value));
+		}
 
-		// std::ofstream file(path.std_str(), std::ios::binary);
-		// file.write(reinterpret_cast<const char*>(buf), size);
-		// file.close();
+		auto intVector = builder.CreateVector(ints);
+
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryFloat>> floats;
+		floats.reserve(value->getFloatValues().size());
+
+		for (const auto& [key, value] : value->getFloatValues())
+		{
+			floats.push_back(Core::Base::CreateMapEntryFloat(builder, key, value));
+		}
+
+		auto floatVector = builder.CreateVector(floats);
+
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryVec2>> vec2s;
+		vec2s.reserve(value->getVec2Values().size());
+
+		for (const auto& [key, value] : value->getVec2Values())
+		{
+			Core::Base::Vec2 fbVec(value.x, value.y);
+			vec2s.push_back(Core::Base::CreateMapEntryVec2(builder, key, &fbVec));
+		}
+
+		auto vec2Vector = builder.CreateVector(vec2s);
+
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryVec3>> vec3s;
+		vec3s.reserve(value->getVec3Values().size());
+
+		for (const auto& [key, value] : value->getVec3Values())
+		{
+			Core::Base::Vec3 fbVec(value.x, value.y, value.z);
+			vec3s.push_back(Core::Base::CreateMapEntryVec3(builder, key, &fbVec));
+		}
+
+		auto vec3Vector = builder.CreateVector(vec3s);
+
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryVec4>> vec4s;
+		vec4s.reserve(value->getVec4Values().size());
+
+		for (const auto& [key, value] : value->getVec4Values())
+		{
+			Core::Base::Vec4 fbVec(value.x, value.y, value.z, value.w);
+			vec4s.push_back(Core::Base::CreateMapEntryVec4(builder, key, &fbVec));
+		}
+
+		auto vec4Vector = builder.CreateVector(vec4s);
+
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryString>> tex2ds;
+		tex2ds.reserve(value->getTexture2dValues().size());
+
+		for (const auto& [key, value] : value->getTexture2dValues())
+		{
+			auto str = builder.CreateString(value->getUuid().toString());
+			tex2ds.push_back(Core::Base::CreateMapEntryString(builder, key, str));
+		}
+
+		auto tex2dVector = builder.CreateVector(tex2ds);
+
+		std::string programNameRaw = "";
+
+		if (value->getProgram() != nullptr) programNameRaw = value->getProgram()->name.std_str();
+
+		flatbuffers::Offset<flatbuffers::String> programName = builder.CreateString(programNameRaw);
+		
+		auto materialFB = Core::CreateMaterialSerializer(builder, programName, intVector, floatVector, vec2Vector, vec3Vector, vec4Vector, tex2dVector);
+
+		builder.Finish(materialFB);
+
+		uint8_t* buf = builder.GetBufferPointer();
+		size_t size = builder.GetSize();
+
+		std::ofstream file(path.std_str(), std::ios::binary);
+		file.write(reinterpret_cast<const char*>(buf), size);
+		file.close();
 	}
 } // namespace Editor

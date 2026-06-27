@@ -1,0 +1,49 @@
+namespace Core.Base;
+
+struct Vec2 {
+    x:float;
+    y:float;
+}
+
+struct Vec3 {
+    x:float;
+    y:float;
+    z:float;
+}
+
+struct Vec4 {
+    x:float;
+    y:float;
+    z:float;
+    w:float;
+}
+
+table MapEntryInt {
+    key:ulong;
+    value:int32;
+}
+
+table MapEntryFloat {
+    key:ulong;
+    value:float;
+}
+
+table MapEntryVec2 {
+    key:ulong;
+    value:Vec2;
+}
+
+table MapEntryVec3 {
+    key:ulong;
+    value:Vec3;
+}
+
+table MapEntryVec4 {
+    key:ulong;
+    value:Vec4;
+}
+
+table MapEntryString {
+    key:ulong;
+    value:string;
+}

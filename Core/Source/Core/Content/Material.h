@@ -32,7 +32,7 @@ namespace Core
 			std::unordered_map<uint64_t, glm::vec4> _vec4Values;
 			std::unordered_map<uint64_t, glm::mat3> _mat3Values;
 			std::unordered_map<uint64_t, glm::mat4> _mat4Values;
-			std::unordered_map<uint64_t, Texture2D*> _textureValues;
+			std::unordered_map<uint64_t, Texture2D*> _texture2dValues;
 
 			Material(Renderer* renderer);
 			virtual ~Material();
@@ -42,6 +42,15 @@ namespace Core
 
 			Program* getProgram() const { return _program; }
 			void setProgram(Program* value) { _program = value; }
+
+			const std::unordered_map<uint64_t, int>& getIntValues() const { return _intValues; }
+			const std::unordered_map<uint64_t, float>& getFloatValues() const { return _floatValues; }
+			const std::unordered_map<uint64_t, glm::vec2>& getVec2Values() const { return _vec2Values; }
+			const std::unordered_map<uint64_t, glm::vec3>& getVec3Values() const { return _vec3Values; }
+			const std::unordered_map<uint64_t, glm::vec4>& getVec4Values() const { return _vec4Values; }
+			const std::unordered_map<uint64_t, glm::mat3>& getMat3Values() const { return _mat3Values; }
+			const std::unordered_map<uint64_t, glm::mat4>& getMat4Values() const { return _mat4Values; }
+			const std::unordered_map<uint64_t, Texture2D*>& getTexture2dValues() const { return _texture2dValues; }
 
 			int getInt(uint64_t name) const;
 			void setInt(uint64_t name, int value) { _intValues[name] = value; }
@@ -65,7 +74,7 @@ namespace Core
 			void setMat4(uint64_t name, glm::mat4 value) { _mat4Values[name] = value; }
 
 			Texture2D* getTexture2D(uint64_t name) const;
-			void setTexture2D(uint64_t name, Texture2D* value) { _textureValues[name] = value; }
+			void setTexture2D(uint64_t name, Texture2D* value) { _texture2dValues[name] = value; }
 
 			void bind();
 	};

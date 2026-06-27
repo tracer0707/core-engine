@@ -101,15 +101,51 @@ namespace Core
 
 		auto materialSerialized = GetMaterialSerializer(data.data());
 
-		// Texture* tex = nullptr;
-		// String textureUuid = materialSerialized->texture_uuid()->c_str();
-		// if (textureUuid != String::Empty)
-		// {
-		// 	tex = loadTexture2DByUuid(Core::Uuid::fromString(textureUuid.std_str()));
-		// }
-
 		Material* result = new Material(_renderer);
 		result->setUuid(uuid);
+
+		String programName = materialSerialized->program_name()->c_str();
+		Program* program = _renderer->getShaderProgram(programName);
+		result->setProgram(program);
+
+		for (auto entry : *materialSerialized->int_values())
+		{
+			result->setInt(entry->key(), entry->value());
+		}
+
+		for (auto entry : *materialSerialized->float_values())
+		{
+			result->setFloat(entry->key(), entry->value());
+		}
+
+		for (auto entry : *materialSerialized->vec2_values())
+		{
+			auto value = entry->value();
+			result->setVec2(entry->key(), glm::vec2(value->x(), value->y()));
+		}
+
+		for (auto entry : *materialSerialized->vec3_values())
+		{
+			auto value = entry->value();
+			result->setVec3(entry->key(), glm::vec3(value->x(), value->y(), value->z()));
+		}
+
+		for (auto entry : *materialSerialized->vec4_values())
+		{
+			auto value = entry->value();
+			result->setVec4(entry->key(), glm::vec4(value->x(), value->y(), value->z(), value->w()));
+		}
+
+		for (auto entry : *materialSerialized->texture2d_values())
+		{
+			Texture2D* tex = nullptr;
+			String textureUuid = entry->value()->str();
+			if (textureUuid != String::Empty)
+			{
+				tex = loadTexture2DByUuid(Core::Uuid::fromString(textureUuid.std_str()));
+			}
+			result->setTexture2D(entry->key(), tex);
+		}
 
 		_materials.add(result);
 		_materialsCache[uuid] = result;

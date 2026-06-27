@@ -1,7 +1,15 @@
+include "BaseTypesSerializer.fbs";
+
 namespace Core;
 
 table MaterialSerializer {
-	texture_uuid:string;
+	program_name:string;
+	int_values:[Core.Base.MapEntryInt];
+	float_values:[Core.Base.MapEntryFloat];
+	vec2_values:[Core.Base.MapEntryVec2];
+	vec3_values:[Core.Base.MapEntryVec3];
+	vec4_values:[Core.Base.MapEntryVec4];
+	texture2d_values:[Core.Base.MapEntryString];
 }
 
 root_type MaterialSerializer;

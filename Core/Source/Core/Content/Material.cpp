@@ -62,8 +62,8 @@ namespace Core
 
 	Texture2D* Material::getTexture2D(uint64_t name) const
 	{
-		auto it = _textureValues.find(name);
-		return it != _textureValues.end() ? it->second : nullptr;
+		auto it = _texture2dValues.find(name);
+		return it != _texture2dValues.end() ? it->second : nullptr;
 	}
 
 	void Material::bind()
