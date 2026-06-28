@@ -36,6 +36,14 @@ namespace Editor
 			if (selected.count() == 0)
 			{
 				Gizmo::singleton()->setTransform(nullptr);
+				setInspector(nullptr);
+
+				if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
+				{
+					CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
+					mod->setCurrentModel(nullptr);
+					mod->setCurrentBrush(nullptr);
+				}
 			}
 			else if (selected.count() == 1)
 			{
@@ -64,10 +72,10 @@ namespace Editor
 
 					setInspector(node);
 					Gizmo::singleton()->setTransform(transform);
-
-					_parent->invalidateAll();
 				}
 			}
+
+			_parent->invalidateAll();
 		});
 
 		_linearLayout->addControl(_objectTree);
@@ -80,6 +88,12 @@ namespace Editor
 	void HierarchyWindow::setInspector(TreeNode* node)
 	{
 		InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
+
+		if (node == nullptr)
+		{
+			inspectorWnd->setInspector(nullptr);
+			return;
+		}
 
 		for (const auto& it : node->getObjectTags())
 		{

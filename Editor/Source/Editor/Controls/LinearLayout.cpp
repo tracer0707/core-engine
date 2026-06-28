@@ -206,8 +206,6 @@ namespace Editor
 
 			currentX += size.x + style.ItemSpacing.x;
 		}
-
-		// ImGui::SetCursorPos(ImVec2(startPos.x, startPos.y + maxHeight + style.FramePadding.y));
 	}
 
 	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
@@ -261,11 +259,6 @@ namespace Editor
 
 			currentY += row.maxHeight + style.ItemSpacing.y;
 		}
-
-		// if (!rows.empty())
-		//{
-		// ImGui::SetCursorPos(ImVec2(startPos.x, currentY + style.FramePadding.y));
-		//}
 	}
 
 	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
@@ -323,8 +316,6 @@ namespace Editor
 
 			currentY += size.y + style.ItemSpacing.y;
 		}
-
-		// ImGui::SetCursorPos(ImVec2(startPos.x, currentY + style.FramePadding.y));
 	}
 
 	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
@@ -378,11 +369,6 @@ namespace Editor
 
 			currentX += col.maxWidth + style.ItemSpacing.x;
 		}
-
-		/*if (!columns.empty())
-		{
-			ImGui::SetCursorPos(ImVec2(currentX + style.FramePadding.x, startPos.y));
-		}*/
 	}
 
 	void LinearLayout::update()
@@ -396,10 +382,6 @@ namespace Editor
 		ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height), _flags);
 
 		ImVec2 availableSize = ImGui::GetContentRegionAvail();
-
-		// availableSize.x -= (style.FramePadding.x * 2.0f);
-		// availableSize.y -= (style.FramePadding.y * 2.0f);
-
 		ImVec2 cursorStart = ImGui::GetCursorPos();
 
 		std::vector<ImVec2> sizes;
@@ -425,6 +407,15 @@ namespace Editor
 			else
 			{
 				updateVerticalLayoutWrapped(cursorStart, availableSize, sizes);
+			}
+		}
+
+		if (ImGui::IsWindowHovered(ImGuiHoveredFlags_ChildWindows) && !ImGui::IsItemClicked(ImGuiMouseButton_Left) &&
+			ImGui::IsMouseClicked(ImGuiMouseButton_Left))
+		{
+			if (_onClick != nullptr)
+			{
+				_onClick();
 			}
 		}
 

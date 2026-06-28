@@ -2,6 +2,7 @@
 
 #include "Control.h"
 
+#include <functional>
 #include <vector>
 #include <imgui.h>
 
@@ -63,6 +64,8 @@ namespace Editor
 					float startX = 0.0f;
 			};
 
+			std::function<void()> _onClick = nullptr;
+
 			int getVisibleControlsCount();
 			void calculateSizes(std::vector<ImVec2>& sizes);
 			void calculateWrappedRows(float availableWidth, const std::vector<ImVec2>& sizes, std::vector<RowInfo>& rows);
@@ -94,5 +97,7 @@ namespace Editor
 
 			void setWrapMode(LayoutWrapMode mode) { _wrapMode = mode; }
 			LayoutWrapMode getWrapMode() const { return _wrapMode; }
+
+			void setOnClick(std::function<void()> value) { _onClick = value; }
 	};
 } // namespace Editor

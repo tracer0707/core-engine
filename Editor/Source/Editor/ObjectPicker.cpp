@@ -122,12 +122,8 @@ namespace Editor
 
 					if (brush != nullptr)
 					{
-						mod->setCurrentModel(model);
-						mod->setCurrentBrush(brush);
-
-						Gizmo::singleton()->setTransform(brush->getTransform());
 						TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
-						treeView->selectNode(node, false);
+						treeView->selectNode(node, true);
 
 						break;
 					}
@@ -136,18 +132,7 @@ namespace Editor
 		}
 		else
 		{
-			Gizmo::singleton()->setTransform(nullptr);
-
-			if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
-			{
-				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
-
-				mod->setCurrentModel(nullptr);
-				mod->setCurrentBrush(nullptr);
-				treeView->clearSelection(false);
-			}
+			treeView->clearSelection(true);
 		}
-
-		_windowManager->invalidateAll();
 	}
 } // namespace Editor
