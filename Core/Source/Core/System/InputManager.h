@@ -1,7 +1,7 @@
 #pragma once
 
 #include <functional>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <string>
 
@@ -26,9 +26,9 @@ namespace Core
 		std::pair<int, int> mousePos;
 		std::pair<int, int> relativeMousePos;
 
-		std::map<int, bool> keyStates;
-		std::map<int, bool> keyDownStates;
-		std::map<int, bool> keyUpStates;
+		std::unordered_map<int, bool> keyStates;
+		std::unordered_map<int, bool> keyDownStates;
+		std::unordered_map<int, bool> keyUpStates;
 
 		bool mouseStates[32];
 		bool mouseDownStates[32];
@@ -87,8 +87,8 @@ namespace Core
 		void unsubscribeKeyDownEvent(Uuid id);
 		void unsubscribeKeyUpEvent(Uuid id);
 
-		void updateKeys(void* event); //SDL_event
-		void updateMouse(void* window);
+		void updateKeys(void* event); //SDL_Event
+		void updateMouse(void* window); //SDL_Window
 		bool getMouseButton(int button);
 		bool getMouseButtonDown(int button);
 		bool getMouseButtonUp(int button);

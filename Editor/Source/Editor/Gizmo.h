@@ -27,6 +27,7 @@ namespace Editor
 
 		enum class TransformMode
 		{
+			Select,
 			Translate,
 			Rotate,
 			Scale
@@ -43,6 +44,7 @@ namespace Editor
 		Core::InputManager* _inputManager = nullptr;
 		Core::Transformable* _transform = nullptr;
 
+		bool _enabled = true;
 		bool _isUsing = false;
 		bool _lmbDown = false;
 		bool _wasMoved = false;
@@ -51,6 +53,9 @@ namespace Editor
 
 	public:
 		static Gizmo* singleton() { return &_singleton; }
+
+		void setEnabled(bool value) { _enabled = value; }
+		bool isEnabled() const { return _enabled; }
 
 		void setTransform(Core::Transformable* value) { _transform = value; }
 		Core::Transformable* getTransform() { return _transform; }

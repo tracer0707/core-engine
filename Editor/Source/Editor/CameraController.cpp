@@ -160,8 +160,8 @@ namespace Editor
 
 		if (mButtonDown)
 		{
-			rOffsetX *= cameraSpeedNormal * 0.005f;
-			rOffsetY *= cameraSpeedNormal * 0.005f;
+			rOffsetX *= cameraSpeedNormal * 0.004f;
+			rOffsetY *= cameraSpeedNormal * 0.004f;
 
 			glm::vec3 vCamPos = t->getPosition();
 			glm::vec3 vDirUp = -t->getUp();

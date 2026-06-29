@@ -68,7 +68,10 @@ namespace Core
 	{
 		while (_isRunning)
 		{
-			List<Window*> windowsToClose;
+			for (Window* wnd : _windows)
+			{
+				wnd->beginFrame();
+			}
 
 			SDL_Event event;
 			while (SDL_PollEvent(&event))
@@ -88,6 +91,8 @@ namespace Core
 			}
 
 			_eventHandler->processEvents();
+
+			List<Window*> windowsToClose;
 
 			for (Window* wnd : _windows)
 			{

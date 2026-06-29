@@ -2,8 +2,11 @@
 
 #include <imgui.h>
 
+#include <SDL/SDL_scancode.h>
+
 #include <Core/Content/RenderTexture.h>
 #include <Core/Scene/Scene.h>
+#include <Core/System/InputManager.h>
 
 #include "../Gizmo.h"
 #include "../ObjectPicker.h"
@@ -79,5 +82,30 @@ namespace Editor
 		Editor::CameraController::update(isHovered);
 		Editor::Gizmo::singleton()->update(_camera, isHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
 		Editor::ObjectPicker::update(isHovered, isGizmoWasUsed, offsetX, offsetY);
+
+		if (!_parent->getInputManager()->getMouseButton(0) &&
+			!_parent->getInputManager()->getMouseButton(1) &&
+			!_parent->getInputManager()->getMouseButton(2))
+		{
+			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
+			{
+				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
+			}
+
+			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_W))
+			{
+				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
+			}
+
+			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_E))
+			{
+				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
+			}
+
+			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_R))
+			{
+				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
+			}
+		}
 	}
 }

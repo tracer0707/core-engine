@@ -151,7 +151,6 @@ namespace Core
     {
         SDL_Event* evt = (SDL_Event*)event;
 
-        // Handle input events
         if (evt->type == SDL_MOUSEMOTION)
         {
             mouseMoveEvent(evt->motion.x, evt->motion.y);
@@ -164,9 +163,6 @@ namespace Core
                 mouseDownEvent(InputManager::MouseButton::MBE_LEFT, evt->button.x, evt->button.y);
                 setMouseButton(0, true);
                 setMouseButtonDown(0, true);
-
-                int button = 0;
-                void* args[1] = {&button};
             }
 
             if (evt->button.button == SDL_BUTTON_RIGHT)
@@ -174,9 +170,6 @@ namespace Core
                 mouseDownEvent(InputManager::MouseButton::MBE_RIGHT, evt->button.x, evt->button.y);
                 setMouseButton(1, true);
                 setMouseButtonDown(1, true);
-
-                int button = 1;
-                void* args[1] = {&button};
             }
 
             if (evt->button.button == SDL_BUTTON_MIDDLE)
@@ -184,9 +177,6 @@ namespace Core
                 mouseDownEvent(InputManager::MouseButton::MBE_MIDDLE, evt->button.x, evt->button.y);
                 setMouseButton(2, true);
                 setMouseButtonDown(2, true);
-
-                int button = 2;
-                void* args[1] = {&button};
             }
         }
 
@@ -197,9 +187,6 @@ namespace Core
                 mouseUpEvent(InputManager::MouseButton::MBE_LEFT, evt->button.x, evt->button.y);
                 setMouseButton(0, false);
                 setMouseButtonUp(0, true);
-
-                int button = 0;
-                void* args[1] = {&button};
             }
 
             if (evt->button.button == SDL_BUTTON_RIGHT)
@@ -207,9 +194,6 @@ namespace Core
                 mouseUpEvent(InputManager::MouseButton::MBE_RIGHT, evt->button.x, evt->button.y);
                 setMouseButton(1, false);
                 setMouseButtonUp(1, true);
-
-                int button = 1;
-                void* args[1] = {&button};
             }
 
             if (evt->button.button == SDL_BUTTON_MIDDLE)
@@ -217,9 +201,6 @@ namespace Core
                 mouseUpEvent(InputManager::MouseButton::MBE_MIDDLE, evt->button.x, evt->button.y);
                 setMouseButton(2, false);
                 setMouseButtonUp(2, true);
-
-                int button = 2;
-                void* args[1] = {&button};
             }
         }
 
@@ -436,15 +417,18 @@ namespace Core
 
     void InputManager::reset()
     {
-        for (std::map<int, bool>::iterator it = keyDownStates.begin(); it != keyDownStates.end(); ++it)
-            it->second = false;
+		for (auto& it : keyDownStates)
+		{
+			it.second = false;
+		}
 
-        for (std::map<int, bool>::iterator it = keyUpStates.begin(); it != keyUpStates.end(); ++it)
-            it->second = false;
+        for (auto& it : keyUpStates)
+		{
+			it.second = false;
+		}
 
         for (int i = 0; i < 32; ++i)
         {
-            mouseStates[i] = false;
             mouseDownStates[i] = false;
             mouseUpStates[i] = false;
         }

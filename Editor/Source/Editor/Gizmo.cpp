@@ -4,6 +4,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 #include <imgui.h>
+#include <imgui_internal.h>
 #include <ImGuizmo.h>
 
 #include <Core/Components/Camera.h>
@@ -72,9 +73,7 @@ namespace Editor
 			return;
 		}
 
-		ImGuizmo::Enable((_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) && !_inputManager->getMouseButton(2));
-
-		ImGuizmo::BeginFrame();
+		bool isSelectTool = false;
 
 		ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
 		ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
@@ -83,9 +82,31 @@ namespace Editor
 		bool boundSizing = false;
 		bool boundSizingSnap = false;
 
+		if (_transformMode == TransformMode::Select)
+		{
+			isSelectTool = true;
+			mCurrentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		}
+		else if (_transformMode == TransformMode::Translate)
+		{
+			mCurrentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+		}
+		else if (_transformMode == TransformMode::Rotate)
+		{
+			mCurrentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+		}
+		else if (_transformMode == TransformMode::Scale)
+		{
+			mCurrentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+		}
+
 		float snap[3] = {1.f, 1.f, 1.f};
 		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
 		float boundsSnap[] = {0.1f, 0.1f, 0.1f};
+
+		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) && !_inputManager->getMouseButton(2));
+		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentContext()->CurrentWindow);
+		ImGuizmo::BeginFrame();
 
 		ImDrawList* drawList = ImGui::GetForegroundDrawList();
 		drawList->PushClipRect(ImVec2(viewX, viewY), ImVec2(viewX + viewW, viewY + viewH), true);

@@ -8,8 +8,9 @@
 #include <Core/Shared/String.h>
 
 #include "WindowList.h"
-
 #include "WindowManager.h"
+
+#include "../Gizmo.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 #include "../../Utils/TextureUtils.h"
@@ -53,6 +54,9 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/select.png"), contentMgr);
 		selectBtn->setSize(32, 32);
 		selectBtn->setImage(selectBtnImage);
+		selectBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
+		});
 
 		layoutMain->addControl(selectBtn);
 
@@ -63,6 +67,9 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"), contentMgr);
 		moveBtn->setSize(32, 32);
 		moveBtn->setImage(moveBtnImage);
+		moveBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
+		});
 
 		layoutMain->addControl(moveBtn);
 
@@ -73,6 +80,9 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"), contentMgr);
 		rotateBtn->setSize(32, 32);
 		rotateBtn->setImage(rotateBtnImage);
+		rotateBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
+		});
 
 		layoutMain->addControl(rotateBtn);
 
@@ -83,6 +93,9 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"), contentMgr);
 		scaleBtn->setSize(32, 32);
 		scaleBtn->setImage(scaleBtnImage);
+		scaleBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
+		});
 
 		layoutMain->addControl(scaleBtn);
 	}

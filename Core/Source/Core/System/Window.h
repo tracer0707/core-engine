@@ -22,6 +22,7 @@ namespace Core
 
 			std::function<void()> _onClose = nullptr;
 
+			void beginFrame();
 			void processEvents(void* event);
 			void internalUpdate();
 

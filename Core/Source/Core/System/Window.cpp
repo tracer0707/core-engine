@@ -64,6 +64,12 @@ namespace Core
 		SDL_SetWindowTitle((SDL_Window*)_ctx, title.std_str().c_str());
 	}
 
+	void Window::beginFrame()
+	{
+		_time->beginTimer();
+		_renderer->makeCurrent();
+	}
+
 	void Window::processEvents(void* event)
 	{
 		SDL_Event& evt = *((SDL_Event*)event);
@@ -112,14 +118,11 @@ namespace Core
 
 	void Window::internalUpdate()
 	{
-		_time->beginTimer();
-		_renderer->makeCurrent();
-
 		_inputManager->updateMouse(_ctx);
-		_eventHandler->processEvents();
 
 		update();
 
+		_eventHandler->processEvents();
 		_inputManager->reset();
 		_renderer->swapBuffers();
 	}
