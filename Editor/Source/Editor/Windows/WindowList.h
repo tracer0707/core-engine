@@ -14,10 +14,6 @@ namespace Editor
 #define CSG_EDIT_WINDOW "CSG Edit"
 #endif
 
-#ifndef CSG_OBJECT_WINDOW
-#define CSG_OBJECT_WINDOW "CSG Object"
-#endif
-
 #ifndef GIZMO_WINDOW
 #define GIZMO_WINDOW "Gizmo"
 #endif

@@ -11,10 +11,7 @@ namespace Editor
 	class ObjectWindow : public Window
 	{
 	private:
-		LinearLayout* layoutMain = nullptr;
-
-		bool setModifier(uint32_t name);
-		void disableAll();
+		LinearLayout* _layoutMain = nullptr;
 
 	public:
 		ObjectWindow(WindowManager* parent);

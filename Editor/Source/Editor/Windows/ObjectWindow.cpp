@@ -13,41 +13,19 @@
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
-#include "../Modifiers/ModifierManager.h"
-#include "../Modifiers/CSGModifier.h"
-
 #include "../../Utils/TextureUtils.h"
 
 namespace Editor
 {
 	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, OBJECT_WINDOW)
 	{
-		ModifierManager* modMgr = ModifierManager::singleton();
 		Core::ContentManager* contentMgr = parent->getContentManager();
 
 		/* Layout */
 
-		layoutMain = new LinearLayout(LayoutDirection::Horizontal);
+		_layoutMain = new LinearLayout(LayoutDirection::Horizontal);
 
-		addControl(layoutMain);
-
-		/* CSG tool */
-
-		Button* csgTool = new Button();
-		Core::Texture2D* csgToolImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/csg.png"), contentMgr);
-		csgTool->setSize(32, 32);
-		csgTool->setImage(csgToolImage);
-
-		csgTool->setOnClick([=] {
-			disableAll();
-			if (setModifier(CSGModifier::NAME))
-			{
-				csgTool->setActive(true);
-			}
-		});
-
-		layoutMain->addControl(csgTool);
+		addControl(_layoutMain);
 
 		/* Light tool */
 
@@ -57,13 +35,7 @@ namespace Editor
 		lightTool->setSize(32, 32);
 		lightTool->setImage(lightToolImage);
 
-		lightTool->setOnClick([=] {
-			disableAll();
-			modMgr->unsetCurrentModifier();
-			lightTool->setActive(true);
-		});
-
-		layoutMain->addControl(lightTool);
+		_layoutMain->addControl(lightTool);
 
 		/* Camera tool */
 
@@ -73,39 +45,58 @@ namespace Editor
 		cameraTool->setSize(32, 32);
 		cameraTool->setImage(cameraToolImage);
 
-		cameraTool->setOnClick([=] {
-			disableAll();
-			modMgr->unsetCurrentModifier();
-			cameraTool->setActive(true);
-		});
+		_layoutMain->addControl(cameraTool);
 
-		layoutMain->addControl(cameraTool);
+		/* CSG cube */
 
-		_parent->getEventHandler()->addEvent([this] { disableAll(); });
+		Button* csgCube = new Button();
+		Core::Texture2D* csgCubeImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
+		csgCube->setSize(32, 32);
+		csgCube->setImage(csgCubeImage);
+
+		_layoutMain->addControl(csgCube);
+
+		/* CSG sphere */
+
+		Button* csgSphere = new Button();
+		Core::Texture2D* csgSphereImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/sphere.png"), contentMgr);
+		csgSphere->setSize(32, 32);
+		csgSphere->setImage(csgSphereImage);
+
+		_layoutMain->addControl(csgSphere);
+
+		/* CSG cylinder */
+
+		Button* csgCylinder = new Button();
+		Core::Texture2D* csgCylinderImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cylinder.png"), contentMgr);
+		csgCylinder->setSize(32, 32);
+		csgCylinder->setImage(csgCylinderImage);
+
+		_layoutMain->addControl(csgCylinder);
+
+		/* CSG cone */
+
+		Button* csgCone = new Button();
+		Core::Texture2D* csgConeImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cone.png"), contentMgr);
+		csgCone->setSize(32, 32);
+		csgCone->setImage(csgConeImage);
+
+		_layoutMain->addControl(csgCone);
+
+		/* CSG stair */
+
+		Button* csgStair = new Button();
+		Core::Texture2D* csgStairImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/stairs.png"), contentMgr);
+		csgStair->setSize(32, 32);
+		csgStair->setImage(csgStairImage);
+
+		_layoutMain->addControl(csgStair);
 	}
 
 	ObjectWindow::~ObjectWindow() {}
-
-	void ObjectWindow::disableAll()
-	{
-		for (int i = 0; i < layoutMain->getControlsCount(); ++i)
-		{
-			Button* button = (Button*)layoutMain->getControl(i);
-			button->setActive(false);
-		}
-	}
-
-	bool ObjectWindow::setModifier(uint32_t name)
-	{
-		ModifierManager* modMgr = ModifierManager::singleton();
-
-		if (modMgr->getCurrentModifierName() == name)
-		{
-			modMgr->unsetCurrentModifier();
-			return false;
-		}
-
-		modMgr->setCurrentModifier(name);
-		return true;
-	}
 } // namespace Editor

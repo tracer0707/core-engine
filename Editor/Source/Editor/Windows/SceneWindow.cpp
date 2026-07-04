@@ -13,9 +13,8 @@
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
 #include "../CameraController.h"
-#include "../Modifiers/ModifierManager.h"
-#include "../Modifiers/CSGModifier.h"
 
+#include "../../CSG/CSGBuilder.h"
 #include "../../CSG/CSGModel.h"
 
 #include "WindowManager.h"
@@ -27,18 +26,11 @@ namespace Editor
 		_style.paddingX = 0;
 		_style.paddingY = 0;
 
-		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=] ()
-		{
-			ModifierManager* modMgr = ModifierManager::singleton();
-			if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
+		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=]() {
+			CSGModel* model = CSGBuilder::singleton()->getCurrentModel();
+			if (model != nullptr)
 			{
-				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
-				CSGModel* model = mod->getCurrentModel();
-
-				if (model != nullptr)
-				{
-					model->rebuild();
-				}
+				model->rebuild();
 			}
 		});
 	}
@@ -83,8 +75,7 @@ namespace Editor
 		Editor::Gizmo::singleton()->update(_camera, isHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
 		Editor::ObjectPicker::update(isHovered, isGizmoWasUsed, offsetX, offsetY);
 
-		if (!_parent->getInputManager()->getMouseButton(0) &&
-			!_parent->getInputManager()->getMouseButton(1) &&
+		if (!_parent->getInputManager()->getMouseButton(0) && !_parent->getInputManager()->getMouseButton(1) &&
 			!_parent->getInputManager()->getMouseButton(2))
 		{
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
@@ -108,4 +99,4 @@ namespace Editor
 			}
 		}
 	}
-}
+} // namespace Editor

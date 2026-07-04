@@ -13,8 +13,7 @@
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
-#include "../Modifiers/ModifierManager.h"
-#include "../Modifiers/CSGModifier.h"
+#include "../../CSG/CSGBuilder.h"
 
 #include "../../Utils/TextureUtils.h"
 
@@ -22,10 +21,7 @@ namespace Editor
 {
 	CSGEditWindow::CSGEditWindow(WindowManager* parent) : Window(parent, CSG_EDIT_WINDOW)
 	{
-		ModifierManager* modMgr = ModifierManager::singleton();
 		Core::ContentManager* contentMgr = parent->getContentManager();
-
-		_modifier = (CSGModifier*)modMgr->getModifier(CSGModifier::NAME);
 
 		/* Layout */
 
@@ -42,7 +38,7 @@ namespace Editor
 		_csgSelectBtn->setImage(csgAddBtnImage);
 		_csgSelectBtn->setOnClick([this] {
 			activateAll(false);
-			_modifier->setEditMode(CSGModifier::EditMode::Select);
+			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::Select);
 			_csgSelectBtn->setActive(true);
 		});
 
@@ -57,7 +53,7 @@ namespace Editor
 		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
 		csgEditPointsBtn->setOnClick([this, csgEditPointsBtn] {
 			activateAll(false);
-			_modifier->setEditMode(CSGModifier::EditMode::EditVertices);
+			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::EditVertices);
 			csgEditPointsBtn->setActive(true);
 		});
 
@@ -72,7 +68,7 @@ namespace Editor
 		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
 		csgEditEdgesBtn->setOnClick([this, csgEditEdgesBtn] {
 			activateAll(false);
-			_modifier->setEditMode(CSGModifier::EditMode::EditEdges);
+			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::EditEdges);
 			csgEditEdgesBtn->setActive(true);
 		});
 
@@ -87,7 +83,7 @@ namespace Editor
 		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
 		csgEditFacesBtn->setOnClick([this, csgEditFacesBtn] {
 			activateAll(false);
-			_modifier->setEditMode(CSGModifier::EditMode::EditFaces);
+			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::EditFaces);
 			csgEditFacesBtn->setActive(true);
 		});
 
@@ -106,11 +102,11 @@ namespace Editor
 	{
 		enableAll(false);
 
-		if (_modifier->getCurrentModel() != nullptr)
+		if (CSGBuilder::singleton()->getCurrentModel() != nullptr)
 		{
 			_csgSelectBtn->setEnabled(true);
 
-			if (_modifier->getCurrentBrush() != nullptr)
+			if (CSGBuilder::singleton()->getCurrentBrush() != nullptr)
 			{
 				enableAll(true);
 			}

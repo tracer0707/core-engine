@@ -10,116 +10,102 @@
 #include <Core/Components/Transform.h>
 #include <Core/Renderer/VertexBuffer.h>
 
-#include "../Editor/Modifiers/ModifierManager.h"
-#include "../Editor/Modifiers/CSGModifier.h"
+#include "../CSG/CSGBuilder.h"
 #include "../CSG/CSGModel.h"
 #include "../CSG/CSGBrush.h"
 
 namespace Editor
 {
-    bool Raycast::hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit)
-    {
-        bool hit = false;
+	bool Raycast::hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit)
+	{
+		bool hit = false;
 
-        ModifierManager* modMgr = ModifierManager::singleton();
+		Core::List<std::pair<Core::Object*, float>> boundsIntersected;
+		Core::List<Core::Object*>& objects = scene->getObjects();
 
-        Core::List<std::pair<Core::Object*, float>> boundsIntersected;
-        Core::List<Core::Object*>& objects = scene->getObjects();
+		for (auto* obj : objects)
+		{
+			Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
+			if (meshRenderer == nullptr) continue;
 
-        for (auto* obj : objects)
-        {
-            /*if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
-            {
-                    if (!obj->getFlags().getBit(LAYER_CSG)) continue;
-            }*/
+			auto aab = meshRenderer->getWorldBoundingBox();
+			auto boundsHit = aab.intersects(ray.origin, ray.direction);
 
-            Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
-            if (meshRenderer == nullptr) continue;
+			if (boundsHit.first)
+			{
+				boundsIntersected.add(std::make_pair(obj, boundsHit.second));
+			}
+		}
 
-            auto aab = meshRenderer->getWorldBoundingBox();
-            auto boundsHit = aab.intersects(ray.origin, ray.direction);
+		boundsIntersected.sort([=](std::pair<Core::Object*, float>& a, std::pair<Core::Object*, float>& b) -> bool { return a.second < b.second; });
 
-            if (boundsHit.first)
-            {
-                boundsIntersected.add(std::make_pair(obj, boundsHit.second));
-            }
-        }
+		for (auto& b : boundsIntersected)
+		{
+			Core::Object* obj = b.first;
+			Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
+			Core::Transform* transform = obj->findComponent<Core::Transform*>();
+			Core::Mesh* mesh = meshRenderer->getMesh();
 
-        boundsIntersected.sort([=](std::pair<Core::Object*, float>& a, std::pair<Core::Object*, float>& b) -> bool { return a.second < b.second; });
+			if (transform == nullptr) continue;
 
-        for (auto& b : boundsIntersected)
-        {
-            Core::Object* obj = b.first;
-            Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
-            Core::Transform* transform = obj->findComponent<Core::Transform*>();
-            Core::Mesh* mesh = meshRenderer->getMesh();
+			glm::mat4 mtx = transform->getTransformMatrix();
+			Core::Uuid brushId;
 
-            if (transform == nullptr) continue;
+			if (meshTest(ray, mesh, mtx, &brushId))
+			{
+				outHit->brushId = brushId;
+				outHit->object = obj;
+				return true;
+			}
+		}
 
-            glm::mat4 mtx = transform->getTransformMatrix();
-            Core::Uuid brushId;
+		return false;
+	}
 
-            if (meshTest(ray, mesh, mtx, &brushId))
-            {
-                outHit->brushId = brushId;
-                outHit->object = obj;
-                return true;
-            }
-        }
+	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, Core::Uuid* brushId)
+	{
+		CSGModel* csgModel = nullptr;
 
-        return false;
-    }
+		for (int i = 0; i < CSGBuilder::singleton()->getNumModels(); ++i)
+		{
+			CSGModel* mdl = CSGBuilder::singleton()->getModel(i);
+			if (mdl->getMeshRenderer()->getMesh() == mesh)
+			{
+				csgModel = mdl;
+			}
+		}
 
-    bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, Core::Uuid* brushId)
-    {
-        CSGModel* csgModel = nullptr;
+		for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
+		{
+			Core::SubMesh* subMesh = mesh->getSubMesh(i);
+			Core::VertexBuffer* vb = subMesh->getVertexBuffer();
 
-        ModifierManager* modMgr = ModifierManager::singleton();
+			int sz = vb->indexArraySize > 0 ? vb->indexArraySize : vb->vertexArraySize;
 
-        if (modMgr->getCurrentModifierName() == CSGModifier::NAME)
-        {
-            CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
-            for (int i = 0; i < mod->getNumModels(); ++i)
-            {
-                CSGModel* mdl = mod->getModel(i);
-                if (mdl->getMeshRenderer()->getMesh() == mesh)
-                {
-                    csgModel = mdl;
-                }
-            }
-        }
+			for (int j = 0; j < sz; j += 3)
+			{
+				Core::Vertex& v1 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j] : j];
+				Core::Vertex& v2 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 1] : j + 1];
+				Core::Vertex& v3 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 2] : j + 2];
 
-        for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
-        {
-            Core::SubMesh* subMesh = mesh->getSubMesh(i);
-            Core::VertexBuffer* vb = subMesh->getVertexBuffer();
+				glm::vec3 p1 = mtx * glm::vec4(v1.position, 1.0f);
+				glm::vec3 p2 = mtx * glm::vec4(v2.position, 1.0f);
+				glm::vec3 p3 = mtx * glm::vec4(v3.position, 1.0f);
 
-            int sz = vb->indexArraySize > 0 ? vb->indexArraySize : vb->vertexArraySize;
+				std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, true);
 
-            for (int j = 0; j < sz; j += 3)
-            {
-                Core::Vertex& v1 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j] : j];
-                Core::Vertex& v2 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 1] : j + 1];
-                Core::Vertex& v3 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 2] : j + 2];
+				if (hit.first)
+				{
+					if (csgModel != nullptr)
+					{
+						*brushId = csgModel->getBrushId(subMesh, j);
+					}
 
-                glm::vec3 p1 = mtx * glm::vec4(v1.position, 1.0f);
-                glm::vec3 p2 = mtx * glm::vec4(v2.position, 1.0f);
-                glm::vec3 p3 = mtx * glm::vec4(v3.position, 1.0f);
+					return true;
+				}
+			}
+		}
 
-                std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, true);
-
-                if (hit.first)
-                {
-                    if (csgModel != nullptr)
-                    {
-                        *brushId = csgModel->getBrushId(subMesh, j);
-                    }
-
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+		return false;
+	}
 } // namespace Editor

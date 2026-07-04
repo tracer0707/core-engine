@@ -20,19 +20,16 @@
 #include "../Editor/Windows/MainMenu.h"
 #include "../Editor/Windows/SceneWindow.h"
 #include "../Editor/Windows/ObjectWindow.h"
-#include "../Editor/Windows/CSGObjectWindow.h"
 #include "../Editor/Windows/InspectorWindow.h"
 #include "../Editor/Windows/HierarchyWindow.h"
 #include "../Editor/Windows/ContentWindow.h"
 #include "../Editor/Windows/GizmoWindow.h"
 #include "../Editor/Windows/CSGEditWindow.h"
 #include "../Editor/Windows/ContentImportWindow.h"
-
-#include "../Editor/Modifiers/ModifierManager.h"
-#include "../Editor/Modifiers/CSGModifier.h"
-
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
+
+#include "../CSG/CSGBuilder.h"
 
 #include "../Shared/IconsForkAwesome.h"
 
@@ -65,8 +62,6 @@ namespace Editor
 		_windowManager->setInputManager(_inputManager);
 		_windowManager->setEventHandler(_eventHandler);
 
-		_csgModifier = ModifierManager::singleton()->addModifier<CSGModifier*>();
-
 		_mainMenu = new MainMenu();
 		_windowManager->setMenuBar(_mainMenu->getMenuBar());
 
@@ -93,19 +88,11 @@ namespace Editor
 		_objectWindow->setCanAcceptDocking(false);
 		_objectWindow->setCanDock(false);
 
-		_csgObjectWindow = _windowManager->addWindow<CSGObjectWindow*>();
-		_csgObjectWindow->setHasTitle(false);
-		_csgObjectWindow->setCanAcceptDocking(false);
-		_csgObjectWindow->setCanDock(false);
-		_csgObjectWindow->setVisible(false);
-
 		_csgEditWindow = _windowManager->addWindow<CSGEditWindow*>();
 		_csgEditWindow->setHasTitle(false);
 		_csgEditWindow->setCanAcceptDocking(false);
 		_csgEditWindow->setCanDock(false);
 		_csgEditWindow->setVisible(false);
-
-		ModifierManager::singleton()->init(_windowManager, _scene);
 
 		_windowManager->setOnDock([this] {
 			auto dockInspector = _inspectorWindow->dock(DockDirection::Right, 0, 0.25f);
@@ -115,11 +102,13 @@ namespace Editor
 		});
 
 		_windowManager->initWindows();
+
+		CSGBuilder::singleton()->init(_windowManager, _renderer, _scene, _contentManager);
 	}
 
 	EditorApp::MainWindow::~MainWindow()
 	{
-		ModifierManager::singleton()->destroy();
+		CSGBuilder::singleton()->destroy();
 
 		_renderer->deleteBuffer(_gridBuffer);
 
@@ -133,8 +122,6 @@ namespace Editor
 
 	void EditorApp::MainWindow::update()
 	{
-		ModifierManager::singleton()->update();
-
 		//** Render scene begin **//
 		_camera->getRenderTexture()->bind();
 
@@ -145,7 +132,7 @@ namespace Editor
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
 		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
-		ModifierManager::singleton()->render();
+
 		_scene->render();
 
 		_renderer->bindFrameBuffer(nullptr);

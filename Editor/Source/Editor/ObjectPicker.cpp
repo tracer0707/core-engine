@@ -10,12 +10,11 @@
 #include "Gizmo.h"
 #include "Windows/WindowManager.h"
 #include "Windows/HierarchyWindow.h"
-#include "Modifiers/ModifierManager.h"
-#include "Modifiers/CSGModifier.h"
 #include "Controls/TreeView.h"
 
 #include "../Shared/Tags.h"
 #include "../SceneUtils/Raycast.h"
+#include "../CSG/CSGBuilder.h"
 #include "../CSG/CSGModel.h"
 #include "../CSG/CSGBrush.h"
 
@@ -107,26 +106,21 @@ namespace Editor
 		HierarchyWindow* wnd = (HierarchyWindow*)_windowManager->getWindow(HIERARCHY_WINDOW);
 		TreeView* treeView = wnd->getTreeView();
 
-		ModifierManager* modMgr = ModifierManager::singleton();
-
 		if (hit.object != nullptr)
 		{
-			if (modMgr->getCurrentModifierName() == CSGModifier::NAME && !hit.brushId.isNil())
+			CSGBuilder* csgBuilder = CSGBuilder::singleton();
+
+			for (int i = 0; i < csgBuilder->getNumModels(); ++i)
 			{
-				CSGModifier* mod = (CSGModifier*)modMgr->getCurrentModifier();
+				CSGModel* model = csgBuilder->getModel(i);
+				CSGBrush* brush = model->findBrush(hit.brushId);
 
-				for (int i = 0; i < mod->getNumModels(); ++i)
+				if (brush != nullptr)
 				{
-					CSGModel* model = mod->getModel(i);
-					CSGBrush* brush = model->findBrush(hit.brushId);
+					TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
+					treeView->selectNode(node, true);
 
-					if (brush != nullptr)
-					{
-						TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
-						treeView->selectNode(node, true);
-
-						break;
-					}
+					break;
 				}
 			}
 		}

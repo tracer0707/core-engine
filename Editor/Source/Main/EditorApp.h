@@ -21,14 +21,12 @@ namespace Editor
 	class MainMenu;
 	class SceneWindow;
 	class ObjectWindow;
-	class CSGObjectWindow;
 	class InspectorWindow;
 	class HierarchyWindow;
 	class ContentWindow;
 	class ContentImportWindow;
 	class GizmoWindow;
 	class CSGEditWindow;
-	class CSGModifier;
 	class Font;
 
 	class EditorApp : public Core::Application
@@ -57,15 +55,12 @@ namespace Editor
 					MainMenu* _mainMenu = nullptr;
 					SceneWindow* _sceneWindow = nullptr;
 					ObjectWindow* _objectWindow = nullptr;
-					CSGObjectWindow* _csgObjectWindow = nullptr;
 					InspectorWindow* _inspectorWindow = nullptr;
 					HierarchyWindow* _hierarchyWindow = nullptr;
 					ContentWindow* _contentWindow = nullptr;
 					ContentImportWindow* _contentImportWindow = nullptr;
 					GizmoWindow* _gizmoWindow = nullptr;
 					CSGEditWindow* _csgEditWindow = nullptr;
-
-					CSGModifier* _csgModifier = nullptr;
 			};
 
 			Font* _mainFont = nullptr;

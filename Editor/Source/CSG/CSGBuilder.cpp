@@ -1,4 +1,4 @@
-#include "CSGModifier.h"
+#include "CSGBuilder.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -11,55 +11,47 @@
 #include <Core/Renderer/Primitives.h>
 #include <Core/Renderer/Color.h>
 
-#include "../Windows/WindowManager.h"
-#include "../Windows/HierarchyWindow.h"
-#include "../Windows/CSGObjectWindow.h"
-#include "../Windows/CSGEditWindow.h"
+#include "CSGModel.h"
+#include "CSGBrush.h"
+#include "CSGBrushCube.h"
 
-#include "../Controls/TreeView.h"
-#include "../Controls/TreeNode.h"
+#include "../Editor/Windows/WindowManager.h"
+#include "../Editor/Windows/HierarchyWindow.h"
+#include "../Editor/Windows/CSGEditWindow.h"
 
-#include "ModifierManager.h"
-#include "ModifierList.h"
+#include "../Editor/Controls/TreeView.h"
+#include "../Editor/Controls/TreeNode.h"
 
-#include "../Gizmo.h"
-
-#include "../../Shared/Tags.h"
-#include "../../CSG/CSGModel.h"
-#include "../../CSG/CSGBrush.h"
-#include "../../CSG/CSGBrushCube.h"
+#include "../Editor/Gizmo.h"
+#include "../Shared/Tags.h"
 
 namespace Editor
 {
-	uint32_t CSGModifier::NAME = CSG_MODIFIER;
+	CSGBuilder CSGBuilder::_singleton;
 
-	CSGModifier::CSGModifier() : Modifier(NAME) {}
+	CSGBuilder::CSGBuilder() {}
 
-	CSGModifier::~CSGModifier()
+	CSGBuilder::~CSGBuilder() {}
+
+	void CSGBuilder::init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager)
 	{
-		_renderer->deleteBuffer(_wireframeBuffer);
-	}
+		_windowManager = windowManager;
+		_renderer = renderer;
+		_scene = scene;
+		_contentManager = contentManager;
 
-	void CSGModifier::init(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager)
-	{
-		Modifier::init(renderer, scene, contentManager);
-
-		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
-
-		_hierarchyWindow = (HierarchyWindow*)winMgr->getWindow(HIERARCHY_WINDOW);
-		_csgObjectWindow = (CSGObjectWindow*)winMgr->getWindow(CSG_OBJECT_WINDOW);
-		_csgEditWindow = (CSGEditWindow*)winMgr->getWindow(CSG_EDIT_WINDOW);
+		_hierarchyWindow = (HierarchyWindow*)_windowManager->getWindow(HIERARCHY_WINDOW);
+		_csgEditWindow = (CSGEditWindow*)_windowManager->getWindow(CSG_EDIT_WINDOW);
 
 		_wireframeBuffer = renderer->createBuffer(nullptr, 2048, nullptr, 0);
 	}
 
-	void CSGModifier::enableWindows(bool enable)
+	void CSGBuilder::destroy()
 	{
-		_csgObjectWindow->setVisible(enable);
-		_csgEditWindow->setVisible(enable);
+		_renderer->deleteBuffer(_wireframeBuffer);
 	}
 
-	void CSGModifier::addModel()
+	void CSGBuilder::addModel()
 	{
 		_currentBrush = nullptr;
 		_currentModel = new CSGModel(_renderer, _scene, _contentManager);
@@ -73,12 +65,9 @@ namespace Editor
 		modelNode->setObjectTag(TAG_CSG_MODEL, _currentModel);
 		tree->addControl(modelNode);
 		tree->selectNode(modelNode);
-
-		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
-		winMgr->invalidateAll();
 	}
 
-	void CSGModifier::addBrush(BrushType brushType)
+	void CSGBuilder::addBrush(BrushType brushType)
 	{
 		CSGBrush* newBrush = nullptr;
 
@@ -109,14 +98,11 @@ namespace Editor
 
 		modelNode->addControl(brushNode);
 		tree->selectNode(brushNode);
-
-		WindowManager* winMgr = ModifierManager::singleton()->getWindowManager();
-		winMgr->invalidateAll();
 	}
 
-	void CSGModifier::update() {}
+	void CSGBuilder::update() {}
 
-	void CSGModifier::render()
+	void CSGBuilder::render()
 	{
 		if (_currentBrush == nullptr) return;
 

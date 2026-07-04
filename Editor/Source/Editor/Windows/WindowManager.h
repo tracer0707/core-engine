@@ -25,7 +25,6 @@ namespace Editor
 	class ContentWindow;
 	class ContentImportWindow;
 	class CSGEditWindow;
-	class CSGObjectWindow;
 	class GizmoWindow;
 	class HierarchyWindow;
 	class InspectorWindow;
@@ -104,12 +103,6 @@ namespace Editor
 	inline CSGEditWindow* WindowManager::addWindow<CSGEditWindow*>()
 	{
 		return (CSGEditWindow*)addWindow(CSG_EDIT_WINDOW);
-	}
-
-	template <>
-	inline CSGObjectWindow* WindowManager::addWindow<CSGObjectWindow*>()
-	{
-		return (CSGObjectWindow*)addWindow(CSG_OBJECT_WINDOW);
 	}
 
 	template <>

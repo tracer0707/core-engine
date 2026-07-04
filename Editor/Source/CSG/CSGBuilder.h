@@ -2,22 +2,23 @@
 
 #include <Core/Shared/List.h>
 
-#include "Modifier.h"
-
 namespace Core
 {
+	class Renderer;
+	class Scene;
+	class ContentManager;
 	class VertexBuffer;
 } // namespace Core
 
 namespace Editor
 {
+	class WindowManager;
 	class HierarchyWindow;
-	class CSGObjectWindow;
 	class CSGEditWindow;
 	class CSGModel;
 	class CSGBrush;
 
-	class CSGModifier : public Modifier
+	class CSGBuilder
 	{
 		public:
 			enum class EditMode
@@ -41,8 +42,12 @@ namespace Editor
 		private:
 			EditMode _editMode = EditMode::Select;
 
+			Core::Renderer* _renderer = nullptr;
+			Core::Scene* _scene = nullptr;
+			Core::ContentManager* _contentManager = nullptr;
+
+			WindowManager* _windowManager = nullptr;
 			HierarchyWindow* _hierarchyWindow = nullptr;
-			CSGObjectWindow* _csgObjectWindow = nullptr;
 			CSGEditWindow* _csgEditWindow = nullptr;
 
 			Core::List<CSGModel*> _models;
@@ -52,13 +57,13 @@ namespace Editor
 
 			Core::VertexBuffer* _wireframeBuffer = nullptr;
 
-			virtual void enableWindows(bool enable);
+			static CSGBuilder _singleton;
 
 		public:
-			CSGModifier();
-			virtual ~CSGModifier();
+			CSGBuilder();
+			~CSGBuilder();
 
-			static uint32_t NAME;
+			static CSGBuilder* singleton() { return &_singleton; }
 
 			void setEditMode(EditMode value) { _editMode = value; }
 			EditMode getEditMode() { return _editMode; }
@@ -66,7 +71,7 @@ namespace Editor
 			void addModel();
 			void addBrush(BrushType brushType);
 
-			int getNumModels() { return _models.count(); }
+			size_t getNumModels() { return _models.count(); }
 			CSGModel* getModel(int index) { return _models.get(index); }
 			void removeModel(CSGModel* value) { _models.remove(value); }
 
@@ -76,8 +81,9 @@ namespace Editor
 			CSGBrush* getCurrentBrush() { return _currentBrush; }
 			void setCurrentBrush(CSGBrush* value) { _currentBrush = value; }
 
-			virtual void init(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
-			virtual void update();
-			virtual void render();
+			void init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
+			void destroy();
+			void update();
+			void render();
 	};
 } // namespace Editor
