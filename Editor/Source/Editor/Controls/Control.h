@@ -29,6 +29,10 @@ namespace Editor
 			float _width = 0;
 			float _height = 0;
 
+			bool _isDragDropSource = false;
+			bool _isDragDropTarget = false;
+			void* _dragDropSourceData = nullptr;
+
 		public:
 			Control();
 			virtual ~Control();
@@ -55,6 +59,13 @@ namespace Editor
 
 			void setStringTag(int key, Core::String value);
 			Core::String getStringTag(int key) const;
+
+			void setDragDropSource(bool value, void* data = nullptr);
+			bool getIsDragDropSource() const { return _isDragDropSource; }
+			const void* getDragDropSourceData() const { return _dragDropSourceData; }
+
+			bool getIsDragDropTarget() const { return _isDragDropTarget; }
+			void setDragDropTarget(bool value) { _isDragDropTarget = value; }
 
 			const std::map<int, void*>& getObjectTags() const { return _objectTags; }
 			const std::map<int, Core::String>& getStringTags() const { return _stringTags; }

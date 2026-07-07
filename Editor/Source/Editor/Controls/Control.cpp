@@ -49,4 +49,10 @@ namespace Editor
 
 		return _stringTags.at(key);
 	}
+
+	void Control::setDragDropSource(bool value, void* data)
+	{
+		_isDragDropSource = value;
+		_dragDropSourceData = data;
+	}
 } // namespace Editor
