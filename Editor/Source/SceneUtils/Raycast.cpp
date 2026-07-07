@@ -66,12 +66,11 @@ namespace Editor
 	{
 		CSGModel* csgModel = nullptr;
 
-		for (int i = 0; i < CSGBuilder::singleton()->getNumModels(); ++i)
+		for (auto model : CSGBuilder::singleton()->getModels())
 		{
-			CSGModel* mdl = CSGBuilder::singleton()->getModel(i);
-			if (mdl->getMeshRenderer()->getMesh() == mesh)
+			if (model->getMeshRenderer()->getMesh() == mesh)
 			{
-				csgModel = mdl;
+				csgModel = model;
 			}
 		}
 

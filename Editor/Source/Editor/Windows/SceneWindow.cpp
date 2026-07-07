@@ -32,13 +32,7 @@ namespace Editor
 
 		addControl(_image);
 
-		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=]() {
-			CSGModel* model = CSGBuilder::singleton()->getCurrentModel();
-			if (model != nullptr)
-			{
-				model->rebuild();
-			}
-		});
+		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=]() { CSGBuilder::singleton()->rebuild(); });
 	}
 
 	SceneWindow::~SceneWindow() {}
@@ -106,15 +100,15 @@ namespace Editor
 	{
 		if (data->key == "CSG Cube")
 		{
-			// CSGBuilder::singleton()->createCube();
+			CSGBuilder::singleton()->addBrush(CSGBuilder::BrushType::Cube);
 		}
 		else if (data->key == "CSG Sphere")
 		{
-			// CSGBuilder::singleton()->createSphere();
+			CSGBuilder::singleton()->addBrush(CSGBuilder::BrushType::Sphere);
 		}
 		else if (data->key == "CSG Cylinder")
 		{
-			// CSGBuilder::singleton()->createCylinder();
+			CSGBuilder::singleton()->addBrush(CSGBuilder::BrushType::Cylinder);
 		}
 	}
 } // namespace Editor

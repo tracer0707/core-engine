@@ -14,35 +14,41 @@ namespace Core
 
 	class Object
 	{
-		friend class Scene;
+			friend class Scene;
 
-	private:
-		Object(Renderer* renderer);
-		~Object();
+		private:
+			Object(Renderer* renderer);
+			~Object();
 
-		Renderer* _renderer = nullptr;
-		List<Component*> _components;
-		BitSet _flags;
+			Renderer* _renderer = nullptr;
+			List<Component*> _components;
+			Transform* _transform = nullptr;
+			BitSet _flags;
 
-		Component* addComponent(unsigned int type);
+			Component* addComponent(unsigned int type);
 
-	public:
-		List<Component*>& getComponents() { return _components; }
+		public:
+			List<Component*>& getComponents() { return _components; }
 
-		void update(float& dt);
-		void render(Camera* camera);
+			void update(float& dt);
+			void render(Camera* camera);
 
-		void removeComponent(Component* component);
+			void removeComponent(Component* component);
 
-		template <typename T>
-		T addComponent() {}
+			template <typename T>
+			T addComponent()
+			{
+			}
 
-		template <typename T>
-		T findComponent() {}
+			template <typename T>
+			T findComponent() const
+			{
+			}
 
-		Component* findComponent(unsigned int type);
+			Transform* getTransform() const { return _transform; }
+			Component* findComponent(unsigned int type) const;
 
-		BitSet& getFlags() { return _flags; }
+			BitSet& getFlags() { return _flags; }
 	};
 
 	/* ADD */
@@ -66,20 +72,20 @@ namespace Core
 
 	/* FIND */
 	template <>
-	inline Camera* Object::findComponent<Camera*>()
+	inline Camera* Object::findComponent<Camera*>() const
 	{
 		return (Camera*)findComponent(COMPONENT_CAMERA);
 	}
 
 	template <>
-	inline MeshRenderer* Object::findComponent<MeshRenderer*>()
+	inline MeshRenderer* Object::findComponent<MeshRenderer*>() const
 	{
 		return (MeshRenderer*)findComponent(COMPONENT_MESHRENDERER);
 	}
 
 	template <>
-	inline Transform* Object::findComponent<Transform*>()
+	inline Transform* Object::findComponent<Transform*>() const
 	{
 		return (Transform*)findComponent(COMPONENT_TRANSFORM);
 	}
-}
+} // namespace Core

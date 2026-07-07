@@ -18,17 +18,17 @@ namespace Editor
 	Core::Uuid Gizmo::subscribeManipulateEndEvent(GizmoEvent callback)
 	{
 		Core::Uuid uuid = Core::Uuid::create();
-		manipulateEndEvents.push_back(std::make_pair(uuid, callback));
+		_manipulateEndEvents.push_back(std::make_pair(uuid, callback));
 
 		return uuid;
 	}
 
 	void Gizmo::unsubscribeManipulateEndEvent(Core::Uuid id)
 	{
-		auto it = std::find_if(manipulateEndEvents.begin(), manipulateEndEvents.end(),
+		auto it = std::find_if(_manipulateEndEvents.begin(), _manipulateEndEvents.end(),
 							   [=](std::pair<Core::Uuid, GizmoEvent>& evt) -> bool { return evt.first == id; });
 
-		if (it != manipulateEndEvents.end()) manipulateEndEvents.erase(it);
+		if (it != _manipulateEndEvents.end()) _manipulateEndEvents.erase(it);
 	}
 
 	void Gizmo::init(Core::InputManager* inputManager)
@@ -54,7 +54,7 @@ namespace Editor
 			{
 				if (_isUsing && _lmbDown && _wasMoved)
 				{
-					for (auto& it : manipulateEndEvents)
+					for (auto& it : _manipulateEndEvents)
 					{
 						it.second();
 					}
@@ -64,6 +64,12 @@ namespace Editor
 				_wasMoved = false;
 			}
 		});
+	}
+
+	void Gizmo::setObject(ObjectType type, void* value)
+	{
+		_objectType = type;
+		_object = value;
 	}
 
 	void Gizmo::update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed)
@@ -104,7 +110,8 @@ namespace Editor
 		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
 		float boundsSnap[] = {0.1f, 0.1f, 0.1f};
 
-		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) && !_inputManager->getMouseButton(2));
+		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) &&
+						 !_inputManager->getMouseButton(2));
 		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentContext()->CurrentWindow);
 		ImGuizmo::BeginFrame();
 

@@ -12,64 +12,77 @@ namespace Core
 	class Camera;
 	class Transformable;
 	class InputManager;
-}
+} // namespace Core
 
 namespace Editor
 {
 	class Gizmo
 	{
-	public:
-		enum class TransformSpace
-		{
-			Local,
-			World,
-		};
+		public:
+			enum class TransformSpace
+			{
+				Local,
+				World,
+			};
 
-		enum class TransformMode
-		{
-			Select,
-			Translate,
-			Rotate,
-			Scale
-		};
+			enum class TransformMode
+			{
+				Select,
+				Translate,
+				Rotate,
+				Scale
+			};
 
-		typedef std::function<void()> GizmoEvent;
+			enum class ObjectType
+			{
+				None,
+				SceneObject,
+				CSGBrush
+			};
 
-	private:
-		TransformSpace _transformSpace = TransformSpace::World;
-		TransformMode _transformMode = TransformMode::Translate;
+			typedef std::function<void()> GizmoEvent;
 
-		static Gizmo _singleton;
+		private:
+			TransformSpace _transformSpace = TransformSpace::World;
+			TransformMode _transformMode = TransformMode::Translate;
 
-		Core::InputManager* _inputManager = nullptr;
-		Core::Transformable* _transform = nullptr;
+			static Gizmo _singleton;
 
-		bool _enabled = true;
-		bool _isUsing = false;
-		bool _lmbDown = false;
-		bool _wasMoved = false;
+			Core::InputManager* _inputManager = nullptr;
+			Core::Transformable* _transform = nullptr;
+			ObjectType _objectType = ObjectType::None;
+			void* _object = nullptr;
 
-		std::vector<std::pair<Core::Uuid, GizmoEvent>> manipulateEndEvents;
+			bool _enabled = true;
+			bool _isUsing = false;
+			bool _lmbDown = false;
+			bool _wasMoved = false;
 
-	public:
-		static Gizmo* singleton() { return &_singleton; }
+			std::vector<std::pair<Core::Uuid, GizmoEvent>> _manipulateEndEvents;
 
-		void setEnabled(bool value) { _enabled = value; }
-		bool isEnabled() const { return _enabled; }
+		public:
+			static Gizmo* singleton() { return &_singleton; }
 
-		void setTransform(Core::Transformable* value) { _transform = value; }
-		Core::Transformable* getTransform() { return _transform; }
+			void setEnabled(bool value) { _enabled = value; }
+			bool isEnabled() const { return _enabled; }
 
-		TransformSpace getTransformSpace() const { return _transformSpace; }
-		void setTransformSpace(TransformSpace value) { _transformSpace = value; }
+			void setTransform(Core::Transformable* value) { _transform = value; }
+			Core::Transformable* getTransform() { return _transform; }
 
-		TransformMode getTransformMode() const { return _transformMode; }
-		void setTransformMode(TransformMode value) { _transformMode = value; }
+			void setObject(ObjectType type, void* value);
+			void* getObject() const { return _object; }
+			ObjectType getObjectType() const { return _objectType; }
 
-		Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
-		void unsubscribeManipulateEndEvent(Core::Uuid id);
+			TransformSpace getTransformSpace() const { return _transformSpace; }
+			void setTransformSpace(TransformSpace value) { _transformSpace = value; }
 
-		void init(Core::InputManager* inputManager);
-		void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
+			TransformMode getTransformMode() const { return _transformMode; }
+			void setTransformMode(TransformMode value) { _transformMode = value; }
+
+			Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
+			void unsubscribeManipulateEndEvent(Core::Uuid id);
+
+			void init(Core::InputManager* inputManager);
+			void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
 	};
-}
+} // namespace Editor

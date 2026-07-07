@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Shared/List.h>
+#include <Core/Shared/Uuid.h>
 
 namespace Core
 {
@@ -52,9 +53,6 @@ namespace Editor
 
 			Core::List<CSGModel*> _models;
 
-			CSGModel* _currentModel = nullptr;
-			CSGBrush* _currentBrush = nullptr;
-
 			Core::VertexBuffer* _wireframeBuffer = nullptr;
 
 			static CSGBuilder _singleton;
@@ -68,22 +66,14 @@ namespace Editor
 			void setEditMode(EditMode value) { _editMode = value; }
 			EditMode getEditMode() { return _editMode; }
 
-			void addModel();
+			const Core::List<CSGModel*>& getModels() const { return _models; }
+
 			void addBrush(BrushType brushType);
-
-			size_t getNumModels() { return _models.count(); }
-			CSGModel* getModel(int index) { return _models.get(index); }
-			void removeModel(CSGModel* value) { _models.remove(value); }
-
-			CSGModel* getCurrentModel() { return _currentModel; }
-			void setCurrentModel(CSGModel* value) { _currentModel = value; }
-
-			CSGBrush* getCurrentBrush() { return _currentBrush; }
-			void setCurrentBrush(CSGBrush* value) { _currentBrush = value; }
+			CSGBrush* findBrush(Core::Uuid brushId);
 
 			void init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
 			void destroy();
+			void rebuild();
 			void update();
-			void render();
 	};
 } // namespace Editor

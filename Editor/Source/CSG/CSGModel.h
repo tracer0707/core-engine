@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 
 #include <Core/Shared/String.h>
 #include <Core/Shared/List.h>
@@ -36,7 +36,7 @@ namespace Editor
 
 			Core::String _name = Core::String::Empty;
 			Core::List<CSGBrush*> _brushes;
-			std::map<Core::Material*, SubMeshInfo*> _subMeshes;
+			std::unordered_map<Core::Material*, SubMeshInfo*> _subMeshes;
 
 			Core::Renderer* _renderer = nullptr;
 			Core::Scene* _scene = nullptr;
@@ -60,8 +60,7 @@ namespace Editor
 
 			CSGBrushCube* createCubeBrush();
 
-			int getNumBrushes() const { return _brushes.count(); }
-			CSGBrush* getBrush(int index) const { return _brushes.get(index); }
+			const Core::List<CSGBrush*>& getBrushes() const { return _brushes; }
 			CSGBrush* findBrush(Core::Uuid brushId);
 			bool removeBrush(CSGBrush* value);
 

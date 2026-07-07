@@ -30,6 +30,7 @@
 #include "../Editor/Rendering.h"
 
 #include "../CSG/CSGBuilder.h"
+#include "../Editor/GizmoRenderer.h"
 
 #include "../Shared/IconsForkAwesome.h"
 
@@ -104,6 +105,8 @@ namespace Editor
 		_windowManager->initWindows();
 
 		CSGBuilder::singleton()->init(_windowManager, _renderer, _scene, _contentManager);
+
+		_gizmoRenderer = new GizmoRenderer(_renderer, _scene);
 	}
 
 	EditorApp::MainWindow::~MainWindow()
@@ -132,7 +135,7 @@ namespace Editor
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
 		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
-
+		_gizmoRenderer->renderGizmo();
 		_scene->render();
 
 		_renderer->bindFrameBuffer(nullptr);

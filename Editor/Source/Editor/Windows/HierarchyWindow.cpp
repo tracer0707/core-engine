@@ -34,10 +34,8 @@ namespace Editor
 			if (selected.count() == 0)
 			{
 				Gizmo::singleton()->setTransform(nullptr);
+				Gizmo::singleton()->setObject(Gizmo::ObjectType::None, nullptr);
 				setInspector(nullptr);
-
-				csgBuilder->setCurrentModel(nullptr);
-				csgBuilder->setCurrentBrush(nullptr);
 			}
 			else if (selected.count() == 1)
 			{
@@ -46,22 +44,27 @@ namespace Editor
 				Core::Transformable* transform = nullptr;
 
 				CSGBrush* brush = (CSGBrush*)node->getObjectTag(TAG_CSG_BRUSH);
-				CSGModel* model = (CSGModel*)node->getObjectTag(TAG_CSG_MODEL);
+				Core::Object* obj = (Core::Object*)node->getObjectTag(TAG_SCENE_OBJECT);
 
-				if (brush != nullptr)
+				Gizmo::ObjectType objectType = Gizmo::ObjectType::None;
+				void* gizmoObject = nullptr;
+
+				if (obj != nullptr)
+				{
+					transform = obj->getTransform();
+					objectType = Gizmo::ObjectType::SceneObject;
+					gizmoObject = (void*)obj;
+				}
+				else if (brush != nullptr)
 				{
 					transform = brush->getTransform();
-					csgBuilder->setCurrentModel(brush->getParent());
-					csgBuilder->setCurrentBrush(brush);
-				}
-				else if (model != nullptr)
-				{
-					transform = (Core::Transformable*)model->getObject()->findComponent<Core::Transform*>();
-					csgBuilder->setCurrentModel(model);
+					objectType = Gizmo::ObjectType::CSGBrush;
+					gizmoObject = (void*)brush;
 				}
 
 				setInspector(node);
 				Gizmo::singleton()->setTransform(transform);
+				Gizmo::singleton()->setObject(objectType, gizmoObject);
 			}
 
 			_parent->invalidateAll();

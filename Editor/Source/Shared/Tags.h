@@ -4,8 +4,8 @@
 #define TAG_DEFAULT 0
 #endif
 
-#ifndef TAG_CSG_MODEL
-#define TAG_CSG_MODEL 1
+#ifndef TAG_SCENE_OBJECT
+#define TAG_SCENE_OBJECT 1
 #endif
 
 #ifndef TAG_CSG_BRUSH

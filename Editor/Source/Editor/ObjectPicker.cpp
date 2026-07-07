@@ -108,20 +108,12 @@ namespace Editor
 
 		if (hit.object != nullptr)
 		{
-			CSGBuilder* csgBuilder = CSGBuilder::singleton();
+			CSGBrush* brush = CSGBuilder::singleton()->findBrush(hit.brushId);
 
-			for (int i = 0; i < csgBuilder->getNumModels(); ++i)
+			if (brush != nullptr)
 			{
-				CSGModel* model = csgBuilder->getModel(i);
-				CSGBrush* brush = model->findBrush(hit.brushId);
-
-				if (brush != nullptr)
-				{
-					TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
-					treeView->selectNode(node, true);
-
-					break;
-				}
+				TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
+				treeView->selectNode(node, true);
 			}
 		}
 		else

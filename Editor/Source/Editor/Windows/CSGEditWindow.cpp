@@ -100,17 +100,7 @@ namespace Editor
 
 	void CSGEditWindow::invalidate()
 	{
-		enableAll(false);
-
-		if (CSGBuilder::singleton()->getCurrentModel() != nullptr)
-		{
-			_csgSelectBtn->setEnabled(true);
-
-			if (CSGBuilder::singleton()->getCurrentBrush() != nullptr)
-			{
-				enableAll(true);
-			}
-		}
+		// enableAll(false);
 	}
 
 	void CSGEditWindow::activateAll(bool active)

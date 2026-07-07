@@ -10,7 +10,7 @@ namespace Core
 	Object::Object(Renderer* renderer)
 	{
 		_renderer = renderer;
-		addComponent<Core::Transform*>();
+		_transform = addComponent<Core::Transform*>();
 	}
 
 	Object::~Object()
@@ -22,6 +22,7 @@ namespace Core
 		}
 
 		_components.clear();
+		_transform = nullptr;
 		_renderer = nullptr;
 	}
 
@@ -43,7 +44,7 @@ namespace Core
 		}
 	}
 
-	Component* Object::findComponent(unsigned int type)
+	Component* Object::findComponent(unsigned int type) const
 	{
 		for (int i = 0; i < _components.count(); ++i)
 		{
