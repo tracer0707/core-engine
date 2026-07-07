@@ -54,6 +54,9 @@ namespace Editor
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/cube.png"), contentMgr);
 		csgCube->setSize(32, 32);
 		csgCube->setImage(csgCubeImage);
+		csgCube->setDragDropSource(true, "SCENE_OBJECT");
+		csgCube->setDragDropSourceLabel("CSG Cube");
+		csgCube->setDragDropSourceData({"CSG Cube", nullptr});
 
 		_layoutMain->addControl(csgCube);
 

@@ -10,34 +10,37 @@ namespace Core
 	class Scene;
 	class RenderTexture;
 	class Time;
-}
+} // namespace Core
 
 namespace Editor
 {
 	class LinearLayout;
 	class Control;
 	class Image;
+	struct DragDropData;
 
 	class SceneWindow : public Window
 	{
-	private:
-		Image* _image = nullptr;
+		private:
+			Image* _image = nullptr;
 
-		Core::Time* _time = nullptr;
-		Core::Camera* _camera = nullptr;
-		Core::Scene* _scene = nullptr;
-		Core::RenderTexture* _renderTexture = nullptr;
+			Core::Time* _time = nullptr;
+			Core::Camera* _camera = nullptr;
+			Core::Scene* _scene = nullptr;
+			Core::RenderTexture* _renderTexture = nullptr;
 
-	protected:
-		virtual void onResize(int newWidth, int newHeight);
-		virtual void onUpdate();
+			void onDragDrop(DragDropData* data);
 
-	public:
-		SceneWindow(WindowManager* parent);
-		virtual ~SceneWindow();
+		protected:
+			virtual void onResize(int newWidth, int newHeight);
+			virtual void onUpdate();
 
-		void setTime(Core::Time* time) { _time = time; }
-		void setScene(Core::Scene* scene);
-		void setRenderTexture(Core::RenderTexture* renderTexture);
+		public:
+			SceneWindow(WindowManager* parent);
+			virtual ~SceneWindow();
+
+			void setTime(Core::Time* time) { _time = time; }
+			void setScene(Core::Scene* scene);
+			void setRenderTexture(Core::RenderTexture* renderTexture);
 	};
-}
+} // namespace Editor

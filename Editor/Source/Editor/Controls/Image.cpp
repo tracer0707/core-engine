@@ -31,5 +31,8 @@ namespace Editor
 		if (texture != nullptr) texId = texture->getNativeId();
 
 		ImGui::Image((ImTextureID)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
+
+		updateDragDropSource();
+		updateDragDropTarget();
 	}
 } // namespace Editor

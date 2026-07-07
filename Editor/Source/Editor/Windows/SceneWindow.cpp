@@ -26,6 +26,12 @@ namespace Editor
 		_style.paddingX = 0;
 		_style.paddingY = 0;
 
+		_image = new Image();
+		_image->setDragDropTarget(true, "SCENE_OBJECT");
+		_image->setOnDragDrop([this](DragDropData* data) { onDragDrop(data); });
+
+		addControl(_image);
+
 		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=]() {
 			CSGModel* model = CSGBuilder::singleton()->getCurrentModel();
 			if (model != nullptr)
@@ -50,11 +56,7 @@ namespace Editor
 	void SceneWindow::setRenderTexture(Core::RenderTexture* renderTexture)
 	{
 		_renderTexture = renderTexture;
-
-		_image = new Image();
 		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
-
-		addControl(_image);
 	}
 
 	void SceneWindow::onResize(int newWidth, int newHeight)
@@ -97,6 +99,22 @@ namespace Editor
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
 			}
+		}
+	}
+
+	void SceneWindow::onDragDrop(DragDropData* data)
+	{
+		if (data->key == "CSG Cube")
+		{
+			// CSGBuilder::singleton()->createCube();
+		}
+		else if (data->key == "CSG Sphere")
+		{
+			// CSGBuilder::singleton()->createSphere();
+		}
+		else if (data->key == "CSG Cylinder")
+		{
+			// CSGBuilder::singleton()->createCylinder();
 		}
 	}
 } // namespace Editor

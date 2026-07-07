@@ -134,6 +134,9 @@ namespace Editor
 
 		ImGui::PopStyleVar();
 
+		updateDragDropSource();
+		updateDragDropTarget();
+
 		if (!_style.enabled)
 		{
 			ImGui::PopItemFlag();

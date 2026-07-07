@@ -1,5 +1,7 @@
 #include "Control.h"
 
+#include <imgui.h>
+
 #include <Core/Shared/Uuid.h>
 
 namespace Editor
@@ -7,10 +9,14 @@ namespace Editor
 	Control::Control() : Container()
 	{
 		_id = Core::Uuid::create().toString();
+		_dragDropSourceData = new DragDropData();
 	}
 
 	Control::~Control()
 	{
+		delete _dragDropSourceData;
+
+		_dragDropSourceData = nullptr;
 		_parent = nullptr;
 	}
 
@@ -50,9 +56,93 @@ namespace Editor
 		return _stringTags.at(key);
 	}
 
-	void Control::setDragDropSource(bool value, void* data)
+	void Control::setDragDropSource(bool value, Core::String key)
 	{
 		_isDragDropSource = value;
-		_dragDropSourceData = data;
+		_dragDropSourceKey = key;
+	}
+
+	void Control::setDragDropSourceData(DragDropData data)
+	{
+		_dragDropSourceData->key = data.key;
+		_dragDropSourceData->value = data.value;
+	}
+
+	void Control::setDragDropTarget(bool value, Core::String key)
+	{
+		_isDragDropTarget = value;
+		_dragDropTargetKey = key;
+	}
+
+	void Control::updateDragDropSource()
+	{
+		if (!_isDragDropSource) return;
+
+		if (ImGui::BeginDragDropSource())
+		{
+			void* data = reinterpret_cast<void*>(_dragDropSourceData);
+			ImGui::SetDragDropPayload(_dragDropSourceKey.std_str().c_str(), &data, sizeof(void*));
+			ImGui::Text(_dragDropSourceLabel.std_str().c_str());
+			ImGui::EndDragDropSource();
+		}
+	}
+
+	void Control::updateDragDropTarget()
+	{
+		if (!_isDragDropTarget) return;
+
+		DragDropData* dataGlobal = nullptr;
+		const ImGuiPayload* payloadGlobal = ImGui::GetDragDropPayload();
+		if (payloadGlobal != nullptr)
+		{
+			dataGlobal = reinterpret_cast<DragDropData*>(*(void**)payloadGlobal->Data);
+		}
+
+		if (ImGui::BeginDragDropTarget())
+		{
+			if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
+			{
+				if (!_isDragDropEnter)
+				{
+					_isDragDropEnter = true;
+					if (_onDragEnter != nullptr && dataGlobal != nullptr)
+					{
+						_onDragEnter(dataGlobal);
+					}
+				}
+				else
+				{
+					if (_onDragOver != nullptr && dataGlobal != nullptr)
+					{
+						ImVec2 mousePosAbs = ImGui::GetMousePos();
+						ImVec2 elementPosAbs = ImGui::GetItemRectMin();
+						ImVec2 mousePosRelative = ImVec2(mousePosAbs.x - elementPosAbs.x, mousePosAbs.y - elementPosAbs.y);
+						_onDragOver(dataGlobal, (int)mousePosRelative.x, (int)mousePosRelative.y);
+					}
+				}
+			}
+
+			const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(_dragDropTargetKey.std_str().c_str());
+			if (payload != nullptr)
+			{
+				if (_onDragDrop != nullptr)
+				{
+					DragDropData* data = reinterpret_cast<DragDropData*>(*(void**)payload->Data);
+					_onDragDrop(data);
+				}
+			}
+			ImGui::EndDragDropTarget();
+		}
+		else
+		{
+			if (_isDragDropEnter)
+			{
+				_isDragDropEnter = false;
+				if (_onDragExit != nullptr && dataGlobal != nullptr)
+				{
+					_onDragExit(dataGlobal);
+				}
+			}
+		}
 	}
 } // namespace Editor

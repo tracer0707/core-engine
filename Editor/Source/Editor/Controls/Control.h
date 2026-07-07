@@ -2,6 +2,7 @@
 
 #include <string>
 #include <map>
+#include <functional>
 
 #include "Container.h"
 #include "Style.h"
@@ -13,6 +14,12 @@ namespace Editor
 {
 	class Window;
 	class Container;
+
+	struct DragDropData
+	{
+			Core::String key = Core::String::Empty;
+			void* value = nullptr;
+	};
 
 	class Control : public Container
 	{
@@ -29,9 +36,23 @@ namespace Editor
 			float _width = 0;
 			float _height = 0;
 
+			Core::String _dragDropSourceKey = Core::String::Empty;
+			Core::String _dragDropSourceLabel = Core::String::Empty;
+			Core::String _dragDropTargetKey = Core::String::Empty;
+
 			bool _isDragDropSource = false;
 			bool _isDragDropTarget = false;
-			void* _dragDropSourceData = nullptr;
+			DragDropData* _dragDropSourceData = nullptr;
+
+			bool _isDragDropEnter = false;
+
+			std::function<void(DragDropData*)> _onDragDrop = nullptr;
+			std::function<void(DragDropData*)> _onDragEnter = nullptr;
+			std::function<void(DragDropData*, int, int)> _onDragOver = nullptr;
+			std::function<void(DragDropData*)> _onDragExit = nullptr;
+
+			void updateDragDropSource();
+			void updateDragDropTarget();
 
 		public:
 			Control();
@@ -60,12 +81,22 @@ namespace Editor
 			void setStringTag(int key, Core::String value);
 			Core::String getStringTag(int key) const;
 
-			void setDragDropSource(bool value, void* data = nullptr);
+			void setDragDropSource(bool value, Core::String key);
 			bool getIsDragDropSource() const { return _isDragDropSource; }
-			const void* getDragDropSourceData() const { return _dragDropSourceData; }
 
+			void setDragDropSourceLabel(Core::String value) { _dragDropSourceLabel = value; }
+			Core::String getDragDropSourceLabel() const { return _dragDropSourceLabel; }
+
+			void setDragDropSourceData(DragDropData data);
+			const DragDropData* getDragDropSourceData() const { return _dragDropSourceData; }
+
+			void setDragDropTarget(bool value, Core::String key);
 			bool getIsDragDropTarget() const { return _isDragDropTarget; }
-			void setDragDropTarget(bool value) { _isDragDropTarget = value; }
+
+			void setOnDragDrop(std::function<void(DragDropData*)> callback) { _onDragDrop = callback; }
+			void setOnDragEnter(std::function<void(DragDropData*)> callback) { _onDragEnter = callback; }
+			void setOnDragOver(std::function<void(DragDropData*, int, int)> callback) { _onDragOver = callback; }
+			void setOnDragExit(std::function<void(DragDropData*)> callback) { _onDragExit = callback; }
 
 			const std::map<int, void*>& getObjectTags() const { return _objectTags; }
 			const std::map<int, Core::String>& getStringTags() const { return _stringTags; }

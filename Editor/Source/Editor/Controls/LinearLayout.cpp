@@ -422,6 +422,9 @@ namespace Editor
 		ImGui::EndChild();
 		ImGui::PopStyleVar();
 
+		updateDragDropSource();
+		updateDragDropTarget();
+
 		ImVec2 _actualSize = ImGui::GetWindowSize();
 		_actualWidth = _actualSize.x;
 		_actualHeight = _actualSize.y;
