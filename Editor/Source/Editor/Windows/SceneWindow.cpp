@@ -28,7 +28,7 @@ namespace Editor
 
 		_image = new Image();
 		_image->setDragDropTarget(true, "SCENE_OBJECT");
-		_image->setOnDragDrop([this](DragDropData* data) { onDragDrop(data); });
+		_image->setOnDragDrop([this](DragDropData* data, int x, int y) { onDragDrop(data, x, y); });
 
 		addControl(_image);
 
@@ -96,7 +96,7 @@ namespace Editor
 		}
 	}
 
-	void SceneWindow::onDragDrop(DragDropData* data)
+	void SceneWindow::onDragDrop(DragDropData* data, int x, int y)
 	{
 		if (data->key == "CSG Cube")
 		{

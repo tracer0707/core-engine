@@ -29,7 +29,7 @@ namespace Editor
 			Core::Scene* _scene = nullptr;
 			Core::RenderTexture* _renderTexture = nullptr;
 
-			void onDragDrop(DragDropData* data);
+			void onDragDrop(DragDropData* data, int x, int y);
 
 		protected:
 			virtual void onResize(int newWidth, int newHeight);

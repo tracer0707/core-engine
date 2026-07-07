@@ -46,8 +46,8 @@ namespace Editor
 
 			bool _isDragDropEnter = false;
 
-			std::function<void(DragDropData*)> _onDragDrop = nullptr;
-			std::function<void(DragDropData*)> _onDragEnter = nullptr;
+			std::function<void(DragDropData*, int, int)> _onDragDrop = nullptr;
+			std::function<void(DragDropData*, int, int)> _onDragEnter = nullptr;
 			std::function<void(DragDropData*, int, int)> _onDragOver = nullptr;
 			std::function<void(DragDropData*)> _onDragExit = nullptr;
 
@@ -93,8 +93,8 @@ namespace Editor
 			void setDragDropTarget(bool value, Core::String key);
 			bool getIsDragDropTarget() const { return _isDragDropTarget; }
 
-			void setOnDragDrop(std::function<void(DragDropData*)> callback) { _onDragDrop = callback; }
-			void setOnDragEnter(std::function<void(DragDropData*)> callback) { _onDragEnter = callback; }
+			void setOnDragDrop(std::function<void(DragDropData*, int, int)> callback) { _onDragDrop = callback; }
+			void setOnDragEnter(std::function<void(DragDropData*, int, int)> callback) { _onDragEnter = callback; }
 			void setOnDragOver(std::function<void(DragDropData*, int, int)> callback) { _onDragOver = callback; }
 			void setOnDragExit(std::function<void(DragDropData*)> callback) { _onDragExit = callback; }
 

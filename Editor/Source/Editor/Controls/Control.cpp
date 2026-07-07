@@ -100,6 +100,10 @@ namespace Editor
 
 		if (ImGui::BeginDragDropTarget())
 		{
+			ImVec2 mousePosAbs = ImGui::GetMousePos();
+			ImVec2 elementPosAbs = ImGui::GetItemRectMin();
+			ImVec2 mousePosRelative = ImVec2(mousePosAbs.x - elementPosAbs.x, mousePosAbs.y - elementPosAbs.y);
+
 			if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenBlockedByActiveItem))
 			{
 				if (!_isDragDropEnter)
@@ -107,16 +111,13 @@ namespace Editor
 					_isDragDropEnter = true;
 					if (_onDragEnter != nullptr && dataGlobal != nullptr)
 					{
-						_onDragEnter(dataGlobal);
+						_onDragEnter(dataGlobal, (int)mousePosRelative.x, (int)mousePosRelative.y);
 					}
 				}
 				else
 				{
 					if (_onDragOver != nullptr && dataGlobal != nullptr)
 					{
-						ImVec2 mousePosAbs = ImGui::GetMousePos();
-						ImVec2 elementPosAbs = ImGui::GetItemRectMin();
-						ImVec2 mousePosRelative = ImVec2(mousePosAbs.x - elementPosAbs.x, mousePosAbs.y - elementPosAbs.y);
 						_onDragOver(dataGlobal, (int)mousePosRelative.x, (int)mousePosRelative.y);
 					}
 				}
@@ -128,7 +129,7 @@ namespace Editor
 				if (_onDragDrop != nullptr)
 				{
 					DragDropData* data = reinterpret_cast<DragDropData*>(*(void**)payload->Data);
-					_onDragDrop(data);
+					_onDragDrop(data, (int)mousePosRelative.x, (int)mousePosRelative.y);
 				}
 			}
 			ImGui::EndDragDropTarget();
