@@ -132,6 +132,7 @@ namespace Core
 		for (Window* wnd : _windows)
 		{
 			if (SDL_GetWindowID((SDL_Window*)wnd->_ctx) != id) continue;
+			wnd->beginFrame();
 			wnd->processEvents(event);
 			wnd->internalUpdate();
 			break;

@@ -11,6 +11,10 @@ namespace Core
 	{
 			friend class Renderer;
 
+		private:
+			static bool isGladLoaded;
+			static void* currentContext;
+
 		protected:
 			RendererGL4(void* windowCtx);
 			virtual ~RendererGL4();

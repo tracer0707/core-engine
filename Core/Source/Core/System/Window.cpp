@@ -67,7 +67,6 @@ namespace Core
 	void Window::beginFrame()
 	{
 		_time->beginTimer();
-		_renderer->makeCurrent();
 	}
 
 	void Window::processEvents(void* event)
@@ -119,6 +118,7 @@ namespace Core
 	void Window::internalUpdate()
 	{
 		_inputManager->updateMouse(_ctx);
+		_renderer->makeCurrent();
 
 		update();
 

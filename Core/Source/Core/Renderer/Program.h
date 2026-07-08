@@ -35,18 +35,13 @@ namespace Core
 			String name = String::Empty;
 
 			unsigned int program = 0;
-			unsigned int vertexShader = 0;
-			unsigned int fragmentShader = 0;
-			unsigned int geometryShader = 0;
-			unsigned int computeShader = 0;
-
+			
 			uint64_t u_viewMtxLocation = 0;
 			uint64_t u_projMtxLocation = 0;
 			uint64_t u_modelMtxLocation = 0;
 
 			Core::List<UniformInfo> uniforms;
 
-			Program& operator=(const Program& left);
 			bool operator==(const Program& left);
 	};
 } // namespace Core

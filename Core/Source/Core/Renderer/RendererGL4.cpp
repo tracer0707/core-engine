@@ -24,7 +24,10 @@
 
 namespace Core
 {
-	void debugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+	bool RendererGL4::isGladLoaded = false;
+	void* RendererGL4::currentContext = nullptr;
+
+	static void debugMessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 	{
 		if (severity == GL_DEBUG_SEVERITY_NOTIFICATION)
 		{
@@ -46,19 +49,23 @@ namespace Core
 		makeCurrent();
 		swapBuffers();
 
-		int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
-		printf("GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+		if (!isGladLoaded)
+		{
+			int version = gladLoadGL((GLADloadfunc)SDL_GL_GetProcAddress);
+			printf("Renderer: GL %d.%d\n", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+			isGladLoaded = true;
+		}
+
+		glEnable(GL_MULTISAMPLE);
+
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback(debugMessageCallback, nullptr);
 
 		_imguiCtx = ImGui::CreateContext();
 		ImGui::SetCurrentContext(_imguiCtx);
 
 		ImGui_ImplSDL2_InitForOpenGL((SDL_Window*)_windowCtx, (SDL_GLContext)_renderCtx);
 		ImGui_ImplOpenGL3_Init("#version 130");
-
-		glEnable(GL_MULTISAMPLE);
-
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback(debugMessageCallback, nullptr);
 
 		_defaultProgram = createProgram("Builtin/Default", Shaders::Default::getVertexSource(), Shaders::Default::getFragmentSource());
 		_unlitColorProgram = createProgram("Builtin/UnlitColor", Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
@@ -117,6 +124,8 @@ namespace Core
 
 	void RendererGL4::makeCurrent()
 	{
+		if (_renderCtx == currentContext) return;
+		currentContext = _renderCtx;
 		SDL_GL_MakeCurrent((SDL_Window*)_windowCtx, (SDL_GLContext)_renderCtx);
 	}
 
@@ -177,12 +186,12 @@ namespace Core
 
 		glDetachShader(programId, vs);
 		glDetachShader(programId, fs);
+		glDeleteShader(vs);
+		glDeleteShader(fs);
 
 		Program* program = new Program();
 		program->name = name;
 		program->program = programId;
-		program->vertexShader = vs;
-		program->fragmentShader = fs;
 
 		program->u_viewMtxLocation = glGetUniformLocation(programId, "_u_viewMtx");
 		program->u_projMtxLocation = glGetUniformLocation(programId, "_u_projMtx");
@@ -263,10 +272,7 @@ namespace Core
 		if (program == nullptr || it == _shaderPrograms.end())
 			throw std::invalid_argument("An attempt was made to delete a program that does not exist");
 
-		if (program->vertexShader > 0) glDeleteShader(program->vertexShader);
-		if (program->fragmentShader > 0) glDeleteShader(program->fragmentShader);
-		if (program->geometryShader > 0) glDeleteShader(program->geometryShader);
-		if (program->computeShader > 0) glDeleteShader(program->computeShader);
+		if (program->program > 0) glDeleteProgram(program->program);
 
 		_shaderPrograms.erase(it);
 
