@@ -74,9 +74,13 @@ namespace Editor
 			FaceInfo& face = faces.get(i);
 
 			if (face.indices.count() == 3)
+			{
 				data.addFace(face.indices.get(0), face.indices.get(1), face.indices.get(2));
+			}
 			else if (face.indices.count() == 4)
+			{
 				data.addFace(face.indices.get(0), face.indices.get(1), face.indices.get(2), face.indices.get(3));
+			}
 		}
 
 		brushPtr = data.create();

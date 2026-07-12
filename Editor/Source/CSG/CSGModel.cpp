@@ -129,7 +129,7 @@ namespace Editor
 
 		for (unsigned long long i = 0; i < csgGeom->faces.size(); ++i)
 		{
-			auto* f = &csgGeom->faces[i];
+			auto* face = &csgGeom->faces[i];
 
 			Core::Material* mat = nullptr;
 			int layer = 0;
@@ -137,16 +137,16 @@ namespace Editor
 			bool smoothNormals = false;
 			Core::Uuid brushId = Core::Uuid::Empty;
 
-			if (f_material.hasAttribute(f))
+			if (f_material.hasAttribute(face))
 			{
-				Core::Material* mt = f_material.getAttribute(f);
+				Core::Material* mt = f_material.getAttribute(face);
 				if (mt != nullptr) mat = mt;
 			}
 
-			if (f_layer.hasAttribute(f)) layer = f_layer.getAttribute(f);
-			if (f_castShadows.hasAttribute(f)) castShadows = f_castShadows.getAttribute(f);
-			if (f_smoothNormals.hasAttribute(f)) smoothNormals = f_smoothNormals.getAttribute(f);
-			if (f_brushId.hasAttribute(f)) brushId = f_brushId.getAttribute(f);
+			if (f_layer.hasAttribute(face)) layer = f_layer.getAttribute(face);
+			if (f_castShadows.hasAttribute(face)) castShadows = f_castShadows.getAttribute(face);
+			if (f_smoothNormals.hasAttribute(face)) smoothNormals = f_smoothNormals.getAttribute(face);
+			if (f_brushId.hasAttribute(face)) brushId = f_brushId.getAttribute(face);
 
 			SubMeshInfo* subMesh = nullptr;
 
@@ -163,10 +163,10 @@ namespace Editor
 
 			for (unsigned long long j = 0; j < 3; ++j)
 			{
-				carve::geom3d::Vector v = f->vertex(j)->v;
+				carve::geom3d::Vector v = face->vertex(j)->v;
 				CSGBrush::uv_t uv = CSGBrush::uv_t(0, 0);
 
-				if (fv_uv.hasAttribute(f, j)) uv = fv_uv.getAttribute(f, j);
+				if (fv_uv.hasAttribute(face, j)) uv = fv_uv.getAttribute(face, j);
 
 				Core::Vertex vtx{};
 
