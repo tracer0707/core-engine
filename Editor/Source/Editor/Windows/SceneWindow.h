@@ -17,6 +17,7 @@ namespace Editor
 	class LinearLayout;
 	class Control;
 	class Image;
+	class GizmoWindow;
 	struct DragDropData;
 
 	class SceneWindow : public Window
@@ -29,6 +30,8 @@ namespace Editor
 			Core::Scene* _scene = nullptr;
 			Core::RenderTexture* _renderTexture = nullptr;
 
+			GizmoWindow* _gizmoWindow = nullptr;
+
 			void onDragDrop(DragDropData* data, int x, int y);
 
 		protected:
@@ -38,6 +41,8 @@ namespace Editor
 		public:
 			SceneWindow(WindowManager* parent);
 			virtual ~SceneWindow();
+
+			virtual void init();
 
 			void setTime(Core::Time* time) { _time = time; }
 			void setScene(Core::Scene* scene);

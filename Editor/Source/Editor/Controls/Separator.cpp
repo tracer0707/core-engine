@@ -7,6 +7,11 @@ namespace Editor
 {
 	Separator::Separator() : Control() {}
 
+	Separator::Separator(SeparatorDirection direction) : Control()
+	{
+		_direction = direction;
+	}
+
 	Separator::~Separator() {}
 
 	void Separator::update()

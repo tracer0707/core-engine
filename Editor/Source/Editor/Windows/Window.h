@@ -79,42 +79,42 @@ namespace Editor
 			virtual void init() {}
 
 			WindowManager* getParent() { return _parent; }
-			std::string getName() { return _name; };
+			std::string getName() const { return _name; };
 
 			void setVisible(bool value) { _visible = value; }
-			bool getVisible() { return _visible; }
+			bool getVisible() const { return _visible; }
 
-			float getWidth() { return _width; }
-			float getHeight() { return _height; }
+			float getWidth() const { return _width; }
+			float getHeight() const { return _height; }
 
 			void setWidth(float value) { _fixedWidth = value; }
 			void setHeight(float value) { _fixedHeight = value; }
 
-			float getClientWidth() { return _clientWidth; }
-			float getClientHeight() { return _clientHeight; }
+			float getClientWidth() const { return _clientWidth; }
+			float getClientHeight() const { return _clientHeight; }
 
-			float getPositionX() { return _positionX; }
-			float getPositionY() { return _positionY; }
+			float getPositionX() const { return _positionX; }
+			float getPositionY() const { return _positionY; }
 
 			void setPositionX(float value) { _fixedPositionX = value; }
 			void setPositionY(float value) { _fixedPositionY = value; }
 
-			bool getIsHovered() { return _isHovered; }
+			bool getIsHovered() const { return _isHovered; }
 
 			void setHasTitle(bool value) { _hasTitle = value; }
-			bool getHasTitle() { return _hasTitle; }
+			bool getHasTitle() const { return _hasTitle; }
 
 			void setCanAcceptDocking(bool value) { _canAcceptDocking = value; }
-			bool getCanAcceptDocking() { return _canAcceptDocking; }
+			bool getCanAcceptDocking() const { return _canAcceptDocking; }
 
 			void setCanDock(bool value) { _canDock = value; }
-			bool getCanDock() { return _canDock; }
+			bool getCanDock() const { return _canDock; }
 
 			void setCanResize(bool value) { _canResize = value; }
-			bool getCanResize() { return _canResize; }
+			bool getCanResize() const { return _canResize; }
 
 			void setCanMove(bool value) { _canMove = value; }
-			bool getCanMove() { return _canMove; }
+			bool getCanMove() const { return _canMove; }
 
 			void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
 			void close();

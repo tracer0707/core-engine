@@ -17,6 +17,7 @@ namespace Editor
 
 	public:
 		Separator();
+		Separator(SeparatorDirection direction);
 		virtual ~Separator();
 
 		virtual ControlType getControlType() const { return ControlType::Separator; }

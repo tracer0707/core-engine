@@ -17,7 +17,9 @@
 #include "../../CSG/CSGBuilder.h"
 #include "../../CSG/CSGModel.h"
 
+#include "WindowList.h"
 #include "WindowManager.h"
+#include "GizmoWindow.h"
 
 namespace Editor
 {
@@ -36,6 +38,11 @@ namespace Editor
 	}
 
 	SceneWindow::~SceneWindow() {}
+
+	void SceneWindow::init()
+	{
+		_gizmoWindow = (GizmoWindow*)_parent->getWindow(GIZMO_WINDOW);
+	}
 
 	void SceneWindow::setScene(Core::Scene* scene)
 	{
@@ -77,21 +84,25 @@ namespace Editor
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
+				_gizmoWindow->updateCurrentToolButtonState();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_W))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
+				_gizmoWindow->updateCurrentToolButtonState();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_E))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
+				_gizmoWindow->updateCurrentToolButtonState();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_R))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
+				_gizmoWindow->updateCurrentToolButtonState();
 			}
 		}
 	}

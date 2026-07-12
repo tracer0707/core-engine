@@ -13,6 +13,7 @@
 #include "../Gizmo.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
+#include "../Controls/Separator.h"
 #include "../../Utils/TextureUtils.h"
 
 namespace Editor
@@ -47,58 +48,111 @@ namespace Editor
 
 		layoutMain->addControl(redoBtn);
 
+		layoutMain->addControl(new Separator(SeparatorDirection::Vertical));
+
 		/* Select */
 
-		Button* selectBtn = new Button();
+		_selectBtn = new Button();
 		Core::Texture2D* selectBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/select.png"), contentMgr);
-		selectBtn->setSize(32, 32);
-		selectBtn->setImage(selectBtnImage);
-		selectBtn->setOnClick([this]() {
+		_selectBtn->setSize(32, 32);
+		_selectBtn->setImage(selectBtnImage);
+		_selectBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
+			updateCurrentToolButtonState();
 		});
 
-		layoutMain->addControl(selectBtn);
+		layoutMain->addControl(_selectBtn);
 
 		/* Move */
 
-		Button* moveBtn = new Button();
+		_translateBtn = new Button();
 		Core::Texture2D* moveBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"), contentMgr);
-		moveBtn->setSize(32, 32);
-		moveBtn->setImage(moveBtnImage);
-		moveBtn->setOnClick([this]() {
+		_translateBtn->setSize(32, 32);
+		_translateBtn->setImage(moveBtnImage);
+		_translateBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
+			updateCurrentToolButtonState();
 		});
 
-		layoutMain->addControl(moveBtn);
+		layoutMain->addControl(_translateBtn);
 
 		/* Rotate */
 
-		Button* rotateBtn = new Button();
+		_rotateBtn = new Button();
 		Core::Texture2D* rotateBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"), contentMgr);
-		rotateBtn->setSize(32, 32);
-		rotateBtn->setImage(rotateBtnImage);
-		rotateBtn->setOnClick([this]() {
+		_rotateBtn->setSize(32, 32);
+		_rotateBtn->setImage(rotateBtnImage);
+		_rotateBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
+			updateCurrentToolButtonState();
 		});
 
-		layoutMain->addControl(rotateBtn);
+		layoutMain->addControl(_rotateBtn);
 
 		/* Scale */
 
-		Button* scaleBtn = new Button();
+		_scaleBtn = new Button();
 		Core::Texture2D* scaleBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"), contentMgr);
-		scaleBtn->setSize(32, 32);
-		scaleBtn->setImage(scaleBtnImage);
-		scaleBtn->setOnClick([this]() {
+		_scaleBtn->setSize(32, 32);
+		_scaleBtn->setImage(scaleBtnImage);
+		_scaleBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
+			updateCurrentToolButtonState();
 		});
 
-		layoutMain->addControl(scaleBtn);
+		layoutMain->addControl(_scaleBtn);
+
+		layoutMain->addControl(new Separator(SeparatorDirection::Vertical));
+
+		/* Local Space */
+
+		_localSpaceBtn = new Button();
+		Core::Texture2D* localSpaceBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/local.png"), contentMgr);
+		_localSpaceBtn->setSize(32, 32);
+		_localSpaceBtn->setImage(localSpaceBtnImage);
+		_localSpaceBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformSpace(Gizmo::TransformSpace::Local);
+			updateCurrentToolButtonState();
+		});
+
+		layoutMain->addControl(_localSpaceBtn);
+
+		/* World Space */
+
+		_worldSpaceBtn = new Button();
+		Core::Texture2D* worldSpaceBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/world.png"), contentMgr);
+		_worldSpaceBtn->setSize(32, 32);
+		_worldSpaceBtn->setImage(worldSpaceBtnImage);
+		_worldSpaceBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformSpace(Gizmo::TransformSpace::World);
+			updateCurrentToolButtonState();
+		});
+
+		layoutMain->addControl(_worldSpaceBtn);
+
+		updateCurrentToolButtonState();
 	}
 
 	GizmoWindow::~GizmoWindow() {}
+
+	void GizmoWindow::updateCurrentToolButtonState()
+	{
+		_selectBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Select);
+		_translateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Translate);
+		_rotateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Rotate);
+		_scaleBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Scale);
+		_localSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::Local);
+		_worldSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::World);
+	}
+
+	void GizmoWindow::invalidate()
+	{
+		updateCurrentToolButtonState();
+	}
 } // namespace Editor
