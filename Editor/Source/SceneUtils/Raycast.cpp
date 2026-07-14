@@ -43,7 +43,7 @@ namespace Editor
 		{
 			Core::Object* obj = b.first;
 			Core::MeshRenderer* meshRenderer = obj->findComponent<Core::MeshRenderer*>();
-			Core::Transform* transform = obj->findComponent<Core::Transform*>();
+			Core::Transform* transform = obj->getTransform();
 			Core::Mesh* mesh = meshRenderer->getMesh();
 
 			if (transform == nullptr) continue;
@@ -54,9 +54,10 @@ namespace Editor
 
 			if (meshTest(ray, mesh, mtx, &csgBrush, &csgBrushFaceId))
 			{
+				outHit->object = obj;
+				outHit->mesh = mesh;
 				outHit->csgBrush = csgBrush;
 				outHit->csgBrushFaceId = csgBrushFaceId;
-				outHit->object = obj;
 				return true;
 			}
 		}

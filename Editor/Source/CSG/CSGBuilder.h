@@ -53,8 +53,6 @@ namespace Editor
 
 			Core::List<CSGModel*> _models;
 
-			Core::VertexBuffer* _wireframeBuffer = nullptr;
-
 			static CSGBuilder _singleton;
 
 		public:
@@ -64,7 +62,7 @@ namespace Editor
 			static CSGBuilder* singleton() { return &_singleton; }
 
 			void setEditMode(EditMode value) { _editMode = value; }
-			EditMode getEditMode() { return _editMode; }
+			EditMode getEditMode() const { return _editMode; }
 
 			const Core::List<CSGModel*>& getModels() const { return _models; }
 

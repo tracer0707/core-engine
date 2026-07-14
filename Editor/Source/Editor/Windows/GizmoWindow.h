@@ -21,7 +21,5 @@ namespace Editor
 		virtual ~GizmoWindow();
 
 		virtual void invalidate();
-
-		void updateCurrentToolButtonState();
 	};
 }

@@ -59,7 +59,7 @@ namespace Editor
 		_selectBtn->setImage(selectBtnImage);
 		_selectBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
-			updateCurrentToolButtonState();
+			invalidate();
 		});
 
 		layoutMain->addControl(_selectBtn);
@@ -73,7 +73,7 @@ namespace Editor
 		_translateBtn->setImage(moveBtnImage);
 		_translateBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
-			updateCurrentToolButtonState();
+			invalidate();
 		});
 
 		layoutMain->addControl(_translateBtn);
@@ -87,7 +87,7 @@ namespace Editor
 		_rotateBtn->setImage(rotateBtnImage);
 		_rotateBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
-			updateCurrentToolButtonState();
+			invalidate();
 		});
 
 		layoutMain->addControl(_rotateBtn);
@@ -101,7 +101,7 @@ namespace Editor
 		_scaleBtn->setImage(scaleBtnImage);
 		_scaleBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
-			updateCurrentToolButtonState();
+			invalidate();
 		});
 
 		layoutMain->addControl(_scaleBtn);
@@ -117,7 +117,7 @@ namespace Editor
 		_localSpaceBtn->setImage(localSpaceBtnImage);
 		_localSpaceBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformSpace(Gizmo::TransformSpace::Local);
-			updateCurrentToolButtonState();
+			invalidate();
 		});
 
 		layoutMain->addControl(_localSpaceBtn);
@@ -131,17 +131,17 @@ namespace Editor
 		_worldSpaceBtn->setImage(worldSpaceBtnImage);
 		_worldSpaceBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformSpace(Gizmo::TransformSpace::World);
-			updateCurrentToolButtonState();
+			invalidate();
 		});
 
 		layoutMain->addControl(_worldSpaceBtn);
 
-		updateCurrentToolButtonState();
+		invalidate();
 	}
 
 	GizmoWindow::~GizmoWindow() {}
 
-	void GizmoWindow::updateCurrentToolButtonState()
+	void GizmoWindow::invalidate()
 	{
 		_selectBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Select);
 		_translateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Translate);
@@ -149,10 +149,5 @@ namespace Editor
 		_scaleBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Scale);
 		_localSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::Local);
 		_worldSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::World);
-	}
-
-	void GizmoWindow::invalidate()
-	{
-		updateCurrentToolButtonState();
 	}
 } // namespace Editor

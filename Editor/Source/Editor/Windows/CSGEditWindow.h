@@ -12,9 +12,9 @@ namespace Editor
 		private:
 			LinearLayout* _layoutMain = nullptr;
 			Button* _csgSelectBtn = nullptr;
-
-			void activateAll(bool active);
-			void enableAll(bool enable);
+			Button* _csgEditVerticesBtn = nullptr;
+			Button* _csgEditEdgesBtn = nullptr;
+			Button* _csgEditFacesBtn = nullptr;
 
 		public:
 			CSGEditWindow(WindowManager* parent);

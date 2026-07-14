@@ -42,13 +42,10 @@ namespace Editor
 
 		_hierarchyWindow = (HierarchyWindow*)_windowManager->getWindow(HIERARCHY_WINDOW);
 		_csgEditWindow = (CSGEditWindow*)_windowManager->getWindow(CSG_EDIT_WINDOW);
-
-		_wireframeBuffer = renderer->createBuffer(nullptr, 2048, nullptr, 0);
 	}
 
 	void CSGBuilder::destroy()
 	{
-		_renderer->deleteBuffer(_wireframeBuffer);
 	}
 
 	void CSGBuilder::addBrush(BrushType brushType)

@@ -10,11 +10,11 @@
 
 #include "WindowManager.h"
 
+#include "../Gizmo.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 
 #include "../../CSG/CSGBuilder.h"
-
 #include "../../Utils/TextureUtils.h"
 
 namespace Editor
@@ -37,87 +37,73 @@ namespace Editor
 		_csgSelectBtn->setSize(32, 32);
 		_csgSelectBtn->setImage(csgAddBtnImage);
 		_csgSelectBtn->setOnClick([this] {
-			activateAll(false);
 			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::Select);
-			_csgSelectBtn->setActive(true);
+			invalidate();
 		});
 
 		_layoutMain->addControl(_csgSelectBtn);
 
-		/* CSG edit points */
+		/* CSG edit vertices */
 
-		Button* csgEditPointsBtn = new Button();
-		Core::Texture2D* csgEditPointsBtnImage = TextureUtils::loadCompressed(
+		_csgEditVerticesBtn = new Button();
+		Core::Texture2D* csgEditVerticesBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/points.png"), contentMgr);
-		csgEditPointsBtn->setSize(32, 32);
-		csgEditPointsBtn->setImage(csgEditPointsBtnImage);
-		csgEditPointsBtn->setOnClick([this, csgEditPointsBtn] {
-			activateAll(false);
+		_csgEditVerticesBtn->setSize(32, 32);
+		_csgEditVerticesBtn->setImage(csgEditVerticesBtnImage);
+		_csgEditVerticesBtn->setOnClick([this] {
 			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::EditVertices);
-			csgEditPointsBtn->setActive(true);
+			invalidate();
 		});
 
-		_layoutMain->addControl(csgEditPointsBtn);
+		_layoutMain->addControl(_csgEditVerticesBtn);
 
 		/* CSG edit edges */
 
-		Button* csgEditEdgesBtn = new Button();
+		_csgEditEdgesBtn = new Button();
 		Core::Texture2D* csgEditEdgesBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/edges.png"), contentMgr);
-		csgEditEdgesBtn->setSize(32, 32);
-		csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
-		csgEditEdgesBtn->setOnClick([this, csgEditEdgesBtn] {
-			activateAll(false);
+		_csgEditEdgesBtn->setSize(32, 32);
+		_csgEditEdgesBtn->setImage(csgEditEdgesBtnImage);
+		_csgEditEdgesBtn->setOnClick([this] {
 			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::EditEdges);
-			csgEditEdgesBtn->setActive(true);
+			invalidate();
 		});
 
-		_layoutMain->addControl(csgEditEdgesBtn);
+		_layoutMain->addControl(_csgEditEdgesBtn);
 
 		/* CSG edit faces */
 
-		Button* csgEditFacesBtn = new Button();
+		_csgEditFacesBtn = new Button();
 		Core::Texture2D* csgEditFacesBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/csg/face.png"), contentMgr);
-		csgEditFacesBtn->setSize(32, 32);
-		csgEditFacesBtn->setImage(csgEditFacesBtnImage);
-		csgEditFacesBtn->setOnClick([this, csgEditFacesBtn] {
-			activateAll(false);
+		_csgEditFacesBtn->setSize(32, 32);
+		_csgEditFacesBtn->setImage(csgEditFacesBtnImage);
+		_csgEditFacesBtn->setOnClick([this] {
 			CSGBuilder::singleton()->setEditMode(CSGBuilder::EditMode::EditFaces);
-			csgEditFacesBtn->setActive(true);
-		});
-
-		_layoutMain->addControl(csgEditFacesBtn);
-
-		_parent->getEventHandler()->addEvent([this] {
-			activateAll(false);
 			invalidate();
-			_csgSelectBtn->setActive(true);
 		});
+
+		_layoutMain->addControl(_csgEditFacesBtn);
+
+		invalidate();
 	}
 
 	CSGEditWindow::~CSGEditWindow() {}
 
 	void CSGEditWindow::invalidate()
 	{
-		// enableAll(false);
-	}
-
-	void CSGEditWindow::activateAll(bool active)
-	{
-		for (int i = 0; i < _layoutMain->getControlsCount(); ++i)
+		if (Gizmo::singleton()->getObjectType() == Gizmo::ObjectType::CSGBrush)
 		{
-			Button* button = (Button*)_layoutMain->getControl(i);
-			button->setActive(active);
+			setVisible(true);
 		}
-	}
-
-	void CSGEditWindow::enableAll(bool enable)
-	{
-		for (int i = 0; i < _layoutMain->getControlsCount(); ++i)
+		else
 		{
-			Button* button = (Button*)_layoutMain->getControl(i);
-			button->setEnabled(enable);
+			setVisible(false);
 		}
+
+		_csgSelectBtn->setActive(CSGBuilder::singleton()->getEditMode() == CSGBuilder::EditMode::Select);
+		_csgEditVerticesBtn->setActive(CSGBuilder::singleton()->getEditMode() == CSGBuilder::EditMode::EditVertices);
+		_csgEditEdgesBtn->setActive(CSGBuilder::singleton()->getEditMode() == CSGBuilder::EditMode::EditEdges);
+		_csgEditFacesBtn->setActive(CSGBuilder::singleton()->getEditMode() == CSGBuilder::EditMode::EditFaces);
 	}
 } // namespace Editor
