@@ -107,7 +107,8 @@ namespace Editor
 			carve::interpolate::FaceAttr<int>* f_layer,
 			carve::interpolate::FaceAttr<bool>* f_castShadows,
 			carve::interpolate::FaceAttr<bool>* f_smoothNormals,
-			carve::interpolate::FaceAttr<Core::Uuid>* f_brushId
+			carve::interpolate::FaceAttr<Core::Uuid>* f_brushId,
+			carve::interpolate::FaceAttr<size_t>* f_faceId
 		);
 
 		Core::Transformable* getTransform() { return transform; }

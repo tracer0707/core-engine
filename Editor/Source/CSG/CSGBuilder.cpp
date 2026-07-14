@@ -92,20 +92,6 @@ namespace Editor
 		tree->selectNode(brushNode);
 	}
 
-	CSGBrush* CSGBuilder::findBrush(Core::Uuid brushId)
-	{
-		for (CSGModel* model : _models)
-		{
-			CSGBrush* brush = model->findBrush(brushId);
-			if (brush != nullptr)
-			{
-				return brush;
-			}
-		}
-
-		return nullptr;
-	}
-
 	void CSGBuilder::rebuild()
 	{
 		for (CSGModel* model : _models)

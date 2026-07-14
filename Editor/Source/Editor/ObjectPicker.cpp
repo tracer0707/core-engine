@@ -108,11 +108,9 @@ namespace Editor
 
 		if (hit.object != nullptr)
 		{
-			CSGBrush* brush = CSGBuilder::singleton()->findBrush(hit.brushId);
-
-			if (brush != nullptr)
+			if (hit.csgBrush != nullptr)
 			{
-				TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, brush);
+				TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, hit.csgBrush);
 				treeView->selectNode(node, true);
 			}
 		}

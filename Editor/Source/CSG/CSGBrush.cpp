@@ -94,13 +94,14 @@ namespace Editor
 
 	void CSGBrush::bind(carve::interpolate::FaceVertexAttr<uv_t>* fv_uv, carve::interpolate::FaceAttr<Core::Material*>* f_material,
 						carve::interpolate::FaceAttr<int>* f_layer, carve::interpolate::FaceAttr<bool>* f_castShadows,
-						carve::interpolate::FaceAttr<bool>* f_smoothNormals, carve::interpolate::FaceAttr<Core::Uuid>* f_brushId)
+						carve::interpolate::FaceAttr<bool>* f_smoothNormals, carve::interpolate::FaceAttr<Core::Uuid>* f_brushId,
+						carve::interpolate::FaceAttr<size_t>* f_faceId)
 	{
-		for (int i = 0; i < faces.count(); ++i)
+		for (size_t i = 0; i < faces.count(); ++i)
 		{
 			FaceInfo& face = faces.get(i);
 
-			for (int j = 0; j < face.texCoords.count(); ++j)
+			for (size_t j = 0; j < face.texCoords.count(); ++j)
 			{
 				glm::vec2 uv = face.texCoords.get(j);
 
@@ -117,6 +118,7 @@ namespace Editor
 			f_castShadows->setAttribute(&brushPtr->faces[i], castShadows);
 			f_smoothNormals->setAttribute(&brushPtr->faces[i], faces.get(i).smoothNormals);
 			f_brushId->setAttribute(&brushPtr->faces[i], uuid);
+			f_faceId->setAttribute(&brushPtr->faces[i], i);
 		}
 	}
 

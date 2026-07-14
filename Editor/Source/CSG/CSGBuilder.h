@@ -69,7 +69,6 @@ namespace Editor
 			const Core::List<CSGModel*>& getModels() const { return _models; }
 
 			void addBrush(BrushType brushType);
-			CSGBrush* findBrush(Core::Uuid brushId);
 
 			void init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
 			void destroy();

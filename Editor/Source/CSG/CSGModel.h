@@ -32,6 +32,7 @@ namespace Editor
 					Core::SubMesh* subMesh = nullptr;
 					Core::List<Core::Vertex> vertices;
 					Core::List<Core::Uuid> brushIds;
+					Core::List<size_t> faceIds;
 			};
 
 			Core::String _name = Core::String::Empty;
@@ -45,6 +46,8 @@ namespace Editor
 			Core::ContentManager* _contentManager = nullptr;
 
 			CSGBrush* _nullBrush = nullptr;
+
+			CSGBrush* findBrushByUuid(Core::Uuid brushId);
 
 		public:
 			CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
@@ -61,10 +64,9 @@ namespace Editor
 			CSGBrushCube* createCubeBrush();
 
 			const Core::List<CSGBrush*>& getBrushes() const { return _brushes; }
-			CSGBrush* findBrush(Core::Uuid brushId);
 			bool removeBrush(CSGBrush* value);
 
-			Core::Uuid getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId);
+			void findBrush(const Core::SubMesh* subMesh, unsigned int vertexId, CSGBrush** outCsgBrush, size_t* outFaceId);
 
 			void rebuild();
 	};

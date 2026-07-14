@@ -49,11 +49,13 @@ namespace Editor
 			if (transform == nullptr) continue;
 
 			glm::mat4 mtx = transform->getTransformMatrix();
-			Core::Uuid brushId;
+			CSGBrush* csgBrush = nullptr;
+			size_t csgBrushFaceId = -1;
 
-			if (meshTest(ray, mesh, mtx, &brushId))
+			if (meshTest(ray, mesh, mtx, &csgBrush, &csgBrushFaceId))
 			{
-				outHit->brushId = brushId;
+				outHit->csgBrush = csgBrush;
+				outHit->csgBrushFaceId = csgBrushFaceId;
 				outHit->object = obj;
 				return true;
 			}
@@ -62,7 +64,7 @@ namespace Editor
 		return false;
 	}
 
-	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, Core::Uuid* brushId)
+	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, CSGBrush** csgBrush, size_t* faceId)
 	{
 		CSGModel* csgModel = nullptr;
 
@@ -97,7 +99,7 @@ namespace Editor
 				{
 					if (csgModel != nullptr)
 					{
-						*brushId = csgModel->getBrushId(subMesh, j);
+						csgModel->findBrush(subMesh, j, csgBrush, faceId);
 					}
 
 					return true;

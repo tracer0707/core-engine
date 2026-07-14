@@ -74,6 +74,7 @@ namespace Editor
 		carve::interpolate::FaceAttr<bool> f_castShadows;
 		carve::interpolate::FaceAttr<bool> f_smoothNormals;
 		carve::interpolate::FaceAttr<Core::Uuid> f_brushId;
+		carve::interpolate::FaceAttr<size_t> f_faceId;
 
 		carve::poly::Polyhedron* csgGeom = nullptr;
 
@@ -83,7 +84,7 @@ namespace Editor
 		for (auto brush : _brushes)
 		{
 			brush->rebuild();
-			brush->bind(&fv_uv, &f_material, &f_layer, &f_castShadows, &f_smoothNormals, &f_brushId);
+			brush->bind(&fv_uv, &f_material, &f_layer, &f_castShadows, &f_smoothNormals, &f_brushId, &f_faceId);
 		}
 
 		fv_uv.installHooks(csg);
@@ -92,6 +93,7 @@ namespace Editor
 		f_castShadows.installHooks(csg);
 		f_smoothNormals.installHooks(csg);
 		f_brushId.installHooks(csg);
+		f_faceId.installHooks(csg);
 
 		csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
 
@@ -127,7 +129,7 @@ namespace Editor
 		// Build meshes
 		Core::AxisAlignedBox aab = Core::AxisAlignedBox();
 
-		for (unsigned long long i = 0; i < csgGeom->faces.size(); ++i)
+		for (size_t i = 0; i < csgGeom->faces.size(); ++i)
 		{
 			auto* face = &csgGeom->faces[i];
 
@@ -136,6 +138,7 @@ namespace Editor
 			bool castShadows = true;
 			bool smoothNormals = false;
 			Core::Uuid brushId = Core::Uuid::Empty;
+			size_t faceId = 0;
 
 			if (f_material.hasAttribute(face))
 			{
@@ -147,6 +150,7 @@ namespace Editor
 			if (f_castShadows.hasAttribute(face)) castShadows = f_castShadows.getAttribute(face);
 			if (f_smoothNormals.hasAttribute(face)) smoothNormals = f_smoothNormals.getAttribute(face);
 			if (f_brushId.hasAttribute(face)) brushId = f_brushId.getAttribute(face);
+			if (f_faceId.hasAttribute(face)) faceId = f_faceId.getAttribute(face);
 
 			SubMeshInfo* subMesh = nullptr;
 
@@ -161,7 +165,7 @@ namespace Editor
 				_subMeshes[mat] = subMesh;
 			}
 
-			for (unsigned long long j = 0; j < 3; ++j)
+			for (size_t j = 0; j < 3; ++j)
 			{
 				carve::geom3d::Vector v = face->vertex(j)->v;
 				CSGBrush::uv_t uv = CSGBrush::uv_t(0, 0);
@@ -178,6 +182,7 @@ namespace Editor
 
 				subMesh->vertices.add(vtx);
 				subMesh->brushIds.add(brushId);
+				subMesh->faceIds.add(faceId);
 			}
 		}
 
@@ -209,16 +214,6 @@ namespace Editor
 		return brush;
 	}
 
-	CSGBrush* CSGModel::findBrush(Core::Uuid brushId)
-	{
-		for (auto it : _brushes)
-		{
-			if (it->getId() == brushId) return it;
-		}
-
-		return nullptr;
-	}
-
 	bool CSGModel::removeBrush(CSGBrush* value)
 	{
 		if (_brushes.contains(value))
@@ -232,7 +227,17 @@ namespace Editor
 		return false;
 	}
 
-	Core::Uuid CSGModel::getBrushId(const Core::SubMesh* subMesh, unsigned int vertexId)
+	CSGBrush* CSGModel::findBrushByUuid(Core::Uuid brushId)
+	{
+		for (auto it : _brushes)
+		{
+			if (it->getId() == brushId) return it;
+		}
+
+		return nullptr;
+	}
+
+	void CSGModel::findBrush(const Core::SubMesh* subMesh, unsigned int vertexId, CSGBrush** outCsgBrush, size_t* outFaceId)
 	{
 		for (auto& sm : _subMeshes)
 		{
@@ -240,11 +245,14 @@ namespace Editor
 			{
 				if (sm.second->brushIds.count() > vertexId)
 				{
-					return sm.second->brushIds.get(vertexId);
+					*outCsgBrush = findBrushByUuid(sm.second->brushIds.get(vertexId));
+					*outFaceId = sm.second->faceIds.get(vertexId);
+					return;
 				}
 			}
 		}
 
-		return Core::Uuid::Empty;
+		*outCsgBrush = nullptr;
+		*outFaceId = -1;
 	}
 } // namespace Editor
