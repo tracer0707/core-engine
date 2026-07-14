@@ -8,11 +8,11 @@
 #include <Core/Scene/Scene.h>
 #include <Core/System/InputManager.h>
 
-#include "../Gizmo.h"
-#include "../ObjectPicker.h"
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
 #include "../CameraController.h"
+
+#include "../Gizmo.h"
 
 #include "../../CSG/CSGBuilder.h"
 #include "../../CSG/CSGModel.h"
@@ -33,8 +33,6 @@ namespace Editor
 		_image->setOnDragDrop([this](DragDropData* data, int x, int y) { onDragDrop(data, x, y); });
 
 		addControl(_image);
-
-		Editor::Gizmo::singleton()->subscribeManipulateEndEvent([=]() { CSGBuilder::singleton()->rebuild(); });
 	}
 
 	SceneWindow::~SceneWindow() {}
@@ -48,10 +46,6 @@ namespace Editor
 	{
 		_scene = scene;
 		_camera = _scene->getMainCamera();
-
-		Editor::CameraController::init(_parent->getInputManager(), _parent->getTime(), _camera);
-		Editor::ObjectPicker::init(_parent, _scene, _camera);
-		Editor::Gizmo::singleton()->init(_parent->getInputManager());
 	}
 
 	void SceneWindow::setRenderTexture(Core::RenderTexture* renderTexture)
@@ -68,41 +62,31 @@ namespace Editor
 
 	void SceneWindow::onUpdate()
 	{
-		bool isHovered = getIsHovered();
-		bool isGizmoWasUsed = false;
-
-		float offsetX = getPositionX();
-		float offsetY = getPositionY();
-
-		Editor::CameraController::update(isHovered);
-		Editor::Gizmo::singleton()->update(_camera, isHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
-		Editor::ObjectPicker::update(isHovered, isGizmoWasUsed, offsetX, offsetY);
-
 		if (!_parent->getInputManager()->getMouseButton(0) && !_parent->getInputManager()->getMouseButton(1) &&
 			!_parent->getInputManager()->getMouseButton(2))
 		{
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
-				_gizmoWindow->updateCurrentToolButtonState();
+				_gizmoWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_W))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
-				_gizmoWindow->updateCurrentToolButtonState();
+				_gizmoWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_E))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
-				_gizmoWindow->updateCurrentToolButtonState();
+				_gizmoWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_R))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
-				_gizmoWindow->updateCurrentToolButtonState();
+				_gizmoWindow->invalidate();
 			}
 		}
 	}

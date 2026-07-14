@@ -28,6 +28,8 @@
 #include "../Editor/Windows/ContentImportWindow.h"
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
+#include "../Editor/Gizmo.h"
+#include "../Editor/ObjectPicker.h"
 
 #include "../CSG/CSGBuilder.h"
 #include "../Editor/GizmoRenderer.h"
@@ -104,9 +106,14 @@ namespace Editor
 
 		_windowManager->initWindows();
 
+		CameraController::init(_inputManager, _time, _camera);
 		CSGBuilder::singleton()->init(_windowManager, _renderer, _scene, _contentManager);
+		Gizmo::singleton()->init(_inputManager);
 
 		_gizmoRenderer = new GizmoRenderer(_renderer, _scene);
+		_objectPicker = new ObjectPicker(_windowManager, _renderer, _scene, _camera);
+
+		Gizmo::singleton()->subscribeManipulateEndEvent([=]() { CSGBuilder::singleton()->rebuild(); });
 	}
 
 	EditorApp::MainWindow::~MainWindow()
@@ -117,7 +124,11 @@ namespace Editor
 
 		delete _windowManager;
 		delete _scene;
+		delete _gizmoRenderer;
+		delete _objectPicker;
 
+		_gizmoRenderer = nullptr;
+		_objectPicker = nullptr;
 		_gridBuffer = nullptr;
 		_windowManager = nullptr;
 		_scene = nullptr;
@@ -135,8 +146,9 @@ namespace Editor
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
 		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
-		_gizmoRenderer->renderGizmo();
 		_scene->render();
+		_gizmoRenderer->renderGizmo();
+		_objectPicker->render();
 
 		_renderer->bindFrameBuffer(nullptr);
 		//** Render scene end **//
@@ -147,6 +159,13 @@ namespace Editor
 
 		_renderer->beginUI();
 		_windowManager->update(_width, _height);
+		bool isSceneWindowHovered = _sceneWindow->getIsHovered();
+		bool isGizmoWasUsed = false;
+
+		Editor::CameraController::update(isSceneWindowHovered);
+		Editor::Gizmo::singleton()->update(_camera, isSceneWindowHovered, _sceneWindow->getPositionX(), _sceneWindow->getPositionY(),
+										   _sceneWindow->getClientWidth(), _sceneWindow->getClientHeight(), isGizmoWasUsed);
+		_objectPicker->update(isSceneWindowHovered, isGizmoWasUsed, _sceneWindow->getPositionX(), _sceneWindow->getPositionY());
 		_renderer->endUI();
 		//** Render UI end **//
 

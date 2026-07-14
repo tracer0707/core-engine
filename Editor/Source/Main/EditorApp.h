@@ -29,6 +29,7 @@ namespace Editor
 	class CSGEditWindow;
 	class Font;
 	class GizmoRenderer;
+	class ObjectPicker;
 
 	class EditorApp : public Core::Application
 	{
@@ -52,6 +53,7 @@ namespace Editor
 					Core::VertexBuffer* _gridBuffer = nullptr;
 
 					GizmoRenderer* _gizmoRenderer = nullptr;
+					ObjectPicker* _objectPicker = nullptr;
 					WindowManager* _windowManager = nullptr;
 
 					MainMenu* _mainMenu = nullptr;
