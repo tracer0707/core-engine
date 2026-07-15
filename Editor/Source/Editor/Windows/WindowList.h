@@ -10,10 +10,6 @@ namespace Editor
 #define CONTENT_WINDOW "Content"
 #endif
 
-#ifndef CSG_EDIT_WINDOW
-#define CSG_EDIT_WINDOW "CSG Edit"
-#endif
-
 #ifndef GIZMO_WINDOW
 #define GIZMO_WINDOW "Gizmo"
 #endif

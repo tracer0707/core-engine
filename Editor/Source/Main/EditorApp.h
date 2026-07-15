@@ -26,7 +26,6 @@ namespace Editor
 	class ContentWindow;
 	class ContentImportWindow;
 	class GizmoWindow;
-	class CSGEditWindow;
 	class Font;
 	class GizmoRenderer;
 
@@ -62,7 +61,6 @@ namespace Editor
 					ContentWindow* _contentWindow = nullptr;
 					ContentImportWindow* _contentImportWindow = nullptr;
 					GizmoWindow* _gizmoWindow = nullptr;
-					CSGEditWindow* _csgEditWindow = nullptr;
 			};
 
 			Font* _mainFont = nullptr;

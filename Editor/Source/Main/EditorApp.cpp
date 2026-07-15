@@ -24,7 +24,6 @@
 #include "../Editor/Windows/HierarchyWindow.h"
 #include "../Editor/Windows/ContentWindow.h"
 #include "../Editor/Windows/GizmoWindow.h"
-#include "../Editor/Windows/CSGEditWindow.h"
 #include "../Editor/Windows/ContentImportWindow.h"
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
@@ -91,12 +90,6 @@ namespace Editor
 		_objectWindow->setCanAcceptDocking(false);
 		_objectWindow->setCanDock(false);
 
-		_csgEditWindow = _windowManager->addWindow<CSGEditWindow*>();
-		_csgEditWindow->setHasTitle(false);
-		_csgEditWindow->setCanAcceptDocking(false);
-		_csgEditWindow->setCanDock(false);
-		_csgEditWindow->setVisible(false);
-
 		_windowManager->setOnDock([this] {
 			auto dockInspector = _inspectorWindow->dock(DockDirection::Right, 0, 0.25f);
 			auto dockHierarchy = _hierarchyWindow->dock(DockDirection::Right, dockInspector.area2, 0.2f);
@@ -109,7 +102,7 @@ namespace Editor
 		CameraController::init(_inputManager, _time, _camera);
 		CSGBuilder::singleton()->init(_windowManager, _renderer, _scene, _contentManager);
 		Gizmo::singleton()->init(_inputManager);
-		ObjectPicker::singleton()->init(_windowManager, _renderer, _scene, _camera);
+		ObjectPicker::singleton()->init(_windowManager, _scene, _camera);
 
 		_gizmoRenderer = new GizmoRenderer(_renderer, _scene);
 
@@ -147,7 +140,6 @@ namespace Editor
 		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
 		_scene->render();
 		_gizmoRenderer->renderGizmo();
-		ObjectPicker::singleton()->render();
 
 		_renderer->bindFrameBuffer(nullptr);
 		//** Render scene end **//

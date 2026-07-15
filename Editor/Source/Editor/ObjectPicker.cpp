@@ -8,31 +8,23 @@
 #include <Core/Components/Transform.h>
 #include <Core/System/InputManager.h>
 #include <Core/Renderer/VertexBuffer.h>
-#include <Core/Renderer/Renderer.h>
-#include <Core/Renderer/Primitives.h>
 
-#include "Gizmo.h"
 #include "Windows/WindowManager.h"
 #include "Windows/HierarchyWindow.h"
 #include "Controls/TreeView.h"
 
 #include "../Shared/Tags.h"
 #include "../SceneUtils/Raycast.h"
-#include "../CSG/CSGBuilder.h"
-#include "../CSG/CSGModel.h"
-#include "../CSG/CSGBrush.h"
 
 namespace Editor
 {
 	ObjectPicker ObjectPicker::_singleton;
 
-	void ObjectPicker::init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::Camera* camera)
+	void ObjectPicker::init(WindowManager* windowManager, Core::Scene* scene, Core::Camera* camera)
 	{
 		_scene = scene;
 		_camera = camera;
 		_windowManager = windowManager;
-		_renderer = renderer;
-		_highlightBuffer = _renderer->createBuffer(nullptr, 2048, nullptr, 0);
 
 		_mouseDownEventId = _windowManager->getInputManager()->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y) {
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
@@ -57,8 +49,6 @@ namespace Editor
 			{
 				_isMouseWasMoved = true;
 			}
-
-			highlightCsgBrush(x, y);
 		});
 
 		_mouseUpEventId = _windowManager->getInputManager()->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y) {
@@ -89,18 +79,9 @@ namespace Editor
 		_windowManager->getInputManager()->unsubscribeMouseMoveEvent(_mouseMoveEventId);
 		_windowManager->getInputManager()->unsubscribeMouseUpEvent(_mouseUpEventId);
 
-		if (_highlightBuffer != nullptr)
-		{
-			_windowManager->getRenderer()->deleteBuffer(_highlightBuffer);
-			_highlightBuffer = nullptr;
-		}
-
 		_scene = nullptr;
 		_camera = nullptr;
 		_windowManager = nullptr;
-		_selectedObject = nullptr;
-		_selectedMesh = nullptr;
-		_selectedCsgBrush = nullptr;
 	}
 
 	void ObjectPicker::update(bool isMouseInView, bool isGizmoWasUsed, float offsetX, float offsetY)
@@ -121,11 +102,6 @@ namespace Editor
 		HierarchyWindow* wnd = (HierarchyWindow*)_windowManager->getWindow(HIERARCHY_WINDOW);
 		TreeView* treeView = wnd->getTreeView();
 
-		_selectedObject = hit.object;
-		_selectedCsgBrush = hit.csgBrush;
-		_selectedMesh = hit.mesh;
-		_selectedCsgFace = -1;
-
 		if (hit.object != nullptr)
 		{
 			if (hit.csgBrush != nullptr)
@@ -138,62 +114,5 @@ namespace Editor
 		{
 			treeView->clearSelection(true);
 		}
-	}
-
-	void ObjectPicker::highlightCsgBrush(int x, int y)
-	{
-		if (CSGBuilder::singleton()->getEditMode() == CSGBuilder::EditMode::Select)
-		{
-			_selectedCsgFace = -1;
-			return;
-		}
-
-		if (Gizmo::singleton()->getObjectType() != Gizmo::ObjectType::CSGBrush)
-		{
-			_selectedCsgFace = -1;
-			return;
-		}
-
-		if (_selectedObject == nullptr || _selectedCsgBrush == nullptr || _selectedMesh == nullptr)
-		{
-			_selectedCsgFace = -1;
-			return;
-		}
-
-		Core::Ray ray = _camera->getCameraToViewportRay(x, y, _offsetX, _offsetY);
-		glm::mat4 mtx = _selectedObject->getTransform()->getTransformMatrix();
-		CSGBrush* csgBrush = nullptr;
-		size_t faceId = -1;
-
-		if (Raycast::meshTest(ray, _selectedMesh, mtx, &csgBrush, &faceId))
-		{
-			if (_selectedCsgBrush != csgBrush)
-			{
-				_selectedCsgFace = -1;
-				return;
-			}
-
-			_selectedCsgFace = faceId;
-		}
-	}
-
-	void ObjectPicker::render()
-	{
-		if (_selectedObject == nullptr || _selectedCsgBrush == nullptr || _selectedMesh == nullptr || _selectedCsgFace < 0)
-		{
-			_selectedCsgFace = -1;
-			return;
-		}
-
-		glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
-		glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
-		glm::mat4 model = _selectedCsgBrush->getTransform()->getTransformMatrix();
-
-		auto inds = _selectedCsgBrush->getFaces().get(_selectedCsgFace).indices;
-		auto verts = _selectedCsgBrush->getVertices();
-
-		Core::Primitives::wireMesh(_renderer, _highlightBuffer, view, proj, model, verts, inds, Core::Color::BLUE,
-								   Core::Primitives::WireframeMode::Polygon,
-								   C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
 	}
 } // namespace Editor
