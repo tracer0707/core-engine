@@ -46,7 +46,7 @@ namespace Editor
 			glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
 			glm::mat4 model = brush->getTransform()->getTransformMatrix();
 
-			Core::List<int> inds = brush->getFlatIndices();
+			Core::List<uint32_t> inds = brush->getFlatIndices();
 			Core::List<glm::vec3>& verts = brush->getVertices();
 
 			Core::Primitives::wireMesh(_renderer, _wireframeBuffer, view, proj, model, verts, inds, Core::Color::RED,

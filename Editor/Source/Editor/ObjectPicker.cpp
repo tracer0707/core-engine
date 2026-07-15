@@ -124,6 +124,7 @@ namespace Editor
 		_selectedObject = hit.object;
 		_selectedCsgBrush = hit.csgBrush;
 		_selectedMesh = hit.mesh;
+		_selectedCsgFace = -1;
 
 		if (hit.object != nullptr)
 		{
@@ -143,16 +144,19 @@ namespace Editor
 	{
 		if (CSGBuilder::singleton()->getEditMode() == CSGBuilder::EditMode::Select)
 		{
+			_selectedCsgFace = -1;
 			return;
 		}
 
 		if (Gizmo::singleton()->getObjectType() != Gizmo::ObjectType::CSGBrush)
 		{
+			_selectedCsgFace = -1;
 			return;
 		}
 
 		if (_selectedObject == nullptr || _selectedCsgBrush == nullptr || _selectedMesh == nullptr)
 		{
+			_selectedCsgFace = -1;
 			return;
 		}
 
@@ -163,19 +167,33 @@ namespace Editor
 
 		if (Raycast::meshTest(ray, _selectedMesh, mtx, &csgBrush, &faceId))
 		{
-			if (_selectedCsgBrush != csgBrush) return;
+			if (_selectedCsgBrush != csgBrush)
+			{
+				_selectedCsgFace = -1;
+				return;
+			}
 
+			_selectedCsgFace = faceId;
 		}
 	}
 
 	void ObjectPicker::render()
 	{
+		if (_selectedObject == nullptr || _selectedCsgBrush == nullptr || _selectedMesh == nullptr || _selectedCsgFace < 0)
+		{
+			_selectedCsgFace = -1;
+			return;
+		}
+
 		glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
 		glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
-		glm::mat4 model = glm::identity<glm::mat4>();
+		glm::mat4 model = _selectedCsgBrush->getTransform()->getTransformMatrix();
 
-		/*Core::Primitives::wireMesh(_renderer, _highlightBuffer, view, proj, model, verts, inds, Core::Color::RED,
+		auto inds = _selectedCsgBrush->getFaces().get(_selectedCsgFace).indices;
+		auto verts = _selectedCsgBrush->getVertices();
+
+		Core::Primitives::wireMesh(_renderer, _highlightBuffer, view, proj, model, verts, inds, Core::Color::BLUE,
 								   Core::Primitives::WireframeMode::Polygon,
-								   C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);*/
+								   C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
 	}
 } // namespace Editor

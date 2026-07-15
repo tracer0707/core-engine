@@ -122,9 +122,9 @@ namespace Editor
 		}
 	}
 
-	Core::List<int> CSGBrush::getFlatIndices()
+	Core::List<uint32_t> CSGBrush::getFlatIndices()
 	{
-		Core::List<int> inds;
+		Core::List<uint32_t> inds;
 
 		for (int i = 0; i < faces.count(); ++i)
 		{

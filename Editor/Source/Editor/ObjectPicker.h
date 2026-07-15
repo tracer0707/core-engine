@@ -34,6 +34,7 @@ namespace Editor
 		Core::Uuid _mouseUpEventId = Core::Uuid::Empty;
 
 		CSGBrush* _selectedCsgBrush = nullptr;
+		size_t _selectedCsgFace = -1;
 
 		bool _isGizmoWasUsed = false;
 		bool _isMouseInView = false;

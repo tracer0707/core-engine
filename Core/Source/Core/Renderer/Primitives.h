@@ -29,6 +29,6 @@ namespace Core
 								 glm::vec3 center, Color color, unsigned int flags);
 
 			static void wireMesh(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
-								 List<glm::vec3>& vertices, List<int>& indices, Color color, WireframeMode mode, unsigned int flags);
+								 List<glm::vec3>& vertices, List<uint32_t>& indices, Color color, WireframeMode mode, unsigned int flags);
 	};
 } // namespace Core

@@ -93,7 +93,7 @@ namespace Core
 	}
 
 	void Primitives::wireMesh(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model, List<glm::vec3>& vertices,
-							  List<int>& indices, Color color, WireframeMode mode, unsigned int flags)
+							  List<uint32_t>& indices, Color color, WireframeMode mode, unsigned int flags)
 	{
 		if (indices.count() == 0) return;
 

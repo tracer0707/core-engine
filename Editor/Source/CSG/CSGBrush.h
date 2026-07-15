@@ -113,7 +113,7 @@ namespace Editor
 
 		Core::Transformable* getTransform() { return transform; }
 
-		Core::List<int> getFlatIndices();
+		Core::List<uint32_t> getFlatIndices();
 		Core::List<glm::vec3>& getVertices() { return vertices; }
 		Core::List<FaceInfo>& getFaces() { return faces; }
 
