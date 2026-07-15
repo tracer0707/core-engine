@@ -12,6 +12,7 @@
 #include "../../Controls/Label.h"
 #include "../../Controls/Button.h"
 #include "../../Controls/ContentSelect.h"
+#include "../../Controls/Separator.h"
 
 namespace Editor
 {
@@ -32,13 +33,19 @@ namespace Editor
 		Table* table = new Table();
 		table->setColumnsCount(2);
 
-		ContentSelect* materialSelect = new ContentSelect();
-		materialSelect->setContentType(Core::ContentType::Material);
-		materialSelect->setContent((Core::Content*)_brush->getMaterial(0));
-		materialSelect->setOnContentChanged([this](Core::Content* value) { _brush->setMaterial(0, (Core::Material*)value); });
+		for (int i = 0; i < _brush->getFaces().count(); ++i)
+		{
+			ContentSelect* materialSelect = new ContentSelect();
+			materialSelect->setContentType(Core::ContentType::Material);
+			materialSelect->setContent((Core::Content*)_brush->getMaterial(i));
+			materialSelect->setOnContentChanged([this, i](Core::Content* value) { _brush->setMaterial(i, (Core::Material*)value); });
 
-		table->addControl(new Label("Material"));
-		table->addControl(materialSelect);
+			table->addControl(new Label("Face " + std::to_string(i)));
+			table->addControl(new Separator());
+
+			table->addControl(new Label("Material"));
+			table->addControl(materialSelect);
+		}
 
 		_mainLayout->addControl(table);
 		return _mainLayout;
