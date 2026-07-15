@@ -103,7 +103,15 @@ namespace Editor
 		}
 		else if (_transformMode == TransformMode::Scale)
 		{
-			mCurrentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+			if (_objectType == ObjectType::CSGBrush)
+			{
+				mCurrentGizmoOperation = ImGuizmo::OPERATION::BOUNDS;
+				boundSizing = true;
+			}
+			else
+			{
+				mCurrentGizmoOperation = ImGuizmo::OPERATION::SCALE;
+			}
 		}
 
 		float snap[3] = {1.f, 1.f, 1.f};
