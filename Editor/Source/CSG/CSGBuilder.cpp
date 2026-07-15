@@ -17,7 +17,6 @@
 
 #include "../Editor/Windows/WindowManager.h"
 #include "../Editor/Windows/HierarchyWindow.h"
-#include "../Editor/Windows/CSGEditWindow.h"
 
 #include "../Editor/Controls/TreeView.h"
 #include "../Editor/Controls/TreeNode.h"
@@ -41,7 +40,6 @@ namespace Editor
 		_contentManager = contentManager;
 
 		_hierarchyWindow = (HierarchyWindow*)_windowManager->getWindow(HIERARCHY_WINDOW);
-		_csgEditWindow = (CSGEditWindow*)_windowManager->getWindow(CSG_EDIT_WINDOW);
 	}
 
 	void CSGBuilder::destroy()

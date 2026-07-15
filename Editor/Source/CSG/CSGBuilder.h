@@ -15,7 +15,6 @@ namespace Editor
 {
 	class WindowManager;
 	class HierarchyWindow;
-	class CSGEditWindow;
 	class CSGModel;
 	class CSGBrush;
 
@@ -49,7 +48,6 @@ namespace Editor
 
 			WindowManager* _windowManager = nullptr;
 			HierarchyWindow* _hierarchyWindow = nullptr;
-			CSGEditWindow* _csgEditWindow = nullptr;
 
 			Core::List<CSGModel*> _models;
 
