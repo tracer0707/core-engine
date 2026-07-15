@@ -11,6 +11,7 @@
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
 #include "../CameraController.h"
+#include "../ObjectPicker.h"
 
 #include "../Gizmo.h"
 
@@ -62,6 +63,13 @@ namespace Editor
 
 	void SceneWindow::onUpdate()
 	{
+		bool isSceneWindowHovered = getIsHovered();
+		bool isGizmoWasUsed = false;
+
+		CameraController::update(isSceneWindowHovered);
+		Gizmo::singleton()->update(_camera, isSceneWindowHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
+		ObjectPicker::singleton()->update(isSceneWindowHovered, isGizmoWasUsed, getPositionX(), getPositionY());
+
 		if (!_parent->getInputManager()->getMouseButton(0) && !_parent->getInputManager()->getMouseButton(1) &&
 			!_parent->getInputManager()->getMouseButton(2))
 		{

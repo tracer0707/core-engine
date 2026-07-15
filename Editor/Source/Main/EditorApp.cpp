@@ -109,9 +109,9 @@ namespace Editor
 		CameraController::init(_inputManager, _time, _camera);
 		CSGBuilder::singleton()->init(_windowManager, _renderer, _scene, _contentManager);
 		Gizmo::singleton()->init(_inputManager);
+		ObjectPicker::singleton()->init(_windowManager, _renderer, _scene, _camera);
 
 		_gizmoRenderer = new GizmoRenderer(_renderer, _scene);
-		_objectPicker = new ObjectPicker(_windowManager, _renderer, _scene, _camera);
 
 		Gizmo::singleton()->subscribeManipulateEndEvent([=]() { CSGBuilder::singleton()->rebuild(); });
 	}
@@ -119,16 +119,15 @@ namespace Editor
 	EditorApp::MainWindow::~MainWindow()
 	{
 		CSGBuilder::singleton()->destroy();
+		ObjectPicker::singleton()->destroy();
 
 		_renderer->deleteBuffer(_gridBuffer);
 
+		delete _gizmoRenderer;
 		delete _windowManager;
 		delete _scene;
-		delete _gizmoRenderer;
-		delete _objectPicker;
 
 		_gizmoRenderer = nullptr;
-		_objectPicker = nullptr;
 		_gridBuffer = nullptr;
 		_windowManager = nullptr;
 		_scene = nullptr;
@@ -148,7 +147,7 @@ namespace Editor
 		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
 		_scene->render();
 		_gizmoRenderer->renderGizmo();
-		_objectPicker->render();
+		ObjectPicker::singleton()->render();
 
 		_renderer->bindFrameBuffer(nullptr);
 		//** Render scene end **//
@@ -159,13 +158,6 @@ namespace Editor
 
 		_renderer->beginUI();
 		_windowManager->update(_width, _height);
-		bool isSceneWindowHovered = _sceneWindow->getIsHovered();
-		bool isGizmoWasUsed = false;
-
-		Editor::CameraController::update(isSceneWindowHovered);
-		Editor::Gizmo::singleton()->update(_camera, isSceneWindowHovered, _sceneWindow->getPositionX(), _sceneWindow->getPositionY(),
-										   _sceneWindow->getClientWidth(), _sceneWindow->getClientHeight(), isGizmoWasUsed);
-		_objectPicker->update(isSceneWindowHovered, isGizmoWasUsed, _sceneWindow->getPositionX(), _sceneWindow->getPositionY());
 		_renderer->endUI();
 		//** Render UI end **//
 

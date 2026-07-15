@@ -49,9 +49,13 @@ namespace Editor
 		void pickObject(int x, int y);
 		void highlightCsgBrush(int x, int y);
 
+		static ObjectPicker _singleton;
+
 	public:
-		ObjectPicker(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::Camera* camera);
-		~ObjectPicker();
+		static ObjectPicker* singleton() { return &_singleton; }
+
+		void init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::Camera* camera);
+		void destroy();
 
 		void update(bool isMouseInView, bool isGizmoWasUsed, float offsetX, float offsetY);
 		void render();

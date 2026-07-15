@@ -24,7 +24,9 @@
 
 namespace Editor
 {
-	ObjectPicker::ObjectPicker(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::Camera* camera)
+	ObjectPicker ObjectPicker::_singleton;
+
+	void ObjectPicker::init(WindowManager* windowManager, Core::Renderer* renderer, Core::Scene* scene, Core::Camera* camera)
 	{
 		_scene = scene;
 		_camera = camera;
@@ -81,7 +83,7 @@ namespace Editor
 		});
 	}
 
-	ObjectPicker::~ObjectPicker() 
+	void ObjectPicker::destroy() 
 	{
 		_windowManager->getInputManager()->unsubscribeMouseDownEvent(_mouseDownEventId);
 		_windowManager->getInputManager()->unsubscribeMouseMoveEvent(_mouseMoveEventId);
