@@ -17,12 +17,14 @@ namespace Editor
 	class LinearLayout;
 	class Control;
 	class Image;
+	class Dummy;
 	class GizmoWindow;
 	struct DragDropData;
 
 	class SceneWindow : public Window
 	{
 		private:
+			Dummy* _dndTarget = nullptr;
 			Image* _image = nullptr;
 
 			Core::Time* _time = nullptr;

@@ -22,8 +22,14 @@ namespace Editor
 
 	void Control::setSize(float width, float height)
 	{
-		setWidth(width);
-		setHeight(height);
+		_width = width;
+		_height = height;
+	}
+
+	void Control::setPosition(float x, float y)
+	{
+		_x = x;
+		_y = y;
 	}
 
 	void Control::setObjectTag(int key, void* value)

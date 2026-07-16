@@ -33,6 +33,10 @@ namespace Editor
 			std::map<int, void*> _objectTags;
 			std::map<int, Core::String> _stringTags;
 
+			float _x = FLT_MIN;
+			float _y = FLT_MIN;
+			float _computedX = 0;
+			float _computedY = 0;
 			float _width = 0;
 			float _height = 0;
 
@@ -67,7 +71,14 @@ namespace Editor
 			virtual void setHeight(float value) { _height = value; }
 			virtual float getHeight() const { return _height; }
 
+			float getPositionX() const { return _computedX; }
+			void setPositionX(float value) { _x = value; }
+
+			float getPositionY() const { return _computedY; }
+			void setPositionY(float value) { _y = value; }
+
 			void setSize(float width, float height);
+			void setPosition(float x, float y);
 
 			void setVisible(bool value) { _visible = value; }
 			bool getVisible() const { return _visible; }

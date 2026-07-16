@@ -8,8 +8,10 @@
 #include <Core/Scene/Scene.h>
 #include <Core/System/InputManager.h>
 
+#include "../Controls/Dummy.h"
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
+#include "../Controls/LinearLayout.h"
 #include "../CameraController.h"
 #include "../ObjectPicker.h"
 
@@ -29,11 +31,19 @@ namespace Editor
 		_style.paddingX = 0;
 		_style.paddingY = 0;
 
-		_image = new Image();
-		_image->setDragDropTarget(true, "SCENE_OBJECT");
-		_image->setOnDragDrop([this](DragDropData* data, int x, int y) { onDragDrop(data, x, y); });
+		LinearLayout* layout = new LinearLayout();
+		layout->setNoInputs(true);
 
-		addControl(_image);
+		_image = new Image();
+		
+		_dndTarget = new Dummy();
+		_dndTarget->setDragDropTarget(true, "SCENE_OBJECT");
+		_dndTarget->setOnDragDrop([this](DragDropData* data, int x, int y) { onDragDrop(data, x, y); });
+
+		layout->addControl(_image);
+		layout->addControl(_dndTarget);
+
+		addControl(layout);
 	}
 
 	SceneWindow::~SceneWindow() {}
@@ -65,6 +75,9 @@ namespace Editor
 	{
 		bool isSceneWindowHovered = getIsHovered();
 		bool isGizmoWasUsed = false;
+
+		_dndTarget->setPosition(5, 5);
+		_dndTarget->setSize(getClientWidth() - 10, getClientHeight() - 10);
 
 		CameraController::update(isSceneWindowHovered);
 		Gizmo::singleton()->update(_camera, isSceneWindowHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);

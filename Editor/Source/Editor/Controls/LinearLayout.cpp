@@ -376,10 +376,16 @@ namespace Editor
 		if (!_visible) return;
 
 		uint32_t _flags = ImGuiChildFlags_AlwaysUseWindowPadding;
+		uint32_t _windowFlags = ImGuiWindowFlags_None;
 		ImGuiStyle& style = ImGui::GetStyle();
 
+		if (_noInputs)
+		{
+			_windowFlags |= ImGuiWindowFlags_NoInputs;
+		}
+
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
-		ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height), _flags);
+		ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height), _flags, _windowFlags);
 
 		ImVec2 availableSize = ImGui::GetContentRegionAvail();
 		ImVec2 cursorStart = ImGui::GetCursorPos();

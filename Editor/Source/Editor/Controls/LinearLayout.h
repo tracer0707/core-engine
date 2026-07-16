@@ -48,6 +48,8 @@ namespace Editor
 			float _actualWidth = 0.0f;
 			float _actualHeight = 0.0f;
 
+			bool _noInputs = false;
+
 			struct RowInfo
 			{
 					std::vector<size_t> indices;
@@ -97,6 +99,9 @@ namespace Editor
 
 			void setWrapMode(LayoutWrapMode mode) { _wrapMode = mode; }
 			LayoutWrapMode getWrapMode() const { return _wrapMode; }
+
+			void setNoInputs(bool value) { _noInputs = value; }
+			bool getNoInputs() const { return _noInputs; }
 
 			void setOnClick(std::function<void()> value) { _onClick = value; }
 	};
