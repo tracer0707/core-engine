@@ -120,9 +120,6 @@ namespace Editor
 
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
-		if (text_size.x > w) text_size.x = w;
-		if (text_size.y > h) text_size.y = h;
-
 		ImVec2 total_size(w, h);
 		ImVec2 cur = ImGui::GetCursorPos();
 
@@ -136,24 +133,36 @@ namespace Editor
 		ImVec2 size = ImGui::GetItemRectSize();
 		ImGui::PopID();
 
-		ImU32 bg_col = ImGui::GetColorU32(active ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		if (text_size.x > size.x)
+		{
+			int ellipsisW = ImGui::CalcTextSize("...").x;
 
-		draw_list->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_col, style.FrameRounding);
-
-		ImVec2 img_p(pos.x + (size.x - imgSize.x) * 0.5f, pos.y + padding.y);
-
-		draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1), ImVec2(1, 0));
+			std::string croppedText = "";
+			int prefSizeX = 0;
+			int c = 0;
+			while (prefSizeX < (size.x - ellipsisW) - 4 && c < label.size())
+			{
+				croppedText += label[c];
+				prefSizeX = ImGui::CalcTextSize(croppedText.c_str()).x;
+				++c;
+			}
+			label = croppedText + "...";
+			text_size.x = prefSizeX + ellipsisW;
+		}
 
 		ImU32 text_col = ImGui::GetColorU32(ImGuiCol_Text);
+		ImU32 bg_col = ImGui::GetColorU32(active ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+		ImVec2 img_p(pos.x + (size.x - imgSize.x) * 0.5f, pos.y + padding.y);
+
+		draw_list->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_col, style.FrameRounding);
+		draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1), ImVec2(1, 0));
 
 		float lowSize = (size.x - text_size.x) * 0.5f;
-		float highSize = (size.x + text_size.x) * 0.5f;
-		ImVec2 text_min(pos.x + lowSize, img_p.y + imgSize.y + spacing);
-		ImVec2 text_max(pos.x + highSize, text_min.y + text_size.y);
+		ImVec2 text_min(pos.x + lowSize + 1, img_p.y + imgSize.y + spacing);
 
 		if (!_edit)
 		{
-			ImGui::RenderTextEllipsis(draw_list, text_min, text_max, text_max.x, text_max.x, label.c_str(), nullptr, nullptr);
+			draw_list->AddText(text_min, text_col, label.c_str());
 
 			if (_content != nullptr && ImGui::BeginDragDropSource())
 			{

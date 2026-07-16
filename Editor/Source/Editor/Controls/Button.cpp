@@ -92,7 +92,7 @@ namespace Editor
 			float h = _height;
 
 			ImGuiStyle& style = ImGui::GetStyle();
-			ImVec2 padding = style.FramePadding;
+			ImVec2 padding = ImVec2(2, 2);
 
 			if (w == 0) w = _image->getWidth() + padding.x * 2.0f;
 			if (h == 0) h = _image->getHeight() + padding.y * 2.0f;
