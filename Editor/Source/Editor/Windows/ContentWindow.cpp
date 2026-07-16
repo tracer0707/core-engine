@@ -155,7 +155,7 @@ namespace Editor
 	void ContentWindow::rescanContent()
 	{
 		_treeView->clear();
-		FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, false, false);
+		FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, true, false);
 	}
 
 	void ContentWindow::setCurrentDir(Core::String path)

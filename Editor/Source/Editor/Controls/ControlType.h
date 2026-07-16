@@ -24,6 +24,7 @@ namespace Editor
 		InputFile,
 		InputText,
 		InputInt,
-		InputVec4
+		InputVec4,
+		Collapse
 	};
 }

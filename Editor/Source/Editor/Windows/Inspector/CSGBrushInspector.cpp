@@ -5,6 +5,7 @@
 #include <Core/Content/ContentType.h>
 #include <Core/Content/Material.h>
 
+#include "../../../CSG/CSGBuilder.h"
 #include "../../../CSG/CSGBrush.h"
 
 #include "../../Controls/Table.h"
@@ -12,7 +13,7 @@
 #include "../../Controls/Label.h"
 #include "../../Controls/Button.h"
 #include "../../Controls/ContentSelect.h"
-#include "../../Controls/Separator.h"
+#include "../../Controls/Collapse.h"
 
 namespace Editor
 {
@@ -30,24 +31,30 @@ namespace Editor
 	Control* CSGBrushInspector::build()
 	{
 		LinearLayout* _mainLayout = new LinearLayout();
-		Table* table = new Table();
-		table->setColumnsCount(2);
 
 		for (int i = 0; i < _brush->getFaces().count(); ++i)
 		{
+			Collapse* collapse = new Collapse("Face " + std::to_string(i));
+
+			Table* table = new Table();
+			table->setColumnsCount(2);
+
 			ContentSelect* materialSelect = new ContentSelect();
 			materialSelect->setContentType(Core::ContentType::Material);
 			materialSelect->setContent((Core::Content*)_brush->getMaterial(i));
-			materialSelect->setOnContentChanged([this, i](Core::Content* value) { _brush->setMaterial(i, (Core::Material*)value); });
-
-			table->addControl(new Label("Face " + std::to_string(i)));
-			table->addControl(new Separator());
+			materialSelect->setOnContentChanged([this, i](Core::Content* value)
+			{
+				_brush->setMaterial(i, (Core::Material*)value);
+				CSGBuilder::singleton()->rebuild();
+			});
 
 			table->addControl(new Label("Material"));
 			table->addControl(materialSelect);
+
+			collapse->addControl(table);
+			_mainLayout->addControl(collapse);
 		}
 
-		_mainLayout->addControl(table);
 		return _mainLayout;
 	}
 } // namespace Editor

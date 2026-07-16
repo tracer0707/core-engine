@@ -35,11 +35,11 @@ namespace Editor
 	{
 		if (!_visible) return;
 
-		if (ImGui::BeginTable(_id.c_str(), _colCount, ImGuiTableFlags_Resizable | ImGuiTableFlags_ScrollY, ImVec2(0, 0)))
+		if (ImGui::BeginTable(_id.c_str(), _colCount, ImGuiTableFlags_Resizable, ImVec2(0, 0)))
 		{
 			if (_controls.count() % _colCount != 0)
 			{
-				throw std::runtime_error("Controls count must fill columns entirely");
+				throw std::runtime_error("Controls must fill columns entirely");
 			}
 
 			for (int i = 0, j = 0; i < _controls.count(); ++i, ++j)
