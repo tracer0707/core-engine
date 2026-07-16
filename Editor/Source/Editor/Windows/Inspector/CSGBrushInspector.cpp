@@ -14,6 +14,7 @@
 #include "../../Controls/Button.h"
 #include "../../Controls/ContentSelect.h"
 #include "../../Controls/Collapse.h"
+#include "../../Controls/Dropdown.h"
 
 namespace Editor
 {
@@ -31,6 +32,22 @@ namespace Editor
 	Control* CSGBrushInspector::build()
 	{
 		LinearLayout* _mainLayout = new LinearLayout();
+
+		Table* mainTable = new Table();
+		mainTable->setColumnsCount(2);
+		
+		Dropdown* operation = new Dropdown({"Add", "Subtract"});
+		operation->setSelectedIndex(_brush->getBrushOperation() == CSGBrush::BrushOperation::Add ? 0 : 1);
+		operation->setOnSelectItem([this](int index)
+		{
+			_brush->setBrushOperation(index == 0 ? CSGBrush::BrushOperation::Add : CSGBrush::BrushOperation::Subtract);
+			CSGBuilder::singleton()->rebuild();
+		});
+		
+		mainTable->addControl(new Label("Operation"));
+		mainTable->addControl(operation);
+
+		_mainLayout->addControl(mainTable);
 
 		for (int i = 0; i < _brush->getFaces().count(); ++i)
 		{
