@@ -94,7 +94,7 @@ namespace Editor
 				glm::vec3 p2 = mtx * glm::vec4(v2.position, 1.0f);
 				glm::vec3 p3 = mtx * glm::vec4(v3.position, 1.0f);
 
-				std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, true);
+				std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, false);
 
 				if (hit.first)
 				{
