@@ -15,6 +15,6 @@ namespace Editor
 			CSGBrushInspector(CSGBrush* brush);
 			virtual ~CSGBrushInspector();
 
-			virtual Control* build();
+			virtual void build();	
 	};
 } // namespace Editor

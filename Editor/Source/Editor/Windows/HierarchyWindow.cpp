@@ -83,7 +83,7 @@ namespace Editor
 
 		if (node == nullptr)
 		{
-			inspectorWnd->setInspector(nullptr);
+			inspectorWnd->clear();
 			return;
 		}
 
@@ -92,7 +92,9 @@ namespace Editor
 			if (it.first == TAG_CSG_BRUSH)
 			{
 				CSGBrushInspector* inspector = new CSGBrushInspector((CSGBrush*)it.second);
-				inspectorWnd->setInspector(inspector);
+				inspector->build();
+				inspectorWnd->clear();
+				inspectorWnd->addControl(inspector);
 			}
 		}
 	}

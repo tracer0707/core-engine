@@ -1,12 +1,16 @@
 #include "Inspector.h"
 
+#include "../WindowManager.h"
+#include "../InspectorWindow.h"
+
 namespace Editor
 {
-	Inspector::~Inspector()
+	Core::EventHandler* Inspector::getEventHandler()
 	{
-		if (_onDestroy != nullptr)
-		{
-			_onDestroy();
-		}
+		return ((InspectorWindow*)_parent)->getParent()->getEventHandler();
 	}
+
+	Inspector::Inspector() : LinearLayout(LayoutDirection::Vertical) {}
+
+	Inspector::~Inspector() { }
 } // namespace Editor

@@ -10,29 +10,14 @@ namespace Editor
 {
 	InspectorWindow::InspectorWindow(WindowManager* parent) : Window(parent, INSPECTOR_WINDOW) {}
 
-	void InspectorWindow::setInspector(Inspector* value)
-	{
-		if (_currentInspector != nullptr)
-		{
-			clear();
-			delete _currentInspector;
-			_currentInspector = nullptr;
-		}
+	InspectorWindow::~InspectorWindow() {}
 
-		if (value != nullptr)
-		{
-			_currentInspector = value;
-			_currentInspector->_parent = this;
-			addControl(_currentInspector->build());
-		}
-	}
-
-	void InspectorWindow::rebuildInspector()
+	void InspectorWindow::rebuild()
 	{
-		if (_currentInspector != nullptr)
+		for (auto it : _controls)
 		{
-			clear();
-			addControl(_currentInspector->build());
+			it->clear();
+			((Inspector*)it)->build();
 		}
 	}
 } // namespace Editor

@@ -8,14 +8,10 @@ namespace Editor
 
 	class InspectorWindow : public Window
 	{
-		private:
-			Inspector* _currentInspector = nullptr;
-
 		public:
 			InspectorWindow(WindowManager* parent);
-			virtual ~InspectorWindow() = default;
+			virtual ~InspectorWindow();
 
-			void setInspector(Inspector* value);
-			void rebuildInspector();
+			void rebuild();
 	};
 } // namespace Editor

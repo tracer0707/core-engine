@@ -6,6 +6,7 @@
 #include <Core/Content/Material.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Program.h>
+#include <Core/System/EventHandler.h>
 
 #include "../../Controls/Table.h"
 #include "../../Controls/LinearLayout.h"
@@ -34,9 +35,8 @@ namespace Editor
 
 	MaterialInspector::~MaterialInspector() {}
 
-	Control* MaterialInspector::build()
+	void MaterialInspector::build()
 	{
-		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		Table* table = new Table();
 		table->setColumnsCount(2);
 
@@ -61,7 +61,11 @@ namespace Editor
 		programDropdown->setOnSelectItem([this, programNames](int value) {
 			Core::Program* newProgram = _renderer->getShaderProgram(programNames[value]);
 			_material->setProgram(newProgram);
-			_parent->rebuildInspector();
+			getEventHandler()->addEvent([this]()
+			{
+				clear();
+				build();
+			});
 		});
 		table->addControl(programDropdown);
 
@@ -101,7 +105,6 @@ namespace Editor
 			}
 		}
 
-		_mainLayout->addControl(table);
-		return _mainLayout;
+		addControl(table);
 	}
 } // namespace Editor

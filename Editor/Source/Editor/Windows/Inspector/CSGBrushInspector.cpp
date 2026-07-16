@@ -29,10 +29,8 @@ namespace Editor
 
 	CSGBrushInspector::~CSGBrushInspector() {}
 
-	Control* CSGBrushInspector::build()
+	void CSGBrushInspector::build()
 	{
-		LinearLayout* _mainLayout = new LinearLayout();
-
 		Table* mainTable = new Table();
 		mainTable->setColumnsCount(2);
 		
@@ -47,7 +45,7 @@ namespace Editor
 		mainTable->addControl(new Label("Operation"));
 		mainTable->addControl(operation);
 
-		_mainLayout->addControl(mainTable);
+		addControl(mainTable);
 
 		for (int i = 0; i < _brush->getFaces().count(); ++i)
 		{
@@ -69,9 +67,7 @@ namespace Editor
 			table->addControl(materialSelect);
 
 			collapse->addControl(table);
-			_mainLayout->addControl(collapse);
+			addControl(collapse);
 		}
-
-		return _mainLayout;
 	}
 } // namespace Editor

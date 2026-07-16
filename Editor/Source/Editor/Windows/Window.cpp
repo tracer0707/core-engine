@@ -12,7 +12,7 @@
 
 namespace Editor
 {
-	Window::Window(WindowManager* parent, std::string name)
+	Window::Window(WindowManager* parent, std::string name) : Container()
 	{
 		_name = name;
 		_id = Core::Uuid::create();

@@ -20,6 +20,6 @@ namespace Editor
 			MaterialInspector(Core::Material* material, Core::Renderer* renderer);
 			virtual ~MaterialInspector();
 
-			virtual Control* build();
+			virtual void build();
 	};
 } // namespace Editor

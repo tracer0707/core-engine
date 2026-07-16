@@ -2,29 +2,26 @@
 
 #include <functional>
 
+#include "../../Controls/LinearLayout.h"
+
+namespace Core
+{
+	class EventHandler;
+}
+
 namespace Editor
 {
-	class Control;
 	class InspectorWindow;
 
-	class Inspector
+	class Inspector : public LinearLayout
 	{
-			friend class InspectorWindow;
-
-		private:
-			std::function<void()> _onDestroy = nullptr;
-
 		protected:
-			InspectorWindow* _parent = nullptr;
+			Core::EventHandler* getEventHandler();
 
 		public:
-			Inspector() = default;
+			Inspector();
 			virtual ~Inspector();
 
-			virtual Control* build() = 0;
-
-			void setOnDestroy(std::function<void()> value) { _onDestroy = value; }
-
-			InspectorWindow* getParent() const { return _parent; }
+			virtual void build() = 0;
 	};
 } // namespace Editor
