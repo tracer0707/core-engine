@@ -88,20 +88,22 @@ namespace Editor
 
 		if (_image != nullptr)
 		{
-			float w = _width;
-			float h = _height;
+			float w = std::max(_width, _imgW);
+			float h = std::max(_height, _imgH);
 
 			ImGuiStyle& style = ImGui::GetStyle();
-			ImVec2 padding = ImVec2(2, 2);
-
-			if (w == 0) w = _image->getWidth() + padding.x * 2.0f;
-			if (h == 0) h = _image->getHeight() + padding.y * 2.0f;
-
-			ImVec2 imgSize(w - padding.x * 2.0f, h - padding.y * 2.0f);
+			ImVec2 padding = ImVec2(_style.paddingX, _style.paddingY);
 
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
 
 			ImVec2 total_size(w, h);
+			ImVec2 text_sz(0, 0);
+
+			if (!_text.empty())
+			{
+				text_sz = ImGui::CalcTextSize(_text.std_str().c_str());
+				total_size.x += text_sz.x + 2.0f + padding.x * 2.0f;
+			}
 
 			ImGui::PushID(_id.c_str());
 			hasClick = ImGui::InvisibleButton("##ImageButtonWithText", total_size);
@@ -112,16 +114,26 @@ namespace Editor
 			ImGui::PopID();
 
 			ImU32 bg_col = ImGui::GetColorU32(active ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
-
+			ImU32 text_col = ImGui::GetColorU32(ImGuiCol_Text);
+			
 			draw_list->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_col, style.FrameRounding);
 
-			ImVec2 img_p(pos.x + (size.x - imgSize.x) * 0.5f, pos.y + padding.y);
+			if (_text.empty())
+			{
+				ImVec2 img_p(pos.x + (size.x - _imgW) * 0.5f, pos.y + (size.y - _imgH) * 0.5f);
+				draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + _imgW, img_p.y + _imgH), ImVec2(0, 1),
+									ImVec2(1, 0));
+			}
+			else
+			{
+				ImVec2 img_p(pos.x + (size.x - _imgW - text_sz.x) * 0.5f, pos.y + (size.y - _imgH) * 0.5f);
+				draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + _imgW, img_p.y + _imgH), ImVec2(0, 1),
+									ImVec2(1, 0));
+				draw_list->AddText(ImVec2(img_p.x + _imgW + 2.0f, pos.y + (size.y - text_sz.y) * 0.5f), text_col, _text.std_str().c_str());
+			}
 
-			draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1),
-								ImVec2(1, 0));
-
-			_actualWidth = w;
-			_actualHeight = h;
+			_actualWidth = size.x;
+			_actualHeight = size.y;
 		}
 		else
 		{

@@ -48,7 +48,7 @@ namespace Editor
 		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		_mainLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
-		LinearLayout* _toolbar = new LinearLayout();
+		LinearLayout* _toolbar = new LinearLayout(LayoutDirection::Horizontal);
 		LinearLayout* _leftPane = new LinearLayout(LayoutDirection::Vertical);
 		_rightPane = new LinearLayout();
 
@@ -63,13 +63,15 @@ namespace Editor
 		Core::Texture2D* _importTex = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/down.png"), _parent->getContentManager());
 
-		_createResourceBtn = new Button(_addTex);
-		_createResourceBtn->setSize(30, 30);
+		_createResourceBtn = new Button("Create", _addTex);
+		_createResourceBtn->setHeight(24);
+		_createResourceBtn->getStyle().paddingX = 8;
 		_createResourceBtn->setUseContextMenu(true);
 		_createResourceBtn->setEnabled(false);
 
-		_importResourceBtn = new Button(_importTex);
-		_importResourceBtn->setSize(30, 30);
+		_importResourceBtn = new Button("Import", _importTex);
+		_importResourceBtn->setHeight(24);
+		_importResourceBtn->getStyle().paddingX = 8;
 		_importResourceBtn->setEnabled(false);
 
 		_importResourceBtn->setOnClick([this, parent]() {
@@ -119,7 +121,7 @@ namespace Editor
 			});
 		});
 
-		_toolbar->setHeight(30);
+		_toolbar->setHeight(24);
 		_toolbar->addControl(_createResourceBtn);
 		_toolbar->addControl(_importResourceBtn);
 

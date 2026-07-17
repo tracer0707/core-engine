@@ -27,6 +27,8 @@ namespace Editor
 			bool _edit = false;
 			float _actualWidth = 0.0f;
 			float _actualHeight = 0.0f;
+			float _imgW = 24.0f;
+			float _imgH = 24.0f;
 
 			ContextMenu* _contextMenu = nullptr;
 
@@ -50,6 +52,12 @@ namespace Editor
 
 			void setImage(Core::Texture2D* value) { _image = value; }
 			Core::Texture2D* getImage() { return _image; }
+
+			float getImageWidth() const { return _imgW; }
+			void setImageWidth(float value) { _imgW = value; }
+
+			float getImageHeight() const { return _imgH; }
+			void setImageHeight(float value) { _imgH = value; }
 
 			bool getActive() const { return _active; }
 			void setActive(bool value);
