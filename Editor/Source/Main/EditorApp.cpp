@@ -23,7 +23,7 @@
 #include "../Editor/Windows/InspectorWindow.h"
 #include "../Editor/Windows/HierarchyWindow.h"
 #include "../Editor/Windows/ContentWindow.h"
-#include "../Editor/Windows/GizmoWindow.h"
+#include "../Editor/Windows/ToolWindow.h"
 #include "../Editor/Windows/ContentImportWindow.h"
 #include "../Editor/CameraController.h"
 #include "../Editor/Rendering.h"
@@ -80,15 +80,15 @@ namespace Editor
 
 		_contentWindow->setContentDir(app->getContentPath());
 
-		_gizmoWindow = _windowManager->addWindow<GizmoWindow*>();
-		_gizmoWindow->setHasTitle(false);
-		_gizmoWindow->setCanAcceptDocking(false);
-		_gizmoWindow->setCanDock(false);
+		_toolWindow = _windowManager->addWindow<ToolWindow*>();
+		_toolWindow->setCanClose(false);
+		_toolWindow->setHasDockTitle(false);
+		_toolWindow->setCanAcceptDocking(false);
 
 		_objectWindow = _windowManager->addWindow<ObjectWindow*>();
-		_objectWindow->setHasTitle(false);
+		_objectWindow->setCanClose(false);
+		_objectWindow->setHasDockTitle(false);
 		_objectWindow->setCanAcceptDocking(false);
-		_objectWindow->setCanDock(false);
 
 		_windowManager->setOnDock([this] {
 			auto dockInspector = _inspectorWindow->dock(DockDirection::Right, 0, 0.25f);

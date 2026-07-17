@@ -10,8 +10,8 @@ namespace Editor
 #define CONTENT_WINDOW "Content"
 #endif
 
-#ifndef GIZMO_WINDOW
-#define GIZMO_WINDOW "Gizmo"
+#ifndef TOOL_WINDOW
+#define TOOL_WINDOW "Tools"
 #endif
 
 #ifndef HIERARCHY_WINDOW

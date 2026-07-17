@@ -1,4 +1,4 @@
-#include "GizmoWindow.h"
+#include "ToolWindow.h"
 
 #include <filesystem>
 
@@ -18,7 +18,7 @@
 
 namespace Editor
 {
-	GizmoWindow::GizmoWindow(WindowManager* parent) : Window(parent, GIZMO_WINDOW)
+	ToolWindow::ToolWindow(WindowManager* parent) : Window(parent, TOOL_WINDOW)
 	{
 		Core::ContentManager* contentMgr = parent->getContentManager();
 
@@ -139,9 +139,9 @@ namespace Editor
 		invalidate();
 	}
 
-	GizmoWindow::~GizmoWindow() {}
+	ToolWindow::~ToolWindow() {}
 
-	void GizmoWindow::invalidate()
+	void ToolWindow::invalidate()
 	{
 		_selectBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Select);
 		_translateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Translate);

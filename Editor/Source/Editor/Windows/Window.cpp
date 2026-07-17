@@ -73,7 +73,11 @@ namespace Editor
 		if (!_hasTitle)
 		{
 			_flags |= ImGuiWindowFlags_NoTitleBar;
-			_dockFlags |= ImGuiDockNodeFlags_HiddenTabBar | ImGuiDockNodeFlags_NoDockingOverOther;
+		}
+
+		if (!_hasDockTitle)
+		{
+			_dockFlags |= ImGuiDockNodeFlags_HiddenTabBar;
 		}
 
 		if (!_canAcceptDocking)
@@ -94,6 +98,11 @@ namespace Editor
 		if (!_canMove)
 		{
 			_flags |= ImGuiWindowFlags_NoMove;
+		}
+
+		if (!_canClose)
+		{
+			_dockFlags |= ImGuiDockNodeFlags_NoCloseButton;
 		}
 
 		ImGuiWindowClass _wndClass;
@@ -123,7 +132,7 @@ namespace Editor
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, _style.borderSize);
 		bool prevVisible = _visible;
-		ImGui::Begin(_name.c_str(), &_visible, _flags);
+		ImGui::Begin(_name.c_str(), _canClose ? & _visible : nullptr, _flags);
 		if (prevVisible != _visible && !_visible)
 		{
 			onClose();

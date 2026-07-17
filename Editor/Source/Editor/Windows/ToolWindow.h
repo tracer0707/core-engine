@@ -6,7 +6,7 @@ namespace Editor
 {
 	class Button;
 
-	class GizmoWindow : public Window
+	class ToolWindow : public Window
 	{
 	private:
 		Button* _selectBtn = nullptr;
@@ -17,8 +17,8 @@ namespace Editor
 		Button* _worldSpaceBtn = nullptr;
 
 	public:
-		GizmoWindow(WindowManager* parent);
-		virtual ~GizmoWindow();
+		ToolWindow(WindowManager* parent);
+		virtual ~ToolWindow();
 
 		virtual void invalidate();
 	};

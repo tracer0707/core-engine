@@ -24,7 +24,7 @@ namespace Editor
 	class Window;
 	class ContentWindow;
 	class ContentImportWindow;
-	class GizmoWindow;
+	class ToolWindow;
 	class HierarchyWindow;
 	class InspectorWindow;
 	class ObjectWindow;
@@ -99,9 +99,9 @@ namespace Editor
 	}
 
 	template <>
-	inline GizmoWindow* WindowManager::addWindow<GizmoWindow*>()
+	inline ToolWindow* WindowManager::addWindow<ToolWindow*>()
 	{
-		return (GizmoWindow*)addWindow(GIZMO_WINDOW);
+		return (ToolWindow*)addWindow(TOOL_WINDOW);
 	}
 
 	template <>

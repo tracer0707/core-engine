@@ -25,7 +25,7 @@ namespace Editor
 	class HierarchyWindow;
 	class ContentWindow;
 	class ContentImportWindow;
-	class GizmoWindow;
+	class ToolWindow;
 	class Font;
 	class GizmoRenderer;
 
@@ -60,7 +60,7 @@ namespace Editor
 					HierarchyWindow* _hierarchyWindow = nullptr;
 					ContentWindow* _contentWindow = nullptr;
 					ContentImportWindow* _contentImportWindow = nullptr;
-					GizmoWindow* _gizmoWindow = nullptr;
+					ToolWindow* _toolWindow = nullptr;
 			};
 
 			Font* _mainFont = nullptr;

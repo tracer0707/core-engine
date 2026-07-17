@@ -18,7 +18,7 @@ namespace Editor
 	class Control;
 	class Image;
 	class Dummy;
-	class GizmoWindow;
+	class ToolWindow;
 	struct DragDropData;
 
 	class SceneWindow : public Window
@@ -32,7 +32,7 @@ namespace Editor
 			Core::Scene* _scene = nullptr;
 			Core::RenderTexture* _renderTexture = nullptr;
 
-			GizmoWindow* _gizmoWindow = nullptr;
+			ToolWindow* _toolWindow = nullptr;
 
 			void onDragDrop(DragDropData* data, int x, int y);
 

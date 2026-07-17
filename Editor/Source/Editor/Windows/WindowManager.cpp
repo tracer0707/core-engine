@@ -9,7 +9,7 @@
 #include "Window.h"
 #include "ContentWindow.h"
 #include "ContentImportWindow.h"
-#include "GizmoWindow.h"
+#include "ToolWindow.h"
 #include "HierarchyWindow.h"
 #include "InspectorWindow.h"
 #include "ObjectWindow.h"
@@ -81,9 +81,9 @@ namespace Editor
 		{
 			window = new ContentImportWindow(this);
 		}
-		else if (name == GIZMO_WINDOW)
+		else if (name == TOOL_WINDOW)
 		{
-			window = new GizmoWindow(this);
+			window = new ToolWindow(this);
 		}
 		else if (name == HIERARCHY_WINDOW)
 		{

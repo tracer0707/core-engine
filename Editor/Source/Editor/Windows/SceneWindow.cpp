@@ -22,7 +22,7 @@
 
 #include "WindowList.h"
 #include "WindowManager.h"
-#include "GizmoWindow.h"
+#include "ToolWindow.h"
 
 namespace Editor
 {
@@ -50,7 +50,7 @@ namespace Editor
 
 	void SceneWindow::init()
 	{
-		_gizmoWindow = (GizmoWindow*)_parent->getWindow(GIZMO_WINDOW);
+		_toolWindow = (ToolWindow*)_parent->getWindow(TOOL_WINDOW);
 	}
 
 	void SceneWindow::setScene(Core::Scene* scene)
@@ -89,25 +89,25 @@ namespace Editor
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
-				_gizmoWindow->invalidate();
+				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_W))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
-				_gizmoWindow->invalidate();
+				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_E))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
-				_gizmoWindow->invalidate();
+				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_R))
 			{
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
-				_gizmoWindow->invalidate();
+				_toolWindow->invalidate();
 			}
 		}
 	}

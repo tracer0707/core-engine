@@ -55,9 +55,11 @@ namespace Editor
 
 			bool _visible = true;
 			bool _hasTitle = true;
+			bool _hasDockTitle = true;
+			bool _isHovered = false;
 			bool _canAcceptDocking = true;
 			bool _canDock = true;
-			bool _isHovered = false;
+			bool _canClose = true;
 			bool _canResize = true;
 			bool _canMove = true;
 
@@ -104,6 +106,9 @@ namespace Editor
 			void setHasTitle(bool value) { _hasTitle = value; }
 			bool getHasTitle() const { return _hasTitle; }
 
+			void setHasDockTitle(bool value) { _hasDockTitle = value; }
+			bool getHasDockTitle() const { return _hasDockTitle; }
+
 			void setCanAcceptDocking(bool value) { _canAcceptDocking = value; }
 			bool getCanAcceptDocking() const { return _canAcceptDocking; }
 
@@ -115,6 +120,9 @@ namespace Editor
 
 			void setCanMove(bool value) { _canMove = value; }
 			bool getCanMove() const { return _canMove; }
+
+			void setCanClose(bool value) { _canClose = value; }
+			bool getCanClose() const { return _canClose; }
 
 			void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
 			void close();
