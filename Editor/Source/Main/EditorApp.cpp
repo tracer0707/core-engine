@@ -91,10 +91,12 @@ namespace Editor
 		_objectWindow->setCanAcceptDocking(false);
 
 		_windowManager->setOnDock([this] {
-			auto dockInspector = _inspectorWindow->dock(DockDirection::Right, 0, 0.25f);
+			auto dockTools = _toolWindow->dock(DockDirection::Up, 0, 0.053f);
+			auto dockInspector = _inspectorWindow->dock(DockDirection::Right, dockTools.area2, 0.25f);
 			auto dockHierarchy = _hierarchyWindow->dock(DockDirection::Right, dockInspector.area2, 0.2f);
 			auto dockContent = _contentWindow->dock(DockDirection::Down, dockHierarchy.area2, 0.3f);
-			auto dockScene = _sceneWindow->dock(DockDirection::None, dockContent.area2, 0.7f);
+			auto dockObjects = _objectWindow->dock(DockDirection::Left, dockContent.area2, 0.051f);
+			auto dockScene = _sceneWindow->dock(DockDirection::None, dockObjects.area2, 0.7f);
 		});
 
 		_windowManager->initWindows();
