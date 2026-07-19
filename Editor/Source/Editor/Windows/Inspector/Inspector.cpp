@@ -10,7 +10,10 @@ namespace Editor
 		return ((InspectorWindow*)_parent)->getParent()->getEventHandler();
 	}
 
-	Inspector::Inspector() : LinearLayout(LayoutDirection::Vertical) {}
+	Inspector::Inspector() : LinearLayout(LayoutDirection::Vertical)
+	{
+		setWrapMode(LayoutWrapMode::NoWrap);
+	}
 
 	Inspector::~Inspector() { }
 } // namespace Editor

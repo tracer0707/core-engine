@@ -25,6 +25,7 @@ namespace Editor
 		InputText,
 		InputInt,
 		InputVec4,
+		InputVec3,
 		Collapse,
 		Dummy
 	};

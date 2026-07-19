@@ -39,7 +39,7 @@ namespace Editor
 
 		ImGui::BeginGroup();
 
-		if (ImGui::CollapsingHeader(_text.std_str().c_str(), ImGuiTreeNodeFlags_None | ImGuiTreeNodeFlags_DefaultOpen))
+		if (ImGui::CollapsingHeader(_text.std_str().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			for (auto it : _controls)
 			{

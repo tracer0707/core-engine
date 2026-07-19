@@ -151,7 +151,7 @@ namespace Editor
 		}
 	}
 
-	void LinearLayout::updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
+	void LinearLayout::updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
 	{
 		float totalWidth = 0.0f;
 		float maxHeight = 0.0f;
@@ -183,6 +183,7 @@ namespace Editor
 
 		float currentX = startX;
 
+		ImGui::BeginGroup();
 		for (size_t i = 0; i < _controls.count(); ++i)
 		{
 			Control* c = _controls[i];
@@ -206,9 +207,15 @@ namespace Editor
 
 			currentX += size.x + style.ItemSpacing.x;
 		}
+		ImGui::EndGroup();
+
+		if (outSize != nullptr)
+		{
+			*outSize = ImGui::GetItemRectSize();
+		}
 	}
 
-	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
+	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
 	{
 		std::vector<RowInfo> rows;
 		calculateWrappedRows(availableSize.x, sizes, rows);
@@ -217,6 +224,7 @@ namespace Editor
 
 		float currentY = startPos.y;
 
+		ImGui::BeginGroup();
 		for (size_t rowIdx = 0; rowIdx < rows.size(); ++rowIdx)
 		{
 			RowInfo& row = rows[rowIdx];
@@ -259,9 +267,15 @@ namespace Editor
 
 			currentY += row.maxHeight + style.ItemSpacing.y;
 		}
+		ImGui::EndGroup();
+
+		if (outSize != nullptr)
+		{
+			*outSize = ImGui::GetItemRectSize();
+		}
 	}
 
-	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
+	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
 	{
 		float totalHeight = 0.0f;
 		float maxWidth = 0.0f;
@@ -293,6 +307,7 @@ namespace Editor
 
 		float currentY = startY;
 
+		ImGui::BeginGroup();
 		for (size_t i = 0; i < _controls.count(); ++i)
 		{
 			Control* c = _controls[i];
@@ -316,9 +331,15 @@ namespace Editor
 
 			currentY += size.y + style.ItemSpacing.y;
 		}
+		ImGui::EndGroup();
+
+		if (outSize != nullptr)
+		{
+			*outSize = ImGui::GetItemRectSize();
+		}
 	}
 
-	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes)
+	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
 	{
 		std::vector<ColumnInfo> columns;
 		calculateWrappedColumns(availableSize.y, sizes, columns);
@@ -327,6 +348,7 @@ namespace Editor
 
 		float currentX = startPos.x;
 
+		ImGui::BeginGroup();
 		for (size_t colIdx = 0; colIdx < columns.size(); ++colIdx)
 		{
 			ColumnInfo& col = columns[colIdx];
@@ -369,6 +391,12 @@ namespace Editor
 
 			currentX += col.maxWidth + style.ItemSpacing.x;
 		}
+		ImGui::EndGroup();
+
+		if (outSize != nullptr)
+		{
+			*outSize = ImGui::GetItemRectSize();
+		}
 	}
 
 	void LinearLayout::update()
@@ -393,26 +421,28 @@ namespace Editor
 		std::vector<ImVec2> sizes;
 		calculateSizes(sizes);
 
+		ImVec2 finalSize(0, 0);
+
 		if (_direction == LayoutDirection::Horizontal)
 		{
 			if (_wrapMode == LayoutWrapMode::NoWrap)
 			{
-				updateHorizontalLayout(cursorStart, availableSize, sizes);
+				updateHorizontalLayout(cursorStart, availableSize, sizes, &finalSize);
 			}
 			else
 			{
-				updateHorizontalLayoutWrapped(cursorStart, availableSize, sizes);
+				updateHorizontalLayoutWrapped(cursorStart, availableSize, sizes, &finalSize);
 			}
 		}
 		else
 		{
 			if (_wrapMode == LayoutWrapMode::NoWrap)
 			{
-				updateVerticalLayout(cursorStart, availableSize, sizes);
+				updateVerticalLayout(cursorStart, availableSize, sizes, &finalSize);
 			}
 			else
 			{
-				updateVerticalLayoutWrapped(cursorStart, availableSize, sizes);
+				updateVerticalLayoutWrapped(cursorStart, availableSize, sizes, &finalSize);
 			}
 		}
 
@@ -431,8 +461,7 @@ namespace Editor
 		updateDragDropSource();
 		updateDragDropTarget();
 
-		ImVec2 _actualSize = ImGui::GetWindowSize();
-		_actualWidth = _actualSize.x;
-		_actualHeight = _actualSize.y;
+		_actualWidth = finalSize.x;
+		_actualHeight = finalSize.y;
 	}
 } // namespace Editor

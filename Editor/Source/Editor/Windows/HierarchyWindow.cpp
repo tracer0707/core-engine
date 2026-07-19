@@ -4,12 +4,14 @@
 #include "../Controls/TreeNode.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
+#include "../Controls/Collapse.h"
 
 #include "../Windows/WindowManager.h"
 #include "../Windows/WindowList.h"
 #include "../Windows/InspectorWindow.h"
 
 #include "../Windows/Inspector/CSGBrushInspector.h"
+#include "../Windows/Inspector/TransformInspector.h"
 
 #include "../Gizmo.h"
 
@@ -80,21 +82,36 @@ namespace Editor
 	void HierarchyWindow::setInspector(TreeNode* node)
 	{
 		InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
+		inspectorWnd->clear();
 
 		if (node == nullptr)
 		{
-			inspectorWnd->clear();
 			return;
 		}
 
 		for (const auto& it : node->getObjectTags())
 		{
-			if (it.first == TAG_CSG_BRUSH)
+			if (it.first == TAG_SCENE_OBJECT)
 			{
-				CSGBrushInspector* inspector = new CSGBrushInspector((CSGBrush*)it.second);
+				Collapse* collapse = new Collapse("Transform");
+				Inspector* inspector = new TransformInspector(((Core::Object*)it.second)->getTransform());
 				inspector->build();
-				inspectorWnd->clear();
-				inspectorWnd->addControl(inspector);
+				collapse->addControl(inspector);
+				inspectorWnd->addControl(collapse);
+			}
+			else if (it.first == TAG_CSG_BRUSH)
+			{
+				Collapse* collapse1 = new Collapse("Transform");
+				Inspector* inspector1 = new TransformInspector(((CSGBrush*)it.second)->getTransform());
+				inspector1->build();
+				collapse1->addControl(inspector1);
+				inspectorWnd->addControl(collapse1);
+
+				Collapse* collapse2 = new Collapse("CSG Brush");
+				Inspector* inspector2 = new CSGBrushInspector((CSGBrush*)it.second);
+				inspector2->build();
+				collapse2->addControl(inspector2);
+				inspectorWnd->addControl(collapse2);
 			}
 		}
 	}

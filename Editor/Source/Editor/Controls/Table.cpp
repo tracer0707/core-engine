@@ -35,7 +35,7 @@ namespace Editor
 	{
 		if (!_visible) return;
 
-		if (ImGui::BeginTable(_id.c_str(), _colCount, ImGuiTableFlags_Resizable, ImVec2(0, 0)))
+		if (ImGui::BeginTable(_id.c_str(), _colCount))
 		{
 			if (_controls.count() % _colCount != 0)
 			{
