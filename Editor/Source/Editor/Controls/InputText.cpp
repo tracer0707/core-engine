@@ -42,6 +42,7 @@ namespace Editor
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
 		}
 
+		ImGui::SetNextItemWidth(_width);
 		ImGui::InputText((std::string("##") + _id).c_str(), &_text);
 
 		ImVec2 _actualSize = ImGui::GetItemRectSize();

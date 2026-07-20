@@ -9,18 +9,18 @@ namespace Core
 	{
 		_renderer = renderer;
 
-		this->width = width;
-		this->height = height;
+		_width = width;
+		_height = height;
 
-		frameBuffer = _renderer->createFrameBuffer(width, height);
+		_frameBuffer = _renderer->createFrameBuffer(width, height);
 	}
 
 	Core::RenderTexture::~RenderTexture()
 	{
-		if (frameBuffer != nullptr)
+		if (_frameBuffer != nullptr)
 		{
-			_renderer->deleteFrameBuffer(frameBuffer);
-			frameBuffer = nullptr;
+			_renderer->deleteFrameBuffer(_frameBuffer);
+			_frameBuffer = nullptr;
 		}
 
 		_renderer = nullptr;
@@ -28,34 +28,34 @@ namespace Core
 
 	void RenderTexture::bind()
 	{
-		_renderer->bindFrameBuffer(frameBuffer);
+		_renderer->bindFrameBuffer(_frameBuffer);
 	}
 
 	unsigned int RenderTexture::getNativeFrameBufferId()
 	{
-		return frameBuffer->frameBuffer;
+		return _frameBuffer->frameBuffer;
 	}
 
 	unsigned int RenderTexture::getNativeColorTextureId()
 	{
-		return frameBuffer->colorBuffer;
+		return _frameBuffer->colorBuffer;
 	}
 
 	unsigned int RenderTexture::getNativeDepthTextureId()
 	{
-		return frameBuffer->depthBuffer;
+		return _frameBuffer->depthBuffer;
 	}
 
 	void RenderTexture::setSize(unsigned int width, unsigned int height)
 	{
-		this->width = width;
-		this->height = height;
+		_width = std::max(width, 1u);
+		_height = std::max(height, 1u);
 
-		if (frameBuffer != nullptr)
+		if (_frameBuffer != nullptr)
 		{
-			_renderer->deleteFrameBuffer(frameBuffer);
+			_renderer->deleteFrameBuffer(_frameBuffer);
 		}
 
-		frameBuffer = _renderer->createFrameBuffer(width, height);
+		_frameBuffer = _renderer->createFrameBuffer(_width, _height);
 	}
 } // namespace Core

@@ -16,10 +16,10 @@ namespace Core
 			~RenderTexture();
 
 			Renderer* _renderer = nullptr;
-			const FrameBuffer* frameBuffer = nullptr;
+			const FrameBuffer* _frameBuffer = nullptr;
 
-			unsigned int width = 0;
-			unsigned int height = 0;
+			unsigned int _width = 0;
+			unsigned int _height = 0;
 
 		public:
 			virtual ContentType getContentType() const { return ContentType::RenderTexture; }
@@ -30,8 +30,8 @@ namespace Core
 			unsigned int getNativeColorTextureId();
 			unsigned int getNativeDepthTextureId();
 
-			unsigned int getWidth() { return width; }
-			unsigned int getHeight() { return height; }
+			unsigned int getWidth() const { return _width; }
+			unsigned int getHeight() const { return _height; }
 
 			void setSize(unsigned int width, unsigned int height);
 	};

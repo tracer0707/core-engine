@@ -16,14 +16,6 @@ namespace Editor
 	{
 	}
 
-	void Label::update()
-	{
-		if (!_visible) return;
-
-		std::string _str = _text.std_str();
-		ImGui::Text(_str.c_str());
-	}
-
 	float Label::getWidth() const
     {
 		if (_width == 0.0f)
@@ -45,4 +37,12 @@ namespace Editor
 
         return _height;
     }
+
+    void Label::update()
+	{
+		if (!_visible) return;
+
+		std::string _str = _text.std_str();
+		ImGui::Text(_str.c_str());
+	}
 }
