@@ -75,6 +75,16 @@ namespace Editor
 		{
 			const ImVec2& size = sizes[i];
 
+			if (size.x == 0.0f && size.y == 0.0f)
+			{
+				continue;
+			}
+
+			if (size.x == 0.0f && size.y == 0.0f)
+			{
+				continue;
+			}
+
 			if (currentRow.indices.empty() ||
 				(currentRow.totalWidth + size.x + (currentRow.indices.empty() ? 0 : style.ItemSpacing.x) <= availableWidth))
 			{
@@ -183,7 +193,7 @@ namespace Editor
 
 		float currentX = startX;
 
-		ImGui::BeginGroup();
+		int placed = 0;
 		for (size_t i = 0; i < _controls.count(); ++i)
 		{
 			Control* c = _controls[i];
@@ -205,13 +215,18 @@ namespace Editor
 
 			c->update();
 
-			currentX += size.x + style.ItemSpacing.x;
+			currentX += size.x;
+			++placed;
+			
+			if (placed < cntCount)
+			{
+				currentX += style.ItemSpacing.x;
+			}
 		}
-		ImGui::EndGroup();
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImGui::GetItemRectSize();
+			*outSize = ImVec2(totalWidth, maxHeight);
 		}
 	}
 
@@ -224,7 +239,6 @@ namespace Editor
 
 		float currentY = startPos.y;
 
-		ImGui::BeginGroup();
 		for (size_t rowIdx = 0; rowIdx < rows.size(); ++rowIdx)
 		{
 			RowInfo& row = rows[rowIdx];
@@ -242,6 +256,13 @@ namespace Editor
 
 			float currentX = startX;
 
+			int visibleInRow = 0;
+			for (size_t idx : row.indices)
+			{
+				if (_controls[idx]->getVisible()) ++visibleInRow;
+			}
+
+			int placedInRow = 0;
 			for (size_t idx : row.indices)
 			{
 				Control* c = _controls[idx];
@@ -262,16 +283,33 @@ namespace Editor
 				ImGui::SetCursorPos(ImVec2(currentX, y));
 				c->update();
 
-				currentX += size.x + style.ItemSpacing.x;
+				currentX += size.x;
+				++placedInRow;
+				if (placedInRow < visibleInRow)
+				{
+					currentX += style.ItemSpacing.x;
+				}
 			}
 
-			currentY += row.maxHeight + style.ItemSpacing.y;
+			currentY += row.maxHeight;
+			if (rowIdx + 1 < rows.size())
+			{
+				currentY += style.ItemSpacing.y;
+			}
 		}
-		ImGui::EndGroup();
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImGui::GetItemRectSize();
+			float fullWidth = 0.0f;
+			float fullHeight = 0.0f;
+			for (size_t i = 0; i < rows.size(); ++i)
+			{
+				fullWidth = std::max(fullWidth, rows[i].totalWidth);
+				fullHeight += rows[i].maxHeight;
+				if (i + 1 < rows.size()) fullHeight += style.ItemSpacing.y;
+			}
+
+			*outSize = ImVec2(fullWidth, fullHeight);
 		}
 	}
 
@@ -307,7 +345,7 @@ namespace Editor
 
 		float currentY = startY;
 
-		ImGui::BeginGroup();
+		int placed = 0;
 		for (size_t i = 0; i < _controls.count(); ++i)
 		{
 			Control* c = _controls[i];
@@ -329,13 +367,18 @@ namespace Editor
 
 			c->update();
 
-			currentY += size.y + style.ItemSpacing.y;
+			currentY += size.y;
+			++placed;
+			
+			if (placed < cntCount)
+			{
+				currentY += style.ItemSpacing.y;
+			}
 		}
-		ImGui::EndGroup();
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImGui::GetItemRectSize();
+			*outSize = ImVec2(maxWidth, totalHeight);
 		}
 	}
 
@@ -348,7 +391,6 @@ namespace Editor
 
 		float currentX = startPos.x;
 
-		ImGui::BeginGroup();
 		for (size_t colIdx = 0; colIdx < columns.size(); ++colIdx)
 		{
 			ColumnInfo& col = columns[colIdx];
@@ -366,6 +408,13 @@ namespace Editor
 
 			float currentY = startY;
 
+			int visibleInCol = 0;
+			for (size_t idx : col.indices)
+			{
+				if (_controls[idx]->getVisible()) ++visibleInCol;
+			}
+
+			int placedInCol = 0;
 			for (size_t idx : col.indices)
 			{
 				Control* c = _controls[idx];
@@ -386,16 +435,33 @@ namespace Editor
 				ImGui::SetCursorPos(ImVec2(x, currentY));
 				c->update();
 
-				currentY += size.y + style.ItemSpacing.y;
+				currentY += size.y;
+				++placedInCol;
+				if (placedInCol < visibleInCol)
+				{
+					currentY += style.ItemSpacing.y;
+				}
 			}
 
-			currentX += col.maxWidth + style.ItemSpacing.x;
+			currentX += col.maxWidth;
+			if (colIdx + 1 < columns.size())
+			{
+				currentX += style.ItemSpacing.x;
+			}
 		}
-		ImGui::EndGroup();
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImGui::GetItemRectSize();
+			float fullWidth = 0.0f;
+			float fullHeight = 0.0f;
+			for (size_t i = 0; i < columns.size(); ++i)
+			{
+				fullWidth += columns[i].maxWidth;
+				if (i + 1 < columns.size()) fullWidth += style.ItemSpacing.x;
+				fullHeight = std::max(fullHeight, columns[i].totalHeight);
+			}
+
+			*outSize = ImVec2(fullWidth, fullHeight);
 		}
 	}
 
@@ -412,11 +478,50 @@ namespace Editor
 			_windowFlags |= ImGuiWindowFlags_NoInputs;
 		}
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
-		ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height), _flags, _windowFlags);
+		float w = _width;
+		float h = _height;
 
-		ImVec2 availableSize = ImGui::GetContentRegionAvail();
+		if (_fitWidth == LayoutFitMode::FitContent)
+		{
+			w = _actualWidth;
+		}
+		else if (_fitWidth == LayoutFitMode::FitAvailable)
+		{
+			w = 0;
+		}
+
+		if (_fitHeight == LayoutFitMode::FitContent)
+		{
+			h = _actualHeight;
+		}
+		else if (_fitHeight == LayoutFitMode::FitAvailable)
+		{
+			h = 0;
+		}
+
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(_style.paddingX, _style.paddingY));
+		ImGui::BeginChild(_id.c_str(), ImVec2(w, h), _flags, _windowFlags);
+
+		ImVec2 availableSize = ImVec2(_width, _height);
 		ImVec2 cursorStart = ImGui::GetCursorPos();
+
+		if (_fitWidth == LayoutFitMode::FitContent)
+		{
+			availableSize.x = _actualWidth;
+		}
+		else if (_fitWidth == LayoutFitMode::FitAvailable)
+		{
+			availableSize.x = ImGui::GetContentRegionAvail().x;
+		}
+
+		if (_fitHeight == LayoutFitMode::FitContent)
+		{
+			availableSize.y = _actualHeight;
+		}
+		else if (_fitHeight == LayoutFitMode::FitAvailable)
+		{
+			availableSize.y = ImGui::GetContentRegionAvail().y;
+		}
 
 		std::vector<ImVec2> sizes;
 		calculateSizes(sizes);

@@ -33,14 +33,24 @@ namespace Editor
 		_mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		_mainLayout->getStyle().paddingX = 20;
 		_mainLayout->getStyle().paddingY = 20;
+		_mainLayout->setWrapMode(LayoutWrapMode::NoWrap);
+		_mainLayout->setFitWidth(LayoutFitMode::FitAvailable);
 
 		LinearLayout* _layout = new LinearLayout(LayoutDirection::Horizontal);
 		_layout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
+		_layout->setFitWidth(LayoutFitMode::FitAvailable);
+		_layout->setFitHeight(LayoutFitMode::FitContent);
+		_layout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		_listLayout = new LinearLayout(LayoutDirection::Vertical);
+		_listLayout->setWrapMode(LayoutWrapMode::NoWrap);
+		_listLayout->setFitWidth(LayoutFitMode::FitAvailable);
 
 		Button* _openBtn = new Button("Open project");
 		Button* _quitBtn = new Button("Quit");
+
+		_openBtn->setSize(100.0f, 24.0f);
+		_quitBtn->setSize(100.0f, 24.0f);
 
 		ListView* listView = new ListView();
 
@@ -68,8 +78,6 @@ namespace Editor
 
 		_layout->addControl(_openBtn);
 		_layout->addControl(_quitBtn);
-
-		_layout->setHeight(32.0f);
 
 		_listLayout->addControl(listView);
 
@@ -115,7 +123,7 @@ namespace Editor
 	void ProjectManager::MainWindow::update()
 	{
 		_mainLayout->setHeight((float)_height);
-		_listLayout->setHeight((float)_height - 85.0f);
+		_listLayout->setHeight((float)_height - 75.0f);
 
 		_renderer->setViewportSize(_width, _height);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));

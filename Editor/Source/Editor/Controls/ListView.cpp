@@ -85,7 +85,7 @@ namespace Editor
 
         ImGui::EndChild();
 
-		ImVec2 _actualSize = ImGui::GetWindowSize();
+		ImVec2 _actualSize = ImGui::GetItemRectSize();
         _actualWidth = _actualSize.x;
         _actualHeight = _actualSize.y;
 	}

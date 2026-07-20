@@ -13,6 +13,8 @@ namespace Editor
 	Inspector::Inspector() : LinearLayout(LayoutDirection::Vertical)
 	{
 		setWrapMode(LayoutWrapMode::NoWrap);
+		setFitWidth(LayoutFitMode::FitAvailable);
+		setFitHeight(LayoutFitMode::FitContent);
 	}
 
 	Inspector::~Inspector() { }

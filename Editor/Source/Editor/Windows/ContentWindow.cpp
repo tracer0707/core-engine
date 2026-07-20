@@ -47,10 +47,18 @@ namespace Editor
 	{
 		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		_mainLayout->setWrapMode(LayoutWrapMode::NoWrap);
+		_mainLayout->setFitWidth(LayoutFitMode::FitAvailable);
+		_mainLayout->setFitHeight(LayoutFitMode::FitAvailable);
 
 		LinearLayout* _toolbar = new LinearLayout(LayoutDirection::Horizontal);
+		_toolbar->setFitWidth(LayoutFitMode::FitAvailable);
+		_toolbar->setFitHeight(LayoutFitMode::FitContent);
+
 		LinearLayout* _leftPane = new LinearLayout(LayoutDirection::Vertical);
-		_rightPane = new LinearLayout();
+		_leftPane->setFitHeight(LayoutFitMode::FitAvailable);
+
+		_rightPane = new LinearLayout(LayoutDirection::Horizontal);
+		_rightPane->setFitHeight(LayoutFitMode::FitAvailable);
 
 		Separator* _separator = new Separator();
 
@@ -121,7 +129,6 @@ namespace Editor
 			});
 		});
 
-		_toolbar->setHeight(24);
 		_toolbar->addControl(_createResourceBtn);
 		_toolbar->addControl(_importResourceBtn);
 

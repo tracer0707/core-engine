@@ -33,6 +33,9 @@ namespace Editor
 
 		LinearLayout* layout = new LinearLayout();
 		layout->setNoInputs(true);
+		layout->setWrapMode(LayoutWrapMode::NoWrap);
+		layout->setFitWidth(LayoutFitMode::FitAvailable);
+		layout->setFitHeight(LayoutFitMode::FitAvailable);
 
 		_image = new Image();
 		
@@ -78,6 +81,8 @@ namespace Editor
 
 		_dndTarget->setPosition(5, 5);
 		_dndTarget->setSize(getClientWidth() - 10, getClientHeight() - 10);
+		_image->setPosition(0, 0);
+		_image->setSize(getClientWidth(), getClientHeight());
 
 		CameraController::update(isSceneWindowHovered);
 		Gizmo::singleton()->update(_camera, isSceneWindowHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);

@@ -35,6 +35,13 @@ namespace Editor
 		WrapReverse
 	};
 
+	enum class LayoutFitMode
+	{
+		None,
+		FitContent,
+		FitAvailable,
+	};
+
 	class LinearLayout : public Control
 	{
 		private:
@@ -47,6 +54,9 @@ namespace Editor
 			float _scrollbarWidth = 8.0f;
 			float _actualWidth = 0.0f;
 			float _actualHeight = 0.0f;
+
+			LayoutFitMode _fitWidth = LayoutFitMode::None;
+			LayoutFitMode _fitHeight = LayoutFitMode::None;
 
 			bool _noInputs = false;
 
@@ -99,6 +109,12 @@ namespace Editor
 
 			void setWrapMode(LayoutWrapMode mode) { _wrapMode = mode; }
 			LayoutWrapMode getWrapMode() const { return _wrapMode; }
+
+			void setFitWidth(LayoutFitMode value) { _fitWidth = value; }
+			LayoutFitMode getFitWidth() const { return _fitWidth; }
+
+			void setFitHeight(LayoutFitMode value) { _fitHeight = value; }
+			LayoutFitMode getFitHeight() const { return _fitHeight; }
 
 			void setNoInputs(bool value) { _noInputs = value; }
 			bool getNoInputs() const { return _noInputs; }

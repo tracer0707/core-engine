@@ -30,6 +30,9 @@ namespace Editor
 		CSGBuilder* csgBuilder = CSGBuilder::singleton();
 
 		_linearLayout = new LinearLayout(LayoutDirection::Vertical);
+		_linearLayout->setFitWidth(LayoutFitMode::FitAvailable);
+		_linearLayout->setFitHeight(LayoutFitMode::FitContent);
+
 		_objectTree = new TreeView();
 
 		_objectTree->setOnSelectionChanged([this, csgBuilder](Core::List<TreeNode*>& selected) {
@@ -89,6 +92,11 @@ namespace Editor
 			return;
 		}
 
+		LinearLayout* layout = new LinearLayout(LayoutDirection::Vertical);
+		layout->setWrapMode(LayoutWrapMode::NoWrap);
+		layout->setFitWidth(LayoutFitMode::FitAvailable);
+		layout->setFitHeight(LayoutFitMode::FitContent);
+
 		for (const auto& it : node->getObjectTags())
 		{
 			if (it.first == TAG_SCENE_OBJECT)
@@ -97,7 +105,7 @@ namespace Editor
 				Inspector* inspector = new TransformInspector(((Core::Object*)it.second)->getTransform());
 				inspector->build();
 				collapse->addControl(inspector);
-				inspectorWnd->addControl(collapse);
+				layout->addControl(collapse);
 			}
 			else if (it.first == TAG_CSG_BRUSH)
 			{
@@ -105,19 +113,20 @@ namespace Editor
 				Inspector* inspector1 = new TransformInspector(((CSGBrush*)it.second)->getTransform());
 				inspector1->build();
 				collapse1->addControl(inspector1);
-				inspectorWnd->addControl(collapse1);
+				layout->addControl(collapse1);
 
 				Collapse* collapse2 = new Collapse("CSG Brush");
 				Inspector* inspector2 = new CSGBrushInspector((CSGBrush*)it.second);
 				inspector2->build();
 				collapse2->addControl(inspector2);
-				inspectorWnd->addControl(collapse2);
+				layout->addControl(collapse2);
 			}
 		}
+
+		inspectorWnd->addControl(layout);
 	}
 
 	void HierarchyWindow::onUpdate()
 	{
-		_linearLayout->setWidth(getClientWidth());
 	}
 } // namespace Editor

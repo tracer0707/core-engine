@@ -25,6 +25,8 @@ namespace Editor
 		/* Layout */
 
 		LinearLayout* layoutMain = new LinearLayout(LayoutDirection::Horizontal);
+		layoutMain->setFitWidth(LayoutFitMode::FitAvailable);
+		layoutMain->setFitHeight(LayoutFitMode::FitContent);
 
 		addControl(layoutMain);
 

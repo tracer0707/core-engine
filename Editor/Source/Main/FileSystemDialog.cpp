@@ -41,10 +41,14 @@ namespace Editor
 		_mainFont->setDefault();
 
 		_layout = new LinearLayout(LayoutDirection::Vertical);
+		_layout->setFitWidth(LayoutFitMode::FitAvailable);
+		_layout->setWrapMode(LayoutWrapMode::NoWrap);
 		_layout->getStyle().paddingX = 10;
 		_layout->getStyle().paddingY = 10;
 
 		_topLayout = new LinearLayout(LayoutDirection::Vertical);
+		_topLayout->setFitWidth(LayoutFitMode::FitAvailable);
+		_topLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		_treeView = new TreeView();
 
@@ -53,14 +57,22 @@ namespace Editor
 		_topLayout->addControl(_treeView);
 
 		_bottomLayout = new LinearLayout(LayoutDirection::Horizontal);
-		_bottomLayout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
+		_bottomLayout->setHorizontalAlignment(LayoutHorizontalAlignment::Right);
+		_bottomLayout->setVerticalAlignment(LayoutVerticalAlignment::Middle);
+		_bottomLayout->setFitWidth(LayoutFitMode::FitAvailable);
+		_bottomLayout->setFitHeight(LayoutFitMode::FitContent);
+		_bottomLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		_selectedPath = new InputText();
+		_selectedPath->setWidth(200.0f);
 		_selectedCount = new Label();
 		_selectedCount->setVisible(false);
 
 		Button* okBtn = new Button("OK");
 		Button* cancelBtn = new Button("Cancel");
+
+		okBtn->setSize(100, 24.0f);
+		cancelBtn->setSize(100, 24.0f);
 
 		okBtn->setEnabled(false);
 
@@ -68,8 +80,6 @@ namespace Editor
 		_bottomLayout->addControl(_selectedCount);
 		_bottomLayout->addControl(okBtn);
 		_bottomLayout->addControl(cancelBtn);
-
-		_bottomLayout->setHeight(32.0f);
 
 		_layout->addControl(_topLayout);
 		_layout->addControl(_bottomLayout);
@@ -205,7 +215,7 @@ namespace Editor
 	void FileSystemDialog::update()
 	{
 		_layout->setHeight((float)_height);
-		_topLayout->setHeight((float)_height - 65.0f);
+		_topLayout->setHeight((float)_height - 50.0f);
 
 		_renderer->setViewportSize(_width, _height);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));

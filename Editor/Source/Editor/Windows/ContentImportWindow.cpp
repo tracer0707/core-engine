@@ -27,8 +27,12 @@ namespace Editor
 {
 	ContentImportWindow::ContentImportWindow(WindowManager* parent) : Window(parent, CONTENT_IMPORT_WINDOW)
 	{
+		setCanAcceptDocking(false);
+		setCanDock(false);
+
 		LinearLayout* mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		mainLayout->setWrapMode(LayoutWrapMode::NoWrap);
+		mainLayout->setFitWidth(LayoutFitMode::FitAvailable);
 		mainLayout->getStyle().paddingX = 10.0f;
 		mainLayout->getStyle().paddingY = 10.0f;
 
@@ -38,13 +42,17 @@ namespace Editor
 
 		LinearLayout* buttonLayout = new LinearLayout();
 		buttonLayout->setHorizontalAlignment(LayoutHorizontalAlignment::Right);
+		buttonLayout->setFitWidth(LayoutFitMode::FitAvailable);
+		buttonLayout->setFitHeight(LayoutFitMode::FitContent);
 
 		_importBtn = new Button("Import");
 		Button* cancelBtn = new Button("Cancel");
 
+		_importBtn->setSize(100.0f, 24.0f);
+		cancelBtn->setSize(100.0f, 24.0f);
+
 		buttonLayout->addControl(_importBtn);
 		buttonLayout->addControl(cancelBtn);
-		buttonLayout->setHeight(30);
 
 		cancelBtn->setOnClick([this]() { close(); });
 
@@ -120,7 +128,7 @@ namespace Editor
 
 	void ContentImportWindow::onUpdate()
 	{
-		_importLayout->setHeight(getHeight() - 105);
+		_importLayout->setHeight(getHeight() - 100);
 	}
 
 	void ContentImportWindow::onClose()
