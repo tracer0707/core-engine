@@ -46,26 +46,6 @@ namespace Editor
 		}
 	}
 
-	float ContentButton::getWidth() const
-	{
-		if (_width == 0.0f)
-		{
-			return _actualWidth;
-		}
-
-		return _width;
-	}
-
-	float ContentButton::getHeight() const
-	{
-		if (_height == 0.0f)
-		{
-			return _actualHeight;
-		}
-
-		return _height;
-	}
-
 	Core::String ContentButton::getContentName() const
 	{
 		if (_content != nullptr)
@@ -122,6 +102,7 @@ namespace Editor
 
 		ImVec2 total_size(w, h);
 		ImVec2 cur = ImGui::GetCursorPos();
+		ImVec2 pos = ImGui::GetCursorScreenPos();
 
 		ImGui::PushID(_id.c_str());
 		bool hasClick = ImGui::InvisibleButton("##ContentButton", total_size);
@@ -129,18 +110,16 @@ namespace Editor
 		bool hasRightClick = ImGui::IsItemHovered() && ImGui::IsMouseClicked(1);
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
-		ImVec2 pos = ImGui::GetItemRectMin();
-		ImVec2 size = ImGui::GetItemRectSize();
 		ImGui::PopID();
 
-		if (text_size.x > size.x)
+		if (text_size.x > total_size.x)
 		{
 			int ellipsisW = ImGui::CalcTextSize("...").x;
 
 			std::string croppedText = "";
 			int prefSizeX = 0;
 			int c = 0;
-			while (prefSizeX < (size.x - ellipsisW) - 4 && c < label.size())
+			while (prefSizeX < (total_size.x - ellipsisW) - 4 && c < label.size())
 			{
 				croppedText += label[c];
 				prefSizeX = ImGui::CalcTextSize(croppedText.c_str()).x;
@@ -152,12 +131,12 @@ namespace Editor
 
 		ImU32 text_col = ImGui::GetColorU32(ImGuiCol_Text);
 		ImU32 bg_col = ImGui::GetColorU32(active ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
-		ImVec2 img_p(pos.x + (size.x - imgSize.x) * 0.5f, pos.y + padding.y);
+		ImVec2 img_p(pos.x + (total_size.x - imgSize.x) * 0.5f, pos.y + padding.y);
 
-		draw_list->AddRectFilled(pos, ImVec2(pos.x + size.x, pos.y + size.y), bg_col, style.FrameRounding);
+		draw_list->AddRectFilled(pos, ImVec2(pos.x + total_size.x, pos.y + total_size.y), bg_col, style.FrameRounding);
 		draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1), ImVec2(1, 0));
 
-		float lowSize = (size.x - text_size.x) * 0.5f;
+		float lowSize = (total_size.x - text_size.x) * 0.5f;
 		ImVec2 text_min(pos.x + lowSize + 1, img_p.y + imgSize.y + spacing);
 
 		if (!_edit)
@@ -182,7 +161,7 @@ namespace Editor
 			ImGui::SetKeyboardFocusHere(0);
 			ImGui::InputText(("##" + _id + "_edit").c_str(), &editLabel);
 			_editValue = editLabel;
-			if (!ImGui::IsItemHovered() && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1)))
+			if (ImGui::IsKeyPressed(ImGuiKey_Escape) || (!ImGui::IsItemHovered() && (ImGui::IsMouseClicked(0) || ImGui::IsMouseClicked(1))))
 			{
 				_edit = false;
 				if (label.empty())
@@ -208,8 +187,8 @@ namespace Editor
 			ImGui::SetCursorPos(cur);
 		}
 
-		_actualWidth = w;
-		_actualHeight = h;
+		_actualWidth = total_size.x;
+		_actualHeight = total_size.y;
 
 		ImGui::PopStyleVar();
 

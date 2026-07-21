@@ -19,9 +19,6 @@ namespace Editor
 	class ContentSelect : public Control
 	{
 		private:
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
-
 			Core::Content* _content = nullptr;
 			Core::ContentType _contentType = Core::ContentType::None;
 
@@ -32,9 +29,6 @@ namespace Editor
 		public:
 			ContentSelect();
 			virtual ~ContentSelect();
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::ContentSelect; }
 			virtual void update();

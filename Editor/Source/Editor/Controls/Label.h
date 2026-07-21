@@ -9,7 +9,7 @@ namespace Editor
 	class Label : public Control
 	{
 	private:
-		Core::String _text = "";
+		Core::String _text = Core::String::Empty;
 
 	public:
 		Label();
@@ -18,9 +18,6 @@ namespace Editor
 
 		Core::String getText() const { return _text; }
 		void setText(Core::String value) { _text = value; }
-
-        virtual float getWidth() const;
-        virtual float getHeight() const;
 
 		virtual ControlType getControlType() const { return ControlType::Label; }
 		virtual void update();

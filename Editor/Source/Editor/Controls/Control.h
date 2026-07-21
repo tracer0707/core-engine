@@ -39,6 +39,8 @@ namespace Editor
 			float _computedY = 0;
 			float _width = 0;
 			float _height = 0;
+			float _actualWidth = 0.0f;
+			float _actualHeight = 0.0f;
 
 			Core::String _dragDropSourceKey = Core::String::Empty;
 			Core::String _dragDropSourceLabel = Core::String::Empty;
@@ -65,11 +67,11 @@ namespace Editor
 			std::string getId() { return _id; }
 			Style& getStyle() { return _style; }
 
-			virtual void setWidth(float value) { _width = value; }
-			virtual float getWidth() const { return _width; }
-
-			virtual void setHeight(float value) { _height = value; }
-			virtual float getHeight() const { return _height; }
+			float getWidth() const;
+			void setWidth(float value) { _width = value; }
+			
+			float getHeight() const;
+			void setHeight(float value) { _height = value; }
 
 			float getPositionX() const { return _computedX; }
 			void setPositionX(float value) { _x = value; }

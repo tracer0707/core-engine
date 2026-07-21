@@ -11,26 +11,6 @@ namespace Editor
 
 	Table::~Table() {}
 
-	float Table::getWidth() const
-	{
-		if (_width == 0.0f)
-		{
-			return _actualWidth;
-		}
-
-		return _width;
-	}
-
-	float Table::getHeight() const
-	{
-		if (_height == 0.0f)
-		{
-			return _actualHeight;
-		}
-
-		return _height;
-	}
-
 	void Table::update()
 	{
 		if (!_visible) return;
@@ -59,8 +39,23 @@ namespace Editor
 			ImGui::EndTable();
 		}
 
-		ImVec2 _actualSize = ImGui::GetItemRectSize();
-		_actualWidth = _actualSize.x;
-		_actualHeight = _actualSize.y;
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+		float total_h = 0.0f;
+		
+		for (int i = 0; i < _controls.count(); i += _colCount)
+		{
+			float rowMax = 0.0f;
+			for (int j = 0; j < _colCount; ++j)
+			{
+				Control* c = _controls[i + j];
+				rowMax = std::max(rowMax, c->getHeight());
+			}
+			total_h += rowMax;
+		}
+
+		_actualWidth = total_w;
+		_actualHeight = total_h;
 	}
 } // namespace Editor

@@ -20,6 +20,16 @@ namespace Editor
 		_parent = nullptr;
 	}
 
+	float Control::getWidth() const
+	{
+		return _width == 0.0f ? _actualWidth : _width;
+	}
+
+	float Control::getHeight() const
+	{
+		return _height == 0.0f ? _actualHeight : _height;
+	}
+
 	void Control::setSize(float width, float height)
 	{
 		_width = width;

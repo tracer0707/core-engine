@@ -15,15 +15,9 @@ namespace Editor
 		std::function<void(Core::List<Control*>&)> _onSelectionChanged = nullptr;
 		std::function<void(Control*)> _onItemClick = nullptr;
 
-		float _actualWidth = 0.0f;
-        float _actualHeight = 0.0f;
-
 	public:
 		ListView();
 		virtual ~ListView();
-
-		virtual float getWidth() const;
-        virtual float getHeight() const;
 
 		virtual ControlType getControlType() const { return ControlType::ListView; }
 		virtual void update();

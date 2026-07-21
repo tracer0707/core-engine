@@ -16,16 +16,10 @@ namespace Editor
 		private:
 			SplitPanelDirection _direction = SplitPanelDirection::Horizontal;
 
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
-
 		public:
 			SplitPanel();
 			SplitPanel(SplitPanelDirection direction);
 			virtual ~SplitPanel();
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::SplitPanel; }
 			virtual void update();

@@ -14,10 +14,18 @@ namespace Editor
 
 	void TreeView::update()
 	{
+		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+		float total_h = 0.0f;
+
 		for (auto it : _controls)
 		{
 			it->update();
+			total_h += it->getHeight();
+			if (it->getWidth() > total_w) total_w = it->getWidth();
 		}
+
+		_actualWidth = total_w;
+		_actualHeight = total_h;
 	}
 
 	TreeNode* TreeView::createNode()

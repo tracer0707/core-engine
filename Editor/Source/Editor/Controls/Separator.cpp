@@ -16,13 +16,19 @@ namespace Editor
 
 	void Separator::update()
 	{
+		ImGuiStyle& style = ImGui::GetStyle();
+
 		if (_direction == SeparatorDirection::Horizontal)
 		{
 			ImGui::Separator();
+			_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+			_actualHeight = 1.0f;
 		}
 		else
 		{
 			ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+			_actualWidth = 1.0f;
+			_actualHeight = (_height > 0.0f) ? _height : ImGui::GetContentRegionAvail().y;
 		}
 	}
 }

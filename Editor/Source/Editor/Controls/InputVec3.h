@@ -9,9 +9,6 @@ namespace Editor
 	class InputVec3 : public Control
 	{
 		private:
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
-
 			glm::vec3 _value = glm::vec3(0.0f);
 			glm::vec3 _prevValue = glm::vec3(0.0f);
 
@@ -20,9 +17,6 @@ namespace Editor
 		public:
 			InputVec3();
 			virtual ~InputVec3();
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::InputVec3; }
 			virtual void update();

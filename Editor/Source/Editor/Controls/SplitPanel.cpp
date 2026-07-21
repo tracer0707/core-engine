@@ -14,32 +14,24 @@ namespace Editor
 
     SplitPanel::~SplitPanel() {}
 
-    float SplitPanel::getWidth() const
-    {
-        if (_width == 0.0f)
-        {
-            return _actualWidth;
-        }
-
-        return _width;
-    }
-
-    float SplitPanel::getHeight() const
-    {
-        if (_height == 0.0f)
-        {
-            return _actualHeight;
-        }
-
-        return _height;
-    }
-
     void SplitPanel::update()
     {
         if (!_visible) return;
 
         ImGuiContext& g = *ImGui::GetCurrentContext();
         ImGuiStyle& style = ImGui::GetStyle();
+
+        if (_width > 0.0f)
+			_actualWidth = _width;
+		else
+			_actualWidth = ImGui::GetContentRegionAvail().x;
+
+		if (_height > 0.0f)
+			_actualHeight = _height;
+		else
+		{
+			_actualHeight = ImGui::GetContentRegionAvail().y;
+		}
         
         ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height));
 
@@ -124,9 +116,5 @@ namespace Editor
         }
 
         ImGui::EndChild();
-
-        ImVec2 _actualSize = ImGui::GetWindowSize();
-        _actualWidth = _actualSize.x;
-        _actualHeight = _actualSize.y;
     }
 } // namespace Editor

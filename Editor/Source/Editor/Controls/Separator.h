@@ -14,7 +14,7 @@ namespace Editor
 	{
 	private:
 		SeparatorDirection _direction = SeparatorDirection::Horizontal;
-
+		
 	public:
 		Separator();
 		Separator(SeparatorDirection direction);

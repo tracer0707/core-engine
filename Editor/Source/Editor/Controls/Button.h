@@ -25,8 +25,6 @@ namespace Editor
 
 			bool _active = true;
 			bool _edit = false;
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
 			float _imgW = 24.0f;
 			float _imgH = 24.0f;
 
@@ -40,9 +38,6 @@ namespace Editor
 			Button(Core::Texture2D* image);
 			Button(Core::String text, Core::Texture2D* image);
 			virtual ~Button();
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::Button; }
 			virtual void update();

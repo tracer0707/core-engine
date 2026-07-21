@@ -20,6 +20,7 @@ namespace Editor
 
 	void TreeNode::update()
 	{
+		ImGuiStyle& style = ImGui::GetStyle();
 		uint64_t flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanFullWidth;
 		bool isLeaf = _controls.count() == 0 && !_alwaysShowOpenArrow;
 
@@ -44,15 +45,24 @@ namespace Editor
 
 		_prevOpened = _isNodeOpened;
 
+		float header_h = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
+		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+		float total_h = header_h;
+
 		if (_isNodeOpened)
 		{
 			for (auto it : _controls)
 			{
 				it->update();
+				total_h += it->getHeight();
+				if (it->getWidth() > total_w) total_w = it->getWidth();
 			}
 
 			ImGui::TreePop();
 		}
+
+		_actualWidth = total_w;
+		_actualHeight = total_h;
 	}
 
 	void TreeNode::open(bool openChildren)

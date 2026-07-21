@@ -39,7 +39,7 @@ namespace Editor
 			void selectNode(TreeNode* value, bool byUser = true);
 			void clearSelection(bool byUser = true);
 
-			bool getSelectMultiple() { return _selectMultiple; }
+			bool getSelectMultiple() const { return _selectMultiple; }
 			void setSelectMultiple(bool value) { _selectMultiple = value; }
 
 			virtual void clear();

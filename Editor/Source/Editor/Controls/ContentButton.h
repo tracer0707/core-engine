@@ -26,8 +26,6 @@ namespace Editor
 
 			bool _active = true;
 			bool _edit = false;
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
 			Core::String _editValue = Core::String::Empty;
 
 			ContextMenu* _contextMenu = nullptr;
@@ -43,9 +41,6 @@ namespace Editor
 			ContentButton();
 			ContentButton(Core::Texture2D* image);
 			virtual ~ContentButton();
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::ContentButton; }
 			virtual void update();

@@ -13,26 +13,6 @@ namespace Editor
 
 	LinearLayout::~LinearLayout() {}
 
-	float LinearLayout::getWidth() const
-	{
-		if (_width == 0.0f)
-		{
-			return _actualWidth;
-		}
-
-		return _width;
-	}
-
-	float LinearLayout::getHeight() const
-	{
-		if (_height == 0.0f)
-		{
-			return _actualHeight;
-		}
-
-		return _height;
-	}
-
 	int LinearLayout::getVisibleControlsCount()
 	{
 		int cnt = 0;
@@ -226,7 +206,7 @@ namespace Editor
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImVec2(totalWidth, maxHeight);
+			*outSize = ImVec2(totalWidth, maxHeight + style.ItemSpacing.y);
 		}
 	}
 
@@ -378,7 +358,7 @@ namespace Editor
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImVec2(maxWidth, totalHeight);
+			*outSize = ImVec2(maxWidth, totalHeight + style.ItemSpacing.y);
 		}
 	}
 

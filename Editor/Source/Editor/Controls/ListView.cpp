@@ -10,27 +10,8 @@ namespace Editor
     }
 
     ListView::~ListView()
-    {}
-
-    float ListView::getWidth() const
-    {
-        if (_width == 0.0f)
-        {
-            return _actualWidth;
-        }
-
-        return _width;
-    }
-
-    float ListView::getHeight() const
-    {
-        if (_height == 0.0f)
-        {
-            return _actualHeight;
-        }
-
-        return _height;
-    }
+	{
+	}
 
 	void ListView::selectItem(Control* value, bool byUser)
 	{
@@ -83,10 +64,27 @@ namespace Editor
 			}
 		}
 
-        ImGui::EndChild();
+		ImGui::EndChild();
 
-		ImVec2 _actualSize = ImGui::GetItemRectSize();
-        _actualWidth = _actualSize.x;
-        _actualHeight = _actualSize.y;
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+
+		if (_height > 0.0f)
+		{
+			_actualHeight = _height;
+		}
+		else
+		{
+			float total_h = 0.0f;
+			for (auto it : _controls)
+			{
+				total_h += it->getHeight();
+			}
+			
+			if (_controls.count() > 1)
+				total_h += style.ItemSpacing.y * (_controls.count() - 1);
+
+			_actualHeight = total_h;
+		}
 	}
 }

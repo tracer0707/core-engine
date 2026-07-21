@@ -52,9 +52,7 @@ namespace Editor
 
 			ImVec2 _scrollOffset = ImVec2(0.0f, 0.0f);
 			float _scrollbarWidth = 8.0f;
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
-
+			
 			LayoutFitMode _fitWidth = LayoutFitMode::None;
 			LayoutFitMode _fitHeight = LayoutFitMode::None;
 
@@ -91,9 +89,6 @@ namespace Editor
 			LinearLayout();
 			LinearLayout(LayoutDirection direction);
 			virtual ~LinearLayout();
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::LinearLayout; }
 			virtual void update();

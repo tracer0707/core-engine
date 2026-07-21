@@ -14,9 +14,6 @@ namespace Editor
 		private:
 			Core::List<Core::String> _items;
 
-			float _actualWidth = 0.0f;
-			float _actualHeight = 0.0f;
-
 			int current_item_index = 0;
 
 			std::function<void(int)> _onSelectItem = nullptr;
@@ -31,9 +28,6 @@ namespace Editor
 
 			int getSelectedIndex() { return current_item_index; }
 			void setSelectedIndex(int value) { current_item_index = value; }
-
-			virtual float getWidth() const;
-			virtual float getHeight() const;
 
 			virtual ControlType getControlType() const { return ControlType::Dropdown; }
 			virtual void update();
