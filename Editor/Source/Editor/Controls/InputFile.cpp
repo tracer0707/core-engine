@@ -25,7 +25,7 @@ namespace Editor
 
 		button->setOnClick([this, application] {
 			application->getEventHandler()->addEvent([this, application] {
-				FileSystemDialog* dlg = new FileSystemDialog(_application);
+				FileSystemDialog* dlg = new FileSystemDialog(_application, "Select File");
 				dlg->setOnPathSelected([this](Core::List<Core::String> fileNames) { _textInput->setValue(fileNames[0]); });
 			});
 		});

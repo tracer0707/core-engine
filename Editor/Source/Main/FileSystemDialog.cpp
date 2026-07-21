@@ -22,7 +22,7 @@
 
 namespace Editor
 {
-	FileSystemDialog::FileSystemDialog(Core::Application* app) : Core::Window(app, "File Dialog", 800, 400)
+	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title) : Core::Window(app, title, 800, 400)
 	{
 		_mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
 

@@ -85,7 +85,7 @@ namespace Editor
 			app->getEventHandler()->addEvent([this, app] {
 				if (_fsDlg != nullptr) return;
 
-				_fsDlg = new FileSystemDialog(app);
+				_fsDlg = new FileSystemDialog(app, "Open Project");
 				_fsDlg->setShowFiles(false);
 
 				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });

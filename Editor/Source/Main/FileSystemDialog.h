@@ -39,7 +39,7 @@ namespace Editor
 			virtual void update();
 
 		public:
-			FileSystemDialog(Core::Application* app);
+			FileSystemDialog(Core::Application* app, Core::String title);
 			virtual ~FileSystemDialog();
 
 			bool getShowFiles() { return _showFiles; }

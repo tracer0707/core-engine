@@ -39,7 +39,7 @@ namespace Editor
 {
 	/* WINDOW */
 
-	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Engine", 1366, 768)
+	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Editor", 1366, 768)
 	{
 		_scene = new Core::Scene(_renderer);
 

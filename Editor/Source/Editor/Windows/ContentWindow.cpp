@@ -86,7 +86,7 @@ namespace Editor
 			parent->getApplication()->getEventHandler()->addEvent([this, parent] {
 				if (_fsDlg != nullptr) return;
 
-				_fsDlg = new FileSystemDialog(parent->getApplication());
+				_fsDlg = new FileSystemDialog(parent->getApplication(), "Import Content");
 				_fsDlg->setIsMultiple(true);
 
 				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
