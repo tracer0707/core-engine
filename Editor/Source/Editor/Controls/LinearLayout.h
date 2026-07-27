@@ -77,13 +77,12 @@ namespace Editor
 			std::function<void()> _onClick = nullptr;
 
 			int getVisibleControlsCount();
-			void calculateSizes(std::vector<ImVec2>& sizes);
-			void calculateWrappedRows(float availableWidth, const std::vector<ImVec2>& sizes, std::vector<RowInfo>& rows);
-			void calculateWrappedColumns(float availableHeight, const std::vector<ImVec2>& sizes, std::vector<ColumnInfo>& columns);
-			void updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize);
-			void updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize);
-			void updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize);
-			void updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize);
+			void calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows);
+			void calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns);
+			void updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
+			void updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
+			void updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
+			void updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
 
 		public:
 			LinearLayout();

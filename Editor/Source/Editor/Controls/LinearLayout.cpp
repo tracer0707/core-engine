@@ -24,25 +24,7 @@ namespace Editor
 		return cnt;
 	}
 
-	void LinearLayout::calculateSizes(std::vector<ImVec2>& sizes)
-	{
-		sizes.clear();
-		sizes.reserve(_controls.count());
-
-		for (auto& control : _controls)
-		{
-			if (!control->getVisible())
-			{
-				sizes.push_back(ImVec2(0, 0));
-			}
-			else
-			{
-				sizes.push_back(ImVec2(control->getWidth(), control->getHeight()));
-			}
-		}
-	}
-
-	void LinearLayout::calculateWrappedRows(float availableWidth, const std::vector<ImVec2>& sizes, std::vector<RowInfo>& rows)
+	void LinearLayout::calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows)
 	{
 		rows.clear();
 
@@ -51,9 +33,12 @@ namespace Editor
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		for (size_t i = 0; i < sizes.size(); ++i)
+		for (size_t i = 0; i < _controls.count(); ++i)
 		{
-			const ImVec2& size = sizes[i];
+			Control* control = _controls[i];
+			if (!control->getVisible()) continue;
+
+			ImVec2 size = ImVec2(control->getWidth(), control->getHeight());
 
 			if (size.x == 0.0f && size.y == 0.0f)
 			{
@@ -96,7 +81,7 @@ namespace Editor
 		}
 	}
 
-	void LinearLayout::calculateWrappedColumns(float availableHeight, const std::vector<ImVec2>& sizes, std::vector<ColumnInfo>& columns)
+	void LinearLayout::calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns)
 	{
 		columns.clear();
 
@@ -105,9 +90,12 @@ namespace Editor
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		for (size_t i = 0; i < sizes.size(); ++i)
+		for (size_t i = 0; i < _controls.count(); ++i)
 		{
-			const ImVec2& size = sizes[i];
+			Control* control = _controls[i];
+			if (!control->getVisible()) continue;
+
+			ImVec2 size = ImVec2(control->getWidth(), control->getHeight());
 
 			if (currentColumn.indices.empty() ||
 				(currentColumn.totalHeight + size.y + (currentColumn.indices.empty() ? 0 : style.ItemSpacing.y) <= availableHeight))
@@ -141,15 +129,18 @@ namespace Editor
 		}
 	}
 
-	void LinearLayout::updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
+	void LinearLayout::updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
 	{
 		float totalWidth = 0.0f;
 		float maxHeight = 0.0f;
 
-		for (const auto& size : sizes)
+		for (size_t i = 0; i < _controls.count(); ++i)
 		{
-			totalWidth += size.x;
-			maxHeight = std::max(maxHeight, size.y);
+			Control* control = _controls[i];
+			if (!control->getVisible()) continue;
+
+			totalWidth += control->getWidth();
+			maxHeight = std::max(maxHeight, control->getHeight());
 		}
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -179,7 +170,7 @@ namespace Editor
 			Control* c = _controls[i];
 			if (!c->getVisible()) continue;
 
-			const ImVec2& size = sizes[i];
+			ImVec2 size = ImVec2(c->getWidth(), c->getHeight());
 
 			float y = startPos.y;
 			if (_verticalAlign == LayoutVerticalAlignment::Middle)
@@ -206,14 +197,14 @@ namespace Editor
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImVec2(totalWidth, maxHeight + style.ItemSpacing.y);
+			*outSize = ImVec2(totalWidth, maxHeight);
 		}
 	}
 
-	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
+	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
 	{
 		std::vector<RowInfo> rows;
-		calculateWrappedRows(availableSize.x, sizes, rows);
+		calculateWrappedRows(availableSize.x, rows);
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
@@ -248,7 +239,7 @@ namespace Editor
 				Control* c = _controls[idx];
 				if (!c->getVisible()) continue;
 
-				const ImVec2& size = sizes[idx];
+				ImVec2 size = ImVec2(c->getWidth(), c->getHeight());
 
 				float y = row.startY;
 				if (_verticalAlign == LayoutVerticalAlignment::Middle)
@@ -293,15 +284,18 @@ namespace Editor
 		}
 	}
 
-	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
+	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
 	{
 		float totalHeight = 0.0f;
 		float maxWidth = 0.0f;
 
-		for (const auto& size : sizes)
+		for (size_t i = 0; i < _controls.count(); ++i)
 		{
-			totalHeight += size.y;
-			maxWidth = std::max(maxWidth, size.x);
+			Control* control = _controls[i];
+			if (!control->getVisible()) continue;
+
+			totalHeight += control->getHeight();
+			maxWidth = std::max(maxWidth, control->getWidth());
 		}
 
 		ImGuiStyle& style = ImGui::GetStyle();
@@ -331,7 +325,7 @@ namespace Editor
 			Control* c = _controls[i];
 			if (!c->getVisible()) continue;
 
-			const ImVec2& size = sizes[i];
+			ImVec2 size = ImVec2(c->getWidth(), c->getHeight());
 
 			float x = startPos.x;
 			if (_horizontalAlign == LayoutHorizontalAlignment::Center)
@@ -358,14 +352,14 @@ namespace Editor
 
 		if (outSize != nullptr)
 		{
-			*outSize = ImVec2(maxWidth, totalHeight + style.ItemSpacing.y);
+			*outSize = ImVec2(maxWidth, totalHeight);
 		}
 	}
 
-	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, const std::vector<ImVec2>& sizes, ImVec2* outSize)
+	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
 	{
 		std::vector<ColumnInfo> columns;
-		calculateWrappedColumns(availableSize.y, sizes, columns);
+		calculateWrappedColumns(availableSize.y, columns);
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
@@ -400,7 +394,7 @@ namespace Editor
 				Control* c = _controls[idx];
 				if (!c->getVisible()) continue;
 
-				const ImVec2& size = sizes[idx];
+				ImVec2 size = ImVec2(c->getWidth(), c->getHeight());
 
 				float x = col.startX;
 				if (_horizontalAlign == LayoutHorizontalAlignment::Center)
@@ -503,31 +497,28 @@ namespace Editor
 			availableSize.y = ImGui::GetContentRegionAvail().y;
 		}
 
-		std::vector<ImVec2> sizes;
-		calculateSizes(sizes);
-
 		ImVec2 finalSize(0, 0);
 
 		if (_direction == LayoutDirection::Horizontal)
 		{
 			if (_wrapMode == LayoutWrapMode::NoWrap)
 			{
-				updateHorizontalLayout(cursorStart, availableSize, sizes, &finalSize);
+				updateHorizontalLayout(cursorStart, availableSize, &finalSize);
 			}
 			else
 			{
-				updateHorizontalLayoutWrapped(cursorStart, availableSize, sizes, &finalSize);
+				updateHorizontalLayoutWrapped(cursorStart, availableSize, &finalSize);
 			}
 		}
 		else
 		{
 			if (_wrapMode == LayoutWrapMode::NoWrap)
 			{
-				updateVerticalLayout(cursorStart, availableSize, sizes, &finalSize);
+				updateVerticalLayout(cursorStart, availableSize, &finalSize);
 			}
 			else
 			{
-				updateVerticalLayoutWrapped(cursorStart, availableSize, sizes, &finalSize);
+				updateVerticalLayoutWrapped(cursorStart, availableSize, &finalSize);
 			}
 		}
 

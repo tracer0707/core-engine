@@ -38,6 +38,7 @@ namespace Editor
 
 		LinearLayout* _layout = new LinearLayout(LayoutDirection::Horizontal);
 		_layout->setHorizontalAlignment(LayoutHorizontalAlignment::Center);
+		_layout->setVerticalAlignment(LayoutVerticalAlignment::Middle);
 		_layout->setFitWidth(LayoutFitMode::FitAvailable);
 		_layout->setFitHeight(LayoutFitMode::FitContent);
 		_layout->setWrapMode(LayoutWrapMode::NoWrap);

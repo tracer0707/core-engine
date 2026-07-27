@@ -40,7 +40,7 @@ namespace Editor
 		Core::String label = getContentName();
 
 		float w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		float h = (_height > 0.0f) ? _height : ImGui::GetFrameHeightWithSpacing();
+		float h = (_height > 0.0f) ? _height : ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
 
 		ImVec2 total_size(w, h);
 
@@ -55,7 +55,6 @@ namespace Editor
 		ImU32 bg_col = ImGui::GetColorU32(active ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
 
 		draw_list->AddRectFilled(pos, ImVec2(pos.x + total_size.x, pos.y + total_size.y), bg_col, style.FrameRounding);
-		
 		draw_list->AddText(pos, ImGui::GetColorU32(ImGuiCol_Text), label.std_str().c_str());
 
 		if (ImGui::BeginDragDropTarget())

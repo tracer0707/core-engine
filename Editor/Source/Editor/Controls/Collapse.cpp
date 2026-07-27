@@ -33,6 +33,8 @@ namespace Editor
 				total_h += it->getHeight();
 				if (it->getWidth() > total_w) total_w = it->getWidth();
 			}
+
+			total_h += style.ItemSpacing.y * 2.0f;
 		}
 
 		_actualWidth = total_w;
