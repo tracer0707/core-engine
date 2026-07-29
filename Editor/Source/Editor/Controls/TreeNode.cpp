@@ -45,9 +45,8 @@ namespace Editor
 
 		_prevOpened = _isNodeOpened;
 
-		float header_h = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
 		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		float total_h = header_h;
+		float total_h = ImGui::GetTextLineHeightWithSpacing();
 
 		if (_isNodeOpened)
 		{

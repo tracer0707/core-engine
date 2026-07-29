@@ -14,19 +14,21 @@ namespace Editor
 	{
 		if (!_visible) return;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
+		const ImGuiStyle& style = ImGui::GetStyle();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * _style.opacity);
 
 		if (!_style.enabled)
 		{
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * 0.35f);
 		}
 
 		ImGui::SetNextItemWidth(_width);
 		ImGui::InputText((std::string("##") + _id).c_str(), &_text);
 
 		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		_actualHeight = ImGui::GetFrameHeightWithSpacing();
+		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
 
 		if (_text != _prevText && _onValueChanged != nullptr)
 		{

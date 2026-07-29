@@ -32,6 +32,7 @@ namespace Editor
 		_linearLayout = new LinearLayout(LayoutDirection::Vertical);
 		_linearLayout->setFitWidth(LayoutFitMode::FitAvailable);
 		_linearLayout->setFitHeight(LayoutFitMode::FitContent);
+		_linearLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		_objectTree = new TreeView();
 
