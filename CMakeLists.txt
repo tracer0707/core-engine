@@ -169,16 +169,16 @@ target_include_directories(Editor PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Manifold/include
 )
 
-add_library(Carve STATIC IMPORTED)
+add_library(Manifold STATIC IMPORTED)
 add_library(Assimp STATIC IMPORTED)
 add_library(FreeImage STATIC IMPORTED)
 add_library(bc7enc STATIC IMPORTED)
 
-set_target_properties(Carve PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/include"
+set_target_properties(Manifold PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Manifold/include"
 )
 set_target_properties(Assimp PROPERTIES
     INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include"
@@ -191,8 +191,8 @@ set_target_properties(bc7enc PROPERTIES
 )
 
 if(PLATFORM_LINUX)
-    set_target_properties(Carve PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/lib/linux64/libcarve.a"
+    set_target_properties(Manifold PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Manifold/lib/linux64/libmanifold.a"
     )
     set_target_properties(Assimp PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/lib/linux64/libassimp.a"
@@ -204,8 +204,8 @@ if(PLATFORM_LINUX)
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/lib/linux64/libbc7enc.a"
     )
 elseif(PLATFORM_WINDOWS)
-    set_target_properties(Carve PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Carve/lib/win64/carve.lib"
+    set_target_properties(Manifold PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Manifold/lib/win64/manifold.lib"
     )
     set_target_properties(Assimp PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/lib/win64/assimp-vc143-mt.lib"
@@ -221,7 +221,7 @@ endif()
 # Link Editor and Core
 target_link_libraries(Editor
     PRIVATE Core
-    PRIVATE Carve
+    PRIVATE Manifold
     PRIVATE Assimp
     PRIVATE FreeImage
     PRIVATE bc7enc

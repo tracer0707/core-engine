@@ -15,21 +15,9 @@ namespace Core
 	class Transformable;
 }
 
-namespace carve
+namespace manifold
 {
-	namespace poly
-	{
-		class Polyhedron;
-	}
-
-	namespace interpolate
-	{
-		template<typename attr_t>
-		class FaceVertexAttr;
-
-		template<typename attr_t>
-		class FaceAttr;
-	}
+	class Manifold;
 }
 
 namespace Editor
@@ -77,7 +65,8 @@ namespace Editor
 		bool castShadows = true;
 		BrushOperation brushOperation = BrushOperation::Add;
 		Core::Transformable* transform = nullptr;
-		carve::poly::Polyhedron* brushPtr = nullptr;
+		manifold::Manifold* brushPtr = nullptr;
+		uint32_t originalId = 0;
 
 		Core::List<glm::vec3> vertices;
 		Core::List<FaceInfo> faces;
@@ -95,21 +84,13 @@ namespace Editor
 
 		CSGModel* getParent() { return parent; }
 
-		carve::poly::Polyhedron* getBrushPtr() { return brushPtr; }
+		manifold::Manifold* getBrushPtr() { return brushPtr; }
+
+		uint32_t getOriginalId() const { return originalId; }
 
 		BrushOperation getBrushOperation() { return brushOperation; }
 		void setBrushOperation(BrushOperation value);
 
-		void bind
-		(
-			carve::interpolate::FaceVertexAttr<uv_t>* fv_uv,
-			carve::interpolate::FaceAttr<Core::Material*>* f_material,
-			carve::interpolate::FaceAttr<int>* f_layer,
-			carve::interpolate::FaceAttr<bool>* f_castShadows,
-			carve::interpolate::FaceAttr<bool>* f_smoothNormals,
-			carve::interpolate::FaceAttr<Core::Uuid>* f_brushId,
-			carve::interpolate::FaceAttr<size_t>* f_faceId
-		);
 
 		Core::Transformable* getTransform() { return transform; }
 

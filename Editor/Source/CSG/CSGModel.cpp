@@ -2,11 +2,9 @@
 
 #include <algorithm>
 
-#include <carve/interpolator.hpp>
-#include <carve/csg_triangulator.hpp>
-#include <carve/carve.hpp>
-#include <carve/csg.hpp>
-#include <carve/input.hpp>
+#include <manifold/mesh.h>
+#include <manifold/manifold.h>
+#include <optional>
 
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/Object.h>
@@ -66,94 +64,103 @@ namespace Editor
 
 		_meshRenderer->setMesh(nullptr);
 
-		carve::csg::CSG csg;
-
-		carve::interpolate::FaceVertexAttr<CSGBrush::uv_t> fv_uv;
-		carve::interpolate::FaceAttr<Core::Material*> f_material;
-		carve::interpolate::FaceAttr<int> f_layer;
-		carve::interpolate::FaceAttr<bool> f_castShadows;
-		carve::interpolate::FaceAttr<bool> f_smoothNormals;
-		carve::interpolate::FaceAttr<Core::Uuid> f_brushId;
-		carve::interpolate::FaceAttr<size_t> f_faceId;
-
-		carve::poly::Polyhedron* csgGeom = nullptr;
+		std::optional<manifold::Manifold> csgGeom;
 
 		_nullBrush->rebuild();
 
-		// Bind attributes
+		std::unordered_map<uint32_t, CSGBrush*> originalMap;
 		for (auto brush : _brushes)
 		{
 			brush->rebuild();
-			brush->bind(&fv_uv, &f_material, &f_layer, &f_castShadows, &f_smoothNormals, &f_brushId, &f_faceId);
+			if (brush->getBrushPtr() != nullptr)
+			{
+				originalMap[brush->getOriginalId()] = brush;
+			}
 		}
 
-		fv_uv.installHooks(csg);
-		f_material.installHooks(csg);
-		f_layer.installHooks(csg);
-		f_castShadows.installHooks(csg);
-		f_smoothNormals.installHooks(csg);
-		f_brushId.installHooks(csg);
-		f_faceId.installHooks(csg);
-
-		csg.hooks.registerHook(new carve::csg::CarveTriangulatorWithImprovement(), carve::csg::CSG::Hooks::PROCESS_OUTPUT_FACE_BIT);
-
-		// Compute CSG
 		for (auto* brush : _brushes)
 		{
-			glm::mat4x4 mtx = brush->getTransform()->getTransformMatrix();
-			glm::quat nrmMtx = brush->getTransform()->getRotation();
-
-			carve::poly::Polyhedron* brushPtr = brush->getBrushPtr();
-			carve::poly::Polyhedron* prevCSG = csgGeom;
-			carve::csg::CSG::OP op = carve::csg::CSG::OP::UNION;
-
-			if (brush->getBrushOperation() == CSGBrush::BrushOperation::Subtract) op = carve::csg::CSG::OP::A_MINUS_B;
+			manifold::Manifold* brushPtr = brush->getBrushPtr();
+			if (brushPtr == nullptr) continue;
 
 			try
 			{
-				if (csgGeom == nullptr)
-					csgGeom = csg.compute(_nullBrush->getBrushPtr(), brushPtr, op);
+				if (!csgGeom.has_value())
+				{
+					if (_nullBrush->getBrushPtr() != nullptr)
+					{
+						csgGeom = *_nullBrush->getBrushPtr();
+						if (brush->getBrushOperation() == CSGBrush::BrushOperation::Subtract)
+							csgGeom = csgGeom.value() - (*brushPtr);
+						else
+							csgGeom = csgGeom.value() + (*brushPtr);
+					}
+					else
+					{
+						csgGeom = *brushPtr;
+					}
+				}
 				else
-					csgGeom = csg.compute(csgGeom, brushPtr, op);
+				{
+					if (brush->getBrushOperation() == CSGBrush::BrushOperation::Subtract)
+						csgGeom = csgGeom.value() - (*brushPtr);
+					else
+						csgGeom = csgGeom.value() + (*brushPtr);
+				}
 			}
-			catch (carve::exception e)
+			catch (const std::exception&)
 			{
-				prevCSG = nullptr;
+				csgGeom.reset();
 			}
-
-			if (prevCSG != nullptr && prevCSG != _nullBrush->getBrushPtr()) delete prevCSG;
 		}
 
-		if (csgGeom == nullptr) return;
+		if (!csgGeom.has_value()) return;
 
 		// Build meshes
 		Core::AxisAlignedBox aab = Core::AxisAlignedBox();
 
-		for (size_t i = 0; i < csgGeom->faces.size(); ++i)
+		manifold::MeshGL out = csgGeom->GetMeshGL();
+
+		std::vector<size_t> runStart;
+		for (size_t r = 0; r < out.runIndex.size(); ++r)
 		{
-			auto* face = &csgGeom->faces[i];
+			size_t triStart = out.runIndex[r] / 3;
+			runStart.push_back(triStart);
+		}
 
-			Core::Material* mat = nullptr;
-			int layer = 0;
-			bool castShadows = true;
-			bool smoothNormals = false;
-			Core::Uuid brushId = Core::Uuid::Empty;
-			size_t faceId = 0;
-
-			if (f_material.hasAttribute(face))
+		size_t triCount = out.NumTri();
+		for (size_t t = 0; t < triCount; ++t)
+		{
+			size_t triIdxStart = t;
+			size_t run = 0;
+			for (size_t r = 0; r + 1 < runStart.size(); ++r)
 			{
-				Core::Material* mt = f_material.getAttribute(face);
-				if (mt != nullptr) mat = mt;
+				if (triIdxStart >= runStart[r] && triIdxStart < runStart[r+1]) { run = r; break; }
+				if (r + 1 == runStart.size() - 1) run = r + 1;
 			}
 
-			if (f_layer.hasAttribute(face)) layer = f_layer.getAttribute(face);
-			if (f_castShadows.hasAttribute(face)) castShadows = f_castShadows.getAttribute(face);
-			if (f_smoothNormals.hasAttribute(face)) smoothNormals = f_smoothNormals.getAttribute(face);
-			if (f_brushId.hasAttribute(face)) brushId = f_brushId.getAttribute(face);
-			if (f_faceId.hasAttribute(face)) faceId = f_faceId.getAttribute(face);
+			uint32_t original = 0;
+			if (run < out.runOriginalID.size()) original = out.runOriginalID[run];
+
+			CSGBrush* srcBrush = nullptr;
+			if (originalMap.find(original) != originalMap.end()) srcBrush = originalMap[original];
+
+			Core::Material* mat = nullptr;
+			Core::Uuid brushUuid = Core::Uuid::Empty;
+			size_t faceId = 0;
+			bool castShadows = true;
+			bool smoothNormals = false;
+
+			if (srcBrush != nullptr)
+			{
+				if (t < out.faceID.size()) faceId = out.faceID[t];
+				mat = srcBrush->getMaterial((int)faceId);
+				brushUuid = srcBrush->getId();
+				smoothNormals = srcBrush->getSmoothNormals((int)faceId);
+				castShadows = srcBrush->getCastShadows();
+			}
 
 			SubMeshInfo* subMesh = nullptr;
-
 			auto it = _subMeshes.find(mat);
 			if (it != _subMeshes.end())
 			{
@@ -165,28 +172,30 @@ namespace Editor
 				_subMeshes[mat] = subMesh;
 			}
 
-			for (size_t j = 0; j < 3; ++j)
+			for (size_t vi = 0; vi < 3; ++vi)
 			{
-				carve::geom3d::Vector v = face->vertex(j)->v;
-				CSGBrush::uv_t uv = CSGBrush::uv_t(0, 0);
-
-				if (fv_uv.hasAttribute(face, j)) uv = fv_uv.getAttribute(face, j);
+				uint32_t vertIdx = out.triVerts[3 * t + vi];
+				size_t propOff = (size_t)vertIdx * out.numProp;
 
 				Core::Vertex vtx{};
+				if (propOff + 2 < out.vertProperties.size())
+				{
+					vtx.position = glm::vec3((float)out.vertProperties[propOff + 0], (float)out.vertProperties[propOff + 1], (float)out.vertProperties[propOff + 2]);
+				}
+				if (out.numProp > 3 && propOff + 4 < out.vertProperties.size())
+				{
+					vtx.uv = glm::vec2((float)out.vertProperties[propOff + 3], (float)out.vertProperties[propOff + 4]);
+				}
 
-				vtx.position = glm::vec3((float)v.x, (float)v.y, (float)v.z);
-				vtx.uv = glm::vec2(uv.u, uv.v);
 				vtx.color = Core::Color(1.0f, 1.0f, 1.0f, 1.0f);
 
 				aab.merge(vtx.position);
 
 				subMesh->vertices.add(vtx);
-				subMesh->brushIds.add(brushId);
+				subMesh->brushIds.add(brushUuid);
 				subMesh->faceIds.add(faceId);
 			}
 		}
-
-		if (csgGeom != nullptr && csgGeom != _nullBrush->getBrushPtr()) delete csgGeom;
 
 		Core::Mesh* mesh = _contentManager->createMesh(_subMeshes.size());
 		Core::SubMesh** subMeshes = mesh->getSubMeshes();
