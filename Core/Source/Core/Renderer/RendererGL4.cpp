@@ -524,7 +524,6 @@ namespace Core
 			return;
 		}
 
-		glBindTexture(GL_TEXTURE_2D, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
 	}
 

@@ -5,11 +5,12 @@
 
 #include <imgui.h>
 #include <imgui_internal.h>
-#include <ImGuizmo.h>
 
 #include <Core/Components/Camera.h>
 #include <Core/Components/Transform.h>
 #include <Core/System/InputManager.h>
+
+#include "../../Dependencies/ImGuizmo/ImGuizmo.h"
 
 namespace Editor
 {
@@ -118,15 +119,9 @@ namespace Editor
 		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
 		float boundsSnap[] = {0.1f, 0.1f, 0.1f};
 
-		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) &&
-						 !_inputManager->getMouseButton(2));
-		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentContext()->CurrentWindow);
-		ImGuizmo::BeginFrame();
-
-		ImDrawList* drawList = ImGui::GetForegroundDrawList();
-		drawList->PushClipRect(ImVec2(viewX, viewY), ImVec2(viewX + viewW, viewY + viewH), true);
-
-		ImGuizmo::SetDrawlist(drawList);
+		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) && !_inputManager->getMouseButton(2));
+		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentWindow());
+		
 		ImGuizmo::SetRect(viewX, viewY, viewW, viewH);
 
 		glm::mat4 _srcMtx = _transform->getTransformMatrix();
@@ -146,8 +141,6 @@ namespace Editor
 		_transform->setPosition(t);
 		_transform->setRotation(glm::normalize(r));
 		_transform->setScale(s);
-
-		drawList->PopClipRect();
 
 		wasUsed = ImGuizmo::IsUsing();
 		_isUsing = wasUsed;

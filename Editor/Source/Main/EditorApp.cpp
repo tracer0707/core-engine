@@ -30,6 +30,8 @@
 #include "../Editor/Gizmo.h"
 #include "../Editor/ObjectPicker.h"
 
+#include "../../Dependencies/ImGuizmo/ImGuizmo.h"
+
 #include "../CSG/CSGBuilder.h"
 #include "../Editor/GizmoRenderer.h"
 
@@ -151,6 +153,7 @@ namespace Editor
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.1f, 0.1f, 0.1f, 1.0f));
 
 		_renderer->beginUI();
+		ImGuizmo::BeginFrame();
 		_windowManager->update(_width, _height);
 		_renderer->endUI();
 		//** Render UI end **//

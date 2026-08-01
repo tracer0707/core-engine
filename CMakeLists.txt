@@ -137,10 +137,10 @@ target_link_libraries(Core
 )
 
 # Editor headers
-file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h" "Core/Source/Core/Serialization/FlatBuffers/*.h")
+file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h" "Editor/Dependencies/ImGuizmo/*.h" "Core/Source/Core/Serialization/FlatBuffers/*.h")
 
 # Editor sources
-file(GLOB_RECURSE EDITOR_SOURCES "Editor/Source/*.cpp")
+file(GLOB_RECURSE EDITOR_SOURCES "Editor/Source/*.cpp" "Editor/Dependencies/ImGuizmo/*.cpp")
 
 # Editor (executable, depends on Core)
 add_executable(Editor ${EDITOR_HEADERS} ${EDITOR_SOURCES} Editor/Editor.rc)
