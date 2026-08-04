@@ -14,6 +14,12 @@
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
 #include "../Controls/Separator.h"
+#include "../Controls/ContextMenu.h"
+#include "../Controls/Checkbox.h"
+#include "../Controls/Label.h"
+#include "../Controls/InputFloat.h"
+#include "../Controls/Table.h"
+
 #include "../../Utils/TextureUtils.h"
 
 namespace Editor
@@ -50,7 +56,9 @@ namespace Editor
 
 		layoutMain->addControl(redoBtn);
 
-		layoutMain->addControl(new Separator(SeparatorDirection::Vertical));
+		Separator* separator1 = new Separator(SeparatorDirection::Vertical);
+		separator1->setHeight(30.0f);
+		layoutMain->addControl(separator1);
 
 		/* Select */
 
@@ -69,14 +77,45 @@ namespace Editor
 		/* Move */
 
 		_translateBtn = new Button();
+		_translateBtn->setButtonType(ButtonType::Action);
 		Core::Texture2D* moveBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"), contentMgr);
-		_translateBtn->setSize(32, 32);
+		_translateBtn->setSize(45, 32);
 		_translateBtn->setImage(moveBtnImage);
 		_translateBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
 			invalidate();
 		});
+		_translateBtn->setUseContextMenu(true);
+
+		LinearLayout* translateContextMenuLayout = new LinearLayout(LayoutDirection::Vertical);
+		translateContextMenuLayout->setFitWidth(LayoutFitMode::FitContent);
+		translateContextMenuLayout->setHeight(50.0f);
+		translateContextMenuLayout->setWrapMode(LayoutWrapMode::NoWrap);
+
+		Table* translateContextMenuTable = new Table(2);
+		translateContextMenuTable->setWidth(250.0f);
+
+		Checkbox* enableMoveSnap = new Checkbox();
+		enableMoveSnap->setValue(Gizmo::singleton()->getMoveSnap());
+		enableMoveSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setMoveSnap(value); });
+		Label* enableMoveSnapLabel = new Label("Enable Move Snap");
+		translateContextMenuTable->addControl(enableMoveSnapLabel);
+		translateContextMenuTable->addControl(enableMoveSnap);
+
+		InputFloat* moveSnapStepInput = new InputFloat();
+		moveSnapStepInput->setValue(Gizmo::singleton()->getMoveStepSize());
+		moveSnapStepInput->setWidth(120.0f);
+		moveSnapStepInput->setStep(0.25f);
+		moveSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setMoveStepSize(value); });
+		Label* enableMoveSnapStepLabel = new Label("Move Snap Step");
+		translateContextMenuTable->addControl(enableMoveSnapStepLabel);
+		translateContextMenuTable->addControl(moveSnapStepInput);
+
+		translateContextMenuLayout->addControl(translateContextMenuTable);
+
+		ContextMenu* translateContextMenu = _translateBtn->getContextMenu();
+		translateContextMenu->addControl(translateContextMenuLayout);
 
 		layoutMain->addControl(_translateBtn);
 
@@ -108,7 +147,9 @@ namespace Editor
 
 		layoutMain->addControl(_scaleBtn);
 
-		layoutMain->addControl(new Separator(SeparatorDirection::Vertical));
+		Separator* separator2 = new Separator(SeparatorDirection::Vertical);
+		separator2->setHeight(30.0f);
+		layoutMain->addControl(separator2);
 
 		/* Local Space */
 

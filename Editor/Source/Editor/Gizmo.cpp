@@ -82,12 +82,14 @@ namespace Editor
 
 		bool isSelectTool = false;
 
-		ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::LOCAL);
+		ImGuizmo::MODE mCurrentGizmoMode(ImGuizmo::WORLD);
 		ImGuizmo::OPERATION mCurrentGizmoOperation(ImGuizmo::TRANSLATE);
 
 		bool useSnap = false;
 		bool boundSizing = false;
-		bool boundSizingSnap = false;
+
+		float snap[] = {_moveStepSize, _moveStepSize, _moveStepSize};
+		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
 
 		if (_transformMode == TransformMode::Select)
 		{
@@ -97,10 +99,18 @@ namespace Editor
 		else if (_transformMode == TransformMode::Translate)
 		{
 			mCurrentGizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+			useSnap = _moveSnap;
+			snap[0] = _moveStepSize;
+			snap[1] = _moveStepSize;
+			snap[2] = _moveStepSize;
 		}
 		else if (_transformMode == TransformMode::Rotate)
 		{
 			mCurrentGizmoOperation = ImGuizmo::OPERATION::ROTATE;
+			useSnap = _rotateSnap;
+			snap[0] = _rotateStepSize;
+			snap[1] = _rotateStepSize;
+			snap[2] = _rotateStepSize;
 		}
 		else if (_transformMode == TransformMode::Scale)
 		{
@@ -113,11 +123,17 @@ namespace Editor
 			{
 				mCurrentGizmoOperation = ImGuizmo::OPERATION::SCALE;
 			}
+
+			useSnap = _scaleSnap;
+			snap[0] = _scaleStepSize;
+			snap[1] = _scaleStepSize;
+			snap[2] = _scaleStepSize;
 		}
 
-		float snap[3] = {1.f, 1.f, 1.f};
-		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
-		float boundsSnap[] = {0.1f, 0.1f, 0.1f};
+		if (_transformSpace == TransformSpace::Local)
+		{
+			mCurrentGizmoMode = ImGuizmo::LOCAL;
+		}
 
 		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) && !_inputManager->getMouseButton(2));
 		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentWindow());
@@ -131,7 +147,7 @@ namespace Editor
 		glm::mat4 proj = camera->getProjectionMatrix();
 
 		ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, mtx, NULL,
-							 useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, boundSizingSnap ? boundsSnap : NULL);
+							 useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, useSnap ? &snap[0] : NULL);
 
 		glm::vec3 s, t, skew;
 		glm::quat r;

@@ -58,6 +58,14 @@ namespace Editor
 			bool _lmbDown = false;
 			bool _wasMoved = false;
 
+			bool _moveSnap = true;
+			bool _rotateSnap = true;
+			bool _scaleSnap = true;
+
+			float _moveStepSize = 0.25f;
+			float _rotateStepSize = 15.0f;
+			float _scaleStepSize = 0.1f;
+
 			std::vector<std::pair<Core::Uuid, GizmoEvent>> _manipulateEndEvents;
 
 		public:
@@ -78,6 +86,24 @@ namespace Editor
 
 			TransformMode getTransformMode() const { return _transformMode; }
 			void setTransformMode(TransformMode value) { _transformMode = value; }
+
+			bool getMoveSnap() const { return _moveSnap; }
+			void setMoveSnap(bool value) { _moveSnap = value; }
+
+			bool getRotateSnap() const { return _rotateSnap; }
+			void setRotateSnap(bool value) { _rotateSnap = value; }
+
+			bool getScaleSnap() const { return _scaleSnap; }
+			void setScaleSnap(bool value) { _scaleSnap = value; }
+
+			float getMoveStepSize() const { return _moveStepSize; }
+			void setMoveStepSize(float value) { _moveStepSize = value; }
+
+			float getRotateStepSize() const { return _rotateStepSize; }
+			void setRotateStepSize(float value) { _rotateStepSize = value; }
+
+			float getScaleStepSize() const { return _scaleStepSize; }
+			void setScaleStepSize(float value) { _scaleStepSize = value; }
 
 			Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
 			void unsubscribeManipulateEndEvent(Core::Uuid id);
