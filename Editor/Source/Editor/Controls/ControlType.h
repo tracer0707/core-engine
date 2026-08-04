@@ -24,9 +24,11 @@ namespace Editor
 		InputFile,
 		InputText,
 		InputInt,
+		InputFloat,
 		InputVec4,
 		InputVec3,
 		Collapse,
+		Checkbox,
 		Dummy
 	};
 }
