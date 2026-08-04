@@ -16,6 +16,12 @@ namespace Editor
 {
 	class ContextMenu;
 
+	enum class ButtonType
+	{
+		Normal,
+		Action,
+	};
+
 	class Button : public Control
 	{
 		private:
@@ -27,6 +33,8 @@ namespace Editor
 			bool _edit = false;
 			float _imgW = 24.0f;
 			float _imgH = 24.0f;
+
+			ButtonType _buttonType = ButtonType::Normal;
 
 			ContextMenu* _contextMenu = nullptr;
 
@@ -53,6 +61,9 @@ namespace Editor
 
 			float getImageHeight() const { return _imgH; }
 			void setImageHeight(float value) { _imgH = value; }
+
+			ButtonType getButtonType() const { return _buttonType; }
+			void setButtonType(ButtonType value) { _buttonType = value; }
 
 			bool getActive() const { return _active; }
 			void setActive(bool value);

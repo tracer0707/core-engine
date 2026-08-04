@@ -57,13 +57,16 @@ namespace Editor
 		if (!_visible) return;
 
 		bool hasClick = false;
+		bool hasArrowClick = false;
 
-		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
+		ImGuiStyle& style = ImGui::GetStyle();
+
+		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * _style.opacity);
 
 		if (!_style.enabled)
 		{
 			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * 0.35f);
 		}
 
 		if (_image != nullptr)
@@ -71,7 +74,14 @@ namespace Editor
 			float w = std::max(_width, _imgW);
 			float h = std::max(_height, _imgH);
 
-			ImGuiStyle& style = ImGui::GetStyle();
+			float arrowSize = 12.0f;
+			float arrowScale = 0.7f;
+
+			if (_buttonType == ButtonType::Action)
+			{
+				w -= arrowSize - 1.0f;
+			}
+
 			ImVec2 padding = ImVec2(_style.paddingX, _style.paddingY);
 
 			ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -112,6 +122,36 @@ namespace Editor
 				draw_list->AddText(ImVec2(img_p.x + _imgW + 2.0f, pos.y + (total_size.y - text_sz.y) * 0.5f), text_col, _text.std_str().c_str());
 			}
 
+			if (_buttonType == ButtonType::Action)
+			{
+				ImGui::SameLine(0, 0);
+
+				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 1.0f);
+				
+				ImGuiWindow* window = ImGui::GetCurrentWindow();
+				const ImGuiID im_id = window->GetID((_id + "_arrow").c_str());
+
+				ImVec2 size_arrow = ImVec2(arrowSize, total_size.y);
+				ImVec2 pos = ImVec2(window->DC.CursorPos.x + size_arrow.x, window->DC.CursorPos.y + size_arrow.y);
+				
+				const ImRect bb(window->DC.CursorPos, pos);
+				ImGui::ItemSize(bb);
+				if (!ImGui::ItemAdd(bb, im_id)) return;
+
+				bool hovered, held;
+				hasArrowClick = ImGui::ButtonBehavior(bb, im_id, &hovered, &held);
+
+				const ImU32 col = ImGui::GetColorU32((held && hovered) ? ImGuiCol_ButtonActive : hovered ? ImGuiCol_ButtonHovered : ImGuiCol_Button);
+				window->DrawList->AddRectFilled(bb.Min, bb.Max, col, style.FrameRounding);
+
+				float arrow_sz = ImGui::GetFontSize() * arrowScale;
+				ImVec2 arrow_pos = ImVec2(bb.Min.x + ((bb.Max.x - bb.Min.x) * 0.5f) - (arrow_sz * 0.5f) - 2.0f,
+										  bb.Min.y + ((bb.Max.y - bb.Min.y) * 0.5f) - (arrow_sz * 0.5f));
+				ImGui::RenderArrow(window->DrawList, arrow_pos, ImGui::GetColorU32(ImGuiCol_Text), ImGuiDir_Down, arrowScale);
+
+				total_size.x += size_arrow.x + 1.0f;
+			}
+
 			_actualWidth = total_size.x;
 			_actualHeight = total_size.y;
 		}
@@ -136,7 +176,7 @@ namespace Editor
 			ImGui::PopStyleVar();
 		}
 
-		if (hasClick)
+		if (_buttonType == ButtonType::Normal && hasClick)
 		{
 			if (_contextMenu != nullptr)
 			{
@@ -148,6 +188,17 @@ namespace Editor
 				{
 					_onClick();
 				}
+			}
+		}
+		else if(_buttonType == ButtonType::Action)
+		{
+			if (hasClick && _onClick != nullptr)
+			{
+				_onClick();
+			}
+			if (hasArrowClick && _contextMenu != nullptr)
+			{
+				_contextMenu->open();
 			}
 		}
 
