@@ -79,7 +79,7 @@ namespace Editor
 
 			if (_buttonType == ButtonType::Action)
 			{
-				w -= arrowSize - 1.0f;
+				w -= arrowSize + 1.0f;
 			}
 
 			ImVec2 padding = ImVec2(_style.paddingX, _style.paddingY);
@@ -111,30 +111,26 @@ namespace Editor
 			if (_text.empty())
 			{
 				ImVec2 img_p(pos.x + (total_size.x - _imgW) * 0.5f, pos.y + (total_size.y - _imgH) * 0.5f);
-				draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + _imgW, img_p.y + _imgH), ImVec2(0, 1),
-									ImVec2(1, 0));
+				draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + _imgW, img_p.y + _imgH), ImVec2(0, 1), ImVec2(1, 0));
 			}
 			else
 			{
 				ImVec2 img_p(pos.x + (total_size.x - _imgW - text_sz.x) * 0.5f, pos.y + (total_size.y - _imgH) * 0.5f);
-				draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + _imgW, img_p.y + _imgH), ImVec2(0, 1),
-									ImVec2(1, 0));
+				draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + _imgW, img_p.y + _imgH), ImVec2(0, 1), ImVec2(1, 0));
 				draw_list->AddText(ImVec2(img_p.x + _imgW + 2.0f, pos.y + (total_size.y - text_sz.y) * 0.5f), text_col, _text.std_str().c_str());
 			}
 
 			if (_buttonType == ButtonType::Action)
 			{
 				ImGui::SameLine(0, 0);
-
-				ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 1.0f);
 				
 				ImGuiWindow* window = ImGui::GetCurrentWindow();
 				const ImGuiID im_id = window->GetID((_id + "_arrow").c_str());
 
 				ImVec2 size_arrow = ImVec2(arrowSize, total_size.y);
-				ImVec2 pos = ImVec2(window->DC.CursorPos.x + size_arrow.x, window->DC.CursorPos.y + size_arrow.y);
+				ImVec2 _pos = ImVec2(pos.x + total_size.x + 1.0f + size_arrow.x, pos.y + size_arrow.y);
 				
-				const ImRect bb(window->DC.CursorPos, pos);
+				const ImRect bb(ImVec2(pos.x + total_size.x + 1.0f, pos.y), _pos);
 				ImGui::ItemSize(bb);
 				if (!ImGui::ItemAdd(bb, im_id)) return;
 
