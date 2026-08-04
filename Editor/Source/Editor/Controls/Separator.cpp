@@ -16,6 +16,8 @@ namespace Editor
 
 	void Separator::update()
 	{
+		if (!_visible) return;
+
 		ImGuiStyle& style = ImGui::GetStyle();
 
 		if (_direction == SeparatorDirection::Horizontal)
@@ -26,9 +28,15 @@ namespace Editor
 		}
 		else
 		{
-			ImGui::SeparatorEx(ImGuiSeparatorFlags_Vertical);
+			ImVec2 p = ImGui::GetCursorScreenPos();
+			float line_height = (_height > 0.0f) ? _height : ImGui::GetTextLineHeightWithSpacing();
+
+			ImGui::GetWindowDrawList()->AddLine(p, ImVec2(p.x, p.y + line_height), ImGui::GetColorU32(ImGuiCol_Separator));
+
+			ImGui::Dummy(ImVec2(1.0f, line_height));
+			
 			_actualWidth = 1.0f;
-			_actualHeight = (_height > 0.0f) ? _height : ImGui::GetContentRegionAvail().y;
+			_actualHeight = line_height;
 		}
 	}
 }
