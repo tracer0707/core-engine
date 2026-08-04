@@ -9,6 +9,11 @@ namespace Editor
 {
 	Table::Table() {}
 
+	Table::Table(int colCount)
+	{
+		_colCount = colCount;
+	}
+
 	Table::~Table() {}
 
 	void Table::update()

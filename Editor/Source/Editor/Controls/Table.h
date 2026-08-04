@@ -11,6 +11,7 @@ namespace Editor
 
 		public:
 			Table();
+			Table(int colCount);
 			virtual ~Table();
 
 			virtual ControlType getControlType() const { return ControlType::Table; }

@@ -40,16 +40,6 @@ namespace Editor
 
 			ImVec2 size = ImVec2(control->getWidth(), control->getHeight());
 
-			if (size.x == 0.0f && size.y == 0.0f)
-			{
-				continue;
-			}
-
-			if (size.x == 0.0f && size.y == 0.0f)
-			{
-				continue;
-			}
-
 			if (currentRow.indices.empty() ||
 				(currentRow.totalWidth + size.x + (currentRow.indices.empty() ? 0 : style.ItemSpacing.x) <= availableWidth))
 			{
