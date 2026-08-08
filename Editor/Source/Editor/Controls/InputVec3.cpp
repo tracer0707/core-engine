@@ -24,7 +24,7 @@ namespace Editor
 		ImGui::InputFloat3((std::string("##") + _id).c_str(), &_value[0]);
 
 		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		_actualHeight = ImGui::GetFrameHeightWithSpacing();
+		_actualHeight = ImGui::GetFrameHeight();
 
 		if (_value != _prevValue && _onValueChanged != nullptr)
 		{

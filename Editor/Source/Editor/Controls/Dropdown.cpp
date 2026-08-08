@@ -39,6 +39,6 @@ namespace Editor
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 text_sz = ImGui::CalcTextSize(preview_value.std_str().c_str());
 		_actualWidth = (_width > 0.0f) ? _width : (text_sz.x + style.FramePadding.x * 2.0f);
-		_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeightWithSpacing();
+		_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeight();
 	}
 } // namespace Editor

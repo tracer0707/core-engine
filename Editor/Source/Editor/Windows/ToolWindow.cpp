@@ -94,7 +94,7 @@ namespace Editor
 		translateContextMenuLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		Table* translateContextMenuTable = new Table(2);
-		translateContextMenuTable->setWidth(250.0f);
+		translateContextMenuTable->setWidth(255.0f);
 
 		Checkbox* enableMoveSnap = new Checkbox();
 		enableMoveSnap->setValue(Gizmo::singleton()->getMoveSnap());

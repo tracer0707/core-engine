@@ -61,6 +61,6 @@ namespace Editor
 		}
 
 		_actualWidth = total_w;
-		_actualHeight = total_h;
+		_actualHeight = total_h + (style.CellPadding.y * 2.0f) * ((float)(_controls.count() / _colCount));
 	}
 } // namespace Editor
