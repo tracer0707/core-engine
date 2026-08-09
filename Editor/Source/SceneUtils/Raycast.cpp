@@ -77,6 +77,12 @@ namespace Editor
 			}
 		}
 
+		bool foundHit = false;
+		float closestDistance = std::numeric_limits<float>::max();
+
+		CSGBrush* closestBrush = nullptr;
+		size_t closestFaceId = -1;
+
 		for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
 		{
 			Core::SubMesh* subMesh = mesh->getSubMesh(i);
@@ -94,20 +100,28 @@ namespace Editor
 				glm::vec3 p2 = mtx * glm::vec4(v2.position, 1.0f);
 				glm::vec3 p3 = mtx * glm::vec4(v3.position, 1.0f);
 
-				std::pair<bool, float> hit = Core::Mathf::intersects(ray, p1, p2, p3, true, false);
+				auto hit = Core::Mathf::intersects(ray, p1, p2, p3, true, false);
 
-				if (hit.first)
+				if (!hit.first) continue;
+
+				if (hit.second < closestDistance)
 				{
+					closestDistance = hit.second;
+					foundHit = true;
+
 					if (csgModel != nullptr)
 					{
-						csgModel->findBrush(subMesh, j, csgBrush, faceId);
+						csgModel->findBrush(subMesh, vb->indexArraySize > 0 ? vb->indexArray[j] : j, &closestBrush, &closestFaceId);
 					}
-
-					return true;
 				}
 			}
 		}
 
-		return false;
+		if (!foundHit) return false;
+
+		*csgBrush = closestBrush;
+		*faceId = closestFaceId;
+
+		return true;
 	}
 } // namespace Editor

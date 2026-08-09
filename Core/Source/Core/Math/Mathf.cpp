@@ -41,11 +41,9 @@ namespace Core
 
 	float Mathf::clamp(float value, float min1, float max1)
 	{
-		if (value < min1)
-			return min1;
+		if (value < min1) return min1;
 
-		if (value > max1)
-			return max1;
+		if (value > max1) return max1;
 
 		return value;
 	}
@@ -211,92 +209,48 @@ namespace Core
 		if (cmp.y < v.y) v.y = cmp.y;
 	}
 
-	std::pair<bool, float> Mathf::intersects(const Ray& ray, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& normal, bool positiveSide, bool negativeSide)
+	std::pair<bool, float> Mathf::intersects(const Ray& ray, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, bool positiveSide,
+											 bool negativeSide)
 	{
-		float t;
+		const float EPSILON = 1e-7f;
+
+		const glm::vec3 edge1 = b - a;
+		const glm::vec3 edge2 = c - a;
+
+		const glm::vec3 pvec = glm::cross(ray.direction, edge2);
+		const float det = glm::dot(edge1, pvec);
+
+		// Backface handling
+		if (positiveSide && !negativeSide)
 		{
-			float denom = glm::dot(normal, ray.direction);
-
-			// Check intersect side
-			if (denom > +std::numeric_limits<float>::epsilon())
-			{
-				if (!negativeSide)
-					return std::pair<bool, float>(false, (float)0);
-			}
-			else if (denom < -std::numeric_limits<float>::epsilon())
-			{
-				if (!positiveSide)
-					return std::pair<bool, float>(false, (float)0);
-			}
-			else
-			{
-				// Parallel or triangle area is close to zero when
-				// the plane normal not normalised.
-				return std::pair<bool, float>(false, (float)0);
-			}
-
-			t = glm::dot(normal, a - ray.origin) / denom;
-
-			if (t < 0)
-			{
-				// Intersection is behind origin
-				return std::pair<bool, float>(false, (float)0);
-			}
+			if (det < EPSILON) return {false, 0.0f};
 		}
-
-		// Calculate the largest area projection plane in X, Y or Z.
-		size_t i0, i1;
+		else if (!positiveSide && negativeSide)
 		{
-			float n0 = abs(normal[0]);
-			float n1 = abs(normal[1]);
-			float n2 = abs(normal[2]);
-
-			i0 = 1; i1 = 2;
-			if (n1 > n2)
-			{
-				if (n1 > n0) i0 = 0;
-			}
-			else
-			{
-				if (n2 > n0) i1 = 0;
-			}
-		}
-
-		// Check the intersection point is inside the triangle.
-		float u1 = b[i0] - a[i0];
-		float v1 = b[i1] - a[i1];
-		float u2 = c[i0] - a[i0];
-		float v2 = c[i1] - a[i1];
-		float u0 = t * ray.direction[i0] + ray.origin[i0] - a[i0];
-		float v0 = t * ray.direction[i1] + ray.origin[i1] - a[i1];
-
-		float alpha = u0 * v2 - u2 * v0;
-		float beta = u1 * v0 - u0 * v1;
-		float area = u1 * v2 - u2 * v1;
-
-		// epsilon to avoid float precision error
-		const float EPSILON = 1e-6f;
-
-		float tolerance = -EPSILON * area;
-
-		if (area > 0)
-		{
-			if (alpha < tolerance || beta < tolerance || alpha + beta > area - tolerance)
-				return std::pair<bool, float>(false, (float)0);
+			if (det > -EPSILON) return {false, 0.0f};
 		}
 		else
 		{
-			if (alpha > tolerance || beta > tolerance || alpha + beta < area - tolerance)
-				return std::pair<bool, float>(false, (float)0);
+			if (std::abs(det) < EPSILON) return {false, 0.0f};
 		}
 
-		return std::pair<bool, float>(true, (float)t);
-	}
+		const float invDet = 1.0f / det;
 
-	std::pair<bool, float> Mathf::intersects(const Ray& ray, const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, bool positiveSide, bool negativeSide)
-	{
-		glm::vec3 normal = calculateBasicFaceNormalWithoutNormalize(a, b, c);
-		return intersects(ray, a, b, c, normal, positiveSide, negativeSide);
+		const glm::vec3 tvec = ray.origin - a;
+		const float u = glm::dot(tvec, pvec) * invDet;
+
+		if (u < -EPSILON || u > 1.0f + EPSILON) return {false, 0.0f};
+
+		const glm::vec3 qvec = glm::cross(tvec, edge1);
+		const float v = glm::dot(ray.direction, qvec) * invDet;
+
+		if (v < -EPSILON || u + v > 1.0f + EPSILON) return {false, 0.0f};
+
+		const float t = glm::dot(edge2, qvec) * invDet;
+
+		if (t < EPSILON) return {false, 0.0f};
+
+		return {true, t};
 	}
 
 	bool Mathf::intersects(glm::vec3 center, float radius, AxisAlignedBox box)
@@ -343,7 +297,7 @@ namespace Core
 		return normal;
 	}
 
-	void setColumn(glm::mat3 &mtx, size_t iCol, glm::vec3 vec)
+	void setColumn(glm::mat3& mtx, size_t iCol, glm::vec3 vec)
 	{
 		assert(iCol < 3);
 		mtx[0][iCol] = vec.x;
@@ -388,9 +342,8 @@ namespace Core
 	glm::vec2 Mathf::rotateUV(glm::vec2 uv, float rotation)
 	{
 		float mid = 0.5f;
-		return glm::vec2(
-			cos(rotation) * (uv.x - mid) + sin(rotation) * (uv.y - mid) + mid,
-			cos(rotation) * (uv.y - mid) - sin(rotation) * (uv.x - mid) + mid);
+		return glm::vec2(cos(rotation) * (uv.x - mid) + sin(rotation) * (uv.y - mid) + mid,
+						 cos(rotation) * (uv.y - mid) - sin(rotation) * (uv.x - mid) + mid);
 	}
 
 	float Mathf::angleBetweenVectors(glm::vec3 dir1, glm::vec3 dir2)
@@ -410,10 +363,7 @@ namespace Core
 
 	glm::vec3 Mathf::rotateAround(glm::vec3 aPointToRotate, glm::vec3 aRotationCenter, glm::mat4x4 aRotation)
 	{
-		glm::mat4x4 translate =
-			glm::translate(
-				glm::identity<glm::mat4x4>(),
-				aRotationCenter);
+		glm::mat4x4 translate = glm::translate(glm::identity<glm::mat4x4>(), aRotationCenter);
 
 		glm::mat4x4 invTranslate = glm::inverse(translate);
 
@@ -460,4 +410,4 @@ namespace Core
 
 		return glm::vec3(u, v, w);
 	}
-}
+} // namespace Core

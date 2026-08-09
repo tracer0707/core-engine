@@ -1,6 +1,7 @@
 #include "CSGModel.h"
 
 #include <algorithm>
+#include <iostream>
 
 #include <manifold/mesh.h>
 #include <manifold/manifold.h>
@@ -49,8 +50,10 @@ namespace Editor
 	{
 		for (auto& sm : _subMeshes)
 		{
-			sm.second->brushIds.clear();
+			sm.second->brushes.clear();
 			sm.second->vertices.clear();
+			sm.second->faceIds.clear();
+			sm.second->subMesh = nullptr;
 			delete sm.second;
 		}
 
@@ -131,22 +134,15 @@ namespace Editor
 		size_t triCount = out.NumTri();
 		for (size_t t = 0; t < triCount; ++t)
 		{
-			size_t triIdxStart = t;
-			size_t run = 0;
-			for (size_t r = 0; r + 1 < runStart.size(); ++r)
-			{
-				if (triIdxStart >= runStart[r] && triIdxStart < runStart[r+1]) { run = r; break; }
-				if (r + 1 == runStart.size() - 1) run = r + 1;
-			}
+			auto itRun = std::upper_bound(out.runIndex.begin(), out.runIndex.end(), static_cast<uint32_t>(3 * t));
+			size_t run = std::distance(out.runIndex.begin(), itRun) - 1;
 
-			uint32_t original = 0;
-			if (run < out.runOriginalID.size()) original = out.runOriginalID[run];
+			uint32_t original = out.runOriginalID[run];
 
 			CSGBrush* srcBrush = nullptr;
 			if (originalMap.find(original) != originalMap.end()) srcBrush = originalMap[original];
 
 			Core::Material* mat = nullptr;
-			Core::Uuid brushUuid = Core::Uuid::Empty;
 			size_t faceId = 0;
 			bool castShadows = true;
 			bool smoothNormals = false;
@@ -155,7 +151,6 @@ namespace Editor
 			{
 				if (t < out.faceID.size()) faceId = out.faceID[t];
 				mat = srcBrush->getMaterial((int)faceId);
-				brushUuid = srcBrush->getId();
 				smoothNormals = srcBrush->getSmoothNormals((int)faceId);
 				castShadows = srcBrush->getCastShadows();
 			}
@@ -180,7 +175,8 @@ namespace Editor
 				Core::Vertex vtx{};
 				if (propOff + 2 < out.vertProperties.size())
 				{
-					vtx.position = glm::vec3((float)out.vertProperties[propOff + 0], (float)out.vertProperties[propOff + 1], (float)out.vertProperties[propOff + 2]);
+					vtx.position = glm::vec3((float)out.vertProperties[propOff + 0], (float)out.vertProperties[propOff + 1],
+											 (float)out.vertProperties[propOff + 2]);
 				}
 				if (out.numProp > 3 && propOff + 4 < out.vertProperties.size())
 				{
@@ -192,7 +188,7 @@ namespace Editor
 				aab.merge(vtx.position);
 
 				subMesh->vertices.add(vtx);
-				subMesh->brushIds.add(brushUuid);
+				subMesh->brushes.add(srcBrush);
 				subMesh->faceIds.add(faceId);
 			}
 		}
@@ -236,25 +232,15 @@ namespace Editor
 		return false;
 	}
 
-	CSGBrush* CSGModel::findBrushByUuid(Core::Uuid brushId)
-	{
-		for (auto it : _brushes)
-		{
-			if (it->getId() == brushId) return it;
-		}
-
-		return nullptr;
-	}
-
-	void CSGModel::findBrush(const Core::SubMesh* subMesh, unsigned int vertexId, CSGBrush** outCsgBrush, size_t* outFaceId)
+	void CSGModel::findBrush(const Core::SubMesh* subMesh, int vertexId, CSGBrush** outCsgBrush, size_t* outFaceId)
 	{
 		for (auto& sm : _subMeshes)
 		{
 			if (subMesh == sm.second->subMesh)
 			{
-				if (sm.second->brushIds.count() > vertexId)
+				if (sm.second->brushes.count() > vertexId)
 				{
-					*outCsgBrush = findBrushByUuid(sm.second->brushIds.get(vertexId));
+					*outCsgBrush = sm.second->brushes.get(vertexId);
 					*outFaceId = sm.second->faceIds.get(vertexId);
 					return;
 				}

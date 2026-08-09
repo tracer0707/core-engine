@@ -77,14 +77,18 @@ namespace Editor
 			if (n < 3) continue;
 
 			std::vector<int> idx;
-			for (size_t k = 0; k < n; ++k) idx.push_back(face.indices.get(k));
+			for (size_t k = 0; k < n; ++k)
+				idx.push_back(face.indices.get(k));
 
-			std::vector<std::array<int,3>> tris;
-			if (n == 3) tris.push_back({{0,1,2}});
-			else if (n == 4) tris.push_back({{0,1,2}}), tris.push_back({{0,2,3}});
+			std::vector<std::array<int, 3>> tris;
+			if (n == 3)
+				tris.push_back({{0, 1, 2}});
+			else if (n == 4)
+				tris.push_back({{0, 1, 2}}), tris.push_back({{0, 2, 3}});
 			else
 			{
-				for (size_t k = 1; k + 1 < n; ++k) tris.push_back({{0,(int)k,(int)(k+1)}});
+				for (size_t k = 1; k + 1 < n; ++k)
+					tris.push_back({{0, (int)k, (int)(k + 1)}});
 			}
 
 			glm::vec3 p0_world = mtx * glm::vec4(vertices.get(idx[0]), 1.0f);
@@ -92,11 +96,13 @@ namespace Editor
 			glm::vec3 p2_world = mtx * glm::vec4(vertices.get(idx.size() > 2 ? idx[2] : idx[1]), 1.0f);
 
 			glm::vec3 center_world = glm::vec3(0.0f);
-			for (size_t ii = 0; ii < idx.size(); ++ii) center_world += glm::vec3(mtx * glm::vec4(vertices.get(idx[ii]), 1.0f));
+			for (size_t ii = 0; ii < idx.size(); ++ii)
+				center_world += glm::vec3(mtx * glm::vec4(vertices.get(idx[ii]), 1.0f));
 			center_world /= (float)idx.size();
 
 			glm::vec3 center_ns = glm::vec3(0.0f);
-			for (size_t ii = 0; ii < idx.size(); ++ii) center_ns += transform->getRotation() * vertices.get(idx[ii]) + transform->getPosition();
+			for (size_t ii = 0; ii < idx.size(); ++ii)
+				center_ns += transform->getRotation() * vertices.get(idx[ii]) + transform->getPosition();
 			center_ns /= (float)idx.size();
 
 			glm::vec3 e1 = p1_world - p0_world;
@@ -132,7 +138,7 @@ namespace Editor
 			if (glm::length(axisV) == 0.0f) axisV = glm::vec3(0.0f, 0.0f, 1.0f);
 			axisV = glm::normalize(axisV);
 
-			for (auto &t : tris)
+			for (auto& t : tris)
 			{
 				for (int pi = 0; pi < 3; ++pi)
 				{
@@ -143,7 +149,7 @@ namespace Editor
 
 					glm::vec3 p_world = p;
 					glm::vec3 relp = p_world - center_world;
-				
+
 					double u = glm::dot(relp, axisU) * face.texCoordsScale.x;
 					double vv = glm::dot(relp, axisV) * face.texCoordsScale.y;
 					glm::vec2 uv = glm::vec2((float)u, (float)vv);
@@ -169,9 +175,18 @@ namespace Editor
 		mesh.runIndex.push_back((uint32_t)mesh.triVerts.size());
 
 		mesh.runTransform.resize(12);
-		mesh.runTransform[0] = 1; mesh.runTransform[1] = 0; mesh.runTransform[2] = 0; mesh.runTransform[3] = 0;
-		mesh.runTransform[4] = 0; mesh.runTransform[5] = 1; mesh.runTransform[6] = 0; mesh.runTransform[7] = 0;
-		mesh.runTransform[8] = 0; mesh.runTransform[9] = 0; mesh.runTransform[10] = 1; mesh.runTransform[11] = 0;
+		mesh.runTransform[0] = 1;
+		mesh.runTransform[1] = 0;
+		mesh.runTransform[2] = 0;
+		mesh.runTransform[3] = 0;
+		mesh.runTransform[4] = 0;
+		mesh.runTransform[5] = 1;
+		mesh.runTransform[6] = 0;
+		mesh.runTransform[7] = 0;
+		mesh.runTransform[8] = 0;
+		mesh.runTransform[9] = 0;
+		mesh.runTransform[10] = 1;
+		mesh.runTransform[11] = 0;
 
 		try
 		{
@@ -180,11 +195,13 @@ namespace Editor
 			manifold::Manifold m(mesh);
 			brushPtr = new manifold::Manifold(m);
 		}
-		catch (const std::exception& ex) {
+		catch (const std::exception& ex)
+		{
 			std::cout << "CSGBrush::rebuild: Manifold construction failed: " << ex.what() << "\n";
 			brushPtr = nullptr;
 		}
-		catch (...) {
+		catch (...)
+		{
 			std::cout << "CSGBrush::rebuild: Manifold construction threw unknown exception\n";
 			brushPtr = nullptr;
 		}
@@ -193,7 +210,6 @@ namespace Editor
 	void CSGBrush::setBrushOperation(BrushOperation value)
 	{
 		brushOperation = value;
-		rebuild();
 	}
 
 	Core::List<uint32_t> CSGBrush::getFlatIndices()
@@ -214,7 +230,6 @@ namespace Editor
 	void CSGBrush::setCastShadows(bool value)
 	{
 		castShadows = value;
-		rebuild();
 	}
 
 	Core::Material* CSGBrush::getMaterial(int faceIndex)
