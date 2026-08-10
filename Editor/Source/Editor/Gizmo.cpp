@@ -135,9 +135,11 @@ namespace Editor
 			mCurrentGizmoMode = ImGuizmo::LOCAL;
 		}
 
-		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) && !_inputManager->getMouseButton(2));
+		ImGuizmo::Enable(_enabled && !isSelectTool && (_isUsing || isMouseInView) && !_inputManager->getMouseButton(1) &&
+						 !_inputManager->getMouseButton(2));
+
 		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentWindow());
-		
+
 		ImGuizmo::SetRect(viewX, viewY, viewW, viewH);
 
 		glm::mat4 _srcMtx = _transform->getTransformMatrix();
@@ -146,17 +148,19 @@ namespace Editor
 		glm::mat4 view = camera->getViewMatrix();
 		glm::mat4 proj = camera->getProjectionMatrix();
 
-		ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, mtx, NULL,
-							 useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, useSnap ? &snap[0] : NULL);
+		bool manipulated = ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, mtx, NULL,
+												useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, useSnap ? &snap[0] : NULL);
 
 		glm::vec3 s, t, skew;
 		glm::quat r;
 		glm::vec4 persp;
-		glm::decompose(_srcMtx, s, r, t, skew, persp);
 
-		_transform->setPosition(t);
-		_transform->setRotation(glm::normalize(r));
-		_transform->setScale(s);
+		if (manipulated && glm::decompose(_srcMtx, s, r, t, skew, persp))
+		{
+			_transform->setPosition(t);
+			_transform->setRotation(glm::normalize(r));
+			_transform->setScale(s);
+		}
 
 		wasUsed = ImGuizmo::IsUsing();
 		_isUsing = wasUsed;
