@@ -106,7 +106,10 @@ namespace Editor
 		InputFloat* moveSnapStepInput = new InputFloat();
 		moveSnapStepInput->setValue(Gizmo::singleton()->getMoveStepSize());
 		moveSnapStepInput->setWidth(120.0f);
-		moveSnapStepInput->setStep(0.25f);
+		moveSnapStepInput->setStep(2.0f);
+		moveSnapStepInput->setLimitMin(0.125f);
+		moveSnapStepInput->setLimitMax(16.0f);
+		moveSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
 		moveSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setMoveStepSize(value); });
 		Label* enableMoveSnapStepLabel = new Label("Move Snap Step");
 		translateContextMenuTable->addControl(enableMoveSnapStepLabel);

@@ -23,8 +23,48 @@ namespace Editor
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * 0.35f);
 		}
 
-		ImGui::SetNextItemWidth(_actualWidth);
-		ImGui::InputFloat((std::string("##") + _id).c_str(), &_value, _step);
+		float _w = _actualWidth;
+
+		if (_step > 0)
+		{
+			_w -= (40.0f + (style.ItemSpacing.x * 2.0f));
+		}
+
+		ImGui::SetNextItemWidth(_w);
+		bool changed = ImGui::InputFloat((std::string("##") + _id).c_str(), &_value, 0.0f, 0.0f, "%.4f");
+
+		if (_step > 0)
+		{
+			ImGui::SameLine();
+
+			if (ImGui::Button("-", ImVec2(20.0f, 0.0f)))
+			{
+				if (_incrementType == IncrementType::Additive)
+					_value -= _step;
+				else
+					_value /= _step;
+
+				changed = true;
+			}
+
+			ImGui::SameLine();
+
+			if (ImGui::Button("+", ImVec2(20.0f, 0.0f)))
+			{
+				if (_incrementType == IncrementType::Additive)
+					_value += _step;
+				else
+					_value *= _step;
+
+				changed = true;
+			}
+		}
+
+		if (changed)
+		{
+			if (_value < _limitMin) _value = _limitMin;
+			if (_value > _limitMax) _value = _limitMax;
+		}
 
 		_actualWidth = (_width > 0.0f) ? _width : 100.0f;
 		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;

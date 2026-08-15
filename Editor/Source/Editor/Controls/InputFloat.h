@@ -6,10 +6,21 @@ namespace Editor
 {
 	class InputFloat : public Control
 	{
+		public:
+			enum class IncrementType
+			{
+				Additive,
+				Multiplicative
+			};
+
 		private:
 			float _value = 0.0f;
 			float _prevValue = 0.0f;
-			float _step = 0.1f;
+			float _step = 1.0f;
+			float _limitMin = 0.0f;
+			float _limitMax = FLT_MAX;
+
+			IncrementType _incrementType = IncrementType::Additive;
 
 			std::function<void(float)> _onValueChanged = nullptr;
 
@@ -25,6 +36,15 @@ namespace Editor
 
 			float getStep() const { return _step; }
 			void setStep(float value) { _step = value; }
+
+			float getLimitMin() const { return _limitMin; }
+			void setLimitMin(float value) { _limitMin = value; }
+
+			float getLimitMax() const { return _limitMax; }
+			void setLimitMax(float value) { _limitMax = value; }
+
+			IncrementType getIncrementType() const { return _incrementType; }
+			void setIncrementType(IncrementType value) { _incrementType = value; }
 
 			void setOnValueChanged(std::function<void(float)> value) { _onValueChanged = value; }
 	};
