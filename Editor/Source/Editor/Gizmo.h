@@ -30,7 +30,8 @@ namespace Editor
 				Select,
 				Translate,
 				Rotate,
-				Scale
+				Scale,
+				Bounds
 			};
 
 			enum class ObjectType
@@ -61,10 +62,12 @@ namespace Editor
 			bool _moveSnap = true;
 			bool _rotateSnap = true;
 			bool _scaleSnap = true;
+			bool _boundsSnap = true;
 
 			float _moveStepSize = 0.25f;
 			float _rotateStepSize = 15.0f;
-			float _scaleStepSize = 0.1f;
+			float _scaleStepSize = 0.25f;
+			float _boundsStepSize = 0.25f;
 
 			std::vector<std::pair<Core::Uuid, GizmoEvent>> _manipulateEndEvents;
 
@@ -96,6 +99,9 @@ namespace Editor
 			bool getScaleSnap() const { return _scaleSnap; }
 			void setScaleSnap(bool value) { _scaleSnap = value; }
 
+			bool getBoundsSnap() const { return _boundsSnap; }
+			void setBoundsSnap(bool value) { _boundsSnap = value; }
+
 			float getMoveStepSize() const { return _moveStepSize; }
 			void setMoveStepSize(float value) { _moveStepSize = value; }
 
@@ -104,6 +110,9 @@ namespace Editor
 
 			float getScaleStepSize() const { return _scaleStepSize; }
 			void setScaleStepSize(float value) { _scaleStepSize = value; }
+
+			float getBoundsStepSize() const { return _boundsStepSize; }
+			void setBoundsStepSize(float value) { _boundsStepSize = value; }
 
 			Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
 			void unsubscribeManipulateEndEvent(Core::Uuid id);

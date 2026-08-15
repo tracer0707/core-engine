@@ -111,8 +111,8 @@ namespace Editor
 		moveSnapStepInput->setLimitMax(16.0f);
 		moveSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
 		moveSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setMoveStepSize(value); });
-		Label* enableMoveSnapStepLabel = new Label("Move Snap Step");
-		translateContextMenuTable->addControl(enableMoveSnapStepLabel);
+		Label* moveSnapStepLabel = new Label("Move Snap Step");
+		translateContextMenuTable->addControl(moveSnapStepLabel);
 		translateContextMenuTable->addControl(moveSnapStepInput);
 
 		translateContextMenuLayout->addControl(translateContextMenuTable);
@@ -125,30 +125,146 @@ namespace Editor
 		/* Rotate */
 
 		_rotateBtn = new Button();
+		_rotateBtn->setButtonType(ButtonType::Action);
 		Core::Texture2D* rotateBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"), contentMgr);
-		_rotateBtn->setSize(32, 32);
+		_rotateBtn->setSize(45, 32);
 		_rotateBtn->setImage(rotateBtnImage);
 		_rotateBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
 			invalidate();
 		});
+		_rotateBtn->setUseContextMenu(true);
+
+		LinearLayout* rotateContextMenuLayout = new LinearLayout(LayoutDirection::Vertical);
+		rotateContextMenuLayout->setFitWidth(LayoutFitMode::FitContent);
+		rotateContextMenuLayout->setHeight(50.0f);
+		rotateContextMenuLayout->setWrapMode(LayoutWrapMode::NoWrap);
+
+		Table* rotateContextMenuTable = new Table(2);
+		rotateContextMenuTable->setWidth(255.0f);
+
+		Checkbox* enableRotateSnap = new Checkbox();
+		enableRotateSnap->setValue(Gizmo::singleton()->getRotateSnap());
+		enableRotateSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setRotateSnap(value); });
+		Label* enableRotateSnapLabel = new Label("Enable Rotate Snap");
+		rotateContextMenuTable->addControl(enableRotateSnapLabel);
+		rotateContextMenuTable->addControl(enableRotateSnap);
+
+		InputFloat* rotateSnapStepInput = new InputFloat();
+		rotateSnapStepInput->setValue(Gizmo::singleton()->getRotateStepSize());
+		rotateSnapStepInput->setWidth(120.0f);
+		rotateSnapStepInput->setStep(15.0f);
+		rotateSnapStepInput->setLimitMin(15.0f);
+		rotateSnapStepInput->setLimitMax(90.0f);
+		rotateSnapStepInput->setIncrementType(InputFloat::IncrementType::Additive);
+		rotateSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setRotateStepSize(value); });
+		Label* rotateSnapStepLabel = new Label("Rotate Snap Step");
+		rotateContextMenuTable->addControl(rotateSnapStepLabel);
+		rotateContextMenuTable->addControl(rotateSnapStepInput);
+
+		rotateContextMenuLayout->addControl(rotateContextMenuTable);
+
+		ContextMenu* rotateContextMenu = _rotateBtn->getContextMenu();
+		rotateContextMenu->addControl(rotateContextMenuLayout);
 
 		layoutMain->addControl(_rotateBtn);
 
 		/* Scale */
 
 		_scaleBtn = new Button();
+		_scaleBtn->setButtonType(ButtonType::Action);
 		Core::Texture2D* scaleBtnImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"), contentMgr);
-		_scaleBtn->setSize(32, 32);
+		_scaleBtn->setSize(45, 32);
 		_scaleBtn->setImage(scaleBtnImage);
 		_scaleBtn->setOnClick([this]() {
 			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
 			invalidate();
 		});
+		_scaleBtn->setUseContextMenu(true);
+
+		LinearLayout* scaleContextMenuLayout = new LinearLayout(LayoutDirection::Vertical);
+		scaleContextMenuLayout->setFitWidth(LayoutFitMode::FitContent);
+		scaleContextMenuLayout->setHeight(50.0f);
+		scaleContextMenuLayout->setWrapMode(LayoutWrapMode::NoWrap);
+
+		Table* scaleContextMenuTable = new Table(2);
+		scaleContextMenuTable->setWidth(255.0f);
+
+		Checkbox* enableScaleSnap = new Checkbox();
+		enableScaleSnap->setValue(Gizmo::singleton()->getScaleSnap());
+		enableScaleSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setScaleSnap(value); });
+		Label* enableScaleSnapLabel = new Label("Enable Scale Snap");
+		scaleContextMenuTable->addControl(enableScaleSnapLabel);
+		scaleContextMenuTable->addControl(enableScaleSnap);
+
+		InputFloat* scaleSnapStepInput = new InputFloat();
+		scaleSnapStepInput->setValue(Gizmo::singleton()->getScaleStepSize());
+		scaleSnapStepInput->setWidth(120.0f);
+		scaleSnapStepInput->setStep(2.0f);
+		scaleSnapStepInput->setLimitMin(0.125f);
+		scaleSnapStepInput->setLimitMax(2.0f);
+		scaleSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
+		scaleSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setScaleStepSize(value); });
+		Label* scaleSnapStepLabel = new Label("Scale Snap Step");
+		scaleContextMenuTable->addControl(scaleSnapStepLabel);
+		scaleContextMenuTable->addControl(scaleSnapStepInput);
+
+		scaleContextMenuLayout->addControl(scaleContextMenuTable);
+
+		ContextMenu* scaleContextMenu = _scaleBtn->getContextMenu();
+		scaleContextMenu->addControl(scaleContextMenuLayout);
 
 		layoutMain->addControl(_scaleBtn);
+
+		/* Bounds */
+
+		_boundsBtn = new Button();
+		_boundsBtn->setButtonType(ButtonType::Action);
+		Core::Texture2D* boundsBtnImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/button.png"), contentMgr);
+		_boundsBtn->setSize(45, 32);
+		_boundsBtn->setImage(boundsBtnImage);
+		_boundsBtn->setOnClick([this]() {
+			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Bounds);
+			invalidate();
+		});
+		_boundsBtn->setUseContextMenu(true);
+
+		LinearLayout* boundsContextMenuLayout = new LinearLayout(LayoutDirection::Vertical);
+		boundsContextMenuLayout->setFitWidth(LayoutFitMode::FitContent);
+		boundsContextMenuLayout->setHeight(50.0f);
+		boundsContextMenuLayout->setWrapMode(LayoutWrapMode::NoWrap);
+
+		Table* boundsContextMenuTable = new Table(2);
+		boundsContextMenuTable->setWidth(255.0f);
+
+		Checkbox* enableBoundsSnap = new Checkbox();
+		enableBoundsSnap->setValue(Gizmo::singleton()->getBoundsSnap());
+		enableBoundsSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setBoundsSnap(value); });
+		Label* enableBoundsSnapLabel = new Label("Enable Bounds Snap");
+		boundsContextMenuTable->addControl(enableBoundsSnapLabel);
+		boundsContextMenuTable->addControl(enableBoundsSnap);
+
+		InputFloat* boundsSnapStepInput = new InputFloat();
+		boundsSnapStepInput->setValue(Gizmo::singleton()->getBoundsStepSize());
+		boundsSnapStepInput->setWidth(120.0f);
+		boundsSnapStepInput->setStep(2.0f);
+		boundsSnapStepInput->setLimitMin(0.125f);
+		boundsSnapStepInput->setLimitMax(16.0f);
+		boundsSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
+		boundsSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setBoundsStepSize(value); });
+		Label* boundsSnapStepLabel = new Label("Bounds Snap Step");
+		boundsContextMenuTable->addControl(boundsSnapStepLabel);
+		boundsContextMenuTable->addControl(boundsSnapStepInput);
+
+		boundsContextMenuLayout->addControl(boundsContextMenuTable);
+
+		ContextMenu* boundsContextMenu = _boundsBtn->getContextMenu();
+		boundsContextMenu->addControl(boundsContextMenuLayout);
+
+		layoutMain->addControl(_boundsBtn);
 
 		Separator* separator2 = new Separator(SeparatorDirection::Vertical);
 		separator2->setHeight(30.0f);
@@ -193,6 +309,7 @@ namespace Editor
 		_translateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Translate);
 		_rotateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Rotate);
 		_scaleBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Scale);
+		_boundsBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Bounds);
 		_localSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::Local);
 		_worldSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::World);
 	}

@@ -114,20 +114,20 @@ namespace Editor
 		}
 		else if (_transformMode == TransformMode::Scale)
 		{
-			if (_objectType == ObjectType::CSGBrush)
-			{
-				mCurrentGizmoOperation = ImGuizmo::OPERATION::BOUNDS;
-				boundSizing = true;
-			}
-			else
-			{
-				mCurrentGizmoOperation = ImGuizmo::OPERATION::SCALE;
-			}
-
+			mCurrentGizmoOperation = ImGuizmo::OPERATION::SCALE;
 			useSnap = _scaleSnap;
 			snap[0] = _scaleStepSize;
 			snap[1] = _scaleStepSize;
 			snap[2] = _scaleStepSize;
+		}
+		else if (_transformMode == TransformMode::Bounds)
+		{
+			mCurrentGizmoOperation = ImGuizmo::OPERATION::BOUNDS;
+			useSnap = _boundsSnap;
+			boundSizing = true;
+			snap[0] = _boundsStepSize;
+			snap[1] = _boundsStepSize;
+			snap[2] = _boundsStepSize;
 		}
 
 		if (_transformSpace == TransformSpace::Local)

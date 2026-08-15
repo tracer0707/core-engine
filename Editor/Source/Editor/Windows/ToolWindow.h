@@ -13,6 +13,7 @@ namespace Editor
 		Button* _translateBtn = nullptr;
 		Button* _rotateBtn = nullptr;
 		Button* _scaleBtn = nullptr;
+		Button* _boundsBtn = nullptr;
 		Button* _localSpaceBtn = nullptr;
 		Button* _worldSpaceBtn = nullptr;
 

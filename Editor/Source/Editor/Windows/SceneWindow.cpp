@@ -114,6 +114,12 @@ namespace Editor
 				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
 				_toolWindow->invalidate();
 			}
+
+			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_T))
+			{
+				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Bounds);
+				_toolWindow->invalidate();
+			}
 		}
 	}
 
