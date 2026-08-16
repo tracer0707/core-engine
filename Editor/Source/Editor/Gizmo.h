@@ -3,6 +3,7 @@
 #include <string>
 #include <functional>
 
+#include <glm/vec3.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Core/Shared/Uuid.h>
@@ -53,6 +54,7 @@ namespace Editor
 			Core::Transformable* _transform = nullptr;
 			ObjectType _objectType = ObjectType::None;
 			void* _object = nullptr;
+			glm::vec3 _boundsSnapScale = glm::vec3(0.0f);
 
 			bool _enabled = true;
 			bool _isUsing = false;

@@ -410,4 +410,32 @@ namespace Core
 
 		return glm::vec3(u, v, w);
 	}
+
+	float Mathf::snapValue(float value, float step)
+	{
+		if (step <= 0.0f) return value;
+		return std::round(value / step) * step;
+	}
+
+	glm::vec3 Mathf::snapPosition(const glm::vec3& position, float step)
+	{
+		return glm::vec3 { snapValue(position.x, step), snapValue(position.y, step), snapValue(position.z, step) };
+	}
+
+	float Mathf::snapScaleValue(float value, float step)
+	{
+		if (step <= 0.0f) return value;
+
+		float sign = value < 0.0f ? -1.0f : 1.0f;
+		float magnitude = std::abs(value);
+
+		magnitude = snapValue(magnitude, step);
+
+		return magnitude * sign;
+	}
+
+	glm::vec3 Mathf::snapScale(const glm::vec3& scale, float step)
+	{
+		return { snapScaleValue(scale.x, step), snapScaleValue(scale.y, step), snapScaleValue(scale.z, step) };
+	}
 } // namespace Core

@@ -9,6 +9,7 @@
 #include <Core/Components/Camera.h>
 #include <Core/Components/Transform.h>
 #include <Core/System/InputManager.h>
+#include <Core/Math/Mathf.h>
 
 #include "../../Dependencies/ImGuizmo/ImGuizmo.h"
 
@@ -88,8 +89,13 @@ namespace Editor
 		bool useSnap = false;
 		bool boundSizing = false;
 
-		float snap[] = {_moveStepSize, _moveStepSize, _moveStepSize};
-		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
+		float snap[] = { 0.0f, 0.0f, 0.0f };
+		float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+
+		if (!_isUsing)
+		{
+			_boundsSnapScale = _transform->getScale();
+		}
 
 		if (_transformMode == TransformMode::Select)
 		{
@@ -125,9 +131,9 @@ namespace Editor
 			mCurrentGizmoOperation = ImGuizmo::OPERATION::BOUNDS;
 			useSnap = _boundsSnap;
 			boundSizing = true;
-			snap[0] = _boundsStepSize;
-			snap[1] = _boundsStepSize;
-			snap[2] = _boundsStepSize;
+			snap[0] = _boundsStepSize / _boundsSnapScale.x;
+			snap[1] = _boundsStepSize / _boundsSnapScale.y;
+			snap[2] = _boundsStepSize / _boundsSnapScale.z;
 		}
 
 		if (_transformSpace == TransformSpace::Local)
@@ -139,7 +145,6 @@ namespace Editor
 						 !_inputManager->getMouseButton(2));
 
 		ImGuizmo::SetAlternativeWindow(ImGui::GetCurrentWindow());
-
 		ImGuizmo::SetRect(viewX, viewY, viewW, viewH);
 
 		glm::mat4 _srcMtx = _transform->getTransformMatrix();
@@ -149,7 +154,7 @@ namespace Editor
 		glm::mat4 proj = camera->getProjectionMatrix();
 
 		bool manipulated = ImGuizmo::Manipulate(glm::value_ptr(view), glm::value_ptr(proj), mCurrentGizmoOperation, mCurrentGizmoMode, mtx, NULL,
-												useSnap ? &snap[0] : NULL, boundSizing ? bounds : NULL, useSnap ? &snap[0] : NULL);
+												useSnap ? snap : NULL, boundSizing ? bounds : NULL, useSnap ? snap : NULL);
 
 		glm::vec3 s, t, skew;
 		glm::quat r;
