@@ -89,11 +89,5 @@ namespace Core
 			static glm::vec3 barycentric(glm::vec2 p, glm::vec2 a, glm::vec2 b, glm::vec2 c);
 
 			static float snapValue(float value, float step);
-
-			static glm::vec3 snapPosition(const glm::vec3& position, float step);
-
-			static float snapScaleValue(float value, float step);
-
-			static glm::vec3 snapScale(const glm::vec3& scale, float step);
 	};
 } // namespace Core
