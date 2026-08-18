@@ -60,7 +60,7 @@ namespace Editor
 		CSGBrush(CSGModel* parent);
 		virtual ~CSGBrush();
 
-		Core::String name = "";
+		Core::Object* _object = nullptr;
 		CSGModel* parent = nullptr;
 		bool castShadows = true;
 		BrushOperation brushOperation = BrushOperation::Add;
@@ -78,9 +78,6 @@ namespace Editor
 	public:
 		void rebuild();
 		virtual void make() {};
-
-		Core::String getName() { return name; }
-		void setName(Core::String value) { name = value; }
 
 		CSGModel* getParent() { return parent; }
 

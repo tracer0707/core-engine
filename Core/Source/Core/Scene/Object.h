@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Shared/String.h"
 #include "../Shared/List.h"
 #include "../Shared/BitSet.h"
 #include "../Components/ComponentList.h"
@@ -14,41 +15,41 @@ namespace Core
 
 	class Object
 	{
-			friend class Scene;
+		friend class Scene;
 
-		private:
-			Object(Renderer* renderer);
-			~Object();
+	private:
+		Object(Renderer* renderer);
+		~Object();
 
-			Renderer* _renderer = nullptr;
-			List<Component*> _components;
-			Transform* _transform = nullptr;
-			BitSet _flags;
+		Renderer* _renderer = nullptr;
+		List<Component*> _components;
+		Transform* _transform = nullptr;
+		String _name = String::Empty;
+		BitSet _flags;
 
-			Component* addComponent(unsigned int type);
+		Component* addComponent(unsigned int type);
 
-		public:
-			List<Component*>& getComponents() { return _components; }
+	public:
+		List<Component*>& getComponents() { return _components; }
 
-			void update(float& dt);
-			void render(Camera* camera);
+		void update(float& dt);
+		void render(Camera* camera);
 
-			void removeComponent(Component* component);
+		void removeComponent(Component* component);
 
-			template <typename T>
-			T addComponent()
-			{
-			}
+		template <typename T>
+		T addComponent() { }
 
-			template <typename T>
-			T findComponent() const
-			{
-			}
+		template <typename T>
+		T findComponent() const { }
 
-			Transform* getTransform() const { return _transform; }
-			Component* findComponent(unsigned int type) const;
+		Transform* getTransform() const { return _transform; }
+		Component* findComponent(unsigned int type) const;
 
-			BitSet& getFlags() { return _flags; }
+		String getName() const { return _name; }
+		void setName(String value) { _name = value; }
+
+		BitSet& getFlags() { return _flags; }
 	};
 
 	/* ADD */

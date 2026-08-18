@@ -35,7 +35,6 @@ namespace Editor
 					Core::List<size_t> faceIds;
 			};
 
-			Core::String _name = Core::String::Empty;
 			Core::List<CSGBrush*> _brushes;
 			std::unordered_map<Core::Material*, SubMeshInfo*> _subMeshes;
 
@@ -50,9 +49,6 @@ namespace Editor
 		public:
 			CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
 			~CSGModel();
-
-			Core::String getName() const { return _name; }
-			void setName(Core::String value) { _name = value; }
 
 			Core::Object* getObject() const { return _object; }
 			Core::MeshRenderer* getMeshRenderer() const { return _meshRenderer; }
