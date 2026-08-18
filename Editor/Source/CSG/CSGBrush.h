@@ -12,7 +12,6 @@ namespace Core
 {
 	class Object;
 	class Material;
-	class Transformable;
 }
 
 namespace manifold
@@ -61,17 +60,16 @@ namespace Editor
 		virtual ~CSGBrush();
 
 		Core::Object* _object = nullptr;
-		CSGModel* parent = nullptr;
-		bool castShadows = true;
-		BrushOperation brushOperation = BrushOperation::Add;
-		Core::Transformable* transform = nullptr;
-		manifold::Manifold* brushPtr = nullptr;
-		uint32_t originalId = 0;
+		CSGModel* _parent = nullptr;
+		bool _castShadows = true;
+		BrushOperation _brushOperation = BrushOperation::Add;
+		manifold::Manifold* _brushPtr = nullptr;
+		uint32_t _originalId = 0;
 
-		Core::List<glm::vec3> vertices;
-		Core::List<FaceInfo> faces;
+		Core::List<glm::vec3> _vertices;
+		Core::List<FaceInfo> _faces;
 
-		Core::Uuid uuid = Core::Uuid::create();
+		Core::Uuid _uuid = Core::Uuid::create();
 
 		void destroy();
 
@@ -79,24 +77,23 @@ namespace Editor
 		void rebuild();
 		virtual void make() {};
 
-		CSGModel* getParent() { return parent; }
+		CSGModel* getParent() { return _parent; }
 
-		manifold::Manifold* getBrushPtr() { return brushPtr; }
+		manifold::Manifold* getBrushPtr() { return _brushPtr; }
 
-		uint32_t getOriginalId() const { return originalId; }
+		uint32_t getOriginalId() const { return _originalId; }
 
-		BrushOperation getBrushOperation() { return brushOperation; }
+		BrushOperation getBrushOperation() { return _brushOperation; }
 		void setBrushOperation(BrushOperation value);
 
-
-		Core::Transformable* getTransform() { return transform; }
+		Core::Object* getObject() const { return _object; }
 
 		Core::List<uint32_t> getFlatIndices();
-		Core::List<glm::vec3>& getVertices() { return vertices; }
-		Core::List<FaceInfo>& getFaces() { return faces; }
+		Core::List<glm::vec3>& getVertices() { return _vertices; }
+		Core::List<FaceInfo>& getFaces() { return _faces; }
 
-		bool getCastShadows() { return castShadows; }
-		void setCastShadows(bool value);
+		bool getCastShadows() const { return _castShadows; }
+		void setCastShadows(bool value) { _castShadows = value; }
 
 		Core::Material* getMaterial(int faceIndex);
 		void setMaterial(int faceIndex, Core::Material* value);
@@ -116,7 +113,7 @@ namespace Editor
 		bool getSmoothNormals(int faceIndex);
 		void setSmoothNormals(int faceIndex, bool value);
 
-		Core::Uuid getId() { return uuid; }
+		Core::Uuid getId() { return _uuid; }
 	};
 
 	CSGBrush::uv_t operator*(double s, const CSGBrush::uv_t & t);

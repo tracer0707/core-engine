@@ -4,6 +4,7 @@
 
 #include <Core/Content/ContentManager.h>
 #include <Core/Scene/Scene.h>
+#include <Core/Scene/Object.h>
 #include <Core/System/InputManager.h>
 #include <Core/Components/Camera.h>
 #include <Core/Components/Transform.h>
@@ -50,16 +51,38 @@ namespace Editor
 	{
 		CSGBrush* newBrush = nullptr;
 		CSGModel* currentModel = nullptr;
+		TreeNode* modelNode = nullptr;
 
-		if (_models.isEmpty())
+		auto* tree = _hierarchyWindow->getTreeView();
+
+		if (tree->getSelectedNodes().count() > 0)
 		{
-			currentModel = new CSGModel(_renderer, _scene, _contentManager);
-			currentModel->setName("CSG Model");
-			_models.add(currentModel);
+			for (TreeNode* node : tree->getSelectedNodes())
+			{
+				if (node->getObjectTag(TAG_CSG_MODEL) != nullptr)
+				{
+					currentModel = (CSGModel*)node->getObjectTag(TAG_CSG_MODEL);
+					modelNode = node;
+					break;
+				}
+				else if (node->getObjectTag(TAG_CSG_BRUSH) != nullptr)
+				{
+					CSGBrush* selectedBrush = (CSGBrush*)node->getObjectTag(TAG_CSG_BRUSH);
+					currentModel = selectedBrush->getParent();
+					break;
+				}
+			}
 		}
 		else
 		{
-			currentModel = _models.get(0);
+			currentModel = new CSGModel(_renderer, _scene, _contentManager);
+			currentModel->getObject()->setName("CSG Model");
+			_models.add(currentModel);
+
+			modelNode = tree->createNode();
+			modelNode->setText(currentModel->getObject()->getName());
+			modelNode->setObjectTag(TAG_CSG_MODEL, currentModel);
+			tree->addControl(modelNode);
 		}
 
 		switch (brushType)
@@ -73,14 +96,12 @@ namespace Editor
 
 		if (newBrush == nullptr) return;
 
-		newBrush->setName("CSG Brush");
-		newBrush->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
+		newBrush->getObject()->setName("CSG Brush");
+		newBrush->getObject()->getTransform()->translate(glm::vec3(0.0f, 0.5f, 0.0f));
 		currentModel->rebuild();
 
-		auto* tree = _hierarchyWindow->getTreeView();
-
 		TreeNode* brushNode = tree->createNode();
-		brushNode->setText(newBrush->getName());
+		brushNode->setText(newBrush->getObject()->getName());
 		brushNode->setObjectTag(TAG_CSG_BRUSH, newBrush);
 
 		tree->addControl(brushNode);

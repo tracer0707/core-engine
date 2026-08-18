@@ -50,6 +50,7 @@ namespace Editor
 				Core::Transformable* transform = nullptr;
 
 				CSGBrush* brush = (CSGBrush*)node->getObjectTag(TAG_CSG_BRUSH);
+				CSGModel* model = (CSGModel*)node->getObjectTag(TAG_CSG_MODEL);
 				Core::Object* obj = (Core::Object*)node->getObjectTag(TAG_SCENE_OBJECT);
 
 				Gizmo::ObjectType objectType = Gizmo::ObjectType::None;
@@ -63,9 +64,15 @@ namespace Editor
 				}
 				else if (brush != nullptr)
 				{
-					transform = brush->getTransform();
+					transform = brush->getObject()->getTransform();
 					objectType = Gizmo::ObjectType::CSGBrush;
 					gizmoObject = (void*)brush;
+				}
+				else if (model != nullptr)
+				{
+					transform = model->getObject()->getTransform();
+					objectType = Gizmo::ObjectType::CSGModel;
+					gizmoObject = (void*)model;
 				}
 
 				setInspector(node);
@@ -111,7 +118,7 @@ namespace Editor
 			else if (it.first == TAG_CSG_BRUSH)
 			{
 				Collapse* collapse1 = new Collapse("Transform");
-				Inspector* inspector1 = new TransformInspector(((CSGBrush*)it.second)->getTransform());
+				Inspector* inspector1 = new TransformInspector(((CSGBrush*)it.second)->getObject()->getTransform());
 				inspector1->build();
 				collapse1->addControl(inspector1);
 				layout->addControl(collapse1);

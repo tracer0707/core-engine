@@ -9,6 +9,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <Core/Math/Mathf.h>
+#include <Core/Scene/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/Components/Transform.h>
 
@@ -16,18 +17,16 @@ namespace Editor
 {
 	CSGBrush::CSGBrush(CSGModel* parent)
 	{
-		this->parent = parent;
+		_parent = parent;
 
-		transform = new Core::Transformable();
 		Core::Transform* t = parent->getObject()->findComponent<Core::Transform*>();
-		transform->setParent(t);
+		_object = parent->getScene()->createObject();
+		_object->getTransform()->setParent(t);
 	}
 
 	CSGBrush::~CSGBrush()
 	{
-		delete transform;
-		transform = nullptr;
-
+		_parent->getScene()->removeObject(_object);
 		destroy();
 	}
 
@@ -45,10 +44,10 @@ namespace Editor
 
 	void CSGBrush::destroy()
 	{
-		if (brushPtr != nullptr)
+		if (_brushPtr != nullptr)
 		{
-			delete brushPtr;
-			brushPtr = nullptr;
+			delete _brushPtr;
+			_brushPtr = nullptr;
 		}
 	}
 
@@ -56,22 +55,24 @@ namespace Editor
 	{
 		destroy();
 
+		Core::Transform* transform = _object->getTransform();
+
 		manifold::MeshGL mesh;
 		mesh.numProp = 5; // x,y,z,u,v
 
 		glm::mat4x4 mtx = glm::identity<glm::mat4x4>();
 		mtx = transform->getTransformMatrix();
 
-		originalId = manifold::Manifold::ReserveIDs(1);
+		_originalId = manifold::Manifold::ReserveIDs(1);
 
 		mesh.runIndex.push_back(0);
-		mesh.runOriginalID.push_back(originalId);
+		mesh.runOriginalID.push_back(_originalId);
 
 		uint32_t vertIndex = 0;
 
-		for (int i = 0; i < faces.count(); ++i)
+		for (int i = 0; i < _faces.count(); ++i)
 		{
-			FaceInfo& face = faces.get(i);
+			FaceInfo& face = _faces.get(i);
 
 			size_t n = face.indices.count();
 			if (n < 3) continue;
@@ -91,25 +92,25 @@ namespace Editor
 					tris.push_back({{0, (int)k, (int)(k + 1)}});
 			}
 
-			glm::vec3 p0_world = mtx * glm::vec4(vertices.get(idx[0]), 1.0f);
-			glm::vec3 p1_world = mtx * glm::vec4(vertices.get(idx[1]), 1.0f);
-			glm::vec3 p2_world = mtx * glm::vec4(vertices.get(idx.size() > 2 ? idx[2] : idx[1]), 1.0f);
+			glm::vec3 p0_world = mtx * glm::vec4(_vertices.get(idx[0]), 1.0f);
+			glm::vec3 p1_world = mtx * glm::vec4(_vertices.get(idx[1]), 1.0f);
+			glm::vec3 p2_world = mtx * glm::vec4(_vertices.get(idx.size() > 2 ? idx[2] : idx[1]), 1.0f);
 
 			glm::vec3 center_world = glm::vec3(0.0f);
 			for (size_t ii = 0; ii < idx.size(); ++ii)
-				center_world += glm::vec3(mtx * glm::vec4(vertices.get(idx[ii]), 1.0f));
+				center_world += glm::vec3(mtx * glm::vec4(_vertices.get(idx[ii]), 1.0f));
 			center_world /= (float)idx.size();
 
 			glm::vec3 center_ns = glm::vec3(0.0f);
 			for (size_t ii = 0; ii < idx.size(); ++ii)
-				center_ns += transform->getRotation() * vertices.get(idx[ii]) + transform->getPosition();
+				center_ns += transform->getRotation() * _vertices.get(idx[ii]) + transform->getPosition();
 			center_ns /= (float)idx.size();
 
 			glm::vec3 e1 = p1_world - p0_world;
 			glm::vec3 e2 = p2_world - p0_world;
 
-			glm::vec3 e1_local = vertices.get(idx.size() > 1 ? idx[1] : idx[0]) - vertices.get(idx[0]);
-			glm::vec3 e2_local = vertices.get(idx.size() > 2 ? idx[2] : idx[1]) - vertices.get(idx[0]);
+			glm::vec3 e1_local = _vertices.get(idx.size() > 1 ? idx[1] : idx[0]) - _vertices.get(idx[0]);
+			glm::vec3 e2_local = _vertices.get(idx.size() > 2 ? idx[2] : idx[1]) - _vertices.get(idx[0]);
 
 			double lenU_local = glm::length(e1_local);
 			double lenV_local = glm::length(e2_local);
@@ -143,7 +144,7 @@ namespace Editor
 				for (int pi = 0; pi < 3; ++pi)
 				{
 					int corner = t[pi];
-					glm::vec3 v = vertices.get(idx[corner]);
+					glm::vec3 v = _vertices.get(idx[corner]);
 					glm::vec4 lp = glm::vec4(v, 1.0f);
 					glm::vec3 p = mtx * lp;
 
@@ -193,62 +194,57 @@ namespace Editor
 			mesh.Merge();
 
 			manifold::Manifold m(mesh);
-			brushPtr = new manifold::Manifold(m);
+			_brushPtr = new manifold::Manifold(m);
 		}
 		catch (const std::exception& ex)
 		{
 			std::cout << "CSGBrush::rebuild: Manifold construction failed: " << ex.what() << "\n";
-			brushPtr = nullptr;
+			_brushPtr = nullptr;
 		}
 		catch (...)
 		{
 			std::cout << "CSGBrush::rebuild: Manifold construction threw unknown exception\n";
-			brushPtr = nullptr;
+			_brushPtr = nullptr;
 		}
 	}
 
 	void CSGBrush::setBrushOperation(BrushOperation value)
 	{
-		brushOperation = value;
+		_brushOperation = value;
 	}
 
 	Core::List<uint32_t> CSGBrush::getFlatIndices()
 	{
 		Core::List<uint32_t> inds;
 
-		for (int i = 0; i < faces.count(); ++i)
+		for (int i = 0; i < _faces.count(); ++i)
 		{
-			for (int j = 0; j < faces.get(i).indices.count(); ++j)
+			for (int j = 0; j < _faces.get(i).indices.count(); ++j)
 			{
-				inds.add(faces.get(i).indices.get(j));
+				inds.add(_faces.get(i).indices.get(j));
 			}
 		}
 
 		return inds;
 	}
 
-	void CSGBrush::setCastShadows(bool value)
-	{
-		castShadows = value;
-	}
-
 	Core::Material* CSGBrush::getMaterial(int faceIndex)
 	{
-		if (faceIndex < faces.count()) return faces.get(faceIndex).material;
+		if (faceIndex < _faces.count()) return _faces.get(faceIndex).material;
 
 		return nullptr;
 	}
 
 	void CSGBrush::setMaterial(int faceIndex, Core::Material* value)
 	{
-		if (faceIndex < faces.count()) faces.get(faceIndex).material = value;
+		if (faceIndex < _faces.count()) _faces.get(faceIndex).material = value;
 	}
 
 	glm::vec2 CSGBrush::getUV(int faceIndex, int vertIndex)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 
 			if (vertIndex < face.texCoords.count()) return face.texCoords.get(vertIndex);
 		}
@@ -258,9 +254,9 @@ namespace Editor
 
 	void CSGBrush::setUV(int faceIndex, int vertIndex, glm::vec2 value)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 
 			if (vertIndex < face.texCoords.count()) face.texCoords.get(vertIndex) = value;
 		}
@@ -268,9 +264,9 @@ namespace Editor
 
 	glm::vec2 CSGBrush::getUVScale(int faceIndex)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			return face.texCoordsScale;
 		}
 
@@ -279,18 +275,18 @@ namespace Editor
 
 	void CSGBrush::setUVScale(int faceIndex, glm::vec2 value)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			face.texCoordsScale = value;
 		}
 	}
 
 	glm::vec2 CSGBrush::getUVOffset(int faceIndex)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			return face.texCoordsOffset;
 		}
 
@@ -299,18 +295,18 @@ namespace Editor
 
 	void CSGBrush::setUVOffset(int faceIndex, glm::vec2 value)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			face.texCoordsOffset = value;
 		}
 	}
 
 	float CSGBrush::getUVRotation(int faceIndex)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			return face.texCoordsRotation;
 		}
 
@@ -319,18 +315,18 @@ namespace Editor
 
 	void CSGBrush::setUVRotation(int faceIndex, float value)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			face.texCoordsRotation = value;
 		}
 	}
 
 	bool CSGBrush::getSmoothNormals(int faceIndex)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			return face.smoothNormals;
 		}
 
@@ -339,9 +335,9 @@ namespace Editor
 
 	void CSGBrush::setSmoothNormals(int faceIndex, bool value)
 	{
-		if (faceIndex < faces.count())
+		if (faceIndex < _faces.count())
 		{
-			FaceInfo& face = faces.get(faceIndex);
+			FaceInfo& face = _faces.get(faceIndex);
 			face.smoothNormals = value;
 		}
 	}

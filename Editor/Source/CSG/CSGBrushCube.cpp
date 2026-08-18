@@ -9,23 +9,23 @@ namespace Editor
 
 	CSGBrushCube::~CSGBrushCube()
 	{
-		vertices.clear();
-		faces.clear();
+		_vertices.clear();
+		_faces.clear();
 	}
 
 	void CSGBrushCube::make()
 	{
-		vertices.clear();
-		faces.clear();
+		_vertices.clear();
+		_faces.clear();
 
-		vertices.add(glm::vec3(+0.5f, +0.5f, +0.5f));
-		vertices.add(glm::vec3(-0.5f, +0.5f, +0.5f));
-		vertices.add(glm::vec3(-0.5f, -0.5f, +0.5f));
-		vertices.add(glm::vec3(+0.5f, -0.5f, +0.5f));
-		vertices.add(glm::vec3(+0.5f, +0.5f, -0.5f));
-		vertices.add(glm::vec3(-0.5f, +0.5f, -0.5f));
-		vertices.add(glm::vec3(-0.5f, -0.5f, -0.5f));
-		vertices.add(glm::vec3(+0.5f, -0.5f, -0.5f));
+		_vertices.add(glm::vec3(+0.5f, +0.5f, +0.5f));
+		_vertices.add(glm::vec3(-0.5f, +0.5f, +0.5f));
+		_vertices.add(glm::vec3(-0.5f, -0.5f, +0.5f));
+		_vertices.add(glm::vec3(+0.5f, -0.5f, +0.5f));
+		_vertices.add(glm::vec3(+0.5f, +0.5f, -0.5f));
+		_vertices.add(glm::vec3(-0.5f, +0.5f, -0.5f));
+		_vertices.add(glm::vec3(-0.5f, -0.5f, -0.5f));
+		_vertices.add(glm::vec3(+0.5f, -0.5f, -0.5f));
 
 		FaceInfo face1, face2, face3, face4, face5, face6;
 
@@ -43,11 +43,11 @@ namespace Editor
 		face5.texCoords = { {0.0f, 0.0f}, {1.0f, 0.0f}, {1.0f, 1.0f}, {0.0f, 1.0f} };
 		face6.texCoords = { {1.0f, 1.0f}, {0.0f, 1.0f}, {0.0f, 0.0f}, {1.0f, 0.0f} };
 
-		faces.add(face1); //+Z
-		faces.add(face2); //-Z
-		faces.add(face3); //+Y
-		faces.add(face4); //-Y
-		faces.add(face5); //+X
-		faces.add(face6); //-X
+		_faces.add(face1); //+Z
+		_faces.add(face2); //-Z
+		_faces.add(face3); //+Y
+		_faces.add(face4); //-Y
+		_faces.add(face5); //+X
+		_faces.add(face6); //-X
 	}
 }

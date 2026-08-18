@@ -3,6 +3,7 @@
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Primitives.h>
 #include <Core/Scene/Scene.h>
+#include <Core/Scene/Object.h>
 #include <Core/Components/Camera.h>
 #include <Core/Components/Transform.h>
 
@@ -44,7 +45,7 @@ namespace Editor
 
 			glm::mat4 view = _scene->getMainCamera()->getViewMatrix();
 			glm::mat4 proj = _scene->getMainCamera()->getProjectionMatrix();
-			glm::mat4 model = brush->getTransform()->getTransformMatrix();
+			glm::mat4 model = brush->getObject()->getTransform()->getTransformMatrix();
 
 			Core::List<uint32_t> inds = brush->getFlatIndices();
 			Core::List<glm::vec3>& verts = brush->getVertices();

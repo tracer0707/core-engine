@@ -12,6 +12,10 @@
 #define TAG_CSG_BRUSH 2
 #endif
 
+#ifndef TAG_CSG_MODEL
+#define TAG_CSG_MODEL 3
+#endif
+
 #ifndef TAG_FULL_PATH
-#define TAG_FULL_PATH 3
+#define TAG_FULL_PATH 4
 #endif

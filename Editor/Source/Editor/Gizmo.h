@@ -39,6 +39,7 @@ namespace Editor
 			{
 				None,
 				SceneObject,
+				CSGModel,
 				CSGBrush
 			};
 

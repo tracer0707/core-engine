@@ -50,6 +50,7 @@ namespace Editor
 			CSGModel(Core::Renderer* renderer, Core::Scene* scene, Core::ContentManager* contentManager);
 			~CSGModel();
 
+			Core::Scene* getScene() const { return _scene; }
 			Core::Object* getObject() const { return _object; }
 			Core::MeshRenderer* getMeshRenderer() const { return _meshRenderer; }
 
