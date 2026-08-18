@@ -32,7 +32,6 @@
 
 #include "../../Dependencies/ImGuizmo/ImGuizmo.h"
 
-#include "../CSG/CSGBuilder.h"
 #include "../Editor/GizmoRenderer.h"
 
 #include "../Shared/IconsForkAwesome.h"
@@ -104,18 +103,14 @@ namespace Editor
 		_windowManager->initWindows();
 
 		CameraController::init(_inputManager, _time, _camera);
-		CSGBuilder::singleton()->init(_windowManager, _renderer, _scene, _contentManager);
 		Gizmo::singleton()->init(_inputManager);
 		ObjectPicker::singleton()->init(_windowManager, _scene, _camera);
 
 		_gizmoRenderer = new GizmoRenderer(_renderer, _scene);
-
-		Gizmo::singleton()->subscribeManipulateEndEvent([=]() { CSGBuilder::singleton()->rebuild(); });
 	}
 
 	EditorApp::MainWindow::~MainWindow()
 	{
-		CSGBuilder::singleton()->destroy();
 		ObjectPicker::singleton()->destroy();
 
 		_renderer->deleteBuffer(_gridBuffer);

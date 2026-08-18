@@ -22,14 +22,12 @@ namespace Editor
 	public:
 		Core::Object* object = nullptr;
 		Core::Mesh* mesh = nullptr;
-		CSGBrush* csgBrush = nullptr;
-		size_t csgBrushFaceId = -1;
 	};
 
 	class Raycast
 	{
 	private:
-		static bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, CSGBrush** csgBrush, size_t* faceId);
+		static bool meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx);
 
 	public:
 		static bool hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit);

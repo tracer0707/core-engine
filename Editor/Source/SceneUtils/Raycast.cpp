@@ -10,10 +10,6 @@
 #include <Core/Components/Transform.h>
 #include <Core/Renderer/VertexBuffer.h>
 
-#include "../CSG/CSGBuilder.h"
-#include "../CSG/CSGModel.h"
-#include "../CSG/CSGBrush.h"
-
 namespace Editor
 {
 	bool Raycast::hitTest(Core::Scene* scene, Core::Ray& ray, RaycastHit* outHit)
@@ -49,15 +45,11 @@ namespace Editor
 			if (transform == nullptr) continue;
 
 			glm::mat4 mtx = transform->getTransformMatrix();
-			CSGBrush* csgBrush = nullptr;
-			size_t csgBrushFaceId = -1;
 
-			if (meshTest(ray, mesh, mtx, &csgBrush, &csgBrushFaceId))
+			if (meshTest(ray, mesh, mtx))
 			{
 				outHit->object = obj;
 				outHit->mesh = mesh;
-				outHit->csgBrush = csgBrush;
-				outHit->csgBrushFaceId = csgBrushFaceId;
 				return true;
 			}
 		}
@@ -65,18 +57,8 @@ namespace Editor
 		return false;
 	}
 
-	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx, CSGBrush** csgBrush, size_t* faceId)
+	bool Raycast::meshTest(Core::Ray& ray, Core::Mesh* mesh, glm::mat4& mtx)
 	{
-		CSGModel* csgModel = nullptr;
-
-		for (auto model : CSGBuilder::singleton()->getModels())
-		{
-			if (model->getMeshRenderer()->getMesh() == mesh)
-			{
-				csgModel = model;
-			}
-		}
-
 		bool foundHit = false;
 		float closestDistance = std::numeric_limits<float>::max();
 
@@ -109,18 +91,12 @@ namespace Editor
 					closestDistance = hit.second;
 					foundHit = true;
 
-					if (csgModel != nullptr)
-					{
-						csgModel->findBrush(subMesh, vb->indexArraySize > 0 ? vb->indexArray[j] : j, &closestBrush, &closestFaceId);
-					}
+					//TODO
 				}
 			}
 		}
 
 		if (!foundHit) return false;
-
-		*csgBrush = closestBrush;
-		*faceId = closestFaceId;
 
 		return true;
 	}

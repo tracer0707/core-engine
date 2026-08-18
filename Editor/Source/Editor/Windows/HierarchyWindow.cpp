@@ -10,14 +10,10 @@
 #include "../Windows/WindowList.h"
 #include "../Windows/InspectorWindow.h"
 
-#include "../Windows/Inspector/CSGBrushInspector.h"
 #include "../Windows/Inspector/TransformInspector.h"
 
 #include "../Gizmo.h"
 
-#include "../../CSG/CSGBuilder.h"
-#include "../../CSG/CSGModel.h"
-#include "../../CSG/CSGBrush.h"
 #include "../../Shared/Tags.h"
 
 #include <Core/Components/Transform.h>
@@ -27,8 +23,6 @@ namespace Editor
 {
 	HierarchyWindow::HierarchyWindow(WindowManager* parent) : Window(parent, HIERARCHY_WINDOW)
 	{
-		CSGBuilder* csgBuilder = CSGBuilder::singleton();
-
 		_linearLayout = new LinearLayout(LayoutDirection::Vertical);
 		_linearLayout->setFitWidth(LayoutFitMode::FitAvailable);
 		_linearLayout->setFitHeight(LayoutFitMode::FitContent);
@@ -36,7 +30,7 @@ namespace Editor
 
 		_objectTree = new TreeView();
 
-		_objectTree->setOnSelectionChanged([this, csgBuilder](Core::List<TreeNode*>& selected) {
+		_objectTree->setOnSelectionChanged([this](Core::List<TreeNode*>& selected) {
 			if (selected.count() == 0)
 			{
 				Gizmo::singleton()->setTransform(nullptr);
@@ -49,8 +43,6 @@ namespace Editor
 
 				Core::Transformable* transform = nullptr;
 
-				CSGBrush* brush = (CSGBrush*)node->getObjectTag(TAG_CSG_BRUSH);
-				CSGModel* model = (CSGModel*)node->getObjectTag(TAG_CSG_MODEL);
 				Core::Object* obj = (Core::Object*)node->getObjectTag(TAG_SCENE_OBJECT);
 
 				Gizmo::ObjectType objectType = Gizmo::ObjectType::None;
@@ -62,19 +54,7 @@ namespace Editor
 					objectType = Gizmo::ObjectType::SceneObject;
 					gizmoObject = (void*)obj;
 				}
-				else if (brush != nullptr)
-				{
-					transform = brush->getObject()->getTransform();
-					objectType = Gizmo::ObjectType::CSGBrush;
-					gizmoObject = (void*)brush;
-				}
-				else if (model != nullptr)
-				{
-					transform = model->getObject()->getTransform();
-					objectType = Gizmo::ObjectType::CSGModel;
-					gizmoObject = (void*)model;
-				}
-
+				
 				setInspector(node);
 				Gizmo::singleton()->setTransform(transform);
 				Gizmo::singleton()->setObject(objectType, gizmoObject);
@@ -114,20 +94,6 @@ namespace Editor
 				inspector->build();
 				collapse->addControl(inspector);
 				layout->addControl(collapse);
-			}
-			else if (it.first == TAG_CSG_BRUSH)
-			{
-				Collapse* collapse1 = new Collapse("Transform");
-				Inspector* inspector1 = new TransformInspector(((CSGBrush*)it.second)->getObject()->getTransform());
-				inspector1->build();
-				collapse1->addControl(inspector1);
-				layout->addControl(collapse1);
-
-				Collapse* collapse2 = new Collapse("CSG Brush");
-				Inspector* inspector2 = new CSGBrushInspector((CSGBrush*)it.second);
-				inspector2->build();
-				collapse2->addControl(inspector2);
-				layout->addControl(collapse2);
 			}
 		}
 

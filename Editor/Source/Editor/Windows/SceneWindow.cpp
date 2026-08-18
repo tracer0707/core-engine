@@ -17,9 +17,6 @@
 
 #include "../Gizmo.h"
 
-#include "../../CSG/CSGBuilder.h"
-#include "../../CSG/CSGModel.h"
-
 #include "WindowList.h"
 #include "WindowManager.h"
 #include "ToolWindow.h"
@@ -127,15 +124,7 @@ namespace Editor
 	{
 		if (data->key == "CSG Cube")
 		{
-			CSGBuilder::singleton()->addBrush(CSGBuilder::BrushType::Cube);
-		}
-		else if (data->key == "CSG Sphere")
-		{
-			CSGBuilder::singleton()->addBrush(CSGBuilder::BrushType::Sphere);
-		}
-		else if (data->key == "CSG Cylinder")
-		{
-			CSGBuilder::singleton()->addBrush(CSGBuilder::BrushType::Cylinder);
+			
 		}
 	}
 } // namespace Editor

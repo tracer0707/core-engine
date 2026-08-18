@@ -104,11 +104,8 @@ namespace Editor
 
 		if (hit.object != nullptr)
 		{
-			if (hit.csgBrush != nullptr)
-			{
-				TreeNode* node = treeView->findNodeByTag(TAG_CSG_BRUSH, hit.csgBrush);
-				treeView->selectNode(node, true);
-			}
+			TreeNode* node = treeView->findNodeByTag(TAG_SCENE_OBJECT, hit.object);
+			treeView->selectNode(node, true);
 		}
 		else
 		{
