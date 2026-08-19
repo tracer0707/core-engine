@@ -10,14 +10,21 @@ namespace Core
 
     struct Vertex
     {
-        glm::vec3 position;
-        glm::vec2 uv;
-        Color color;
+        glm::vec3 _position = glm::vec3(0.0f, 0.0f, 0.0f);
+		glm::vec3 _normal = glm::vec3(0.0f, 1.0f, 0.0f);
+		glm::vec3 _tangent = glm::vec3(1.0f, 0.0f, 0.0f);
+		glm::vec3 _bitangent = glm::vec3(0.0f, 0.0f, 1.0f);
+        glm::vec2 _uv0 = glm::vec2(0.0f);
+        glm::vec2 _uv1 = glm::vec2(0.0f);
+        Color _color = Color::WHITE;
+		glm::vec4 _blendWeight = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+		glm::vec4 _blendIndices = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
         Vertex() = default;
-        Vertex(glm::vec3 pos, glm::vec2 uvs, Color col);
-
-        void make(glm::vec3 pos, glm::vec2 uvs, Color col);
+		Vertex(glm::vec3 position, Color color);
+		Vertex(glm::vec3 position, glm::vec2 uv0, Color color);
+		Vertex(glm::vec3 position, glm::vec3 normal, glm::vec2 uv0, Color color);
+        Vertex(glm::vec3 position, glm::vec3 normal, glm::vec3 tangent, glm::vec3 bitangent, glm::vec2 uv0, glm::vec2 uv1, Color color);
     };
 
     enum class VertexBufferType

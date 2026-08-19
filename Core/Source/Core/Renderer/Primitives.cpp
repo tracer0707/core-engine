@@ -38,56 +38,56 @@ namespace Core
 		/* BOTTOM */
 
 		/* -X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.x * center.x), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.x * center.x), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z - size.z), color));
 
 		/* +X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), color));
 
 		/* -Z */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z), color));
 
 		/* +Z */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z - size.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z - size.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), color));
 
 		/* TOP */
 
 		/* -X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z - size.z), color));
 
 		/* +X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), color));
 
 		/* -Z */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z), color));
 
 		/* +Z */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z - size.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z - size.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), color));
 
 		/* SIDE */
 
 		/* -X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z), color));
 
 		/* -X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z - size.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y, size.z * center.z - size.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x, size.y * center.y + size.y, size.z * center.z - size.z), color));
 
 		/* +X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z), color));
 
 		/* +X */
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), {0, 0}, color));
-		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), {0, 0}, color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y, size.z * center.z - size.z), color));
+		verts.add(Core::Vertex(glm::vec3(size.x * center.x - size.x, size.y * center.y + size.y, size.z * center.z - size.z), color));
 
 		Core::Primitives::lines(renderer, buffer, view, proj, model, verts.ptr(), verts.count(), flags);
 	}
@@ -112,12 +112,12 @@ namespace Core
 				int i1 = indices.get(i + 1);
 				int i2 = indices.get(i + 2);
 
-				verts.add(Core::Vertex(vertices.get(i0), {0, 0}, color));
-				verts.add(Core::Vertex(vertices.get(i1), {0, 0}, color));
-				verts.add(Core::Vertex(vertices.get(i1), {0, 0}, color));
-				verts.add(Core::Vertex(vertices.get(i2), {0, 0}, color));
-				verts.add(Core::Vertex(vertices.get(i2), {0, 0}, color));
-				verts.add(Core::Vertex(vertices.get(i0), {0, 0}, color));
+				verts.add(Core::Vertex(vertices.get(i0), color));
+				verts.add(Core::Vertex(vertices.get(i1), color));
+				verts.add(Core::Vertex(vertices.get(i1), color));
+				verts.add(Core::Vertex(vertices.get(i2), color));
+				verts.add(Core::Vertex(vertices.get(i2), color));
+				verts.add(Core::Vertex(vertices.get(i0), color));
 			}
 		}
 		else if (mode == WireframeMode::Polygon)
@@ -131,14 +131,14 @@ namespace Core
 					int i2 = indices.get(i + 2);
 					int i3 = indices.get(i + 3);
 
-					verts.add(Core::Vertex(vertices.get(i0), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i1), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i1), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i2), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i2), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i3), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i3), {0, 0}, color));
-					verts.add(Core::Vertex(vertices.get(i0), {0, 0}, color));
+					verts.add(Core::Vertex(vertices.get(i0), color));
+					verts.add(Core::Vertex(vertices.get(i1), color));
+					verts.add(Core::Vertex(vertices.get(i1), color));
+					verts.add(Core::Vertex(vertices.get(i2), color));
+					verts.add(Core::Vertex(vertices.get(i2), color));
+					verts.add(Core::Vertex(vertices.get(i3), color));
+					verts.add(Core::Vertex(vertices.get(i3), color));
+					verts.add(Core::Vertex(vertices.get(i0), color));
 				}
 			}
 			else if (indices.count() % 3 == 0) // Polygon from two triangles

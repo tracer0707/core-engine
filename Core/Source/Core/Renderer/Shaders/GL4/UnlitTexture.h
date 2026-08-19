@@ -17,8 +17,8 @@ namespace Core
                 #version 400 core
 
                 layout (location = 0) in vec3 position;
-                layout (location = 1) in vec2 uv0;
-                layout (location = 2) in vec4 color0;
+                layout (location = 4) in vec2 uv0;
+                layout (location = 6) in vec4 color0;
                 
                 out vec2 f_uv0;
                 out vec4 f_color0;

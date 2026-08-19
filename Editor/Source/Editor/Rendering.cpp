@@ -34,10 +34,8 @@ namespace Editor
 			glm::vec2 p1 = glm::vec2((j * cellSize), (startY * cellSize)) - glm::vec2(halfSize);
 			glm::vec2 p2 = glm::vec2((j * cellSize), (startY * cellSize + cellCount * cellSize)) - glm::vec2(halfSize) - glm::vec2(0.0f, cellSize);
 
-			Core::Vertex v1, v2;
-
-			v1.make(glm::vec3(p1.x, 0, p1.y), {0, 0}, lineColor);
-			v2.make(glm::vec3(p2.x, 0, p2.y), {0, 0}, lineColor);
+			Core::Vertex v1(glm::vec3(p1.x, 0, p1.y), lineColor);
+			Core::Vertex v2(glm::vec3(p2.x, 0, p2.y), lineColor);
 
 			verts1.add(v1);
 			verts1.add(v2);
@@ -48,10 +46,8 @@ namespace Editor
 			glm::vec2 p1 = glm::vec2((startX * cellSize), (i * cellSize)) - glm::vec2(halfSize);
 			glm::vec2 p2 = glm::vec2((startX * cellSize + cellCount * cellSize), (i * cellSize)) - glm::vec2(halfSize) - glm::vec2(cellSize, 0.0f);
 
-			Core::Vertex v1, v2;
-
-			v1.make(glm::vec3(p1.x, 0, p1.y), {0, 0}, lineColor);
-			v2.make(glm::vec3(p2.x, 0, p2.y), {0, 0}, lineColor);
+			Core::Vertex v1(glm::vec3(p1.x, 0, p1.y), lineColor);
+			Core::Vertex v2(glm::vec3(p2.x, 0, p2.y), lineColor);
 
 			verts1.add(v1);
 			verts1.add(v2);
@@ -68,10 +64,8 @@ namespace Editor
 
 		if (startZ > -32.0f && startZ < 33.0f)
 		{
-			Core::Vertex v1, v2;
-
-			v1.make(px1, {0, 0}, xColor);
-			v2.make(px2, {0, 0}, xColor);
+			Core::Vertex v1(px1, xColor);
+			Core::Vertex v2(px2, xColor);
 
 			verts2.add(v1);
 			verts2.add(v2);
@@ -79,10 +73,8 @@ namespace Editor
 
 		if (startX > -32.0f && startX < 33.0f)
 		{
-			Core::Vertex v3, v4;
-
-			v3.make(pz1, {0, 0}, zColor);
-			v4.make(pz2, {0, 0}, zColor);
+			Core::Vertex v3(pz1, zColor);
+			Core::Vertex v4(pz2, zColor);
 
 			verts2.add(v3);
 			verts2.add(v4);

@@ -17,10 +17,8 @@ namespace Core
                 #version 400 core
 
                 layout (location = 0) in vec3 position;
-                layout (location = 1) in vec2 uv0;
-                layout (location = 2) in vec4 color0;
+                layout (location = 6) in vec4 color0;
                 
-                out vec2 f_uv0;
                 out vec4 f_color0;
 
                 uniform mat4 _u_viewMtx;
@@ -28,7 +26,6 @@ namespace Core
                 uniform mat4 _u_modelMtx;
 
                 void main() {
-                    f_uv0 = uv0;
                     f_color0 = color0;
                     gl_Position = _u_projMtx * _u_viewMtx * _u_modelMtx * vec4(position, 1.0);
                 }
@@ -40,7 +37,6 @@ namespace Core
 			return R"(
                 #version 400 core
 
-                in vec2 f_uv0;
 		        in vec4 f_color0;
 
                 uniform vec4 u_color;
