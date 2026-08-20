@@ -39,6 +39,17 @@ namespace Core
 		return aab;
 	}
 
+	void MeshRenderer::setMesh(Mesh* value)
+	{
+		mesh = value;
+		
+		_materials.clear();
+		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
+		{
+			_materials.add(nullptr);
+		}
+	}
+
 	void MeshRenderer::render(Camera* camera)
 	{
 		if (mesh == nullptr) return;
@@ -49,10 +60,14 @@ namespace Core
 		glm::mat4 proj = camera->getProjectionMatrix();
 		glm::mat4 model = transform->getTransformMatrix();
 
-		for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
+		_renderer->bindBuffer(mesh->getVertexBuffer(),
+							  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
+							  model);
+
+		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 		{
 			SubMesh* subMesh = mesh->getSubMesh(i);
-			Material* material = subMesh->getMaterial();
+			Material* material = _materials[i];
 
 			if (material != nullptr)
 			{
@@ -63,9 +78,14 @@ namespace Core
 				_renderer->bindProgram(nullptr);
 			}
 
-			_renderer->drawBuffer(subMesh->getVertexBuffer(), PrimitiveType::Triangle,
-								  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
-								  model);
+			if (mesh->getVertexBuffer()->indexArraySize > 0)
+			{
+				_renderer->drawBufferIndexed(PrimitiveType::Triangle, subMesh->getIndexOffset(), subMesh->getIndexCount());
+			}
+			else
+			{
+				_renderer->drawBufferArray(PrimitiveType::Triangle, subMesh->getIndexOffset(), subMesh->getIndexCount());
+			}
 		}
 	}
 } // namespace Core

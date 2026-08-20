@@ -27,7 +27,8 @@ namespace Core
 				break;
 			}
 		}
-		renderer->drawBuffer(buffer, PrimitiveType::Line, flags, view, proj, model);
+		renderer->bindBuffer(buffer, flags, view, proj, model);
+		renderer->drawBufferArray(PrimitiveType::Line, 0, pointsCount);
 	}
 
 	void Primitives::wireCube(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model, glm::vec3 size,

@@ -49,7 +49,7 @@ namespace Core
 
 			// Create in memory
 			Material* createMaterial();
-			Mesh* createMesh(int subMeshesCount);
+			Mesh* createMesh();
 			RenderTexture* createRenderTexture(unsigned int width, unsigned int height);
 
 			// Load from files

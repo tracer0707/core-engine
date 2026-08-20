@@ -450,8 +450,7 @@ namespace Core
 		delete buffer;
 	}
 
-	void RendererGL4::drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
-								 glm::mat4& model)
+	void RendererGL4::bindBuffer(VertexBuffer* buffer, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
 	{
 		glUniformMatrix4fv(_currentProgram->u_viewMtxLocation, 1, false, glm::value_ptr(view));
 		glUniformMatrix4fv(_currentProgram->u_projMtxLocation, 1, false, glm::value_ptr(proj));
@@ -480,6 +479,18 @@ namespace Core
 		if (flags & C_DEPTH_NEVER) glDepthFunc(GL_NEVER);
 		if (flags & C_DEPTH_NOTEQUAL) glDepthFunc(GL_NOTEQUAL);
 
+		if (buffer->vao > 0)
+		{
+			glBindVertexArray(buffer->vao);
+		}
+		else
+		{
+			glBindVertexArray(0);
+		}
+	}
+
+	void RendererGL4::drawBufferArray(PrimitiveType primitiveType, unsigned int offset, unsigned int count)
+	{
 		int _primitiveType = GL_TRIANGLES;
 
 		switch (primitiveType)
@@ -495,18 +506,32 @@ namespace Core
 			break;
 		}
 
-		if (buffer->vao > 0)
+		if (offset >= 0 && count > 0)
 		{
-			glBindVertexArray(buffer->vao);
+			glDrawArrays(_primitiveType, offset, count);
+		}
+	}
 
-			if (buffer->ibo > 0 && buffer->indexArraySize > 0)
-			{
-				glDrawElements(_primitiveType, buffer->indexArraySize, GL_UNSIGNED_INT, nullptr);
-			}
-			else if (buffer->vbo > 0 && buffer->vertexArraySize > 0)
-			{
-				glDrawArrays(_primitiveType, 0, buffer->vertexArraySize);
-			}
+	void RendererGL4::drawBufferIndexed(PrimitiveType primitiveType, unsigned int offset, unsigned int count)
+	{
+		int _primitiveType = GL_TRIANGLES;
+
+		switch (primitiveType)
+		{
+		case PrimitiveType::Triangle:
+			_primitiveType = GL_TRIANGLES;
+			break;
+		case PrimitiveType::Line:
+			_primitiveType = GL_LINES;
+			break;
+		default:
+			throw std::runtime_error("Unknown primitive type");
+			break;
+		}
+
+		if (offset >= 0 && count > 0)
+		{
+			glDrawElements(_primitiveType, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(offset * sizeof(uint32_t)));
 		}
 	}
 

@@ -62,16 +62,9 @@ namespace Core
 		return value;
 	}
 
-	Mesh* ContentManager::createMesh(int subMeshesCount)
+	Mesh* ContentManager::createMesh()
 	{
-		SubMesh** _subMeshes = new SubMesh*[subMeshesCount];
-		Mesh* _mesh = new Mesh(_subMeshes, subMeshesCount);
-
-		for (int i = 0; i < subMeshesCount; ++i)
-		{
-			_subMeshes[i] = new SubMesh(_renderer);
-		}
-
+		Mesh* _mesh = new Mesh(_renderer);
 		_meshes.add(_mesh);
 		return _mesh;
 	}

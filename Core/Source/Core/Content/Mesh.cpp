@@ -11,49 +11,59 @@ namespace Core
 {
 	/* SubMesh */
 
-	SubMesh::SubMesh(Renderer* renderer)
+	SubMesh::SubMesh() {}
+
+	SubMesh::SubMesh(int indexOffset, int indexCount)
+	{
+		_indexOffset = indexOffset;
+		_indexCount = indexCount;
+	}
+
+	SubMesh::~SubMesh() {}
+
+	/* Mesh */
+
+	Mesh::Mesh(Renderer* renderer) : Content()
 	{
 		_renderer = renderer;
 	}
 
-	SubMesh::~SubMesh()
+	Mesh::~Mesh()
 	{
+		for (auto it : _subMeshes)
+			delete it;
+
+		_subMeshes.clear();
+
 		if (_vertexBuffer != nullptr)
 		{
 			_renderer->deleteBuffer(_vertexBuffer);
 			_vertexBuffer = nullptr;
 		}
 
-		_material = nullptr;
 		_renderer = nullptr;
 	}
 
-	void SubMesh::updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
+	void Mesh::updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize)
 	{
 		if (_vertexBuffer != nullptr) _renderer->deleteBuffer(_vertexBuffer);
-
 		_vertexBuffer = _renderer->createBuffer(vertexArray, vertexArraySize, indexArray, indexArraySize);
 	}
 
-	/* Mesh */
-
-	Mesh::Mesh(SubMesh** subMeshes, int subMeshesCount) : Content()
+	SubMesh* Mesh::addSubMesh(int indexOffset, int indexCount)
 	{
-		_subMeshes = subMeshes;
-		_subMeshesCount = subMeshesCount;
+		SubMesh* subMesh = new SubMesh(indexOffset, indexCount);
+		_subMeshes.add(subMesh);
+
+		return subMesh;
 	}
 
-	Mesh::~Mesh()
+	void Mesh::removeSubMesh(SubMesh* subMesh)
 	{
-		if (_subMeshes != nullptr)
+		if (_subMeshes.contains(subMesh))
 		{
-			for (int i = 0; i < _subMeshesCount; ++i)
-				delete _subMeshes[i];
-
-			delete[] _subMeshes;
+			_subMeshes.remove(subMesh);
+			delete subMesh;
 		}
-
-		_subMeshes = nullptr;
-		_subMeshesCount = 0;
 	}
 } // namespace Core

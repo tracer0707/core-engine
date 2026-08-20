@@ -102,23 +102,18 @@ namespace Core
 			const std::unordered_map<String, Program*>& getShaderPrograms() const { return _shaderPrograms; }
 			Program* getShaderProgram(String name) const;
 
-			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-											   unsigned int indexArraySize) = 0;
-
+			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize) = 0;
+			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize) = 0;
 			virtual void deleteBuffer(VertexBuffer* buffer) = 0;
-
-			virtual void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
-									glm::mat4& model) = 0;
-
-			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-									  unsigned int indexArraySize) = 0;
+			virtual void bindBuffer(VertexBuffer* buffer, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
+			virtual void drawBufferArray(PrimitiveType primitiveType, unsigned int offset, unsigned int count) = 0;
+			virtual void drawBufferIndexed(PrimitiveType primitiveType, unsigned int offset, unsigned int count) = 0;
 
 			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
 			virtual void deleteFrameBuffer(const FrameBuffer* buffer) = 0;
 			virtual void bindFrameBuffer(const FrameBuffer* buffer) = 0;
 
-			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
-													 TextureFormat format) = 0;
+			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format) = 0;
 			virtual void bindTexture(unsigned int id, unsigned int slot) = 0;
 			virtual void deleteTexture(unsigned int id) = 0;
 

@@ -65,37 +65,43 @@ namespace Editor
 		CSGBrush* closestBrush = nullptr;
 		size_t closestFaceId = -1;
 
-		for (int i = 0; i < mesh->getSubMeshesCount(); ++i)
+		Core::VertexBuffer* vb = mesh->getVertexBuffer();
+
+		int sz = vb->indexArraySize > 0 ? vb->indexArraySize : vb->vertexArraySize;
+
+		for (int j = 0; j < sz; j += 3)
 		{
-			Core::SubMesh* subMesh = mesh->getSubMesh(i);
-			Core::VertexBuffer* vb = subMesh->getVertexBuffer();
+			Core::Vertex& v1 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j] : j];
+			Core::Vertex& v2 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 1] : j + 1];
+			Core::Vertex& v3 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 2] : j + 2];
 
-			int sz = vb->indexArraySize > 0 ? vb->indexArraySize : vb->vertexArraySize;
+			glm::vec3 p1 = mtx * glm::vec4(v1._position, 1.0f);
+			glm::vec3 p2 = mtx * glm::vec4(v2._position, 1.0f);
+			glm::vec3 p3 = mtx * glm::vec4(v3._position, 1.0f);
 
-			for (int j = 0; j < sz; j += 3)
+			auto hit = Core::Mathf::intersects(ray, p1, p2, p3, true, false);
+
+			if (!hit.first) continue;
+
+			if (hit.second < closestDistance)
 			{
-				Core::Vertex& v1 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j] : j];
-				Core::Vertex& v2 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 1] : j + 1];
-				Core::Vertex& v3 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 2] : j + 2];
+				closestDistance = hit.second;
+				foundHit = true;
 
-				glm::vec3 p1 = mtx * glm::vec4(v1._position, 1.0f);
-				glm::vec3 p2 = mtx * glm::vec4(v2._position, 1.0f);
-				glm::vec3 p3 = mtx * glm::vec4(v3._position, 1.0f);
-
-				auto hit = Core::Mathf::intersects(ray, p1, p2, p3, true, false);
-
-				if (!hit.first) continue;
-
-				if (hit.second < closestDistance)
+				for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 				{
-					closestDistance = hit.second;
-					foundHit = true;
-
-					//TODO
+					Core::SubMesh* subMesh = mesh->getSubMesh(i);
+					if (j >= subMesh->getIndexOffset() && j < subMesh->getIndexOffset() + subMesh->getIndexCount())
+					{
+						//SubMesh found
+						break;
+					}
 				}
+
+				//TODO
 			}
 		}
-
+		
 		if (!foundHit) return false;
 
 		return true;

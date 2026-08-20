@@ -33,23 +33,18 @@ namespace Core
 			virtual void bindProgram(Program* program);
 			virtual std::string checkProgramErrors(unsigned int program);
 
-			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-											   unsigned int indexArraySize);
-
+			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
+			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 			virtual void deleteBuffer(VertexBuffer* buffer);
-
-			virtual void drawBuffer(VertexBuffer* buffer, PrimitiveType primitiveType, unsigned int flags, glm::mat4& view, glm::mat4& proj,
-									glm::mat4& model);
-
-			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
-									  unsigned int indexArraySize);
+			virtual void bindBuffer(VertexBuffer* buffer, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model);
+			virtual void drawBufferArray(PrimitiveType primitiveType, unsigned int offset, unsigned int count);
+			virtual void drawBufferIndexed(PrimitiveType primitiveType, unsigned int offset, unsigned int count);
 
 			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
 			virtual void deleteFrameBuffer(const FrameBuffer* buffer);
 			virtual void bindFrameBuffer(const FrameBuffer* buffer);
 
-			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,
-													 TextureFormat format);
+			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format);
 			virtual void bindTexture(unsigned int id, unsigned int slot);
 			virtual void deleteTexture(unsigned int id);
 

@@ -1,12 +1,13 @@
 #pragma once
 
 #include "Content.h"
+
+#include "../Shared/List.h"
 #include "../Math/AxisAlignedBox.h"
 
 namespace Core
 {
 	class VertexBuffer;
-	class Material;
 	class Mesh;
 	class Renderer;
 	struct Vertex;
@@ -14,22 +15,21 @@ namespace Core
 	class SubMesh
 	{
 			friend class Mesh;
-			friend class ContentManager;
-
+			
 		private:
-			SubMesh(Renderer* renderer);
+			int _indexOffset = 0;
+			int _indexCount = 0;
+
+			SubMesh();
+			SubMesh(int indexOffset, int indexCount);
 			~SubMesh();
 
-			VertexBuffer* _vertexBuffer = nullptr;
-			Material* _material = nullptr;
-			Renderer* _renderer = nullptr;
-
 		public:
-			VertexBuffer* getVertexBuffer() { return _vertexBuffer; }
-			void updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
+			void setIndexOffset(int value) { _indexOffset = value; }
+			int getIndexOffset() const { return _indexOffset; }
 
-			Material* getMaterial() { return _material; }
-			void setMaterial(Material* value) { _material = value; }
+			void setIndexCount(int value) { _indexCount = value; }
+			int getIndexCount() const { return _indexCount; }
 	};
 
 	class Mesh : public Content
@@ -37,19 +37,25 @@ namespace Core
 			friend class ContentManager;
 
 		private:
-			SubMesh** _subMeshes = nullptr;
-			int _subMeshesCount = 0;
+			Renderer* _renderer = nullptr;
+			VertexBuffer* _vertexBuffer = nullptr;
+			List<SubMesh*> _subMeshes;
 			AxisAlignedBox aab = AxisAlignedBox::BOX_NULL;
 
-			Mesh(SubMesh** subMeshes, int subMeshesCount);
+			Mesh(Renderer* renderer);
 			virtual ~Mesh();
 
 		public:
 			virtual ContentType getContentType() const { return ContentType::Mesh; }
 
-			SubMesh** getSubMeshes() { return _subMeshes; }
-			SubMesh* getSubMesh(int index) { return _subMeshes[index]; }
-			const int getSubMeshesCount() { return _subMeshesCount; }
+			VertexBuffer* getVertexBuffer() { return _vertexBuffer; }
+			void updateVertexBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
+
+			SubMesh* addSubMesh(int indexOffset, int indexCount);
+			void removeSubMesh(SubMesh* subMesh);
+
+			int getSubMeshCount() const { return _subMeshes.count(); }
+			SubMesh* getSubMesh(int index) { return _subMeshes.get(index); }
 
 			AxisAlignedBox& getBoundingBox() { return aab; }
 			void setBoundingBox(AxisAlignedBox value) { aab = value; }
