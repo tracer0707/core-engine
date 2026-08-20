@@ -41,11 +41,13 @@ namespace Editor
 		_currentFileLbl = new Label();
 
 		_importLayout = new LinearLayout(LayoutDirection::Vertical);
+		_importLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		LinearLayout* buttonLayout = new LinearLayout();
 		buttonLayout->setHorizontalAlignment(LayoutHorizontalAlignment::Right);
 		buttonLayout->setFitWidth(LayoutFitMode::FitAvailable);
 		buttonLayout->setFitHeight(LayoutFitMode::FitContent);
+		buttonLayout->setWrapMode(LayoutWrapMode::NoWrap);
 
 		_importBtn = new Button("Import");
 		Button* cancelBtn = new Button("Cancel");
@@ -153,7 +155,7 @@ namespace Editor
 
 	void ContentImportWindow::onUpdate()
 	{
-		_importLayout->setHeight(getHeight() - 100);
+		_importLayout->setHeight(getHeight() - 105);
 	}
 
 	void ContentImportWindow::onClose()
