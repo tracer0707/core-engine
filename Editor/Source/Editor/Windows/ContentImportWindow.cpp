@@ -21,6 +21,8 @@ static std::vector<std::string> image_extensions = {".jpg",	 ".jpeg", ".jpe",  "
 													".epsf", ".epsi", ".svg",  ".svgz", ".tga",	 ".dds", ".exr", ".hdr", ".ico", ".icns", ".jp2",
 													".j2k",	 ".jxr",  ".jxl",  ".apng", ".pcx",	 ".xbm", ".xpm", ".pnm", ".ppm", ".pgm",  ".pbm"};
 
+static std::vector<std::string> mesh_extensions = {".fbx", ".3ds", ".obj"};
+
 namespace fs = std::filesystem;
 
 namespace Editor
@@ -93,6 +95,10 @@ namespace Editor
 		{
 			prepareTextureLayout();
 		}
+		else if (std::find(mesh_extensions.begin(), mesh_extensions.end(), path.extension().generic_string()) != mesh_extensions.end())
+		{
+			prepareMeshLayout();
+		}
 	}
 
 	void ContentImportWindow::prepareTextureLayout()
@@ -120,6 +126,25 @@ namespace Editor
 				fmt = Core::TextureFormat::BC7;
 
 			importer.importTexture2D(srcFileName, dstFileName, fmt);
+
+			_filesToImport.removeAt(0);
+			importNext();
+		});
+	}
+
+	void ContentImportWindow::prepareMeshLayout()
+	{
+		WindowManager* mgr = _parent;
+		EditorApp* app = mgr->getApplication();
+
+		Core::String srcFileName = _filesToImport[0];
+		fs::path path = srcFileName.std_str();
+		Core::String dstFileName = Core::Path::combine(_targetPath, path.filename().stem().generic_string() + ".mesh");
+
+		_importBtn->setOnClick([this, app, srcFileName, dstFileName]() {
+			ContentImporter importer(app);
+			
+			importer.importMesh(srcFileName, dstFileName);
 
 			_filesToImport.removeAt(0);
 			importNext();

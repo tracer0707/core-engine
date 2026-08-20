@@ -3,13 +3,15 @@ include "BaseTypesSerializer.fbs";
 namespace Core;
 
 table SubMeshSerializer {
-	vertices:[Core.Base.Vertex];
-	indices:[uint32];
+	index_offset:uint32;
+    index_count:uint32;
 }
 
 table MeshSerializer {
-	sub_meshes:[SubMeshSerializer];
-	aabb:Core.Base.AABB;
+	vertices:[Core.Base.Vertex];
+    indices:[uint32];
+    sub_meshes:[SubMeshSerializer];
+    aabb:Core.Base.AABB;
 }
 
 root_type MeshSerializer;

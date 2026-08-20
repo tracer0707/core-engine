@@ -25,6 +25,7 @@ namespace Editor
 
 			void importNext();
 			void prepareTextureLayout();
+			void prepareMeshLayout();
 
 		protected:
 			virtual void onClose();

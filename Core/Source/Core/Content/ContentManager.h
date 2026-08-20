@@ -60,6 +60,7 @@ namespace Core
 			// Load by uuids
 			Material* loadMaterialByUuid(Uuid uuid);
 			Texture2D* loadTexture2DByUuid(Uuid uuid);
+			Mesh* loadMeshByUuid(Uuid uuid);
 
 			// Load from memory
 			Texture2D* loadTexture2DFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt);

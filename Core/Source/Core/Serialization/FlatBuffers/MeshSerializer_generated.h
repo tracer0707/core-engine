@@ -26,21 +26,19 @@ struct MeshSerializerBuilder;
 struct SubMeshSerializer FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef SubMeshSerializerBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_VERTICES = 4,
-    VT_INDICES = 6
+    VT_INDEX_OFFSET = 4,
+    VT_INDEX_COUNT = 6
   };
-  const ::flatbuffers::Vector<const Core::Base::Vertex *> *vertices() const {
-    return GetPointer<const ::flatbuffers::Vector<const Core::Base::Vertex *> *>(VT_VERTICES);
+  uint32_t index_offset() const {
+    return GetField<uint32_t>(VT_INDEX_OFFSET, 0);
   }
-  const ::flatbuffers::Vector<uint32_t> *indices() const {
-    return GetPointer<const ::flatbuffers::Vector<uint32_t> *>(VT_INDICES);
+  uint32_t index_count() const {
+    return GetField<uint32_t>(VT_INDEX_COUNT, 0);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
-           VerifyOffset(verifier, VT_VERTICES) &&
-           verifier.VerifyVector(vertices()) &&
-           VerifyOffset(verifier, VT_INDICES) &&
-           verifier.VerifyVector(indices()) &&
+           VerifyField<uint32_t>(verifier, VT_INDEX_OFFSET, 4) &&
+           VerifyField<uint32_t>(verifier, VT_INDEX_COUNT, 4) &&
            verifier.EndTable();
   }
 };
@@ -49,11 +47,11 @@ struct SubMeshSerializerBuilder {
   typedef SubMeshSerializer Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
-  void add_vertices(::flatbuffers::Offset<::flatbuffers::Vector<const Core::Base::Vertex *>> vertices) {
-    fbb_.AddOffset(SubMeshSerializer::VT_VERTICES, vertices);
+  void add_index_offset(uint32_t index_offset) {
+    fbb_.AddElement<uint32_t>(SubMeshSerializer::VT_INDEX_OFFSET, index_offset, 0);
   }
-  void add_indices(::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> indices) {
-    fbb_.AddOffset(SubMeshSerializer::VT_INDICES, indices);
+  void add_index_count(uint32_t index_count) {
+    fbb_.AddElement<uint32_t>(SubMeshSerializer::VT_INDEX_COUNT, index_count, 0);
   }
   explicit SubMeshSerializerBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
         : fbb_(_fbb) {
@@ -68,32 +66,28 @@ struct SubMeshSerializerBuilder {
 
 inline ::flatbuffers::Offset<SubMeshSerializer> CreateSubMeshSerializer(
     ::flatbuffers::FlatBufferBuilder &_fbb,
-    ::flatbuffers::Offset<::flatbuffers::Vector<const Core::Base::Vertex *>> vertices = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> indices = 0) {
+    uint32_t index_offset = 0,
+    uint32_t index_count = 0) {
   SubMeshSerializerBuilder builder_(_fbb);
-  builder_.add_indices(indices);
-  builder_.add_vertices(vertices);
+  builder_.add_index_count(index_count);
+  builder_.add_index_offset(index_offset);
   return builder_.Finish();
-}
-
-inline ::flatbuffers::Offset<SubMeshSerializer> CreateSubMeshSerializerDirect(
-    ::flatbuffers::FlatBufferBuilder &_fbb,
-    const std::vector<Core::Base::Vertex> *vertices = nullptr,
-    const std::vector<uint32_t> *indices = nullptr) {
-  auto vertices__ = vertices ? _fbb.CreateVectorOfStructs<Core::Base::Vertex>(*vertices) : 0;
-  auto indices__ = indices ? _fbb.CreateVector<uint32_t>(*indices) : 0;
-  return Core::CreateSubMeshSerializer(
-      _fbb,
-      vertices__,
-      indices__);
 }
 
 struct MeshSerializer FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef MeshSerializerBuilder Builder;
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
-    VT_SUB_MESHES = 4,
-    VT_AABB = 6
+    VT_VERTICES = 4,
+    VT_INDICES = 6,
+    VT_SUB_MESHES = 8,
+    VT_AABB = 10
   };
+  const ::flatbuffers::Vector<const Core::Base::Vertex *> *vertices() const {
+    return GetPointer<const ::flatbuffers::Vector<const Core::Base::Vertex *> *>(VT_VERTICES);
+  }
+  const ::flatbuffers::Vector<uint32_t> *indices() const {
+    return GetPointer<const ::flatbuffers::Vector<uint32_t> *>(VT_INDICES);
+  }
   const ::flatbuffers::Vector<::flatbuffers::Offset<Core::SubMeshSerializer>> *sub_meshes() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<Core::SubMeshSerializer>> *>(VT_SUB_MESHES);
   }
@@ -102,6 +96,10 @@ struct MeshSerializer FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
+           VerifyOffset(verifier, VT_VERTICES) &&
+           verifier.VerifyVector(vertices()) &&
+           VerifyOffset(verifier, VT_INDICES) &&
+           verifier.VerifyVector(indices()) &&
            VerifyOffset(verifier, VT_SUB_MESHES) &&
            verifier.VerifyVector(sub_meshes()) &&
            verifier.VerifyVectorOfTables(sub_meshes()) &&
@@ -114,6 +112,12 @@ struct MeshSerializerBuilder {
   typedef MeshSerializer Table;
   ::flatbuffers::FlatBufferBuilder &fbb_;
   ::flatbuffers::uoffset_t start_;
+  void add_vertices(::flatbuffers::Offset<::flatbuffers::Vector<const Core::Base::Vertex *>> vertices) {
+    fbb_.AddOffset(MeshSerializer::VT_VERTICES, vertices);
+  }
+  void add_indices(::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> indices) {
+    fbb_.AddOffset(MeshSerializer::VT_INDICES, indices);
+  }
   void add_sub_meshes(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::SubMeshSerializer>>> sub_meshes) {
     fbb_.AddOffset(MeshSerializer::VT_SUB_MESHES, sub_meshes);
   }
@@ -133,21 +137,31 @@ struct MeshSerializerBuilder {
 
 inline ::flatbuffers::Offset<MeshSerializer> CreateMeshSerializer(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    ::flatbuffers::Offset<::flatbuffers::Vector<const Core::Base::Vertex *>> vertices = 0,
+    ::flatbuffers::Offset<::flatbuffers::Vector<uint32_t>> indices = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::SubMeshSerializer>>> sub_meshes = 0,
     const Core::Base::AABB *aabb = nullptr) {
   MeshSerializerBuilder builder_(_fbb);
   builder_.add_aabb(aabb);
   builder_.add_sub_meshes(sub_meshes);
+  builder_.add_indices(indices);
+  builder_.add_vertices(vertices);
   return builder_.Finish();
 }
 
 inline ::flatbuffers::Offset<MeshSerializer> CreateMeshSerializerDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
+    const std::vector<Core::Base::Vertex> *vertices = nullptr,
+    const std::vector<uint32_t> *indices = nullptr,
     const std::vector<::flatbuffers::Offset<Core::SubMeshSerializer>> *sub_meshes = nullptr,
     const Core::Base::AABB *aabb = nullptr) {
+  auto vertices__ = vertices ? _fbb.CreateVectorOfStructs<Core::Base::Vertex>(*vertices) : 0;
+  auto indices__ = indices ? _fbb.CreateVector<uint32_t>(*indices) : 0;
   auto sub_meshes__ = sub_meshes ? _fbb.CreateVector<::flatbuffers::Offset<Core::SubMeshSerializer>>(*sub_meshes) : 0;
   return Core::CreateMeshSerializer(
       _fbb,
+      vertices__,
+      indices__,
       sub_meshes__,
       aabb);
 }

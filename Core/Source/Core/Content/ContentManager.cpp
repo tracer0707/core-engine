@@ -15,6 +15,7 @@
 
 #include "../Serialization/FlatBuffers/TextureSerializer_generated.h"
 #include "../Serialization/FlatBuffers/MaterialSerializer_generated.h"
+#include "../Serialization/FlatBuffers/MeshSerializer_generated.h"
 
 namespace Core
 {
@@ -86,13 +87,20 @@ namespace Core
 		if (it != _materialsCache.end()) return (Material*)it->second;
 
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
-		size_t fileSize = file.tellg();
-		file.seekg(0);
+		if (!file.is_open()) return nullptr;
 
-		std::vector<uint8_t> data(fileSize);
-		file.read(reinterpret_cast<char*>(data.data()), fileSize);
+		const std::streamsize fileSize = file.tellg();
+		if (fileSize <= 0) return nullptr;
 
-		auto materialSerialized = GetMaterialSerializer(data.data());
+		file.seekg(0, std::ios::beg);
+
+		std::vector<uint8_t> buffer(static_cast<size_t>(fileSize));
+		if (!file.read(reinterpret_cast<char*>(buffer.data()), fileSize))
+		{
+			return nullptr;
+		}
+
+		auto materialSerialized = GetMaterialSerializer(buffer.data());
 
 		Material* result = new Material(_renderer);
 		result->setUuid(uuid);
@@ -159,13 +167,20 @@ namespace Core
 		if (it != _textures2DCache.end()) return (Texture2D*)it->second;
 
 		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
-		size_t fileSize = file.tellg();
-		file.seekg(0);
+		if (!file.is_open()) return nullptr;
 
-		std::vector<uint8_t> data(fileSize);
-		file.read(reinterpret_cast<char*>(data.data()), fileSize);
+		const std::streamsize fileSize = file.tellg();
+		if (fileSize <= 0) return nullptr;
 
-		auto texture2DSerialized = GetTextureSerializer(data.data());
+		file.seekg(0, std::ios::beg);
+
+		std::vector<uint8_t> buffer(static_cast<size_t>(fileSize));
+		if (!file.read(reinterpret_cast<char*>(buffer.data()), fileSize))
+		{
+			return nullptr;
+		}
+
+		auto texture2DSerialized = GetTextureSerializer(buffer.data());
 
 		unsigned char* dataRaw = const_cast<unsigned char*>(texture2DSerialized->data()->data());
 
@@ -187,8 +202,95 @@ namespace Core
 
 	Mesh* ContentManager::loadMeshFromFile(String fileName)
 	{
-		// TODO
-		return nullptr;
+		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
+
+		auto it = _meshesCache.find(uuid);
+		if (it != _meshesCache.end()) return (Mesh*)it->second;
+
+		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
+		if (!file.is_open()) return nullptr;
+
+		const std::streamsize fileSize = file.tellg();
+		if (fileSize <= 0) return nullptr;
+
+		file.seekg(0, std::ios::beg);
+
+		std::vector<uint8_t> buffer(static_cast<size_t>(fileSize));
+		if (!file.read(reinterpret_cast<char*>(buffer.data()), fileSize))
+		{
+			return nullptr;
+		}
+
+		Core::Mesh* result = new Mesh(_renderer);
+
+		const Core::MeshSerializer* serializer = Core::GetMeshSerializer(buffer.data());
+
+		const auto* serializedVertices = serializer->vertices();
+		const uint32_t vertexCount = serializedVertices->size();
+
+		std::vector<Core::Vertex> vertices;
+		vertices.resize(vertexCount);
+
+		for (uint32_t i = 0; i < vertexCount; ++i)
+		{
+			const Core::Base::Vertex* source = serializedVertices->Get(i);
+			Core::Vertex& destination = vertices[i];
+
+			destination._position = glm::vec3(source->position().x(), source->position().y(), source->position().z());
+			destination._normal = glm::vec3(source->normal().x(), source->normal().y(), source->normal().z());
+			destination._tangent = glm::vec3(source->tangent().x(), source->tangent().y(), source->tangent().z());
+			destination._bitangent = glm::vec3(source->bitangent().x(), source->bitangent().y(), source->bitangent().z());
+			destination._uv0 = glm::vec2(source->uv0().x(), source->uv0().y());
+			destination._uv1 = glm::vec2(source->uv1().x(), source->uv1().y());
+			destination._color = Color(source->color().x(), source->color().y(), source->color().z(), source->color().w());
+			destination._blendWeights = glm::vec4(source->blend_weights().x(), source->blend_weights().y(), source->blend_weights().z(), source->blend_weights().w());
+			destination._blendIndices = glm::vec4(source->blend_indices().x(), source->blend_indices().y(), source->blend_indices().z(), source->blend_indices().w());
+		}
+
+		const auto* serializedIndices = serializer->indices();
+		const uint32_t indexCount = serializedIndices->size();
+
+		std::vector<uint32_t> indices;
+		indices.resize(indexCount);
+
+		for (uint32_t i = 0; i < indexCount; ++i)
+			indices[i] = serializedIndices->Get(i);
+
+		result->updateVertexBuffer(vertices.data(), static_cast<unsigned int>(vertices.size()), indices.data(),
+								   static_cast<unsigned int>(indices.size()));
+
+		const auto* serializedSubMeshes = serializer->sub_meshes();
+
+		if (serializedSubMeshes)
+		{
+			for (uint32_t i = 0; i < serializedSubMeshes->size(); ++i)
+			{
+				const Core::SubMeshSerializer* source = serializedSubMeshes->Get(i);
+				result->addSubMesh(source->index_offset(), source->index_count());
+			}
+		}
+
+		const Core::Base::AABB* serializedAABB = serializer->aabb();
+
+		if (serializedAABB)
+		{
+			const Core::Base::Vec3& min = serializedAABB->min();
+			const Core::Base::Vec3& max = serializedAABB->max();
+
+			result->setBoundingBox(Core::AxisAlignedBox(glm::vec3(min.x(), min.y(), min.z()), glm::vec3(max.x(), max.y(), max.z())));
+		}
+
+		result->setUuid(uuid);
+
+		_meshes.add(result);
+		_meshesCache[uuid] = result;
+
+		if (_onResourceLoaded != nullptr)
+		{
+			_onResourceLoaded(result);
+		}
+
+		return result;
 	}
 
 	// Load by uuids
@@ -205,6 +307,13 @@ namespace Core
 		ContentDatabase* db = ContentDatabase::singleton();
 		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
 		return loadTexture2DFromFile(db->getPath(uuid));
+	}
+
+	Mesh* ContentManager::loadMeshByUuid(Uuid uuid)
+	{
+		ContentDatabase* db = ContentDatabase::singleton();
+		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadMeshFromFile(db->getPath(uuid));
 	}
 
 	// Load from memory

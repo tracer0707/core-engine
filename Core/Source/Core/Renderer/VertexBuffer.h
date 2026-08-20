@@ -17,7 +17,7 @@ namespace Core
         glm::vec2 _uv0 = glm::vec2(0.0f);
         glm::vec2 _uv1 = glm::vec2(0.0f);
         Color _color = Color::WHITE;
-		glm::vec4 _blendWeight = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+		glm::vec4 _blendWeights = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 		glm::vec4 _blendIndices = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
         Vertex() = default;
