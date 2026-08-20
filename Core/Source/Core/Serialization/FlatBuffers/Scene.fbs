@@ -1,0 +1,9 @@
+include "BaseTypesSerializer.fbs";
+
+namespace Core;
+
+table SceneSerializer {
+	
+}
+
+root_type SceneSerializer;

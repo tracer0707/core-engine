@@ -47,3 +47,20 @@ table MapEntryString {
     key:ulong;
     value:string;
 }
+
+struct Vertex {
+    position:Vec3;
+    normal:Vec3;
+    tangent:Vec4;
+    bitangent:Vec4;
+    uv0:Vec2;
+    uv1:Vec2;
+    color:Vec4;
+    blend_weights:Vec4;
+    blend_indices:Vec4;
+}
+
+struct AABB {
+    min:Vec3;
+    max:Vec3;
+}

@@ -27,6 +27,7 @@
 
 #include "flatbuffers/flatbuffers.h"
 #include <Core/Serialization/FlatBuffers/TextureSerializer_generated.h>
+#include <Core/Serialization/FlatBuffers/MeshSerializer_generated.h>
 
 namespace fs = std::filesystem;
 
@@ -123,35 +124,9 @@ namespace Editor
 		delete[] _data;
 	}
 
-	// Core::Texture2D* ContentImporter::loadTextureFromBytes(unsigned char* data, int w, int h, int bpp, Core::TextureFormat format)
-	// {
-	// 	FIBITMAP* texture = FreeImage_Allocate(w, h, bpp * 8, 8, 8, 8);
-	// 	for (std::int32_t i = 0; i < h; ++i)
-	// 	{
-	// 		BYTE* bits = FreeImage_GetScanLine(texture, h - 1 - i);
-	// 		for (std::int32_t j = 0; j < w; ++j)
-	// 		{
-	// 			bits[0] = data[(i * w + j) * 4 + 2];
-	// 			bits[1] = data[(i * w + j) * 4 + 1];
-	// 			bits[2] = data[(i * w + j) * 4 + 0];
-	// 			bits[3] = data[(i * w + j) * 4 + 3];
-	// 			bits += 4;
-	// 		}
-	// 	}
-
-	// 	FIBITMAP* conv = FreeImage_ConvertTo32Bits(texture);
-	// 	FreeImage_Unload(texture);
-	// 	texture = conv;
-
-	// 	unsigned char* _data = FreeImage_GetBits(texture);
-
-	// 	int size = w * h * (bpp / 8);
-	// 	return _contentMgr->loadTextureFromBytes(_data, w, h, size, format);
-	// }
-
 	void ContentImporter::importMesh(Core::String sourceFileName, Core::String targetFileName)
 	{
-		/*Assimp::Importer* importer = new Assimp::Importer();
+		Assimp::Importer* importer = new Assimp::Importer();
 		importer->SetPropertyFloat(AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.0f);
 		importer->SetPropertyFloat(AI_CONFIG_PP_GSN_MAX_SMOOTHING_ANGLE, 60.0f);
 		importer->SetPropertyBool(AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false);
@@ -162,51 +137,16 @@ namespace Editor
 		importFlags |= aiProcess_JoinIdenticalVertices;
 		importFlags |= aiProcess_GenSmoothNormals | aiProcess_ForceGenNormals;
 
-		const aiScene* _scene = importer->ReadFile(fileName.std_str().c_str(), importFlags);
-
-		Core::Mesh* _mesh = createMesh(_scene->mNumMeshes);
-		Core::SubMesh** _subMeshes = _mesh->getSubMeshes();
+		const aiScene* _scene = importer->ReadFile(sourceFileName.std_str().c_str(), importFlags);
 
 		Core::AxisAlignedBox aab = Core::AxisAlignedBox();
 
 		for (int i = 0; i < _scene->mNumMeshes; ++i)
 		{
 			const aiMesh* mesh = _scene->mMeshes[i];
-			std::vector<Core::Vertex> verts;
-			std::vector<unsigned int> inds;
-
-			for (int j = 0; j < mesh->mNumVertices; ++j)
-			{
-				Core::Vertex vtx{};
-
-				vtx.position = glm::vec3(mesh->mVertices[j].x, mesh->mVertices[j].y, mesh->mVertices[j].z);
-				vtx.uv = glm::vec2(mesh->mTextureCoords[0][j].x, mesh->mTextureCoords[0][j].y);
-				vtx.color = Core::Color(mesh->mColors[0][j].r, mesh->mColors[0][j].g, mesh->mColors[0][j].b, mesh->mColors[0][j].a);
-
-				aab.merge(vtx.position);
-
-				verts.push_back(vtx);
-			}
-
-			for (int j = 0; j < mesh->mNumFaces; ++j)
-			{
-				aiFace face = mesh->mFaces[j];
-				inds.push_back(face.mIndices[0]);
-				inds.push_back(face.mIndices[1]);
-				inds.push_back(face.mIndices[2]);
-			}
-
-			Core::Material* material = createMaterial();
-			Core::Texture2D* texture = loadTextureFromFile("D:/Dev/C++/core-engine/x64/Release/Test Project/diffuse.jpg", Core::TextureFormat::BC7);
-			material->setTexture(texture);
-
-			_subMeshes[i]->setMaterial(material);
-			_subMeshes[i]->updateVertexBuffer(&verts[0], verts.size(), &inds[0], inds.size());
+			
 		}
 
-		_mesh->setBoundingBox(aab);
-
 		delete importer;
-		return _mesh;*/
 	}
 } // namespace Editor

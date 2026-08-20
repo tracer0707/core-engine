@@ -1,0 +1,15 @@
+include "BaseTypesSerializer.fbs";
+
+namespace Core;
+
+table SubMeshSerializer {
+	vertices:[Core.Base.Vertex];
+	indices:[uint32];
+}
+
+table MeshSerializer {
+	sub_meshes:[SubMeshSerializer];
+	aabb:Core.Base.AABB;
+}
+
+root_type MeshSerializer;

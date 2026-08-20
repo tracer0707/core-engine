@@ -40,6 +40,10 @@ struct MapEntryVec4Builder;
 struct MapEntryString;
 struct MapEntryStringBuilder;
 
+struct Vertex;
+
+struct AABB;
+
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec2 FLATBUFFERS_FINAL_CLASS {
  private:
   float x_;
@@ -126,6 +130,94 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec4 FLATBUFFERS_FINAL_CLASS {
   }
 };
 FLATBUFFERS_STRUCT_END(Vec4, 16);
+
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vertex FLATBUFFERS_FINAL_CLASS {
+ private:
+  Core::Base::Vec3 position_;
+  Core::Base::Vec3 normal_;
+  Core::Base::Vec4 tangent_;
+  Core::Base::Vec4 bitangent_;
+  Core::Base::Vec2 uv0_;
+  Core::Base::Vec2 uv1_;
+  Core::Base::Vec4 color_;
+  Core::Base::Vec4 blend_weights_;
+  Core::Base::Vec4 blend_indices_;
+
+ public:
+  Vertex()
+      : position_(),
+        normal_(),
+        tangent_(),
+        bitangent_(),
+        uv0_(),
+        uv1_(),
+        color_(),
+        blend_weights_(),
+        blend_indices_() {
+  }
+  Vertex(const Core::Base::Vec3 &_position, const Core::Base::Vec3 &_normal, const Core::Base::Vec4 &_tangent, const Core::Base::Vec4 &_bitangent, const Core::Base::Vec2 &_uv0, const Core::Base::Vec2 &_uv1, const Core::Base::Vec4 &_color, const Core::Base::Vec4 &_blend_weights, const Core::Base::Vec4 &_blend_indices)
+      : position_(_position),
+        normal_(_normal),
+        tangent_(_tangent),
+        bitangent_(_bitangent),
+        uv0_(_uv0),
+        uv1_(_uv1),
+        color_(_color),
+        blend_weights_(_blend_weights),
+        blend_indices_(_blend_indices) {
+  }
+  const Core::Base::Vec3 &position() const {
+    return position_;
+  }
+  const Core::Base::Vec3 &normal() const {
+    return normal_;
+  }
+  const Core::Base::Vec4 &tangent() const {
+    return tangent_;
+  }
+  const Core::Base::Vec4 &bitangent() const {
+    return bitangent_;
+  }
+  const Core::Base::Vec2 &uv0() const {
+    return uv0_;
+  }
+  const Core::Base::Vec2 &uv1() const {
+    return uv1_;
+  }
+  const Core::Base::Vec4 &color() const {
+    return color_;
+  }
+  const Core::Base::Vec4 &blend_weights() const {
+    return blend_weights_;
+  }
+  const Core::Base::Vec4 &blend_indices() const {
+    return blend_indices_;
+  }
+};
+FLATBUFFERS_STRUCT_END(Vertex, 120);
+
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) AABB FLATBUFFERS_FINAL_CLASS {
+ private:
+  Core::Base::Vec3 min_;
+  Core::Base::Vec3 max_;
+
+ public:
+  AABB()
+      : min_(),
+        max_() {
+  }
+  AABB(const Core::Base::Vec3 &_min, const Core::Base::Vec3 &_max)
+      : min_(_min),
+        max_(_max) {
+  }
+  const Core::Base::Vec3 &min() const {
+    return min_;
+  }
+  const Core::Base::Vec3 &max() const {
+    return max_;
+  }
+};
+FLATBUFFERS_STRUCT_END(AABB, 24);
 
 struct MapEntryInt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef MapEntryIntBuilder Builder;
