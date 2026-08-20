@@ -66,7 +66,7 @@ namespace Core
 
 		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 		{
-			SubMesh* subMesh = mesh->getSubMesh(i);
+			SubMesh& subMesh = mesh->getSubMesh(i);
 			Material* material = _materials[i];
 
 			if (material != nullptr)
@@ -80,11 +80,11 @@ namespace Core
 
 			if (mesh->getVertexBuffer()->indexArraySize > 0)
 			{
-				_renderer->drawBufferIndexed(PrimitiveType::Triangle, subMesh->getIndexOffset(), subMesh->getIndexCount());
+				_renderer->drawBufferIndexed(PrimitiveType::Triangle, subMesh.getIndexOffset(), subMesh.getIndexCount());
 			}
 			else
 			{
-				_renderer->drawBufferArray(PrimitiveType::Triangle, subMesh->getIndexOffset(), subMesh->getIndexCount());
+				_renderer->drawBufferArray(PrimitiveType::Triangle, subMesh.getIndexOffset(), subMesh.getIndexCount());
 			}
 		}
 	}

@@ -90,8 +90,8 @@ namespace Editor
 
 				for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 				{
-					Core::SubMesh* subMesh = mesh->getSubMesh(i);
-					if (j >= subMesh->getIndexOffset() && j < subMesh->getIndexOffset() + subMesh->getIndexCount())
+					Core::SubMesh& subMesh = mesh->getSubMesh(i);
+					if (j >= subMesh.getIndexOffset() && j < subMesh.getIndexOffset() + subMesh.getIndexCount())
 					{
 						//SubMesh found
 						break;
