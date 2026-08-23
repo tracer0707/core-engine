@@ -93,7 +93,7 @@ namespace Editor
 		ObjectPicker::singleton()->update(isSceneWindowHovered, isGizmoWasUsed, getPositionX(), getPositionY());
 
 		if (!_parent->getInputManager()->getMouseButton(0) && !_parent->getInputManager()->getMouseButton(1) &&
-			!_parent->getInputManager()->getMouseButton(2))
+			!_parent->getInputManager()->getMouseButton(2) && !ImGui::GetIO().WantCaptureKeyboard)
 		{
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
 			{
