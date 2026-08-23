@@ -1,7 +1,5 @@
 #include "MeshRenderer.h"
 
-#include "ComponentList.h"
-
 #include "Transform.h"
 
 #include "../Scene/Object.h"
@@ -20,11 +18,6 @@ namespace Core
 	MeshRenderer::~MeshRenderer()
 	{
 		mesh = nullptr;
-	}
-
-	unsigned int MeshRenderer::getComponentType()
-	{
-		return COMPONENT_MESHRENDERER;
 	}
 
 	AxisAlignedBox MeshRenderer::getWorldBoundingBox()

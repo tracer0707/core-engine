@@ -18,6 +18,6 @@ namespace Core
         virtual ~Transform();
 
       public:
-        virtual unsigned int getComponentType();
+		virtual ComponentType getComponentType() const { return ComponentType::Transform; }
     };
 } // namespace Core

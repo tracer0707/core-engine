@@ -4,7 +4,6 @@ namespace Editor
 {
 	enum class ControlType
 	{
-		Base,
 		Button,
 		Image,
 		Label,

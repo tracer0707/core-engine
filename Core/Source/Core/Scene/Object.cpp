@@ -44,7 +44,7 @@ namespace Core
 		}
 	}
 
-	Component* Object::findComponent(unsigned int type) const
+	Component* Object::findComponent(ComponentType type) const
 	{
 		for (int i = 0; i < _components.count(); ++i)
 		{
@@ -55,19 +55,19 @@ namespace Core
 		return nullptr;
 	}
 
-	Component* Object::addComponent(unsigned int type)
+	Component* Object::addComponent(ComponentType type)
 	{
 		Component* newComponent = nullptr;
 
-		if (type == COMPONENT_CAMERA)
+		if (type == ComponentType::Camera)
 		{
 			newComponent = new Camera(this, _renderer);
 		}
-		else if (type == COMPONENT_MESHRENDERER)
+		else if (type == ComponentType::MeshRenderer)
 		{
 			newComponent = new MeshRenderer(this, _renderer);
 		}
-		else if (type == COMPONENT_TRANSFORM)
+		else if (type == ComponentType::Transform)
 		{
 			newComponent = new Transform(this);
 		}

@@ -28,7 +28,7 @@ namespace Core
         Camera(Object* owner, Renderer* renderer);
         virtual ~Camera();
 
-        virtual unsigned int getComponentType();
+        virtual ComponentType getComponentType() const { return ComponentType::Camera; }
 
         float getFov() { return _fov; }
         void setFov(float value) { _fov = value; }

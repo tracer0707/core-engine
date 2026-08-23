@@ -1,7 +1,6 @@
 #include "Camera.h"
 
 #include "Transform.h"
-#include "ComponentList.h"
 
 #include "../Renderer/Renderer.h"
 #include "../Content/RenderTexture.h"
@@ -17,11 +16,6 @@ namespace Core
 	}
 
 	Camera::~Camera() {}
-
-	unsigned int Camera::getComponentType()
-	{
-		return COMPONENT_CAMERA;
-	}
 
 	const glm::mat4 Camera::getViewMatrix()
 	{

@@ -3,7 +3,7 @@
 #include "../Shared/String.h"
 #include "../Shared/List.h"
 #include "../Shared/BitSet.h"
-#include "../Components/ComponentList.h"
+#include "../Components/ComponentType.h"
 
 namespace Core
 {
@@ -27,7 +27,7 @@ namespace Core
 		String _name = String::Empty;
 		BitSet _flags;
 
-		Component* addComponent(unsigned int type);
+		Component* addComponent(ComponentType type);
 
 	public:
 		List<Component*>& getComponents() { return _components; }
@@ -44,7 +44,7 @@ namespace Core
 		T findComponent() const { }
 
 		Transform* getTransform() const { return _transform; }
-		Component* findComponent(unsigned int type) const;
+		Component* findComponent(ComponentType type) const;
 
 		String getName() const { return _name; }
 		void setName(String value) { _name = value; }
@@ -56,37 +56,37 @@ namespace Core
 	template <>
 	inline Camera* Object::addComponent<Camera*>()
 	{
-		return (Camera*)addComponent(COMPONENT_CAMERA);
+		return (Camera*)addComponent(ComponentType::Camera);
 	}
 
 	template <>
 	inline MeshRenderer* Object::addComponent<MeshRenderer*>()
 	{
-		return (MeshRenderer*)addComponent(COMPONENT_MESHRENDERER);
+		return (MeshRenderer*)addComponent(ComponentType::MeshRenderer);
 	}
 
 	template <>
 	inline Transform* Object::addComponent<Transform*>()
 	{
-		return (Transform*)addComponent(COMPONENT_TRANSFORM);
+		return (Transform*)addComponent(ComponentType::Transform);
 	}
 
 	/* FIND */
 	template <>
 	inline Camera* Object::findComponent<Camera*>() const
 	{
-		return (Camera*)findComponent(COMPONENT_CAMERA);
+		return (Camera*)findComponent(ComponentType::Camera);
 	}
 
 	template <>
 	inline MeshRenderer* Object::findComponent<MeshRenderer*>() const
 	{
-		return (MeshRenderer*)findComponent(COMPONENT_MESHRENDERER);
+		return (MeshRenderer*)findComponent(ComponentType::MeshRenderer);
 	}
 
 	template <>
 	inline Transform* Object::findComponent<Transform*>() const
 	{
-		return (Transform*)findComponent(COMPONENT_TRANSFORM);
+		return (Transform*)findComponent(ComponentType::Transform);
 	}
 } // namespace Core

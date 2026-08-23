@@ -10,7 +10,7 @@
 #include "../Windows/WindowList.h"
 #include "../Windows/InspectorWindow.h"
 
-#include "../Windows/Inspector/TransformInspector.h"
+#include "../Windows/Inspector/ObjectInspector.h"
 
 #include "../Gizmo.h"
 
@@ -89,11 +89,9 @@ namespace Editor
 		{
 			if (it.first == TAG_SCENE_OBJECT)
 			{
-				Collapse* collapse = new Collapse("Transform");
-				Inspector* inspector = new TransformInspector(((Core::Object*)it.second)->getTransform());
+				Inspector* inspector = new ObjectInspector((Core::Object*)it.second);
 				inspector->build();
-				collapse->addControl(inspector);
-				layout->addControl(collapse);
+				layout->addControl(inspector);
 			}
 		}
 

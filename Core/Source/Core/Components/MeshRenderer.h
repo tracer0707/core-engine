@@ -24,7 +24,7 @@ namespace Core
 		MeshRenderer(Object* owner, Renderer* renderer);
 		virtual ~MeshRenderer();
 
-		virtual unsigned int getComponentType();
+		virtual ComponentType getComponentType() const { return ComponentType::MeshRenderer; }
 
 		AxisAlignedBox getWorldBoundingBox();
 
