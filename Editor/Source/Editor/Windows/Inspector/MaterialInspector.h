@@ -17,7 +17,7 @@ namespace Editor
 			Core::Renderer* _renderer = nullptr;
 
 		public:
-			MaterialInspector(Core::Material* material, Core::Renderer* renderer);
+			MaterialInspector(Core::Material* material, Core::Renderer* renderer, Core::EventHandler* eventHandler);
 			virtual ~MaterialInspector();
 
 			virtual void build();

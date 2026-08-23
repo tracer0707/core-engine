@@ -29,6 +29,9 @@ namespace Core
 		AxisAlignedBox getWorldBoundingBox();
 
 		List<Material*>& getMaterials() { return _materials; }
+		int getMaterialCount() const { return _materials.count(); }
+		Material* getMaterial(int index) { return _materials.get(index); }
+		void setMaterial(int index, Material* value) { _materials.set(index, value); }
 
 		Mesh* getMesh() { return mesh; }
 		void setMesh(Mesh* value);

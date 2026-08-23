@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
 
@@ -23,6 +25,8 @@ namespace Editor
 
 			Core::String _targetPath = Core::String::Empty;
 
+			std::function<void(bool)> _onImportFinished = nullptr;
+
 			void importNext();
 			void prepareTextureLayout();
 			void prepareMeshLayout();
@@ -38,5 +42,7 @@ namespace Editor
 			virtual void init();
 
 			void import(Core::List<Core::String> value, Core::String targetPath);
+
+			void setOnImportFinished(std::function<void(bool)> callback) { _onImportFinished = callback; }
 	};
 } // namespace Editor

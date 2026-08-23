@@ -4,6 +4,7 @@
 
 #include <Core/Shared/List.h>
 #include <Core/Content/Material.h>
+#include <Core/Content/Texture2D.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Program.h>
 #include <Core/System/EventHandler.h>
@@ -21,7 +22,7 @@
 
 namespace Editor
 {
-	MaterialInspector::MaterialInspector(Core::Material* material, Core::Renderer* renderer) : Inspector()
+	MaterialInspector::MaterialInspector(Core::Material* material, Core::Renderer* renderer, Core::EventHandler* eventHandler) : Inspector(eventHandler)
 	{
 		_material = material;
 		_renderer = renderer;
@@ -60,7 +61,7 @@ namespace Editor
 		programDropdown->setOnSelectItem([this, programNames](int value) {
 			Core::Program* newProgram = _renderer->getShaderProgram(programNames[value]);
 			_material->setProgram(newProgram);
-			getEventHandler()->addEvent([this]()
+			_eventHandler->addEvent([this]()
 			{
 				clear();
 				build();
@@ -80,7 +81,7 @@ namespace Editor
 				{
 					ContentSelect* textureSelect = new ContentSelect();
 					textureSelect->setContentType(Core::ContentType::Texture2D);
-					textureSelect->setContent((Core::Content*)_material->getTexture2D(uniform.nameHash));
+					textureSelect->setContent(_material->getTexture2D(uniform.nameHash));
 					textureSelect->setOnContentChanged([this, uniform](Core::Content* value) {
 						_material->setTexture2D(uniform.nameHash, (Core::Texture2D*)value);
 						ContentSerializer::serializeMaterial(_material);

@@ -15,11 +15,11 @@ namespace Core
 			Transformable* parent = nullptr;
 			std::vector<Transformable*> children;
 
-			glm::vec3 position{0.0f};
-			glm::quat rotation{1, 0, 0, 0};
-			glm::vec3 scale{1.0f};
+			glm::vec3 position = glm::vec3(0.0f);
+			glm::quat rotation = glm::identity<glm::quat>();
+			glm::vec3 scale = glm::vec3(1.0f);
 
-			mutable glm::mat4 cachedWorldMatrix{1.0f};
+			mutable glm::mat4 cachedWorldMatrix = glm::identity<glm::mat4>();
 			mutable bool dirty = true;
 
 		public:

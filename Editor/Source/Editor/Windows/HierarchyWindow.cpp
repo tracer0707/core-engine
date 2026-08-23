@@ -89,7 +89,7 @@ namespace Editor
 		{
 			if (it.first == TAG_SCENE_OBJECT)
 			{
-				Inspector* inspector = new ObjectInspector((Core::Object*)it.second);
+				Inspector* inspector = new ObjectInspector((Core::Object*)it.second, _parent->getEventHandler());
 				inspector->build();
 				layout->addControl(inspector);
 			}

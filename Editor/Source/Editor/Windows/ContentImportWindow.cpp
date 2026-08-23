@@ -130,6 +130,12 @@ namespace Editor
 			importer.importTexture2D(srcFileName, dstFileName, fmt);
 
 			_filesToImport.removeAt(0);
+
+			if (_onImportFinished != nullptr)
+			{
+				_onImportFinished(_filesToImport.count() == 0);
+			}
+
 			importNext();
 		});
 	}
@@ -149,6 +155,12 @@ namespace Editor
 			importer.importMesh(srcFileName, dstFileName);
 
 			_filesToImport.removeAt(0);
+
+			if (_onImportFinished != nullptr)
+			{
+				_onImportFinished(_filesToImport.count() == 0);
+			}
+
 			importNext();
 		});
 	}

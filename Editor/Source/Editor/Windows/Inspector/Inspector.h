@@ -16,10 +16,10 @@ namespace Editor
 	class Inspector : public LinearLayout
 	{
 		protected:
-			Core::EventHandler* getEventHandler();
+			Core::EventHandler* _eventHandler = nullptr;
 
 		public:
-			Inspector();
+			Inspector(Core::EventHandler* eventHandler);
 			virtual ~Inspector();
 
 			virtual void build() = 0;

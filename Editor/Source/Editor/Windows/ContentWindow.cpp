@@ -6,6 +6,7 @@
 #include <Core/System/EventHandler.h>
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/Material.h>
+#include <Core/Content/Mesh.h>
 #include <Core/Content/ContentManager.h>
 #include <Core/Content/ContentDatabase.h>
 
@@ -95,6 +96,10 @@ namespace Editor
 					ContentImportWindow* wnd = (ContentImportWindow*)parent->getWindow(CONTENT_IMPORT_WINDOW);
 					wnd->setVisible(true);
 					wnd->import(fileNames, _currentDir);
+					wnd->setOnImportFinished([this](bool allFinished) {
+						rescanStructure();
+						rescanCurrentDir();
+					});
 				});
 			});
 		});
@@ -122,7 +127,7 @@ namespace Editor
 					_parent->getEventHandler()->addEvent([this, thumbnail]() {
 						_rightPane->removeControl(thumbnail);
 						delete thumbnail;
-						setCurrentDir(_currentDir);
+						rescanCurrentDir();
 					});
 				});
 				_rightPane->addControl(thumbnail);
@@ -158,17 +163,24 @@ namespace Editor
 
 	void ContentWindow::init()
 	{
-		rescanContent();
+		rescanStructure();
 	}
 
-	void ContentWindow::rescanContent()
+	void ContentWindow::rescanStructure()
 	{
 		_treeView->clear();
 		FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, true, false);
 	}
 
+	void ContentWindow::rescanCurrentDir()
+	{
+		setCurrentDir(_currentDir);
+	}
+
 	void ContentWindow::setCurrentDir(Core::String path)
 	{
+		if (path.empty()) return;
+
 		_rightPane->clear();
 		_currentDir = path;
 
@@ -191,6 +203,11 @@ namespace Editor
 			{
 				tex = getIcon(ext);
 				content = _parent->getContentManager()->loadMaterialFromFile(it.generic_string());
+			}
+			else if (ext == ".mesh")
+			{
+				tex = getIcon(ext);
+				content = _parent->getContentManager()->loadMeshFromFile(it.generic_string());
 			}
 			else
 			{
@@ -243,7 +260,7 @@ namespace Editor
 		{
 			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
 				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(TAG_FULL_PATH));
-				MaterialInspector* inspector = new MaterialInspector(mat, _parent->getRenderer());
+				MaterialInspector* inspector = new MaterialInspector(mat, _parent->getRenderer(), _parent->getEventHandler());
 				inspector->build();
 				inspectorWnd->clear();
 				inspectorWnd->addControl(inspector);
@@ -263,7 +280,7 @@ namespace Editor
 		{
 			iconName = "font.png";
 		}
-		else if (ext == ".fbx")
+		else if (ext == ".mesh")
 		{
 			iconName = "mesh.png";
 		}

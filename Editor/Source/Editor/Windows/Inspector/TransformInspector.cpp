@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 
+#include <Core/Components/Transform.h>
 #include <Core/Interface/Transformable.h>
 #include <Core/Math/Mathf.h>
 
@@ -11,10 +12,9 @@
 
 namespace Editor
 {
-	TransformInspector::TransformInspector(Core::Transformable* transform)
+	TransformInspector::TransformInspector(Core::Transformable* transform, Core::EventHandler* eventHandler) : Inspector(eventHandler)
 	{
 		_transform = transform;
-
 		if (_transform == nullptr)
 		{
 			throw std::runtime_error("Object is null");

@@ -30,7 +30,8 @@ namespace Editor
 			Button* _createResourceBtn = nullptr;
 			Button* _importResourceBtn = nullptr;
 
-			void rescanContent();
+			void rescanStructure();
+			void rescanCurrentDir();
 			void setCurrentDir(Core::String path);
 
 			Core::Texture2D* getIcon(Core::String ext);

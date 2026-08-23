@@ -6,23 +6,30 @@
 
 #include <Core/Content/RenderTexture.h>
 #include <Core/Scene/Scene.h>
+#include <Core/Scene/Object.h>
 #include <Core/System/InputManager.h>
 
 #include "../Controls/Dummy.h"
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
 #include "../Controls/LinearLayout.h"
+#include "../Controls/TreeNode.h"
+#include "../Controls/TreeView.h"
 #include "../CameraController.h"
 #include "../ObjectPicker.h"
 
 #include "../Gizmo.h"
+#include "../../Shared/Tags.h"
 
 #include "WindowList.h"
 #include "WindowManager.h"
 #include "ToolWindow.h"
+#include "HierarchyWindow.h"
 
 namespace Editor
 {
+	static Core::Object* createObject(Core::Scene* scene, Core::String name, TreeView* tree);
+
 	SceneWindow::SceneWindow(WindowManager* parent) : Window(parent, SCENE_WINDOW)
 	{
 		_style.paddingX = 0;
@@ -122,9 +129,26 @@ namespace Editor
 
 	void SceneWindow::onDragDrop(DragDropData* data, int x, int y)
 	{
-		if (data->key == "CSG Cube")
+		HierarchyWindow* _hierarchyWindow = (HierarchyWindow*)_parent->getWindow(HIERARCHY_WINDOW);
+
+		if (data->key == "EmptyObject")
 		{
-			
+			createObject(_scene, "Empty Object", _hierarchyWindow->getTreeView());
 		}
+	}
+
+	static Core::Object* createObject(Core::Scene* scene, Core::String name, TreeView* tree)
+	{
+		Core::Object* obj = scene->createObject();
+		obj->setName(name);
+
+		TreeNode* brushNode = tree->createNode();
+		brushNode->setText(name);
+		brushNode->setObjectTag(TAG_SCENE_OBJECT, obj);
+
+		tree->addControl(brushNode);
+		tree->selectNode(brushNode);
+
+		return obj;
 	}
 } // namespace Editor

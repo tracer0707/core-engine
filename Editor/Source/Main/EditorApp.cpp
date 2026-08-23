@@ -42,7 +42,7 @@ namespace Editor
 
 	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Editor", 1366, 768)
 	{
-		_scene = new Core::Scene(_renderer);
+		_scene = new Core::Scene(_renderer, _time);
 
 		_cameraObject = _scene->createObject();
 		_camera = _cameraObject->addComponent<Core::Camera*>();

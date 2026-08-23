@@ -29,25 +29,38 @@ namespace Editor
 
 		addControl(_layoutMain);
 
-		/* Light tool */
+		/* Empty object */
 
-		Button* lightTool = new Button();
-		Core::Texture2D* lightToolImage = TextureUtils::loadCompressed(
+		Button* emptyObject = new Button();
+		Core::Texture2D* emptyObjectImage = TextureUtils::loadCompressed(
+			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/empty.png"), contentMgr);
+		emptyObject->setSize(32, 32);
+		emptyObject->setImage(emptyObjectImage);
+		emptyObject->setDragDropSource(true, "SCENE_OBJECT");
+		emptyObject->setDragDropSourceLabel(Core::String("Empty Object"));
+		emptyObject->setDragDropSourceData(DragDropData({Core::String("EmptyObject"), nullptr}));
+
+		_layoutMain->addControl(emptyObject);
+
+		/* Light object */
+
+		Button* lightObject = new Button();
+		Core::Texture2D* lightObjectImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), contentMgr);
-		lightTool->setSize(32, 32);
-		lightTool->setImage(lightToolImage);
+		lightObject->setSize(32, 32);
+		lightObject->setImage(lightObjectImage);
 
-		_layoutMain->addControl(lightTool);
+		_layoutMain->addControl(lightObject);
 
-		/* Camera tool */
+		/* Camera object */
 
-		Button* cameraTool = new Button();
-		Core::Texture2D* cameraToolImage = TextureUtils::loadCompressed(
+		Button* cameraObject = new Button();
+		Core::Texture2D* cameraObjectImage = TextureUtils::loadCompressed(
 			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"), contentMgr);
-		cameraTool->setSize(32, 32);
-		cameraTool->setImage(cameraToolImage);
+		cameraObject->setSize(32, 32);
+		cameraObject->setImage(cameraObjectImage);
 
-		_layoutMain->addControl(cameraTool);
+		_layoutMain->addControl(cameraObject);
 	}
 
 	ObjectWindow::~ObjectWindow() {}

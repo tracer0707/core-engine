@@ -15,7 +15,7 @@ namespace Editor
 			Core::Object* _object = nullptr;
 			
 		public:
-			ObjectInspector(Core::Object* object);
+			ObjectInspector(Core::Object* object, Core::EventHandler* eventHandler);
 			virtual ~ObjectInspector();
 
 			virtual void build();

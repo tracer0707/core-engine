@@ -15,7 +15,7 @@ namespace Editor
 			Core::Transformable* _transform = nullptr;
 
 		public:
-			TransformInspector(Core::Transformable* transform);
+			TransformInspector(Core::Transformable* transform, Core::EventHandler* eventHandler);
 			virtual ~TransformInspector();
 
 			virtual void build();

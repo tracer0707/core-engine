@@ -7,6 +7,7 @@ namespace Core
 	class Object;
 	class Camera;
 	class Renderer;
+	class Time;
 
 	class Scene
 	{
@@ -14,9 +15,10 @@ namespace Core
 		Renderer* _renderer = nullptr;
 		List<Object*> _objects;
 		Camera* _mainCamera = nullptr;
+		Time* _time = nullptr;
 
 	public:
-		Scene(Renderer* renderer);
+		Scene(Renderer* renderer, Time* time);
 		~Scene();
 
 		List<Object*>& getObjects() { return _objects; }

@@ -5,6 +5,7 @@
 #include "Object.h"
 
 #include "../Math/Mathf.h"
+#include "../System/Time.h"
 #include "../Components/Camera.h"
 #include "../Components/Transform.h"
 #include "../Content/Mesh.h"
@@ -14,9 +15,10 @@
 
 namespace Core
 {
-	Scene::Scene(Renderer* renderer)
+	Scene::Scene(Renderer* renderer, Time* time)
 	{
         _renderer = renderer;
+        _time = time;
 	}
 
 	Scene::~Scene()
@@ -42,7 +44,7 @@ namespace Core
 	{
         if (_mainCamera == nullptr) return;
 
-        float dt = 0.0f;
+        float dt = _time->getDeltaTime();
 
         for (int i = 0; i < _objects.count(); ++i)
         {
