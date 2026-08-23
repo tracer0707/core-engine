@@ -1,5 +1,7 @@
 #include "VertexBuffer.h"
 
+#include <stdexcept>
+
 namespace Core
 {
 	Vertex::Vertex(glm::vec3 position, Color color)
@@ -34,20 +36,68 @@ namespace Core
 		_color = color;
     }
 
-    VertexBuffer& VertexBuffer::operator=(VertexBuffer& left)
+    VertexBuffer::VertexBuffer(uint32_t vao, uint32_t vbo, uint32_t ibo, VertexBufferType type, Vertex* vertexArray, uint32_t vertexArraySize,
+							   uint32_t* indexArray, uint32_t indexArraySize)
     {
-        vbo = left.vbo;
-        ibo = left.ibo;
-        vertexArray = left.vertexArray;
-        vertexArraySize = left.vertexArraySize;
-        indexArray = left.indexArray;
-        indexArraySize = left.indexArraySize;
+		_vao = vao;
+		_vbo = vbo;
+		_ibo = ibo;
 
-        return *this;
+		_type = type;
+
+		if (vertexArray != nullptr)
+		{
+			_vertexArray = new Vertex[vertexArraySize];
+			memcpy(_vertexArray, vertexArray, vertexArraySize * sizeof(Vertex));
+		}
+
+		_vertexArraySize = vertexArraySize;
+		_maxVertexArraySize = vertexArraySize;
+
+		if (indexArray != nullptr)
+		{
+			_indexArray = new uint32_t[indexArraySize];
+			memcpy(_indexArray, indexArray, indexArraySize * sizeof(uint32_t));
+		}
+
+		_indexArraySize = indexArraySize;
+		_maxIndexArraySize = indexArraySize;
     }
 
-    bool VertexBuffer::operator==(VertexBuffer& left)
-    {
-        return vbo == left.vbo && ibo == left.ibo;
-    }
+	VertexBuffer::~VertexBuffer()
+	{
+		if (_vertexArray != nullptr) delete[] _vertexArray;
+		if (_indexArray != nullptr) delete[] _indexArray;
+
+		_vertexArray = nullptr;
+		_indexArray = nullptr;
+		_vertexArraySize = 0;
+		_maxVertexArraySize = 0;
+		_indexArraySize = 0;
+		_maxIndexArraySize = 0;
+	}
+
+	void VertexBuffer::updateVertexArray(Vertex* vertexArray, uint32_t vertexArraySize)
+	{
+		if (vertexArraySize > _maxVertexArraySize) throw std::runtime_error("Buffer exceed limits");
+
+		if (_vertexArray != nullptr) delete[] _vertexArray;
+
+		_vertexArray = new Vertex[vertexArraySize];
+		memcpy(_vertexArray, vertexArray, vertexArraySize * sizeof(Vertex));
+
+		_vertexArraySize = vertexArraySize;
+	}
+
+	void VertexBuffer::updateIndexArray(uint32_t* indexArray, uint32_t indexArraySize)
+	{
+		if (indexArraySize > _maxIndexArraySize) throw std::runtime_error("Buffer exceed limits");
+
+		if (_indexArray != nullptr) delete[] _indexArray;
+
+		_indexArray = new uint32_t[indexArraySize];
+		memcpy(_indexArray, indexArray, indexArraySize * sizeof(uint32_t));
+
+		_indexArraySize = indexArraySize;
+	}
 } // namespace Core

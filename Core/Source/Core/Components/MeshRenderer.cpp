@@ -53,10 +53,6 @@ namespace Core
 		glm::mat4 proj = camera->getProjectionMatrix();
 		glm::mat4 model = transform->getTransformMatrix();
 
-		_renderer->bindBuffer(mesh->getVertexBuffer(),
-							  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
-							  model);
-
 		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 		{
 			SubMesh& subMesh = mesh->getSubMesh(i);
@@ -71,7 +67,11 @@ namespace Core
 				_renderer->bindProgram(nullptr);
 			}
 
-			if (mesh->getVertexBuffer()->indexArraySize > 0)
+			_renderer->bindBuffer(mesh->getVertexBuffer(),
+								  C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view, proj,
+								  model);
+
+			if (mesh->getVertexBuffer()->getIndexArraySize() > 0)
 			{
 				_renderer->drawBufferIndexed(PrimitiveType::Triangle, subMesh.getIndexOffset(), subMesh.getIndexCount());
 			}

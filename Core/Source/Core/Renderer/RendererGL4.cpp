@@ -381,17 +381,7 @@ namespace Core
 
 		glBindVertexArray(0);
 
-		VertexBuffer* buffer = new VertexBuffer();
-		buffer->vao = vao;
-		buffer->vbo = vbo;
-		buffer->ibo = ibo;
-		buffer->type = vertexArray != nullptr ? VertexBufferType::Static : VertexBufferType::Dynamic;
-		buffer->vertexArray = vertexArray;
-		buffer->vertexArraySize = vertexArraySize;
-		buffer->maxVertexArraySize = vertexArraySize;
-		buffer->indexArray = indexArray;
-		buffer->indexArraySize = indexArraySize;
-		buffer->maxIndexArraySize = indexArraySize;
+		VertexBuffer* buffer = new VertexBuffer(vao, vbo, ibo, vertexArray != nullptr ? VertexBufferType::Static : VertexBufferType::Dynamic, vertexArray, vertexArraySize, indexArray, indexArraySize);
 
 		return buffer;
 	}
@@ -400,9 +390,9 @@ namespace Core
 								   unsigned int indexArraySize)
 	{
 		assert(buffer->type == VertexBufferType::Dynamic && "Only dynamic vertex buffers can be updated");
-		assert(vertexArraySize <= buffer->maxVertexArraySize && "Vertex array size exceeds maximum");
+		assert(vertexArraySize <= buffer->getMaxVertexArraySize() && "Vertex array size exceeds maximum");
 
-		glBindBuffer(GL_ARRAY_BUFFER, buffer->vbo);
+		glBindBuffer(GL_ARRAY_BUFFER, buffer->getVbo());
 		void* vptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, vertexArraySize * sizeof(Vertex), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 
 		if (vptr != nullptr)
@@ -410,15 +400,15 @@ namespace Core
 			memcpy(vptr, vertexArray, vertexArraySize * sizeof(Vertex));
 			glUnmapBuffer(GL_ARRAY_BUFFER);
 
-			buffer->vertexArraySize = vertexArraySize;
+			buffer->updateVertexArray(vertexArray, vertexArraySize);
 		}
 
 		if (indexArray != nullptr)
 		{
 			assert(indexArraySize > 0);
-			assert(indexArraySize <= buffer->maxIndexArraySize && "Index array size exceeds maximum");
+			assert(indexArraySize <= buffer->getMaxIndexArraySize() && "Index array size exceeds maximum");
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->ibo);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->getIbo());
 			void* iptr =
 				glMapBufferRange(GL_ELEMENT_ARRAY_BUFFER, 0, indexArraySize * sizeof(unsigned int), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 
@@ -427,7 +417,7 @@ namespace Core
 				memcpy(iptr, indexArray, indexArraySize * sizeof(unsigned int));
 				glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
 
-				buffer->indexArraySize = indexArraySize;
+				buffer->updateIndexArray(indexArray, indexArraySize);
 			}
 		}
 	}
@@ -437,15 +427,19 @@ namespace Core
 		GLint currentVAO;
 		glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &currentVAO);
 
-		if (currentVAO == (GLint)buffer->vao)
+		if (currentVAO == (GLint)buffer->getVao())
 		{
 			glBindVertexArray(0);
 		}
 
-		glDeleteVertexArrays(1, &buffer->vao);
-		glDeleteBuffers(1, &buffer->vbo);
+		uint32_t vao = buffer->getVao();
+		glDeleteVertexArrays(1, &vao);
 
-		if (buffer->ibo != 0) glDeleteBuffers(1, &buffer->ibo);
+		uint32_t vbo = buffer->getVbo();
+		glDeleteBuffers(1, &vbo);
+
+		uint32_t ibo = buffer->getIbo();
+		if (ibo != 0) glDeleteBuffers(1, &ibo);
 
 		delete buffer;
 	}
@@ -479,9 +473,9 @@ namespace Core
 		if (flags & C_DEPTH_NEVER) glDepthFunc(GL_NEVER);
 		if (flags & C_DEPTH_NOTEQUAL) glDepthFunc(GL_NOTEQUAL);
 
-		if (buffer->vao > 0)
+		if (buffer->getVao() > 0)
 		{
-			glBindVertexArray(buffer->vao);
+			glBindVertexArray(buffer->getVao());
 		}
 		else
 		{

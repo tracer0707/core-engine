@@ -67,13 +67,18 @@ namespace Editor
 
 		Core::VertexBuffer* vb = mesh->getVertexBuffer();
 
-		int sz = vb->indexArraySize > 0 ? vb->indexArraySize : vb->vertexArraySize;
+		uint32_t vertexArraySize = vb->getVertexArraySize();
+		uint32_t indexArraySize = vb->getIndexArraySize();
+		Core::Vertex* vertexArray = vb->getVertexArray();
+		uint32_t* indexArray = vb->getIndexArray();
+
+		int sz = indexArraySize > 0 ? indexArraySize : vertexArraySize;
 
 		for (int j = 0; j < sz; j += 3)
 		{
-			Core::Vertex& v1 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j] : j];
-			Core::Vertex& v2 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 1] : j + 1];
-			Core::Vertex& v3 = vb->vertexArray[vb->indexArraySize > 0 ? vb->indexArray[j + 2] : j + 2];
+			Core::Vertex& v1 = vertexArray[indexArraySize > 0 ? indexArray[j] : j];
+			Core::Vertex& v2 = vertexArray[indexArraySize > 0 ? indexArray[j + 1] : j + 1];
+			Core::Vertex& v3 = vertexArray[indexArraySize > 0 ? indexArray[j + 2] : j + 2];
 
 			glm::vec3 p1 = mtx * glm::vec4(v1._position, 1.0f);
 			glm::vec3 p2 = mtx * glm::vec4(v2._position, 1.0f);

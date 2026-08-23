@@ -35,22 +35,39 @@ namespace Core
 
     class VertexBuffer
     {
+		private:
+			unsigned int _vao = 0;
+			unsigned int _vbo = 0;
+			unsigned int _ibo = 0;
+
+			VertexBufferType _type = VertexBufferType::Static;
+
+			Vertex* _vertexArray = nullptr;
+			unsigned int _vertexArraySize = 0;
+			unsigned int _maxVertexArraySize = 0;
+
+			unsigned int* _indexArray = nullptr;
+			unsigned int _indexArraySize = 0;
+			unsigned int _maxIndexArraySize = 0;
+
 		public:
-		    unsigned int vao = 0;
-		    unsigned int vbo = 0;
-		    unsigned int ibo = 0;
+			VertexBuffer(uint32_t vao, uint32_t vbo, uint32_t ibo, VertexBufferType type, Vertex* vertexArray, uint32_t vertexArraySize,
+						 uint32_t* indexArray, uint32_t indexArraySize);
+			~VertexBuffer();
 
-		    VertexBufferType type = VertexBufferType::Static;
+			void updateVertexArray(Vertex* vertexArray, uint32_t vertexArraySize);
+			void updateIndexArray(uint32_t* indexArray, uint32_t indexArraySize);
 
-		    Vertex* vertexArray = nullptr;
-		    unsigned int vertexArraySize = 0;
-		    unsigned int maxVertexArraySize = 0;
+			Vertex* getVertexArray() const { return _vertexArray; }
+			uint32_t getVertexArraySize() const { return _vertexArraySize; }
+			uint32_t getMaxVertexArraySize() const { return _maxVertexArraySize; }
 
-		    unsigned int* indexArray = nullptr;
-		    unsigned int indexArraySize = 0;
-		    unsigned int maxIndexArraySize = 0;
+			uint32_t* getIndexArray() const { return _indexArray; }
+			uint32_t getIndexArraySize() const { return _indexArraySize; }
+			uint32_t getMaxIndexArraySize() const { return _maxIndexArraySize; }
 
-            VertexBuffer& operator=(VertexBuffer& left);
-            bool operator==(VertexBuffer& left);
+			uint32_t getVao() const { return _vao; }
+			uint32_t getVbo() const { return _vbo; }
+			uint32_t getIbo() const { return _ibo; }
     };
 } // namespace Core
