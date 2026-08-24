@@ -1,6 +1,7 @@
 #include "VertexBuffer.h"
 
 #include <stdexcept>
+#include <string.h>
 
 namespace Core
 {
