@@ -43,6 +43,8 @@ namespace Editor
 		if (_meshRenderer->getMaterialCount() > 0)
 		{
 			Collapse* materialsCollapse = new Collapse("Materials");
+			materialsCollapse->setCollapseType(CollapseType::Node);
+
 			Table* materialsTable = new Table();
 			materialsTable->setColumnsCount(2);
 			for (int i = 0; i < _meshRenderer->getMaterialCount(); ++i)

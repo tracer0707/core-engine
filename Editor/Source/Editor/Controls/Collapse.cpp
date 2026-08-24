@@ -19,11 +19,20 @@ namespace Editor
 
 		ImGuiStyle& style = ImGui::GetStyle();
 
-		float header_h = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
 		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		float total_h = header_h;
+		float total_h = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
 
-		bool open = ImGui::CollapsingHeader(_text.std_str().c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+		bool open = false;
+		if (_collapseType == CollapseType::Header)
+		{
+			open = ImGui::CollapsingHeader(_text.std_str().c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+		}
+		else
+		{
+			total_h = ImGui::GetTextLineHeightWithSpacing();
+			open = ImGui::TreeNodeEx(_text.std_str().c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+		}
+
 		if (open)
 		{
 			int i = 0;
@@ -35,6 +44,11 @@ namespace Editor
 			}
 
 			total_h += style.ItemSpacing.y;
+
+			if (_collapseType == CollapseType::Node)
+			{
+				ImGui::TreePop();
+			}
 		}
 
 		_actualWidth = total_w;
