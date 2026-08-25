@@ -181,7 +181,7 @@ namespace Editor
 		}
 	}
 
-	void LinearLayout::updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
+	void LinearLayout::updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize)
 	{
 		float totalWidth = 0.0f;
 		float maxHeight = 0.0f;
@@ -246,14 +246,9 @@ namespace Editor
 				currentX += style.ItemSpacing.x;
 			}
 		}
-
-		if (outSize != nullptr)
-		{
-			*outSize = ImVec2(totalWidth, maxHeight);
-		}
 	}
 
-	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
+	void LinearLayout::updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize)
 	{
 		std::vector<RowInfo> rows;
 		calculateWrappedRows(availableSize.x, rows);
@@ -320,23 +315,9 @@ namespace Editor
 				currentY += style.ItemSpacing.y;
 			}
 		}
-
-		if (outSize != nullptr)
-		{
-			float fullWidth = 0.0f;
-			float fullHeight = 0.0f;
-			for (size_t i = 0; i < rows.size(); ++i)
-			{
-				fullWidth = std::max(fullWidth, rows[i].totalWidth);
-				fullHeight += rows[i].maxHeight;
-				if (i + 1 < rows.size()) fullHeight += style.ItemSpacing.y;
-			}
-
-			*outSize = ImVec2(fullWidth, fullHeight);
-		}
 	}
 
-	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
+	void LinearLayout::updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize)
 	{
 		float totalHeight = 0.0f;
 		float maxWidth = 0.0f;
@@ -401,14 +382,9 @@ namespace Editor
 				currentY += style.ItemSpacing.y;
 			}
 		}
-
-		if (outSize != nullptr)
-		{
-			*outSize = ImVec2(maxWidth, totalHeight);
-		}
 	}
 
-	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize)
+	void LinearLayout::updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize)
 	{
 		std::vector<ColumnInfo> columns;
 		calculateWrappedColumns(availableSize.y, columns);
@@ -475,20 +451,6 @@ namespace Editor
 				currentX += style.ItemSpacing.x;
 			}
 		}
-
-		if (outSize != nullptr)
-		{
-			float fullWidth = 0.0f;
-			float fullHeight = 0.0f;
-			for (size_t i = 0; i < columns.size(); ++i)
-			{
-				fullWidth += columns[i].maxWidth;
-				if (i + 1 < columns.size()) fullWidth += style.ItemSpacing.x;
-				fullHeight = std::max(fullHeight, columns[i].totalHeight);
-			}
-
-			*outSize = ImVec2(fullWidth, fullHeight);
-		}
 	}
 
 	void LinearLayout::update()
@@ -507,9 +469,13 @@ namespace Editor
 		float w = _width;
 		float h = _height;
 
+		float mW = 0.0f;
+		float mH = 0.0f;
+
 		if (_fitWidth == LayoutFitMode::FitContent)
 		{
-			w = getWidth();
+			mW = getWidth();
+			w = mW;
 		}
 		else if (_fitWidth == LayoutFitMode::FitAvailable)
 		{
@@ -518,7 +484,8 @@ namespace Editor
 
 		if (_fitHeight == LayoutFitMode::FitContent)
 		{
-			h = getHeight();
+			mH = getHeight();
+			h = mH;
 		}
 		else if (_fitHeight == LayoutFitMode::FitAvailable)
 		{
@@ -533,7 +500,7 @@ namespace Editor
 
 		if (_fitWidth == LayoutFitMode::FitContent)
 		{
-			availableSize.x = getWidth();
+			availableSize.x = mW;
 		}
 		else if (_fitWidth == LayoutFitMode::FitAvailable)
 		{
@@ -542,35 +509,33 @@ namespace Editor
 
 		if (_fitHeight == LayoutFitMode::FitContent)
 		{
-			availableSize.y = getHeight();
+			availableSize.y = mH;
 		}
 		else if (_fitHeight == LayoutFitMode::FitAvailable)
 		{
 			availableSize.y = ImGui::GetContentRegionAvail().y;
 		}
 
-		ImVec2 finalSize(0, 0);
-
 		if (_direction == LayoutDirection::Horizontal)
 		{
 			if (_wrapMode == LayoutWrapMode::NoWrap)
 			{
-				updateHorizontalLayout(cursorStart, availableSize, &finalSize);
+				updateHorizontalLayout(cursorStart, availableSize);
 			}
 			else
 			{
-				updateHorizontalLayoutWrapped(cursorStart, availableSize, &finalSize);
+				updateHorizontalLayoutWrapped(cursorStart, availableSize);
 			}
 		}
 		else
 		{
 			if (_wrapMode == LayoutWrapMode::NoWrap)
 			{
-				updateVerticalLayout(cursorStart, availableSize, &finalSize);
+				updateVerticalLayout(cursorStart, availableSize);
 			}
 			else
 			{
-				updateVerticalLayoutWrapped(cursorStart, availableSize, &finalSize);
+				updateVerticalLayoutWrapped(cursorStart, availableSize);
 			}
 		}
 

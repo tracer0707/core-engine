@@ -79,10 +79,10 @@ namespace Editor
 			int getVisibleControlsCount() const;
 			void calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows) const;
 			void calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns) const;
-			void updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
-			void updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
-			void updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
-			void updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
+			void updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize);
+			void updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize);
+			void updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize);
+			void updateVerticalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize);
 
 		public:
 			LinearLayout();

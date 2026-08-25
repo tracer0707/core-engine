@@ -32,10 +32,6 @@ namespace Editor
 		return _height == 0.0f ? _actualHeight : _height;
 	}
 
-	void Control::measure() const
-	{
-	}
-
 	void Control::setSize(float width, float height)
 	{
 		_width = width;

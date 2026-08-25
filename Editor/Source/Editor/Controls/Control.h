@@ -73,7 +73,7 @@ namespace Editor
 			float getHeight() const;
 			void setHeight(float value) { _height = value; }
 
-			virtual void measure() const;
+			virtual void measure() const = 0;
 
 			float getPositionX() const { return _computedX; }
 			void setPositionX(float value) { _x = value; }
