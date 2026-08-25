@@ -9,6 +9,12 @@ namespace Editor
 
 	Checkbox::~Checkbox() {}
 
+	void Checkbox::measure() const
+	{
+		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetFrameHeight();
+		_actualHeight = ImGui::GetFrameHeight();
+	}
+
 	void Checkbox::update()
 	{
 		if (!_visible) return;
@@ -24,11 +30,6 @@ namespace Editor
 		}
 
 		bool changed = ImGui::Checkbox((std::string("##") + _id).c_str(), &_value);
-
-		float square_sz = ImGui::GetFrameHeight();
-
-		_actualWidth = (_width > 0.0f) ? _width : square_sz;
-		_actualHeight = square_sz;
 
 		if (changed && _onValueChanged != nullptr)
 		{

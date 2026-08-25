@@ -22,6 +22,7 @@ namespace Editor
 		virtual ~InputText();
 
 		virtual ControlType getControlType() const { return ControlType::InputText; }
+		virtual void measure() const;
 		virtual void update();
 
 		Core::String getValue() const { return _text; }

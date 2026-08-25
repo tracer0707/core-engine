@@ -13,7 +13,69 @@ namespace Editor
 
 	LinearLayout::~LinearLayout() {}
 
-	int LinearLayout::getVisibleControlsCount()
+	void LinearLayout::measure() const
+	{
+		ImVec2 availableSize(
+			_width > 0.0f ? _width : ImGui::GetContentRegionAvail().x,
+			_height > 0.0f ? _height : ImGui::GetContentRegionAvail().y);
+		if (_fitWidth == LayoutFitMode::FitAvailable) availableSize.x = ImGui::GetContentRegionAvail().x;
+		if (_fitHeight == LayoutFitMode::FitAvailable) availableSize.y = ImGui::GetContentRegionAvail().y;
+
+		ImVec2 measuredSize(0.0f, 0.0f);
+		if (_direction == LayoutDirection::Horizontal)
+		{
+			if (_wrapMode == LayoutWrapMode::NoWrap)
+			{
+				for (auto c : _controls) if (c->getVisible())
+				{
+					measuredSize.x += c->getWidth();
+					measuredSize.y = std::max(measuredSize.y, c->getHeight());
+				}
+				int count = getVisibleControlsCount();
+				if (count > 1) measuredSize.x += ImGui::GetStyle().ItemSpacing.x * (count - 1);
+			}
+			else
+			{
+				std::vector<RowInfo> rows;
+				calculateWrappedRows(availableSize.x, rows);
+				for (auto& row : rows)
+				{
+					measuredSize.x = std::max(measuredSize.x, row.totalWidth);
+					measuredSize.y += row.maxHeight;
+				}
+				if (rows.size() > 1) measuredSize.y += ImGui::GetStyle().ItemSpacing.y * (rows.size() - 1);
+			}
+		}
+		else
+		{
+			if (_wrapMode == LayoutWrapMode::NoWrap)
+			{
+				for (auto c : _controls) if (c->getVisible())
+				{
+					measuredSize.y += c->getHeight();
+					measuredSize.x = std::max(measuredSize.x, c->getWidth());
+				}
+				int count = getVisibleControlsCount();
+				if (count > 1) measuredSize.y += ImGui::GetStyle().ItemSpacing.y * (count - 1);
+			}
+			else
+			{
+				std::vector<ColumnInfo> columns;
+				calculateWrappedColumns(availableSize.y, columns);
+				for (auto& column : columns)
+				{
+					measuredSize.x += column.maxWidth;
+					measuredSize.y = std::max(measuredSize.y, column.totalHeight);
+				}
+				if (columns.size() > 1) measuredSize.x += ImGui::GetStyle().ItemSpacing.x * (columns.size() - 1);
+			}
+		}
+
+		_actualWidth = _fitWidth == LayoutFitMode::FitAvailable ? availableSize.x : measuredSize.x;
+		_actualHeight = _fitHeight == LayoutFitMode::FitAvailable ? availableSize.y : measuredSize.y;
+	}
+
+	int LinearLayout::getVisibleControlsCount() const
 	{
 		int cnt = 0;
 		for (auto& control : _controls)
@@ -24,7 +86,7 @@ namespace Editor
 		return cnt;
 	}
 
-	void LinearLayout::calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows)
+	void LinearLayout::calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows) const
 	{
 		rows.clear();
 
@@ -71,7 +133,7 @@ namespace Editor
 		}
 	}
 
-	void LinearLayout::calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns)
+	void LinearLayout::calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns) const
 	{
 		columns.clear();
 
@@ -447,7 +509,7 @@ namespace Editor
 
 		if (_fitWidth == LayoutFitMode::FitContent)
 		{
-			w = _actualWidth;
+			w = getWidth();
 		}
 		else if (_fitWidth == LayoutFitMode::FitAvailable)
 		{
@@ -456,7 +518,7 @@ namespace Editor
 
 		if (_fitHeight == LayoutFitMode::FitContent)
 		{
-			h = _actualHeight;
+			h = getHeight();
 		}
 		else if (_fitHeight == LayoutFitMode::FitAvailable)
 		{
@@ -471,7 +533,7 @@ namespace Editor
 
 		if (_fitWidth == LayoutFitMode::FitContent)
 		{
-			availableSize.x = _actualWidth;
+			availableSize.x = getWidth();
 		}
 		else if (_fitWidth == LayoutFitMode::FitAvailable)
 		{
@@ -480,7 +542,7 @@ namespace Editor
 
 		if (_fitHeight == LayoutFitMode::FitContent)
 		{
-			availableSize.y = _actualHeight;
+			availableSize.y = getHeight();
 		}
 		else if (_fitHeight == LayoutFitMode::FitAvailable)
 		{
@@ -527,7 +589,5 @@ namespace Editor
 		updateDragDropSource();
 		updateDragDropTarget();
 
-		_actualWidth = finalSize.x;
-		_actualHeight = finalSize.y;
 	}
 } // namespace Editor

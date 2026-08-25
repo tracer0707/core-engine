@@ -17,11 +17,10 @@ namespace Editor
 		virtual ~MenuBar();
 
 		virtual ControlType getControlType() const { return ControlType::MenuBar; }
+		virtual void measure() const;
 		virtual void update();
 
 		void setIsMainMenu(bool value) { _isMainMenu = value; }
 		bool getIsMainMenu() const { return _isMainMenu; }
-
-		float getHeight() const { return _height; }
 	};
 }

@@ -12,6 +12,11 @@ namespace Editor
 
 	MenuBar::~MenuBar() {}
 
+	void MenuBar::measure() const
+	{
+		_actualHeight = ImGui::GetFrameHeight();
+	}
+
 	void MenuBar::update()
 	{
 		bool _menu = false;
@@ -22,8 +27,6 @@ namespace Editor
 
 		if (_menu)
 		{
-			_height = ImGui::GetWindowHeight();
-
 			for (auto it : _controls)
 			{
 				it->update();

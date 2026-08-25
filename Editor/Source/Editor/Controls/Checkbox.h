@@ -16,6 +16,7 @@ namespace Editor
 			virtual ~Checkbox();
 
 			virtual ControlType getControlType() const { return ControlType::Checkbox; }
+			virtual void measure() const;
 			virtual void update();
 
 			bool getValue() const { return _value; }

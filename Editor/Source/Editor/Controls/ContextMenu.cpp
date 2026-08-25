@@ -12,6 +12,17 @@ namespace Editor
 
 	ContextMenu::~ContextMenu() {}
 
+	void ContextMenu::measure() const
+	{
+		_actualWidth = _width;
+		_actualHeight = _height;
+		for (auto c : _controls)
+		{
+			_actualWidth = std::max(_actualWidth, c->getWidth());
+			_actualHeight += c->getHeight();
+		}
+	}
+
 	void ContextMenu::update()
 	{
 		if (!_visible) return;

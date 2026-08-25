@@ -17,6 +17,25 @@ namespace Editor
 		_text = text;
 	}
 
+	void Button::measure() const
+	{
+		if (_image != nullptr)
+		{
+			float w = std::max(_width, _imgW);
+			float h = std::max(_height, _imgH);
+			if (_buttonType == ButtonType::Action) w -= 13.0f;
+			if (!_text.empty()) w += ImGui::CalcTextSize(_text.std_str().c_str()).x + 2.0f + _style.paddingX * 2.0f;
+			if (_buttonType == ButtonType::Action) w += 13.0f;
+			_actualWidth = w;
+			_actualHeight = h;
+			return;
+		}
+
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = (_width > 0.0f) ? _width : (ImGui::CalcTextSize(_text.std_str().c_str()).x + style.FramePadding.x * 2.0f);
+		_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeightWithSpacing();
+	}
+
 	Button::Button(Core::Texture2D* image)
 	{
 		_image = image;
@@ -148,17 +167,10 @@ namespace Editor
 				total_size.x += size_arrow.x + 1.0f;
 			}
 
-			_actualWidth = total_size.x;
-			_actualHeight = total_size.y;
 		}
 		else
 		{
 			hasClick = ImGui::Button(_text.std_str().c_str(), ImVec2(_width, _height));
-
-			ImGuiStyle& style = ImGui::GetStyle();
-			ImVec2 text_sz = ImGui::CalcTextSize(_text.std_str().c_str());
-			_actualWidth = (_width > 0.0f) ? _width : (text_sz.x + style.FramePadding.x * 2.0f);
-			_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeightWithSpacing();
 		}
 
 		ImGui::PopStyleVar();

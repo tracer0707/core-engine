@@ -76,9 +76,9 @@ namespace Editor
 
 			std::function<void()> _onClick = nullptr;
 
-			int getVisibleControlsCount();
-			void calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows);
-			void calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns);
+			int getVisibleControlsCount() const;
+			void calculateWrappedRows(float availableWidth, std::vector<RowInfo>& rows) const;
+			void calculateWrappedColumns(float availableHeight, std::vector<ColumnInfo>& columns) const;
 			void updateHorizontalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
 			void updateHorizontalLayoutWrapped(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
 			void updateVerticalLayout(ImVec2 startPos, ImVec2 availableSize, ImVec2* outSize);
@@ -90,6 +90,7 @@ namespace Editor
 			virtual ~LinearLayout();
 
 			virtual ControlType getControlType() const { return ControlType::LinearLayout; }
+			virtual void measure() const;
 			virtual void update();
 
 			void setDirection(LayoutDirection value) { _direction = value; }

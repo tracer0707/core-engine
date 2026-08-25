@@ -12,6 +12,17 @@ namespace Editor
 
 	TreeView::~TreeView() {}
 
+	void TreeView::measure() const
+	{
+		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = 0.0f;
+		for (auto it : _controls)
+		{
+			_actualHeight += it->getHeight();
+			_actualWidth = std::max(_actualWidth, it->getWidth());
+		}
+	}
+
 	void TreeView::update()
 	{
 		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
@@ -24,8 +35,6 @@ namespace Editor
 			if (it->getWidth() > total_w) total_w = it->getWidth();
 		}
 
-		_actualWidth = total_w;
-		_actualHeight = total_h;
 	}
 
 	TreeNode* TreeView::createNode()

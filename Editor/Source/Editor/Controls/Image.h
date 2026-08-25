@@ -21,6 +21,7 @@ namespace Editor
 			virtual ~Image();
 
 			virtual ControlType getControlType() const { return ControlType::Image; }
+			virtual void measure() const;
 			virtual void update();
 
 			void setTexture(Core::Texture2D* value) { texture = value; }

@@ -11,6 +11,12 @@ namespace Editor
 
 	MenuItem::~MenuItem() {}
 
+	void MenuItem::measure() const
+	{
+		_actualWidth = ImGui::CalcTextSize(_text.std_str().c_str()).x + ImGui::GetStyle().FramePadding.x * 2.0f;
+		_actualHeight = ImGui::GetFrameHeight();
+	}
+
 	void MenuItem::update()
 	{
 		if (_controls.count() > 0)

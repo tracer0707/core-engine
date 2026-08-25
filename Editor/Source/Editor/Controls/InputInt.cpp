@@ -9,6 +9,13 @@ namespace Editor
 
 	InputInt::~InputInt() {}
 
+	void InputInt::measure() const
+	{
+		const ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = (_width > 0.0f) ? _width : 100.0f;
+		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
+	}
+
 	void InputInt::update()
 	{
 		if (!_visible) return;
@@ -23,11 +30,8 @@ namespace Editor
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, style.Alpha * 0.35f);
 		}
 
-		ImGui::SetNextItemWidth(_actualWidth);
+		ImGui::SetNextItemWidth(getWidth());
 		ImGui::InputInt((std::string("##") + _id).c_str(), &_value, _step);
-
-		_actualWidth = (_width > 0.0f) ? _width : 100.0f;
-		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
 
 		if (_value != _prevValue && _onValueChanged != nullptr)
 		{

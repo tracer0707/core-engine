@@ -14,26 +14,19 @@ namespace Editor
 
     SplitPanel::~SplitPanel() {}
 
+    void SplitPanel::measure() const
+    {
+        _actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+        _actualHeight = _height > 0.0f ? _height : ImGui::GetContentRegionAvail().y;
+    }
+
     void SplitPanel::update()
     {
         if (!_visible) return;
 
         ImGuiContext& g = *ImGui::GetCurrentContext();
         ImGuiStyle& style = ImGui::GetStyle();
-
-        if (_width > 0.0f)
-			_actualWidth = _width;
-		else
-			_actualWidth = ImGui::GetContentRegionAvail().x;
-
-		if (_height > 0.0f)
-			_actualHeight = _height;
-		else
-		{
-			_actualHeight = ImGui::GetContentRegionAvail().y;
-		}
-        
-        ImGui::BeginChild(_id.c_str(), ImVec2(_width, _height));
+        ImGui::BeginChild(_id.c_str(), ImVec2(getWidth(), getHeight()));
 
         ImGuiWindow* window = g.CurrentWindow;
 

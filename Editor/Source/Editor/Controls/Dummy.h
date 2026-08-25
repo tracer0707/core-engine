@@ -11,6 +11,7 @@ namespace Editor
 			virtual ~Dummy();
 
 			virtual ControlType getControlType() const { return ControlType::Dropdown; }
+			virtual void measure() const;
 			virtual void update();
 	};
 } // namespace Editor

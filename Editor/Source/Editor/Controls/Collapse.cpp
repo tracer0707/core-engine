@@ -13,14 +13,24 @@ namespace Editor
 
 	Collapse::~Collapse() {}
 
+	void Collapse::measure() const
+	{
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
+		for (auto it : _controls)
+		{
+			_actualHeight += it->getHeight();
+			_actualWidth = std::max(_actualWidth, it->getWidth());
+		}
+		if (_controls.count() > 0) _actualHeight += style.ItemSpacing.y;
+	}
+
 	void Collapse::update()
 	{
 		if (!_visible) return;
 
 		ImGuiStyle& style = ImGui::GetStyle();
-
-		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		float total_h = ImGui::GetFontSize() + ImGui::GetStyle().FramePadding.y * 2.0f;
 
 		bool open = false;
 		if (_collapseType == CollapseType::Header)
@@ -29,7 +39,6 @@ namespace Editor
 		}
 		else
 		{
-			total_h = ImGui::GetTextLineHeightWithSpacing();
 			open = ImGui::TreeNodeEx(_text.std_str().c_str(), ImGuiTreeNodeFlags_DefaultOpen);
 		}
 
@@ -39,11 +48,7 @@ namespace Editor
 			for (auto it : _controls)
 			{
 				it->update();
-				total_h += it->getHeight();
-				if (it->getWidth() > total_w) total_w = it->getWidth();
 			}
-
-			total_h += style.ItemSpacing.y;
 
 			if (_collapseType == CollapseType::Node)
 			{
@@ -51,7 +56,5 @@ namespace Editor
 			}
 		}
 
-		_actualWidth = total_w;
-		_actualHeight = total_h;
 	}
 } // namespace Editor

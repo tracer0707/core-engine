@@ -48,6 +48,7 @@ namespace Editor
 			virtual ~Button();
 
 			virtual ControlType getControlType() const { return ControlType::Button; }
+			virtual void measure() const;
 			virtual void update();
 
 			Core::String getText() const { return _text; }

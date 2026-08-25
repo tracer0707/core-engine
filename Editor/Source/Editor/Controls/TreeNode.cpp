@@ -13,6 +13,20 @@ namespace Editor
 		_tree = treeView;
 	}
 
+	void TreeNode::measure() const
+	{
+		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = ImGui::GetTextLineHeightWithSpacing();
+		if (_isNodeOpened)
+		{
+			for (auto it : _controls)
+			{
+				_actualHeight += it->getHeight();
+				_actualWidth = std::max(_actualWidth, it->getWidth());
+			}
+		}
+	}
+
 	TreeNode::~TreeNode()
 	{
 		_tree = nullptr;
@@ -60,8 +74,6 @@ namespace Editor
 			ImGui::TreePop();
 		}
 
-		_actualWidth = total_w;
-		_actualHeight = total_h;
 	}
 
 	void TreeNode::open(bool openChildren)

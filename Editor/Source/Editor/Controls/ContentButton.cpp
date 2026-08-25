@@ -22,6 +22,18 @@ namespace Editor
 		_image = image;
 	}
 
+	void ContentButton::measure() const
+	{
+		if (_image == nullptr) return;
+		ImGuiStyle& style = ImGui::GetStyle();
+		ImVec2 padding = style.FramePadding;
+		std::string label = getContentName().std_str();
+		float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0.0f;
+		ImVec2 textSize = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
+		_actualWidth = _width == 0 ? _image->getWidth() + padding.x * 2.0f : _width;
+		_actualHeight = _height == 0 ? _image->getHeight() + spacing + textSize.y + padding.y * 2.0f : _height;
+	}
+
 	ContentButton::~ContentButton()
 	{
 		setUseContextMenu(false);
@@ -82,8 +94,8 @@ namespace Editor
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.35f);
 		}
 
-		float w = _width;
-		float h = _height;
+		float w = getWidth();
+		float h = getHeight();
 
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 padding = style.FramePadding;
@@ -93,8 +105,6 @@ namespace Editor
 		float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0;
 		ImVec2 text_size = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
 
-		if (w == 0) w = _image->getWidth() + padding.x * 2.0f;
-		if (h == 0) h = _image->getHeight() + spacing + text_size.y + padding.y * 2.0f;
 
 		ImVec2 imgSize(w - padding.x * 2.0f, h - spacing - text_size.y - padding.y * 2.0f);
 
@@ -186,11 +196,7 @@ namespace Editor
 			}
 			ImGui::SetCursorPos(cur);
 		}
-
-		_actualWidth = total_size.x;
-		_actualHeight = total_size.y;
-
-		ImGui::PopStyleVar();
+	ImGui::PopStyleVar();
 
 		if (!_style.enabled)
 		{

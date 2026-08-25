@@ -30,6 +30,7 @@ namespace Editor
 			void setCollapseType(CollapseType value) { _collapseType = value; }
 
 			virtual ControlType getControlType() const { return ControlType::Collapse; }
+			virtual void measure() const;
 			virtual void update();
 	};
 } // namespace Editor

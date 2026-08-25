@@ -23,6 +23,7 @@ namespace Editor
 		~MenuItem();
 
 		virtual ControlType getControlType() const { return ControlType::MenuItem; }
+		virtual void measure() const;
 		virtual void update();
 
 		Core::String getText() const { return _text; }

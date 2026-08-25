@@ -17,23 +17,20 @@ namespace Editor
 
 	Image::~Image() {}
 
+	void Image::measure() const
+	{
+		_actualWidth = _width == 0 ? ImGui::GetContentRegionAvail().x : _width;
+		_actualHeight = _height == 0 ? ImGui::GetContentRegionAvail().y : _height;
+	}
+
 	void Image::update()
 	{
 		if (!_visible) return;
 
-		float w = _width;
-		float h = _height;
-
-		if (w == 0) w = ImGui::GetContentRegionAvail().x;
-		if (h == 0) h = ImGui::GetContentRegionAvail().y;
-
 		unsigned int texId = nativeTextureId;
 		if (texture != nullptr) texId = texture->getNativeId();
 
-		ImGui::Image((ImTextureID)(intptr_t)texId, ImVec2(w, h), ImVec2(0, 1), ImVec2(1, 0));
-
-		_actualWidth = w;
-		_actualHeight = h;
+		ImGui::Image((ImTextureID)(intptr_t)texId, ImVec2(getWidth(), getHeight()), ImVec2(0, 1), ImVec2(1, 0));
 
 		updateDragDropSource();
 		updateDragDropTarget();

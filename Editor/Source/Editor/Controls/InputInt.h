@@ -18,6 +18,7 @@ namespace Editor
 			virtual ~InputInt();
 
 			virtual ControlType getControlType() const { return ControlType::InputInt; }
+			virtual void measure() const;
 			virtual void update();
 
 			int getValue() const { return _value; }

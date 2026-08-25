@@ -19,6 +19,13 @@ namespace Editor
 
 	}
 
+	void ContentSelect::measure() const
+	{
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = _height > 0.0f ? _height : ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
+	}
+
 	Core::String ContentSelect::getContentName() const
 	{
 		if (_content != nullptr)
@@ -39,8 +46,8 @@ namespace Editor
 
 		Core::String label = getContentName();
 
-		float w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		float h = (_height > 0.0f) ? _height : ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
+		float w = getWidth();
+		float h = getHeight();
 
 		ImVec2 total_size(w, h);
 
@@ -71,7 +78,5 @@ namespace Editor
 			ImGui::EndDragDropTarget();
 		}
 
-		_actualWidth = total_size.x;
-		_actualHeight = total_size.y;
 	}
 } // namespace Editor

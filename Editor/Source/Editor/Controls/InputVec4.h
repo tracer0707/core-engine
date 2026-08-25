@@ -19,6 +19,7 @@ namespace Editor
 			virtual ~InputVec4();
 
 			virtual ControlType getControlType() const { return ControlType::InputVec4; }
+			virtual void measure() const;
 			virtual void update();
 
 			glm::vec4 getValue() const { return _value; }

@@ -22,6 +22,7 @@ namespace Editor
 			virtual ~SplitPanel();
 
 			virtual ControlType getControlType() const { return ControlType::SplitPanel; }
+			virtual void measure() const;
 			virtual void update();
 	};
 } // namespace Editor

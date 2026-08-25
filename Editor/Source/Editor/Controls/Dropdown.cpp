@@ -11,6 +11,14 @@ namespace Editor
 
 	Dropdown::~Dropdown() {}
 
+	void Dropdown::measure() const
+	{
+		Core::String preview_value = _items[current_item_index];
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = (_width > 0.0f) ? _width : (ImGui::CalcTextSize(preview_value.std_str().c_str()).x + style.FramePadding.x * 2.0f);
+		_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeight();
+	}
+
 	void Dropdown::update()
 	{
 		if (!_visible) return;
@@ -36,9 +44,5 @@ namespace Editor
 			ImGui::EndCombo();
 		}
 
-		ImGuiStyle& style = ImGui::GetStyle();
-		ImVec2 text_sz = ImGui::CalcTextSize(preview_value.std_str().c_str());
-		_actualWidth = (_width > 0.0f) ? _width : (text_sz.x + style.FramePadding.x * 2.0f);
-		_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeight();
 	}
 } // namespace Editor

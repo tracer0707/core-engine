@@ -30,6 +30,7 @@ namespace Editor
 
 		public:
 			virtual ControlType getControlType() const { return ControlType::TreeNode; }
+			virtual void measure() const;
 			virtual void update();
 
 			void setText(Core::String value) { _text = value; }

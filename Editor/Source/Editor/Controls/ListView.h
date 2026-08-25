@@ -20,6 +20,7 @@ namespace Editor
 		virtual ~ListView();
 
 		virtual ControlType getControlType() const { return ControlType::ListView; }
+		virtual void measure() const;
 		virtual void update();
 
 		void setOnSelectionChanged(std::function<void(Core::List<Control*>&)> callback) { _onSelectionChanged = callback; }

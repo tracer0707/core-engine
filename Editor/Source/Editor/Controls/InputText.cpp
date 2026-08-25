@@ -10,6 +10,13 @@ namespace Editor
 
 	InputText::~InputText() {}
 
+	void InputText::measure() const
+	{
+		const ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
+	}
+
 	void InputText::update()
 	{
 		if (!_visible) return;
@@ -26,9 +33,6 @@ namespace Editor
 
 		ImGui::SetNextItemWidth(_width);
 		ImGui::InputText((std::string("##") + _id).c_str(), &_text);
-
-		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		_actualHeight = ImGui::GetFontSize() + style.FramePadding.y * 2.0f;
 
 		if (_text != _prevText && _onValueChanged != nullptr)
 		{

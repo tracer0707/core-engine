@@ -19,6 +19,7 @@ namespace Editor
 			virtual ~ContextMenu();
 
 			virtual ControlType getControlType() const { return ControlType::ContextMenu; }
+			virtual void measure() const;
 			virtual void update();
 
 			void open();

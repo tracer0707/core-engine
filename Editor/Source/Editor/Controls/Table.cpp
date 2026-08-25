@@ -16,6 +16,21 @@ namespace Editor
 
 	Table::~Table() {}
 
+	void Table::measure() const
+	{
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = 0.0f;
+		for (int i = 0; i < _controls.count(); i += _colCount)
+		{
+			float rowMax = 0.0f;
+			for (int j = 0; j < _colCount && i + j < _controls.count(); ++j)
+				rowMax = std::max(rowMax, _controls[i + j]->getHeight());
+			_actualHeight += rowMax;
+		}
+		_actualHeight += style.CellPadding.y * 2.0f * (float)(_controls.count() / _colCount);
+	}
+
 	void Table::update()
 	{
 		if (!_visible) return;
@@ -43,24 +58,5 @@ namespace Editor
 
 			ImGui::EndTable();
 		}
-
-		ImGuiStyle& style = ImGui::GetStyle();
-
-		float total_w = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		float total_h = 0.0f;
-		
-		for (int i = 0; i < _controls.count(); i += _colCount)
-		{
-			float rowMax = 0.0f;
-			for (int j = 0; j < _colCount; ++j)
-			{
-				Control* c = _controls[i + j];
-				rowMax = std::max(rowMax, c->getHeight());
-			}
-			total_h += rowMax;
-		}
-
-		_actualWidth = total_w;
-		_actualHeight = total_h + (style.CellPadding.y * 2.0f) * ((float)(_controls.count() / _colCount));
 	}
 } // namespace Editor

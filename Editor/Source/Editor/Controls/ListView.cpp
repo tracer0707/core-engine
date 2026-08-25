@@ -13,6 +13,20 @@ namespace Editor
 	{
 	}
 
+	void ListView::measure() const
+	{
+		ImGuiStyle& style = ImGui::GetStyle();
+		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		if (_height > 0.0f)
+		{
+			_actualHeight = _height;
+			return;
+		}
+		_actualHeight = 0.0f;
+		for (auto it : _controls) _actualHeight += it->getHeight();
+		if (_controls.count() > 1) _actualHeight += style.ItemSpacing.y * (_controls.count() - 1);
+	}
+
 	void ListView::selectItem(Control* value, bool byUser)
 	{
 		_selectedItems.clear();
@@ -66,25 +80,5 @@ namespace Editor
 
 		ImGui::EndChild();
 
-		ImGuiStyle& style = ImGui::GetStyle();
-		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-
-		if (_height > 0.0f)
-		{
-			_actualHeight = _height;
-		}
-		else
-		{
-			float total_h = 0.0f;
-			for (auto it : _controls)
-			{
-				total_h += it->getHeight();
-			}
-			
-			if (_controls.count() > 1)
-				total_h += style.ItemSpacing.y * (_controls.count() - 1);
-
-			_actualHeight = total_h;
-		}
 	}
 }

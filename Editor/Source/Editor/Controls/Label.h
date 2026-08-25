@@ -20,6 +20,7 @@ namespace Editor
 		void setText(Core::String value) { _text = value; }
 
 		virtual ControlType getControlType() const { return ControlType::Label; }
+		virtual void measure() const;
 		virtual void update();
 	};
 }

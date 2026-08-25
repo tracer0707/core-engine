@@ -9,6 +9,12 @@ namespace Editor
 
 	InputVec4::~InputVec4() {}
 
+	void InputVec4::measure() const
+	{
+		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
+		_actualHeight = ImGui::GetFrameHeight();
+	}
+
 	void InputVec4::update()
 	{
 		if (!_visible) return;
@@ -22,9 +28,6 @@ namespace Editor
 		}
 
 		ImGui::InputFloat4((std::string("##") + _id).c_str(), &_value[0]);
-
-		_actualWidth = (_width > 0.0f) ? _width : ImGui::GetContentRegionAvail().x;
-		_actualHeight = ImGui::GetFrameHeight();
 
 		if (_value != _prevValue && _onValueChanged != nullptr)
 		{

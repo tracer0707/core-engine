@@ -30,6 +30,7 @@ namespace Editor
 			void setSelectedIndex(int value) { current_item_index = value; }
 
 			virtual ControlType getControlType() const { return ControlType::Dropdown; }
+			virtual void measure() const;
 			virtual void update();
 	};
 } // namespace Editor

@@ -15,6 +15,7 @@ namespace Editor
 			virtual ~Table();
 
 			virtual ControlType getControlType() const { return ControlType::Table; }
+			virtual void measure() const;
 			virtual void update();
 
 			bool getColumnsCount() const { return _colCount; }

@@ -8,6 +8,12 @@ namespace Editor
 
 	Dummy::~Dummy() {}
 
+	void Dummy::measure() const
+	{
+		_actualWidth = _width;
+		_actualHeight = _height;
+	}
+
 	void Dummy::update()
 	{
 		if (!_visible) return;

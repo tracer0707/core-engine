@@ -22,12 +22,18 @@ namespace Editor
 
 	float Control::getWidth() const
 	{
+		measure();
 		return _width == 0.0f ? _actualWidth : _width;
 	}
 
 	float Control::getHeight() const
 	{
+		measure();
 		return _height == 0.0f ? _actualHeight : _height;
+	}
+
+	void Control::measure() const
+	{
 	}
 
 	void Control::setSize(float width, float height)

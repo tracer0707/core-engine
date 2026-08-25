@@ -29,6 +29,7 @@ namespace Editor
 			virtual ~InputFloat();
 
 			virtual ControlType getControlType() const { return ControlType::InputFloat; }
+			virtual void measure() const;
 			virtual void update();
 
 			float getValue() const { return _value; }
