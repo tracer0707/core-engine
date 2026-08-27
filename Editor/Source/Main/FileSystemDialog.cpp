@@ -7,6 +7,7 @@
 #include <Core/Shared/Path.h>
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
+#include <Core/System/EventHandler.h>
 
 #include "../Utils/FileSystemUtils.h"
 #include "../Shared/IconsForkAwesome.h"
@@ -20,10 +21,13 @@
 #include "../Editor/Controls/TreeNode.h"
 #include "../Editor/Controls/Label.h"
 
+namespace fs = std::filesystem;
+
 namespace Editor
 {
-	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title) : Core::Window(app, title, 800, 400)
+	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title, FileSystemDialogType dialogType) : Core::Window(app, title, 800, 400)
 	{
+		_dialogType = dialogType;
 		_mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
 
 		ImGuiIO& io = ImGui::GetIO();
@@ -66,9 +70,8 @@ namespace Editor
 		_selectedPath = new InputText();
 		_selectedPath->setWidth(200.0f);
 		_selectedCount = new Label();
-		_selectedCount->setVisible(false);
 
-		Button* okBtn = new Button("OK");
+		Button* okBtn = new Button(dialogType == FileSystemDialogType::Save ? "Save" : "Open");
 		Button* cancelBtn = new Button("Cancel");
 
 		okBtn->setSize(100, 24.0f);
@@ -76,8 +79,8 @@ namespace Editor
 
 		okBtn->setEnabled(false);
 
-		_bottomLayout->addControl(_selectedPath);
 		_bottomLayout->addControl(_selectedCount);
+		_bottomLayout->addControl(_selectedPath);
 		_bottomLayout->addControl(okBtn);
 		_bottomLayout->addControl(cancelBtn);
 
@@ -90,16 +93,47 @@ namespace Editor
 		_treeView->setOnSelectionChanged([this, okBtn](Core::List<TreeNode*> lst) {
 			if (!_multiple)
 			{
-				if (lst.count() > 0)
+				_eventHandler->addEvent([this, lst, okBtn]()
 				{
-					_selectedPath->setValue(lst.get(0)->getStringTag(TAG_FULL_PATH));
-					okBtn->setEnabled(true);
-				}
-				else
-				{
-					_selectedPath->setValue(Core::String::Empty);
-					okBtn->setEnabled(false);
-				}
+					if (lst.count() > 0)
+					{
+						if (_dialogType == FileSystemDialogType::Open)
+						{
+							_selectedPath->setValue(lst.get(0)->getStringTag(TAG_FULL_PATH));
+						}
+						else
+						{
+							Core::String path = lst.get(0)->getStringTag(TAG_FULL_PATH);
+							auto _path = fs::path(path.std_str());
+
+							if (!fs::is_directory(_path))
+							{
+								Core::String dirPath = _path.parent_path().generic_string();
+								if (!dirPath.endsWith("/")) dirPath += "/";
+								_selectedCount->setText(dirPath);
+								_selectedPath->setValue(_path.filename().generic_string());
+							}
+							else
+							{
+								if (!path.endsWith("/")) path += "/";
+								_selectedCount->setText(path);
+								okBtn->setEnabled(!_selectedPath->getValue().empty());
+							}
+						}
+					}
+					else
+					{
+						if (_dialogType == FileSystemDialogType::Open)
+						{
+							_selectedPath->setValue(Core::String::Empty);
+						}
+						else
+						{
+							_selectedCount->setText(Core::String::Empty);
+							okBtn->setEnabled(false);
+						}
+					}
+				});
 			}
 			else
 			{
@@ -145,15 +179,38 @@ namespace Editor
 		_selectedPath->setOnValueChanged([this, okBtn](Core::String value) {
 			if (_multiple) return;
 
-			auto path = std::filesystem::path(value.std_str());
-			bool _exists = std::filesystem::exists(path);
-			if (_showFiles)
+			if (_dialogType == FileSystemDialogType::Open)
 			{
-				okBtn->setEnabled(_exists && !std::filesystem::is_directory(path));
+				if (_selectedPath->getValue() == Core::String::Empty)
+				{
+					okBtn->setEnabled(false);
+					return;
+				}
+
+				auto path = std::filesystem::path(value.std_str());
+				bool _exists = std::filesystem::exists(path);
+				if (_showFiles)
+				{
+					okBtn->setEnabled(_exists && !std::filesystem::is_directory(path));
+				}
+				else
+				{
+					okBtn->setEnabled(_exists && std::filesystem::is_directory(path));
+				}
 			}
 			else
 			{
-				okBtn->setEnabled(_exists && std::filesystem::is_directory(path));
+				if (_selectedCount->getText().empty()) return;
+				if (_selectedPath->getValue().empty())
+				{
+					okBtn->setEnabled(false);
+					return;
+				}
+
+				auto path = std::filesystem::path(Core::Path::combine(_selectedCount->getText(), value).std_str());
+				bool _exists = std::filesystem::exists(path);
+
+				okBtn->setEnabled(!_exists);
 			}
 		});
 
@@ -164,9 +221,23 @@ namespace Editor
 			{
 				if (!_multiple)
 				{
-					if (_selectedPath->getValue() != Core::String::Empty)
+					if (_dialogType == FileSystemDialogType::Open)
 					{
-						_onPathSelected({_selectedPath->getValue()});
+						if (_selectedPath->getValue() != Core::String::Empty)
+						{
+							_onPathSelected({_selectedPath->getValue()});
+						}
+					}
+					else
+					{
+						Core::String _left = _selectedCount->getText();
+						Core::String _right = _selectedPath->getValue();
+
+						if (!_left.empty() && !_right.empty())
+						{
+							auto path = std::filesystem::path(Core::Path::combine(_left, _right).std_str());
+							_onPathSelected({path.generic_string()});
+						}
 					}
 				}
 				else if (!_selected.isEmpty())
@@ -196,10 +267,17 @@ namespace Editor
 
 	void FileSystemDialog::setIsMultiple(bool value)
 	{
+		if (_dialogType == FileSystemDialogType::Save)
+		{
+			_multiple = false;
+			return;
+		}
 		_multiple = value;
+		_selected.clear();
 		_treeView->setSelectMultiple(value);
 		_selectedPath->setVisible(!_multiple);
-		_selectedCount->setVisible(_multiple);
+		_selectedPath->setValue(Core::String::Empty);
+		_selectedCount->setText(Core::String::Empty);
 	}
 
 	void FileSystemDialog::rescanFs()

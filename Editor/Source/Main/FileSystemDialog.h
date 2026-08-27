@@ -15,6 +15,12 @@ namespace Editor
 	class InputText;
 	class Label;
 
+	enum class FileSystemDialogType
+	{
+		Open,
+		Save
+	};
+
 	class FileSystemDialog : public Core::Window
 	{
 		private:
@@ -26,6 +32,8 @@ namespace Editor
 			TreeView* _treeView = nullptr;
 			InputText* _selectedPath = nullptr;
 			Label* _selectedCount = nullptr;
+			
+			FileSystemDialogType _dialogType = FileSystemDialogType::Open;
 
 			bool _showFiles = true;
 			bool _multiple = false;
@@ -39,13 +47,13 @@ namespace Editor
 			virtual void update();
 
 		public:
-			FileSystemDialog(Core::Application* app, Core::String title);
+			FileSystemDialog(Core::Application* app, Core::String title, FileSystemDialogType dialogType);
 			virtual ~FileSystemDialog();
 
-			bool getShowFiles() { return _showFiles; }
+			bool getShowFiles() const { return _showFiles; }
 			void setShowFiles(bool value);
 
-			bool getIsMultiple() { return _multiple; }
+			bool getIsMultiple() const { return _multiple; }
 			void setIsMultiple(bool value);
 
 			void setOnPathSelected(std::function<void(Core::List<Core::String>)> value) { _onPathSelected = value; }

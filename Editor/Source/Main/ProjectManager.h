@@ -31,10 +31,12 @@ namespace Editor
 					FullscreenWindow* _wnd = nullptr;
 					FileSystemDialog* _fsDlg = nullptr;
 
+					void openOrCreateProjectDlg(bool open);
+
 					virtual void update();
 			};
 
-			Core::String _selectedProject = "";
+			Core::String _selectedProject = Core::String::Empty;
 
 			Font* _mainFont = nullptr;
 			MainWindow* _wnd = nullptr;

@@ -15,6 +15,7 @@
 #include "../Editor/Controls/Label.h"
 #include "../Editor/Controls/Button.h"
 #include "../Editor/Controls/ListView.h"
+#include "../Editor/Controls/Separator.h"
 
 #include "../Serialization/RecentProjectList.h"
 
@@ -47,9 +48,11 @@ namespace Editor
 		_listLayout->setWrapMode(LayoutWrapMode::NoWrap);
 		_listLayout->setFitWidth(LayoutFitMode::FitAvailable);
 
+		Button* _createBtn = new Button("Create project");
 		Button* _openBtn = new Button("Open project");
 		Button* _quitBtn = new Button("Quit");
 
+		_createBtn->setSize(100.0f, 24.0f);
 		_openBtn->setSize(100.0f, 24.0f);
 		_quitBtn->setSize(100.0f, 24.0f);
 
@@ -77,33 +80,18 @@ namespace Editor
 			app->stop(false);
 		});
 
+		_layout->addControl(_createBtn);
 		_layout->addControl(_openBtn);
 		_layout->addControl(_quitBtn);
 
 		_listLayout->addControl(listView);
 
+		_createBtn->setOnClick([this, app]() {
+			app->getEventHandler()->addEvent([this, app] { openOrCreateProjectDlg(false); });
+		});
+
 		_openBtn->setOnClick([this, app]() {
-			app->getEventHandler()->addEvent([this, app] {
-				if (_fsDlg != nullptr) return;
-
-				_fsDlg = new FileSystemDialog(app, "Open Project");
-				_fsDlg->setShowFiles(false);
-
-				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
-
-				_fsDlg->setOnPathSelected([this, app](Core::List<Core::String> fileNames) {
-					app->initProject(fileNames[0]);
-					app->setSelectedProject(fileNames[0]);
-
-					if (!Serialization::RecentProjectList::getProjectList().contains(fileNames[0]))
-					{
-						Serialization::RecentProjectList::getProjectList().add(fileNames[0]);
-						Serialization::RecentProjectList::save();
-					}
-
-					app->stop(false);
-				});
-			});
+			app->getEventHandler()->addEvent([this, app] { openOrCreateProjectDlg(true); });
 		});
 
 		_quitBtn->setOnClick([app]() { app->stop(true); });
@@ -113,6 +101,32 @@ namespace Editor
 
 		_wnd = new FullscreenWindow();
 		_wnd->addControl(_mainLayout);
+	}
+
+	void ProjectManager::MainWindow::openOrCreateProjectDlg(bool open)
+	{
+		if (_fsDlg != nullptr) return;
+
+		Core::String dlgTitle = open ? "Open Project" : "Create Project";
+		FileSystemDialogType dlgType = open ? FileSystemDialogType::Open : FileSystemDialogType::Save;
+
+		_fsDlg = new FileSystemDialog(_application, dlgTitle, dlgType);
+		_fsDlg->setShowFiles(false);
+
+		_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
+
+		_fsDlg->setOnPathSelected([this](Core::List<Core::String> fileNames) {
+			((ProjectManager*)_application)->initProject(fileNames[0]);
+			((ProjectManager*)_application)->setSelectedProject(fileNames[0]);
+
+			if (!Serialization::RecentProjectList::getProjectList().contains(fileNames[0]))
+			{
+				Serialization::RecentProjectList::getProjectList().add(fileNames[0]);
+				Serialization::RecentProjectList::save();
+			}
+
+			((ProjectManager*)_application)->stop(false);
+		});
 	}
 
 	ProjectManager::MainWindow::~MainWindow()
