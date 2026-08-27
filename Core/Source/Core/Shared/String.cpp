@@ -91,6 +91,20 @@ namespace Core
 		return _buffer.isEmpty();
 	}
 
+	String String::toLower()
+	{
+		String result;
+		result._buffer = icu::UnicodeString(_buffer.toLower());
+		return result;
+	}
+
+	String String::toUpper()
+	{
+		String result;
+		result._buffer = icu::UnicodeString(_buffer.toUpper());
+		return result;
+	}
+
 	String String::replace(char src, char dst)
 	{
 		String s;

@@ -42,6 +42,8 @@ namespace Core
 			bool endsWith(char val) const;
 			bool endsWith(Core::String val) const;
 			bool empty() const;
+			String toLower();
+			String toUpper();
 	};
 } // namespace Core
 
