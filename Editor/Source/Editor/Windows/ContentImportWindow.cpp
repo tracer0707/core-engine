@@ -93,13 +93,18 @@ namespace Editor
 
 		_importLayout->clear();
 
-		if (std::find(image_extensions.begin(), image_extensions.end(), path.extension().generic_string()) != image_extensions.end())
+		if (std::find(image_extensions.begin(), image_extensions.end(), Core::String(path.extension().generic_string()).toLower().std_str()) != image_extensions.end())
 		{
 			prepareTextureLayout();
 		}
-		else if (std::find(mesh_extensions.begin(), mesh_extensions.end(), path.extension().generic_string()) != mesh_extensions.end())
+		else if (std::find(mesh_extensions.begin(), mesh_extensions.end(), Core::String(path.extension().generic_string()).toLower().std_str()) != mesh_extensions.end())
 		{
 			prepareMeshLayout();
+		}
+		else
+		{
+			_filesToImport.removeAt(0);
+			importNext();
 		}
 	}
 
