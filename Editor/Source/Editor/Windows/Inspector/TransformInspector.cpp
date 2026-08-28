@@ -2,8 +2,7 @@
 
 #include <stdexcept>
 
-#include <Core/Components/Transform.h>
-#include <Core/Interface/Transformable.h>
+#include <Core/Interface/Transform.h>
 #include <Core/Math/Mathf.h>
 
 #include "../../Controls/Table.h"
@@ -12,7 +11,7 @@
 
 namespace Editor
 {
-	TransformInspector::TransformInspector(Core::Transformable* transform, Core::EventHandler* eventHandler) : Inspector(eventHandler)
+	TransformInspector::TransformInspector(Core::Transform* transform, Core::EventHandler* eventHandler) : Inspector(eventHandler)
 	{
 		_transform = transform;
 		if (_transform == nullptr)

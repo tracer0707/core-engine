@@ -16,7 +16,7 @@
 
 #include "../../Shared/Tags.h"
 
-#include <Core/Components/Transform.h>
+#include <Core/Interface/Transform.h>
 #include <Core/Scene/Object.h>
 
 namespace Editor
@@ -41,7 +41,7 @@ namespace Editor
 			{
 				TreeNode* node = selected.get(0);
 
-				Core::Transformable* transform = nullptr;
+				Core::Transform* transform = nullptr;
 
 				Core::Object* obj = (Core::Object*)node->getObjectTag(TAG_SCENE_OBJECT);
 

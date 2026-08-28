@@ -1,9 +1,9 @@
 #include "Rendering.h"
 
+#include <Core/Interface/Transform.h>
 #include <Core/Renderer/Color.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Primitives.h>
-#include <Core/Components/Transform.h>
 #include <Core/Components/Camera.h>
 #include <Core/Scene/Object.h>
 
@@ -15,7 +15,7 @@ namespace Editor
 		Core::Color xColor = Core::Color(0.8f, 0.0f, 0.0f, 0.8f);
 		Core::Color zColor = Core::Color(0.0f, 0.0f, 0.8f, 0.8f);
 
-		Core::Transform* t = camera->getOwner()->findComponent<Core::Transform*>();
+		Core::Transform* t = camera->getOwner()->getTransform();
 		glm::vec3 camPos = t->getPosition();
 
 		Core::List<Core::Vertex> verts1;

@@ -4,7 +4,7 @@
 
 namespace Core
 {
-	class Transformable;
+	class Transform;
 } // namespace Core
 
 namespace Editor
@@ -12,10 +12,10 @@ namespace Editor
 	class TransformInspector : public Inspector
 	{
 		private:
-			Core::Transformable* _transform = nullptr;
+			Core::Transform* _transform = nullptr;
 
 		public:
-			TransformInspector(Core::Transformable* transform, Core::EventHandler* eventHandler);
+			TransformInspector(Core::Transform* transform, Core::EventHandler* eventHandler);
 			virtual ~TransformInspector();
 
 			virtual void build();

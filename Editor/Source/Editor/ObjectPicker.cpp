@@ -5,7 +5,6 @@
 #include <Core/Scene/Object.h>
 #include <Core/Scene/Scene.h>
 #include <Core/Components/Camera.h>
-#include <Core/Components/Transform.h>
 #include <Core/System/InputManager.h>
 #include <Core/Renderer/VertexBuffer.h>
 

@@ -22,8 +22,8 @@ namespace Core
 		~Object();
 
 		Renderer* _renderer = nullptr;
-		List<Component*> _components;
 		Transform* _transform = nullptr;
+		List<Component*> _components;
 		String _name = String::Empty;
 		BitSet _flags;
 
@@ -65,12 +65,6 @@ namespace Core
 		return (MeshRenderer*)addComponent(ComponentType::MeshRenderer);
 	}
 
-	template <>
-	inline Transform* Object::addComponent<Transform*>()
-	{
-		return (Transform*)addComponent(ComponentType::Transform);
-	}
-
 	/* FIND */
 	template <>
 	inline Camera* Object::findComponent<Camera*>() const
@@ -82,11 +76,5 @@ namespace Core
 	inline MeshRenderer* Object::findComponent<MeshRenderer*>() const
 	{
 		return (MeshRenderer*)findComponent(ComponentType::MeshRenderer);
-	}
-
-	template <>
-	inline Transform* Object::findComponent<Transform*>() const
-	{
-		return (Transform*)findComponent(ComponentType::Transform);
 	}
 } // namespace Core

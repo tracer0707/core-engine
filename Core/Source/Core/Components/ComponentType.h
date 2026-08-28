@@ -4,8 +4,7 @@ namespace Core
 {
 	enum class ComponentType
 	{
-		Transform,
-		MeshRenderer,
-		Camera
+		Camera,
+		MeshRenderer
 	};
 }

@@ -1,6 +1,6 @@
 #include "Camera.h"
 
-#include "Transform.h"
+#include "../Interface/Transform.h"
 
 #include "../Renderer/Renderer.h"
 #include "../Content/RenderTexture.h"
@@ -19,7 +19,7 @@ namespace Core
 
 	const glm::mat4 Camera::getViewMatrix()
 	{
-		Transform* transform = _owner->findComponent<Transform*>();
+		Transform* transform = _owner->getTransform();
 
 		if (transform == nullptr) return glm::identity<glm::mat4>();
 
@@ -79,7 +79,7 @@ namespace Core
 
 	const glm::vec3 Camera::worldToScreenPoint(glm::vec3 point)
 	{
-		Transform* transform = _owner->findComponent<Transform*>();
+		Transform* transform = _owner->getTransform();
 		if (transform == nullptr) return glm::vec3(0.0f);
 
 		float width = _renderer->getWidth();

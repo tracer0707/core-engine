@@ -3,14 +3,14 @@
 #include "../Components/Component.h"
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
-#include "../Components/Transform.h"
+#include "../Interface/Transform.h"
 
 namespace Core
 {
 	Object::Object(Renderer* renderer)
 	{
 		_renderer = renderer;
-		_transform = addComponent<Core::Transform*>();
+		_transform = new Transform();
 	}
 
 	Object::~Object()
@@ -22,6 +22,9 @@ namespace Core
 		}
 
 		_components.clear();
+
+		delete _transform;
+
 		_transform = nullptr;
 		_renderer = nullptr;
 	}
@@ -66,10 +69,6 @@ namespace Core
 		else if (type == ComponentType::MeshRenderer)
 		{
 			newComponent = new MeshRenderer(this, _renderer);
-		}
-		else if (type == ComponentType::Transform)
-		{
-			newComponent = new Transform(this);
 		}
 
 		assert(newComponent != nullptr && "Unknown component");

@@ -11,7 +11,7 @@
 namespace Core
 {
 	class Camera;
-	class Transformable;
+	class Transform;
 	class InputManager;
 } // namespace Core
 
@@ -52,7 +52,7 @@ namespace Editor
 			static Gizmo _singleton;
 
 			Core::InputManager* _inputManager = nullptr;
-			Core::Transformable* _transform = nullptr;
+			Core::Transform* _transform = nullptr;
 			ObjectType _objectType = ObjectType::None;
 			void* _object = nullptr;
 			glm::vec3 _boundsSnapScale = glm::vec3(0.0f);
@@ -80,8 +80,8 @@ namespace Editor
 			void setEnabled(bool value) { _enabled = value; }
 			bool isEnabled() const { return _enabled; }
 
-			void setTransform(Core::Transformable* value) { _transform = value; }
-			Core::Transformable* getTransform() { return _transform; }
+			void setTransform(Core::Transform* value) { _transform = value; }
+			Core::Transform* getTransform() { return _transform; }
 
 			void setObject(ObjectType type, void* value);
 			void* getObject() const { return _object; }

@@ -5,7 +5,7 @@
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/Components/Camera.h>
-#include <Core/Components/Transform.h>
+#include <Core/Interface/Transform.h>
 
 #include "Gizmo.h"
 
@@ -33,7 +33,7 @@ namespace Editor
 			return;
 		}
 
-		Core::Transformable* transform = Gizmo::singleton()->getTransform();
+		Core::Transform* transform = Gizmo::singleton()->getTransform();
 
 		if (Gizmo::singleton()->getObjectType() == Gizmo::ObjectType::SceneObject)
 		{

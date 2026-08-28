@@ -1,6 +1,6 @@
 #include "MeshRenderer.h"
 
-#include "Transform.h"
+#include "../Interface/Transform.h"
 
 #include "../Scene/Object.h"
 #include "../Content/Material.h"
@@ -24,7 +24,7 @@ namespace Core
 	{
 		if (mesh == nullptr) return AxisAlignedBox::BOX_NULL;
 
-		Transform* transform = _owner->findComponent<Transform*>();
+		Transform* transform = _owner->getTransform();
 
 		AxisAlignedBox aab = mesh->getBoundingBox();
 		aab.transform(transform->getTransformMatrix());
@@ -47,7 +47,7 @@ namespace Core
 	{
 		if (mesh == nullptr) return;
 
-		Transform* transform = _owner->findComponent<Transform*>();
+		Transform* transform = _owner->getTransform();
 
 		glm::mat4 view = camera->getViewMatrix();
 		glm::mat4 proj = camera->getProjectionMatrix();

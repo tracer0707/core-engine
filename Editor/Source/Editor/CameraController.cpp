@@ -7,7 +7,7 @@
 #include <Core/System/InputManager.h>
 #include <Core/System/Time.h>
 #include <Core/Components/Camera.h>
-#include <Core/Components/Transform.h>
+#include <Core/Interface/Transform.h>
 #include <Core/Scene/Object.h>
 #include <Core/Math/Mathf.h>
 
@@ -63,7 +63,7 @@ namespace Editor
 		{
 			float dt = _time->getDeltaTime();
 
-			Core::Transform* t = _camera->getOwner()->findComponent<Core::Transform*>();
+			Core::Transform* t = _camera->getOwner()->getTransform();
 
 			if (_inputManager->getKey(SDL_SCANCODE_W))
 			{
@@ -147,7 +147,7 @@ namespace Editor
 		float rOffsetX = x - prevMousePos.x;
 		float rOffsetY = y - prevMousePos.y;
 
-		Core::Transform* t = _camera->getOwner()->findComponent<Core::Transform*>();
+		Core::Transform* t = _camera->getOwner()->getTransform();
 
 		if (rButtonDown)
 		{
@@ -180,7 +180,7 @@ namespace Editor
 
 		if (!lButtonDown)
 		{
-			Core::Transform* t = _camera->getOwner()->findComponent<Core::Transform*>();
+			Core::Transform* t = _camera->getOwner()->getTransform();
 
 			glm::vec3 vCamPos = t->getPosition();
 			glm::vec3 vCamDir = t->getForward();

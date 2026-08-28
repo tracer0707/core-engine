@@ -1,8 +1,7 @@
 #include "ObjectInspector.h"
 
 #include <Core/Components/Component.h>
-#include <Core/Components/Transform.h>
-#include <Core/Interface/Transformable.h>
+#include <Core/Interface/Transform.h>
 #include <Core/Scene/Object.h>
 #include <Core/System/EventHandler.h>
 
@@ -25,17 +24,15 @@ namespace Editor
 
 	void ObjectInspector::build()
 	{
+		Collapse* collapse = new Collapse("Transform");
+		Inspector* inspector = new TransformInspector(_object->getTransform(), _eventHandler);
+		inspector->build();
+		collapse->addControl(inspector);
+		addControl(collapse);
+
 		for (auto& it : _object->getComponents())
 		{
-			if (it->getComponentType() == Core::ComponentType::Transform)
-			{
-				Collapse* collapse = new Collapse("Transform");
-				Inspector* inspector = new TransformInspector((Core::Transform*)it, _eventHandler);
-				inspector->build();
-				collapse->addControl(inspector);
-				addControl(collapse);
-			}
-			else if (it->getComponentType() == Core::ComponentType::MeshRenderer)
+			if (it->getComponentType() == Core::ComponentType::MeshRenderer)
 			{
 				Collapse* collapse = new Collapse("Mesh Renderer");
 				Inspector* inspector = new MeshRendererInspector((Core::MeshRenderer*)it, _eventHandler);

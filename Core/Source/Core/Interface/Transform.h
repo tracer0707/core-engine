@@ -9,11 +9,11 @@
 
 namespace Core
 {
-	class Transformable
+	class Transform
 	{
 		private:
-			Transformable* parent = nullptr;
-			std::vector<Transformable*> children;
+			Transform* parent = nullptr;
+			std::vector<Transform*> children;
 
 			glm::vec3 position = glm::vec3(0.0f);
 			glm::quat rotation = glm::identity<glm::quat>();
@@ -23,13 +23,13 @@ namespace Core
 			mutable bool dirty = true;
 
 		public:
-			Transformable();
-			~Transformable();
+			Transform();
+			~Transform();
 
-			void setParent(Transformable* value);
+			void setParent(Transform* value);
 
-			void addChild(Transformable* child);
-			void removeChild(Transformable* child);
+			void addChild(Transform* child);
+			void removeChild(Transform* child);
 
 			void markDirty();
 

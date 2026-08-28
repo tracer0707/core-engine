@@ -7,7 +7,7 @@
 #include <Core/Scene/Object.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Components/MeshRenderer.h>
-#include <Core/Components/Transform.h>
+#include <Core/Interface/Transform.h>
 #include <Core/Renderer/VertexBuffer.h>
 
 namespace Editor

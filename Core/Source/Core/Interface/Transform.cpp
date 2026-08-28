@@ -1,18 +1,18 @@
-#include "Transformable.h"
+#include "Transform.h"
 #include "../Math/Mathf.h"
 
 namespace Core
 {
-	Transformable::Transformable() = default;
+	Transform::Transform() = default;
 
-	Transformable::~Transformable()
+	Transform::~Transform()
 	{
 		setParent(nullptr);
 	}
 
 	// ================= HIERARCHY =================
 
-	void Transformable::setParent(Transformable* value)
+	void Transform::setParent(Transform* value)
 	{
 		if (parent == value) return;
 
@@ -25,20 +25,20 @@ namespace Core
 		markDirty();
 	}
 
-	void Transformable::addChild(Transformable* child)
+	void Transform::addChild(Transform* child)
 	{
 		if (!child || child == this) return;
 		children.push_back(child);
 		child->markDirty();
 	}
 
-	void Transformable::removeChild(Transformable* child)
+	void Transform::removeChild(Transform* child)
 	{
 		auto it = std::find(children.begin(), children.end(), child);
 		if (it != children.end()) children.erase(it);
 	}
 
-	void Transformable::markDirty()
+	void Transform::markDirty()
 	{
 		if (dirty) return;
 		dirty = true;
@@ -49,32 +49,32 @@ namespace Core
 
 	// ================= LOCAL =================
 
-	glm::vec3 Transformable::getLocalPosition() const
+	glm::vec3 Transform::getLocalPosition() const
 	{
 		return position;
 	}
-	glm::quat Transformable::getLocalRotation() const
+	glm::quat Transform::getLocalRotation() const
 	{
 		return rotation;
 	}
-	glm::vec3 Transformable::getLocalScale() const
+	glm::vec3 Transform::getLocalScale() const
 	{
 		return scale;
 	}
 
-	void Transformable::setLocalPosition(const glm::vec3& value)
+	void Transform::setLocalPosition(const glm::vec3& value)
 	{
 		position = value;
 		markDirty();
 	}
 
-	void Transformable::setLocalRotation(const glm::quat& value)
+	void Transform::setLocalRotation(const glm::quat& value)
 	{
 		rotation = value;
 		markDirty();
 	}
 
-	void Transformable::setLocalScale(const glm::vec3& value)
+	void Transform::setLocalScale(const glm::vec3& value)
 	{
 		scale = value;
 		markDirty();
@@ -82,22 +82,22 @@ namespace Core
 
 	// ================= WORLD =================
 
-	glm::vec3 Transformable::getPosition() const
+	glm::vec3 Transform::getPosition() const
 	{
 		return glm::vec3(getTransformMatrix()[3]);
 	}
 
-	glm::quat Transformable::getRotation() const
+	glm::quat Transform::getRotation() const
 	{
 		return parent ? parent->getRotation() * rotation : rotation;
 	}
 
-	glm::vec3 Transformable::getScale() const
+	glm::vec3 Transform::getScale() const
 	{
 		return parent ? parent->getScale() * scale : scale;
 	}
 
-	void Transformable::setPosition(const glm::vec3& value)
+	void Transform::setPosition(const glm::vec3& value)
 	{
 		if (parent)
 		{
@@ -109,7 +109,7 @@ namespace Core
 		markDirty();
 	}
 
-	void Transformable::setRotation(const glm::quat& value)
+	void Transform::setRotation(const glm::quat& value)
 	{
 		if (parent)
 			rotation = glm::inverse(parent->getRotation()) * value;
@@ -119,7 +119,7 @@ namespace Core
 		markDirty();
 	}
 
-	void Transformable::setScale(const glm::vec3& value)
+	void Transform::setScale(const glm::vec3& value)
 	{
 		if (parent)
 			scale = value / parent->getScale();
@@ -131,12 +131,12 @@ namespace Core
 
 	// ================= MATRICES =================
 
-	glm::mat4 Transformable::getLocalTransformMatrix() const
+	glm::mat4 Transform::getLocalTransformMatrix() const
 	{
 		return glm::translate(glm::mat4(1.0f), position) * glm::mat4_cast(rotation) * glm::scale(glm::mat4(1.0f), scale);
 	}
 
-	glm::mat4 Transformable::getTransformMatrix() const
+	glm::mat4 Transform::getTransformMatrix() const
 	{
 		if (dirty)
 		{
@@ -152,47 +152,47 @@ namespace Core
 
 	// ================= DIRECTIONS =================
 
-	glm::vec3 Transformable::getForward() const
+	glm::vec3 Transform::getForward() const
 	{
 		return glm::normalize(getRotation() * glm::vec3(0, 0, 1));
 	}
 
-	glm::vec3 Transformable::getUp() const
+	glm::vec3 Transform::getUp() const
 	{
 		return glm::normalize(getRotation() * glm::vec3(0, 1, 0));
 	}
 
-	glm::vec3 Transformable::getRight() const
+	glm::vec3 Transform::getRight() const
 	{
 		return glm::normalize(getRotation() * glm::vec3(1, 0, 0));
 	}
 
-	glm::mat3 Transformable::getLocalAxes() const
+	glm::mat3 Transform::getLocalAxes() const
 	{
 		return glm::mat3(getRight(), getUp(), getForward());
 	}
 
 	// ================= MOVEMENT =================
 
-	void Transformable::yaw(float d, bool w)
+	void Transform::yaw(float d, bool w)
 	{
 		rotate({0, 1, 0}, d, w);
 	}
-	void Transformable::pitch(float d, bool w)
+	void Transform::pitch(float d, bool w)
 	{
 		rotate({1, 0, 0}, d, w);
 	}
-	void Transformable::roll(float d, bool w)
+	void Transform::roll(float d, bool w)
 	{
 		rotate({0, 0, 1}, d, w);
 	}
 
-	void Transformable::rotate(const glm::vec3& axis, float degree, bool world)
+	void Transform::rotate(const glm::vec3& axis, float degree, bool world)
 	{
 		rotate(glm::angleAxis(glm::radians(degree), glm::normalize(axis)), world);
 	}
 
-	void Transformable::rotate(const glm::quat& q, bool world)
+	void Transform::rotate(const glm::quat& q, bool world)
 	{
 		if (world)
 			setRotation(q * getRotation());
@@ -202,7 +202,7 @@ namespace Core
 		markDirty();
 	}
 
-	void Transformable::translate(const glm::vec3& dir, bool world)
+	void Transform::translate(const glm::vec3& dir, bool world)
 	{
 		if (world)
 			setPosition(getPosition() + dir);
@@ -214,7 +214,7 @@ namespace Core
 
 	// ================= CONVERSIONS =================
 
-	glm::vec3 Transformable::worldToLocalPosition(const glm::vec3& worldPos) const
+	glm::vec3 Transform::worldToLocalPosition(const glm::vec3& worldPos) const
 	{
 		glm::vec3 p = worldPos - getPosition();
 		p = glm::inverse(getRotation()) * p;
@@ -222,12 +222,12 @@ namespace Core
 		return p;
 	}
 
-	glm::quat Transformable::worldToLocalRotation(const glm::quat& worldRot) const
+	glm::quat Transform::worldToLocalRotation(const glm::quat& worldRot) const
 	{
 		return glm::inverse(getRotation()) * worldRot;
 	}
 
-	glm::vec3 Transformable::localToWorldPosition(const glm::vec3& localPos) const
+	glm::vec3 Transform::localToWorldPosition(const glm::vec3& localPos) const
 	{
 		glm::vec3 p = localPos * getScale();
 		p = getRotation() * p;
@@ -235,7 +235,7 @@ namespace Core
 		return p;
 	}
 
-	glm::quat Transformable::localToWorldRotation(const glm::quat& localRot) const
+	glm::quat Transform::localToWorldRotation(const glm::quat& localRot) const
 	{
 		return getRotation() * localRot;
 	}

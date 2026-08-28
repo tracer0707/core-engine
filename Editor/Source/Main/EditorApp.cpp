@@ -11,7 +11,7 @@
 #include <Core/Scene/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/Components/Camera.h>
-#include <Core/Components/Transform.h>
+#include <Core/Interface/Transform.h>
 #include <Core/Content/RenderTexture.h>
 #include <Core/Content/ContentManager.h>
 
@@ -46,7 +46,7 @@ namespace Editor
 
 		_cameraObject = _scene->createObject();
 		_camera = _cameraObject->addComponent<Core::Camera*>();
-		Core::Transform* cameraTransform = (Core::Transform*)_cameraObject->findComponent<Core::Transform*>();
+		Core::Transform* cameraTransform = (Core::Transform*)_cameraObject->getTransform();
 
 		_renderTexture = _contentManager->createRenderTexture(512, 512);
 		_camera->setRenderTexture(_renderTexture);
