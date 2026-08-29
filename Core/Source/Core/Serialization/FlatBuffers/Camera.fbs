@@ -1,0 +1,11 @@
+include "Base.fbs";
+
+namespace Core.Serialization;
+
+table Camera {
+	fov:float;
+    near:float;
+    far:float;
+}
+
+root_type Camera;

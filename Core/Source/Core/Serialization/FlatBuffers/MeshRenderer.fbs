@@ -1,0 +1,10 @@
+include "Base.fbs";
+
+namespace Core.Serialization;
+
+table MeshRenderer {
+	mesh:Uuid;
+    materials:[Uuid];
+}
+
+root_type MeshRenderer;

@@ -1,0 +1,17 @@
+include "Base.fbs";
+
+namespace Core.Serialization;
+
+table SubMesh {
+	index_offset:uint32;
+    index_count:uint32;
+}
+
+table Mesh {
+	vertices:[Vertex];
+    indices:[uint32];
+    sub_meshes:[SubMesh];
+    aabb:AABB;
+}
+
+root_type Mesh;

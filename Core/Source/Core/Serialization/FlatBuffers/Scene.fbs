@@ -1,9 +1,9 @@
-include "BaseTypesSerializer.fbs";
+include "Base.fbs";
 
-namespace Core;
+namespace Core.Serialization;
 
-table SceneSerializer {
+table Scene {
 	
 }
 
-root_type SceneSerializer;
+root_type Scene;

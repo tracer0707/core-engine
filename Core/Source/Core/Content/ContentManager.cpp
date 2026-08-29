@@ -13,9 +13,9 @@
 #include "Mesh.h"
 #include "RenderTexture.h"
 
-#include "../Serialization/FlatBuffers/TextureSerializer_generated.h"
-#include "../Serialization/FlatBuffers/MaterialSerializer_generated.h"
-#include "../Serialization/FlatBuffers/MeshSerializer_generated.h"
+#include "../Serialization/FlatBuffers/Texture_generated.h"
+#include "../Serialization/FlatBuffers/Material_generated.h"
+#include "../Serialization/FlatBuffers/Mesh_generated.h"
 
 namespace Core
 {
@@ -100,7 +100,7 @@ namespace Core
 			return nullptr;
 		}
 
-		auto materialSerialized = GetMaterialSerializer(buffer.data());
+		auto materialSerialized = Core::Serialization::GetMaterial(buffer.data());
 
 		Material* result = new Material(_renderer);
 		result->setUuid(uuid);
@@ -180,7 +180,7 @@ namespace Core
 			return nullptr;
 		}
 
-		auto texture2DSerialized = GetTextureSerializer(buffer.data());
+		auto texture2DSerialized = Core::Serialization::GetTexture(buffer.data());
 
 		unsigned char* dataRaw = const_cast<unsigned char*>(texture2DSerialized->data()->data());
 
@@ -223,7 +223,7 @@ namespace Core
 
 		Core::Mesh* result = new Mesh(_renderer);
 
-		const Core::MeshSerializer* serializer = Core::GetMeshSerializer(buffer.data());
+		const Core::Serialization::Mesh* serializer = Core::Serialization::GetMesh(buffer.data());
 
 		const auto* serializedVertices = serializer->vertices();
 		const uint32_t vertexCount = serializedVertices->size();
@@ -233,7 +233,7 @@ namespace Core
 
 		for (uint32_t i = 0; i < vertexCount; ++i)
 		{
-			const Core::Base::Vertex* source = serializedVertices->Get(i);
+			const Core::Serialization::Vertex* source = serializedVertices->Get(i);
 			Core::Vertex& destination = vertices[i];
 
 			destination._position = glm::vec3(source->position().x(), source->position().y(), source->position().z());
@@ -243,8 +243,10 @@ namespace Core
 			destination._uv0 = glm::vec2(source->uv0().x(), source->uv0().y());
 			destination._uv1 = glm::vec2(source->uv1().x(), source->uv1().y());
 			destination._color = Color(source->color().x(), source->color().y(), source->color().z(), source->color().w());
-			destination._blendWeights = glm::vec4(source->blend_weights().x(), source->blend_weights().y(), source->blend_weights().z(), source->blend_weights().w());
-			destination._blendIndices = glm::vec4(source->blend_indices().x(), source->blend_indices().y(), source->blend_indices().z(), source->blend_indices().w());
+			destination._blendWeights =
+				glm::vec4(source->blend_weights().x(), source->blend_weights().y(), source->blend_weights().z(), source->blend_weights().w());
+			destination._blendIndices =
+				glm::vec4(source->blend_indices().x(), source->blend_indices().y(), source->blend_indices().z(), source->blend_indices().w());
 		}
 
 		const auto* serializedIndices = serializer->indices();
@@ -265,17 +267,17 @@ namespace Core
 		{
 			for (uint32_t i = 0; i < serializedSubMeshes->size(); ++i)
 			{
-				const Core::SubMeshSerializer* source = serializedSubMeshes->Get(i);
+				const Core::Serialization::SubMesh* source = serializedSubMeshes->Get(i);
 				result->addSubMesh(source->index_offset(), source->index_count());
 			}
 		}
 
-		const Core::Base::AABB* serializedAABB = serializer->aabb();
+		const Core::Serialization::AABB* serializedAABB = serializer->aabb();
 
 		if (serializedAABB)
 		{
-			const Core::Base::Vec3& min = serializedAABB->min();
-			const Core::Base::Vec3& max = serializedAABB->max();
+			const Core::Serialization::Vec3& min = serializedAABB->min();
+			const Core::Serialization::Vec3& max = serializedAABB->max();
 
 			result->setBoundingBox(Core::AxisAlignedBox(glm::vec3(min.x(), min.y(), min.z()), glm::vec3(max.x(), max.y(), max.z())));
 		}

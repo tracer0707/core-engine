@@ -1,0 +1,15 @@
+include "Base.fbs";
+
+namespace Core.Serialization;
+
+table Material {
+	program_name:string;
+	int_values:[MapEntryInt];
+	float_values:[MapEntryFloat];
+	vec2_values:[MapEntryVec2];
+	vec3_values:[MapEntryVec3];
+	vec4_values:[MapEntryVec4];
+	texture2d_values:[MapEntryUuid];
+}
+
+root_type Material;

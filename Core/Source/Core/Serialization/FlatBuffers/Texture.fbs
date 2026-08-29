@@ -1,6 +1,6 @@
-namespace Core;
+namespace Core.Serialization;
 
-table TextureSerializer {
+table Texture {
 	width:int32;
 	height:int32;
 	format:int32;
@@ -8,4 +8,4 @@ table TextureSerializer {
 	data:[uint8];
 }
 
-root_type TextureSerializer;
+root_type Texture;

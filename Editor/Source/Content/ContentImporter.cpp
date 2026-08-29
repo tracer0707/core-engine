@@ -26,8 +26,8 @@
 #include "../Utils/TextureUtils.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include <Core/Serialization/FlatBuffers/TextureSerializer_generated.h>
-#include <Core/Serialization/FlatBuffers/MeshSerializer_generated.h>
+#include <Core/Serialization/FlatBuffers/Texture_generated.h>
+#include <Core/Serialization/FlatBuffers/Mesh_generated.h>
 
 namespace fs = std::filesystem;
 
@@ -111,7 +111,7 @@ namespace Editor
 		flatbuffers::FlatBufferBuilder builder;
 
 		auto data = builder.CreateVector(_data, _size);
-		auto _texture = Core::CreateTextureSerializer(builder, _width, _height, static_cast<int>(format), _size, data);
+		auto _texture = Core::Serialization::CreateTexture(builder, _width, _height, static_cast<int>(format), _size, data);
 		builder.Finish(_texture);
 
 		uint8_t* buf = builder.GetBufferPointer();
@@ -264,48 +264,46 @@ namespace Editor
 				{
 					flatbuffers::FlatBufferBuilder builder;
 
-					std::vector<Core::Base::Vertex> fVertices;
+					std::vector<Core::Serialization::Vertex> fVertices;
 					for (auto& v : vertices)
 					{
-						fVertices.push_back(Core::Base::Vertex(
-							Core::Base::Vec3(v._position.x, v._position.y, v._position.z),
-							Core::Base::Vec3(v._normal.x, v._normal.y, v._normal.z),
-							Core::Base::Vec3(v._tangent.x, v._tangent.y, v._tangent.z),
-							Core::Base::Vec3(v._bitangent.x, v._bitangent.y, v._bitangent.z),
-							Core::Base::Vec2(v._uv0.x, v._uv0.y),
-							Core::Base::Vec2(v._uv1.x, v._uv1.y),
-							Core::Base::Vec4(v._color.r, v._color.g, v._color.b, v._color.a),
-							Core::Base::Vec4(v._blendWeights.x, v._blendWeights.y, v._blendWeights.z, v._blendWeights.w),
-							Core::Base::Vec4(v._blendIndices.x, v._blendIndices.y, v._blendIndices.z, v._blendIndices.w)
-						));
+						fVertices.push_back(Core::Serialization::Vertex(
+							Core::Serialization::Vec3(v._position.x, v._position.y, v._position.z),
+							Core::Serialization::Vec3(v._normal.x, v._normal.y, v._normal.z),
+							Core::Serialization::Vec3(v._tangent.x, v._tangent.y, v._tangent.z),
+							Core::Serialization::Vec3(v._bitangent.x, v._bitangent.y, v._bitangent.z), Core::Serialization::Vec2(v._uv0.x, v._uv0.y),
+							Core::Serialization::Vec2(v._uv1.x, v._uv1.y), Core::Serialization::Vec4(v._color.r, v._color.g, v._color.b, v._color.a),
+							Core::Serialization::Vec4(v._blendWeights.x, v._blendWeights.y, v._blendWeights.z, v._blendWeights.w),
+							Core::Serialization::Vec4(v._blendIndices.x, v._blendIndices.y, v._blendIndices.z, v._blendIndices.w)));
 					}
 
 					auto verticesOffset = builder.CreateVectorOfStructs(fVertices);
 					auto indicesOffset = builder.CreateVector(indices);
 
-					std::vector<flatbuffers::Offset<Core::SubMeshSerializer>> subMeshOffsets;
+					std::vector<flatbuffers::Offset<Core::Serialization::SubMesh>> subMeshOffsets;
 
 					subMeshOffsets.reserve(subMeshes.size());
 
 					for (const auto& [indexOffset, indexCount] : subMeshes)
 					{
-						subMeshOffsets.push_back(Core::CreateSubMeshSerializer(builder, indexOffset, indexCount));
+						subMeshOffsets.push_back(Core::Serialization::CreateSubMesh(builder, indexOffset, indexCount));
 					}
 
 					auto subMeshesOffset = builder.CreateVector(subMeshOffsets);
 
-					auto aabbMinOffset = Core::Base::Vec3(aabb.getMinimum().x, aabb.getMinimum().y, aabb.getMinimum().z);
-					auto aabbMaxOffset = Core::Base::Vec3(aabb.getMaximum().x, aabb.getMaximum().y, aabb.getMaximum().z);
-					auto aabbOffset = Core::Base::AABB(aabbMinOffset, aabbMaxOffset);
+					auto aabbMinOffset = Core::Serialization::Vec3(aabb.getMinimum().x, aabb.getMinimum().y, aabb.getMinimum().z);
+					auto aabbMaxOffset = Core::Serialization::Vec3(aabb.getMaximum().x, aabb.getMaximum().y, aabb.getMaximum().z);
+					auto aabbOffset = Core::Serialization::AABB(aabbMinOffset, aabbMaxOffset);
 
-					auto meshOffset = Core::CreateMeshSerializer(builder, verticesOffset, indicesOffset, subMeshesOffset, &aabbOffset);
+					auto meshOffset = Core::Serialization::CreateMesh(builder, verticesOffset, indicesOffset, subMeshesOffset, &aabbOffset);
 
 					builder.Finish(meshOffset);
 
 					std::filesystem::path fileName = targetFileName.std_str();
-					Core::String outputFileName =
-						fileName.replace_filename(fileName.filename().stem().generic_string() + "_" + std::to_string(meshIndex) + fileName.extension().generic_string())
-							.generic_string();
+					Core::String outputFileName = fileName
+													  .replace_filename(fileName.filename().stem().generic_string() + "_" +
+																		std::to_string(meshIndex) + fileName.extension().generic_string())
+													  .generic_string();
 
 					std::ofstream file(outputFileName.std_str(), std::ios::binary);
 

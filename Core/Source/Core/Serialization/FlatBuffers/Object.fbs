@@ -1,0 +1,9 @@
+include "Base.fbs";
+
+namespace Core.Serialization;
+
+table Object {
+	
+}
+
+root_type Object;
