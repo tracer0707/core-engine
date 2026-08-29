@@ -44,6 +44,12 @@ namespace Core
 		std::copy(std::cbegin(bytes), std::cend(bytes), std::begin(data));
 	}
 
+	Uuid::Uuid(uint64_t low, uint64_t high)
+	{
+		std::memcpy(data.data(), &low, 8);
+		std::memcpy(data.data() + 8, &high, 8);
+	}
+
 	Uuid Uuid::create()
 	{
 #ifdef _WIN32
@@ -196,9 +202,20 @@ namespace Core
 		return true;
 	}
 
-	std::span<std::byte const, 16> Uuid::asBytes()
+	std::span<std::byte const, 16> Uuid::toBytes() const
 	{
 		return std::span<std::byte const, 16>(reinterpret_cast<std::byte const*>(data.data()), 16);
+	}
+
+	std::pair<uint64_t, uint64_t> Uuid::toUInt64() const
+	{
+		uint64_t low;
+		uint64_t high;
+
+		std::memcpy(&low, data.data(), 8);
+		std::memcpy(&high, data.data() + 8, 8);
+
+		return {low, high};
 	}
 
 	std::string Uuid::toString() const

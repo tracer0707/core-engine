@@ -49,8 +49,8 @@ struct MaterialSerializer FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table
   const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryVec4>> *vec4_values() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryVec4>> *>(VT_VEC4_VALUES);
   }
-  const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryString>> *texture2d_values() const {
-    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryString>> *>(VT_TEXTURE2D_VALUES);
+  const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryUuid>> *texture2d_values() const {
+    return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryUuid>> *>(VT_TEXTURE2D_VALUES);
   }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
@@ -100,7 +100,7 @@ struct MaterialSerializerBuilder {
   void add_vec4_values(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryVec4>>> vec4_values) {
     fbb_.AddOffset(MaterialSerializer::VT_VEC4_VALUES, vec4_values);
   }
-  void add_texture2d_values(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryString>>> texture2d_values) {
+  void add_texture2d_values(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryUuid>>> texture2d_values) {
     fbb_.AddOffset(MaterialSerializer::VT_TEXTURE2D_VALUES, texture2d_values);
   }
   explicit MaterialSerializerBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
@@ -122,7 +122,7 @@ inline ::flatbuffers::Offset<MaterialSerializer> CreateMaterialSerializer(
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryVec2>>> vec2_values = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryVec3>>> vec3_values = 0,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryVec4>>> vec4_values = 0,
-    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryString>>> texture2d_values = 0) {
+    ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Base::MapEntryUuid>>> texture2d_values = 0) {
   MaterialSerializerBuilder builder_(_fbb);
   builder_.add_texture2d_values(texture2d_values);
   builder_.add_vec4_values(vec4_values);
@@ -142,14 +142,14 @@ inline ::flatbuffers::Offset<MaterialSerializer> CreateMaterialSerializerDirect(
     const std::vector<::flatbuffers::Offset<Core::Base::MapEntryVec2>> *vec2_values = nullptr,
     const std::vector<::flatbuffers::Offset<Core::Base::MapEntryVec3>> *vec3_values = nullptr,
     const std::vector<::flatbuffers::Offset<Core::Base::MapEntryVec4>> *vec4_values = nullptr,
-    const std::vector<::flatbuffers::Offset<Core::Base::MapEntryString>> *texture2d_values = nullptr) {
+    const std::vector<::flatbuffers::Offset<Core::Base::MapEntryUuid>> *texture2d_values = nullptr) {
   auto program_name__ = program_name ? _fbb.CreateString(program_name) : 0;
   auto int_values__ = int_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryInt>>(*int_values) : 0;
   auto float_values__ = float_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryFloat>>(*float_values) : 0;
   auto vec2_values__ = vec2_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryVec2>>(*vec2_values) : 0;
   auto vec3_values__ = vec3_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryVec3>>(*vec3_values) : 0;
   auto vec4_values__ = vec4_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryVec4>>(*vec4_values) : 0;
-  auto texture2d_values__ = texture2d_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryString>>(*texture2d_values) : 0;
+  auto texture2d_values__ = texture2d_values ? _fbb.CreateVector<::flatbuffers::Offset<Core::Base::MapEntryUuid>>(*texture2d_values) : 0;
   return Core::CreateMaterialSerializer(
       _fbb,
       program_name__,

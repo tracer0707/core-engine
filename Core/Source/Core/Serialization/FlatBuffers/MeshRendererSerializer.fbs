@@ -3,8 +3,8 @@ include "BaseTypesSerializer.fbs";
 namespace Core;
 
 table MeshRendererSerializer {
-	mesh:string;
-    materials:[string];
+	mesh:Core.Base.Uuid;
+    materials:[Core.Base.Uuid];
 }
 
 root_type MeshRendererSerializer;

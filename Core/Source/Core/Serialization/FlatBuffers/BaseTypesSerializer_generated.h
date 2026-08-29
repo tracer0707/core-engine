@@ -16,6 +16,8 @@ static_assert(FLATBUFFERS_VERSION_MAJOR == 25 &&
 namespace Core {
 namespace Base {
 
+struct Uuid;
+
 struct Vec2;
 
 struct Vec3;
@@ -40,9 +42,37 @@ struct MapEntryVec4Builder;
 struct MapEntryString;
 struct MapEntryStringBuilder;
 
+struct MapEntryUuid;
+struct MapEntryUuidBuilder;
+
 struct Vertex;
 
 struct AABB;
+
+struct Transform;
+
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(8) Uuid FLATBUFFERS_FINAL_CLASS {
+ private:
+  uint64_t low_;
+  uint64_t high_;
+
+ public:
+  Uuid()
+      : low_(0),
+        high_(0) {
+  }
+  Uuid(uint64_t _low, uint64_t _high)
+      : low_(::flatbuffers::EndianScalar(_low)),
+        high_(::flatbuffers::EndianScalar(_high)) {
+  }
+  uint64_t low() const {
+    return ::flatbuffers::EndianScalar(low_);
+  }
+  uint64_t high() const {
+    return ::flatbuffers::EndianScalar(high_);
+  }
+};
+FLATBUFFERS_STRUCT_END(Uuid, 16);
 
 FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Vec2 FLATBUFFERS_FINAL_CLASS {
  private:
@@ -218,6 +248,35 @@ FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) AABB FLATBUFFERS_FINAL_CLASS {
   }
 };
 FLATBUFFERS_STRUCT_END(AABB, 24);
+
+FLATBUFFERS_MANUALLY_ALIGNED_STRUCT(4) Transform FLATBUFFERS_FINAL_CLASS {
+ private:
+  Core::Base::Vec3 position_;
+  Core::Base::Vec4 rotation_;
+  Core::Base::Vec3 scale_;
+
+ public:
+  Transform()
+      : position_(),
+        rotation_(),
+        scale_() {
+  }
+  Transform(const Core::Base::Vec3 &_position, const Core::Base::Vec4 &_rotation, const Core::Base::Vec3 &_scale)
+      : position_(_position),
+        rotation_(_rotation),
+        scale_(_scale) {
+  }
+  const Core::Base::Vec3 &position() const {
+    return position_;
+  }
+  const Core::Base::Vec4 &rotation() const {
+    return rotation_;
+  }
+  const Core::Base::Vec3 &scale() const {
+    return scale_;
+  }
+};
+FLATBUFFERS_STRUCT_END(Transform, 40);
 
 struct MapEntryInt FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   typedef MapEntryIntBuilder Builder;
@@ -535,6 +594,57 @@ inline ::flatbuffers::Offset<MapEntryString> CreateMapEntryStringDirect(
       _fbb,
       key,
       value__);
+}
+
+struct MapEntryUuid FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef MapEntryUuidBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_KEY = 4,
+    VT_VALUE = 6
+  };
+  uint64_t key() const {
+    return GetField<uint64_t>(VT_KEY, 0);
+  }
+  const Core::Base::Uuid *value() const {
+    return GetStruct<const Core::Base::Uuid *>(VT_VALUE);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<uint64_t>(verifier, VT_KEY, 8) &&
+           VerifyField<Core::Base::Uuid>(verifier, VT_VALUE, 8) &&
+           verifier.EndTable();
+  }
+};
+
+struct MapEntryUuidBuilder {
+  typedef MapEntryUuid Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_key(uint64_t key) {
+    fbb_.AddElement<uint64_t>(MapEntryUuid::VT_KEY, key, 0);
+  }
+  void add_value(const Core::Base::Uuid *value) {
+    fbb_.AddStruct(MapEntryUuid::VT_VALUE, value);
+  }
+  explicit MapEntryUuidBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<MapEntryUuid> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<MapEntryUuid>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<MapEntryUuid> CreateMapEntryUuid(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    uint64_t key = 0,
+    const Core::Base::Uuid *value = nullptr) {
+  MapEntryUuidBuilder builder_(_fbb);
+  builder_.add_key(key);
+  builder_.add_value(value);
+  return builder_.Finish();
 }
 
 }  // namespace Base

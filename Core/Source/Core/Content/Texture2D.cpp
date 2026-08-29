@@ -13,16 +13,14 @@ namespace Core
 		_size = size;
 		_width = width;
 		_height = height;
-		_data = new unsigned char[_size];
-		memcpy(_data, data, _size);
 
 		if (format == TextureFormat::RGBA8)
 		{
-			_nativeId = _renderer->createTexture(_data, _width, _height, 0, format);
+			_nativeId = _renderer->createTexture(data, _width, _height, 0, format);
 		}
 		else if (format == TextureFormat::BC7)
 		{
-			_nativeId = _renderer->createTexture(_data, _width, _height, _size, format);
+			_nativeId = _renderer->createTexture(data, _width, _height, _size, format);
 		}
 		else
 		{
@@ -32,10 +30,7 @@ namespace Core
 
 	Texture2D::~Texture2D()
 	{
-		if (_data != nullptr) delete[] _data;
-
 		_renderer->deleteTexture(_nativeId);
-		_data = nullptr;
 		_renderer = nullptr;
 		_width = 0;
 		_height = 0;

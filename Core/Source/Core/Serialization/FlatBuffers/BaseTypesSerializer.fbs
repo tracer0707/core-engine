@@ -1,5 +1,10 @@
 namespace Core.Base;
 
+struct Uuid {
+    low:ulong;
+    high:ulong;
+}
+
 struct Vec2 {
     x:float;
     y:float;
@@ -46,6 +51,11 @@ table MapEntryVec4 {
 table MapEntryString {
     key:ulong;
     value:string;
+}
+
+table MapEntryUuid {
+    key:ulong;
+    value:Uuid;
 }
 
 struct Vertex {

@@ -19,7 +19,6 @@ namespace Core
 			~Texture2D();
 
 			Renderer* _renderer = nullptr;
-			unsigned char* _data = nullptr;
 			int _size = 0;
 
 			int _width = 0;

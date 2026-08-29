@@ -9,7 +9,7 @@ table MaterialSerializer {
 	vec2_values:[Core.Base.MapEntryVec2];
 	vec3_values:[Core.Base.MapEntryVec3];
 	vec4_values:[Core.Base.MapEntryVec4];
-	texture2d_values:[Core.Base.MapEntryString];
+	texture2d_values:[Core.Base.MapEntryUuid];
 }
 
 root_type MaterialSerializer;

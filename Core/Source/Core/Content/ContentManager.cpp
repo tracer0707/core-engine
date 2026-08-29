@@ -140,10 +140,10 @@ namespace Core
 		for (auto entry : *materialSerialized->texture2d_values())
 		{
 			Texture2D* tex = nullptr;
-			String textureUuid = entry->value()->str();
-			if (textureUuid != String::Empty)
+			if (entry->value() != nullptr)
 			{
-				tex = loadTexture2DByUuid(Core::Uuid::fromString(textureUuid.std_str()));
+				Uuid uuid(entry->value()->low(), entry->value()->high());
+				tex = loadTexture2DByUuid(uuid);
 			}
 			result->setTexture2D(entry->key(), tex);
 		}

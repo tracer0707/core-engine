@@ -73,13 +73,22 @@ namespace Editor
 
 		auto vec4Vector = builder.CreateVector(vec4s);
 
-		std::vector<flatbuffers::Offset<Core::Base::MapEntryString>> tex2ds;
+		std::vector<flatbuffers::Offset<Core::Base::MapEntryUuid>> tex2ds;
 		tex2ds.reserve(value->getTexture2dValues().size());
 
 		for (const auto& [key, value] : value->getTexture2dValues())
 		{
-			auto str = builder.CreateString(value->getUuid().toString());
-			tex2ds.push_back(Core::Base::CreateMapEntryString(builder, key, str));
+			const Core::Uuid& uuid = value->getUuid();
+			if (uuid == Core::Uuid::Empty)
+			{
+				tex2ds.push_back(Core::Base::CreateMapEntryUuid(builder, key, nullptr));
+			}
+			else
+			{
+				auto [low, high] = uuid.toUInt64();
+				Core::Base::Uuid fbUuid(low, high);
+				tex2ds.push_back(Core::Base::CreateMapEntryUuid(builder, key, &fbUuid));
+			}
 		}
 
 		auto tex2dVector = builder.CreateVector(tex2ds);
