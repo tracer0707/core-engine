@@ -1,0 +1,10 @@
+include "BaseTypesSerializer.fbs";
+
+namespace Core;
+
+table MeshRendererSerializer {
+	mesh:string;
+    materials:[string];
+}
+
+root_type MeshRendererSerializer;

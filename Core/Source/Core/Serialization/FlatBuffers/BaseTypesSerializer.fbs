@@ -64,3 +64,9 @@ struct AABB {
     min:Vec3;
     max:Vec3;
 }
+
+struct Transform {
+    position:Vec3;
+    rotation:Vec4;
+    scale:Vec3;
+}

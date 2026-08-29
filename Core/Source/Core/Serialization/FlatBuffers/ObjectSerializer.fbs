@@ -1,0 +1,9 @@
+include "BaseTypesSerializer.fbs";
+
+namespace Core;
+
+table ObjectSerializer {
+	
+}
+
+root_type ObjectSerializer;
