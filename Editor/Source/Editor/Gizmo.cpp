@@ -28,7 +28,7 @@ namespace Editor
 	void Gizmo::unsubscribeManipulateEndEvent(Core::Uuid id)
 	{
 		auto it = std::find_if(_manipulateEndEvents.begin(), _manipulateEndEvents.end(),
-							   [=](std::pair<Core::Uuid, GizmoEvent>& evt) -> bool { return evt.first == id; });
+							   [this, id](std::pair<Core::Uuid, GizmoEvent>& evt) -> bool { return evt.first == id; });
 
 		if (it != _manipulateEndEvents.end()) _manipulateEndEvents.erase(it);
 	}
@@ -37,21 +37,21 @@ namespace Editor
 	{
 		_inputManager = inputManager;
 
-		_inputManager->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y) {
+		_inputManager->subscribeMouseDownEvent([this](Core::InputManager::MouseButton mb, int x, int y) {
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
 				_lmbDown = true;
 			}
 		});
 
-		_inputManager->subscribeMouseMoveEvent([=](int x, int y) {
+		_inputManager->subscribeMouseMoveEvent([this](int x, int y) {
 			if (_lmbDown)
 			{
 				_wasMoved = true;
 			}
 		});
 
-		_inputManager->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y) {
+		_inputManager->subscribeMouseUpEvent([this](Core::InputManager::MouseButton mb, int x, int y) {
 			if (mb == Core::InputManager::MouseButton::MBE_LEFT)
 			{
 				if (_isUsing && _lmbDown && _wasMoved)
@@ -89,8 +89,8 @@ namespace Editor
 		bool useSnap = false;
 		bool boundSizing = false;
 
-		float snap[] = { 0.0f, 0.0f, 0.0f };
-		float bounds[] = { -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f };
+		float snap[] = {0.0f, 0.0f, 0.0f};
+		float bounds[] = {-0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f};
 
 		if (!_isUsing)
 		{

@@ -14,6 +14,8 @@
 #include <CoreFoundation/CFUUID.h>
 #endif
 
+#include <cstring>
+
 namespace Core
 {
 	Uuid Uuid::Empty = Uuid();
@@ -46,8 +48,8 @@ namespace Core
 
 	Uuid::Uuid(uint64_t low, uint64_t high)
 	{
-		std::memcpy(data.data(), &low, 8);
-		std::memcpy(data.data() + 8, &high, 8);
+		memcpy(data.data(), &low, 8);
+		memcpy(data.data() + 8, &high, 8);
 	}
 
 	Uuid Uuid::create()
@@ -212,8 +214,8 @@ namespace Core
 		uint64_t low;
 		uint64_t high;
 
-		std::memcpy(&low, data.data(), 8);
-		std::memcpy(&high, data.data() + 8, 8);
+		memcpy(&low, data.data(), 8);
+		memcpy(&high, data.data() + 8, 8);
 
 		return {low, high};
 	}

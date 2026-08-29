@@ -94,11 +94,11 @@ set_target_properties(flatbuffers PROPERTIES
 )
 
 if(PLATFORM_LINUX)
-    set_target_properties(ICUDT PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicudata.a"
-    )
     set_target_properties(ICUUC PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicuuc.a"
+    )
+    set_target_properties(ICUDT PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicudata.a"
     )
     set_target_properties(SDL2 PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/lib/linux64/libSDL2.a"
@@ -110,11 +110,11 @@ if(PLATFORM_LINUX)
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/lib/linux64/libflatbuffers.a"
     )
 elseif(PLATFORM_WINDOWS)
-    set_target_properties(ICUDT PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/win64/icudt.lib"
-    )
     set_target_properties(ICUUC PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/win64/icuuc.lib"
+    )
+    set_target_properties(ICUDT PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/win64/icudt.lib"
     )
     set_target_properties(SDL2 PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/lib/win64/SDL2-static.lib"
@@ -128,8 +128,8 @@ elseif(PLATFORM_WINDOWS)
 endif()
 
 target_link_libraries(Core
-    PRIVATE ICUDT
     PRIVATE ICUUC
+    PRIVATE ICUDT
     PRIVATE SDL2
     PRIVATE glm
     PRIVATE glad
