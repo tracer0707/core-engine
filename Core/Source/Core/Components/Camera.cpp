@@ -49,32 +49,21 @@ namespace Core
 		return glm::perspective(glm::radians(_fov), aspect, _near, _far);
 	}
 
-	const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY) const
+	const Ray Camera::getCameraToViewportRay(float x, float y) const
 	{
-		float screenW = (float)_renderer->getWidth();
-		float screenH = (float)_renderer->getHeight();
+		float width = (float)_renderer->getWidth();
+		float height = (float)_renderer->getHeight();
 
 		if (renderTexture != nullptr)
 		{
-			screenW = (float)renderTexture->getWidth();
-			screenH = (float)renderTexture->getHeight();
+			width = (float)renderTexture->getWidth();
+			height = (float)renderTexture->getHeight();
 		}
 
-		glm::mat4x4 mViewProjInverse = glm::inverse(getProjectionMatrix() * getViewMatrix());
+		glm::mat4 view = getViewMatrix();
+		glm::mat4 proj = getProjectionMatrix();
 
-		float mx = (x - offsetX);
-		float my = (y - offsetY);
-
-		float mox = (mx / screenW) * 2.0f - 1.0f;
-		float moy = (1.0f - (my / screenH)) * 2.0f - 1.0f;
-
-		glm::vec4 rayOrigin = mViewProjInverse * glm::vec4(mox, moy, 0.0f, 1.0f);
-		rayOrigin *= 1.0f / rayOrigin.w;
-		glm::vec4 rayEnd = mViewProjInverse * glm::vec4(mox, moy, 1.0f - FLT_EPSILON, 1.0f);
-		rayEnd *= 1.0f / rayEnd.w;
-		glm::vec4 rayDir = glm::normalize(rayEnd - rayOrigin);
-
-		return Ray(rayOrigin, rayDir);
+		return Core::Mathf::getCameraToViewportRay(width, height, view, proj, x, y);
 	}
 
 	const glm::vec3 Camera::worldToScreenPoint(glm::vec3 point) const
@@ -91,25 +80,16 @@ namespace Core
 			height = renderTexture->getHeight();
 		}
 
-		glm::vec4 spPoint = getProjectionMatrix() * (getViewMatrix() * glm::vec4(point, 1.0f));
+		glm::mat4 view = getViewMatrix();
+		glm::mat4 proj = getProjectionMatrix();
 
-		bool isInFrustum = (spPoint.x < -1.0f) || (spPoint.x > 1.0f) || (spPoint.y < -1.0f) || (spPoint.y > 1.0f);
+		glm::vec3 fwd = transform->getForward();
+		glm::vec3 pos = transform->getPosition();
 
-		Plane cameraPlane = Plane(transform->getForward(), transform->getPosition());
-
-		if (cameraPlane.getSide(point) == Plane::NEGATIVE_SIDE) isInFrustum = false;
-
-		glm::vec3 spoint = glm::vec3(spPoint) / spPoint.w;
-
-		glm::vec3 screenSpacePoint = glm::vec3(0);
-		screenSpacePoint.x = ((spoint.x * 0.5f) + 0.5f) * width;
-		screenSpacePoint.y = height - (((spoint.y * 0.5f) + 0.5f) * height);
-		screenSpacePoint.z = isInFrustum ? 1.0f : -1.0f;
-
-		return screenSpacePoint;
+		return Core::Mathf::worldToScreenPoint(width, height, view, proj, fwd, pos, point);
 	}
 
-	const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY) const
+	const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point) const
 	{
 		float width = _renderer->getWidth();
 		float height = _renderer->getHeight();
@@ -120,12 +100,9 @@ namespace Core
 			height = renderTexture->getHeight();
 		}
 
-		float scrx = point.x / width;
-		float scry = point.y / height;
+		glm::mat4 view = getViewMatrix();
+		glm::mat4 proj = getProjectionMatrix();
 
-		Ray ray = getCameraToViewportRay(scrx, scry, offsetX, offsetY);
-		glm::vec3 vect = ray.origin + ray.direction * point.z;
-
-		return vect;
+		return Core::Mathf::screenToWorldPoint(width, height, view, proj, point);
 	}
 } // namespace Core

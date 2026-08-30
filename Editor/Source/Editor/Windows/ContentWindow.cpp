@@ -106,7 +106,7 @@ namespace Editor
 
 		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
 		
-		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE "Material");
+		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE " Material");
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
 		_materialMenuItem->setOnClick([this]() {
@@ -117,7 +117,7 @@ namespace Editor
 			});
 		});
 
-		MenuItem* _sceneMenuItem = new MenuItem(ICON_FK_CUBES "Scene");
+		MenuItem* _sceneMenuItem = new MenuItem(ICON_FK_CUBES " Scene");
 		_createResourceBtnCm->addControl(_sceneMenuItem);
 
 		_sceneMenuItem->setOnClick([this]() {

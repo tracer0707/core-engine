@@ -2,6 +2,7 @@
 
 #include "Mathf.h"
 #include "Ray.h"
+#include "Plane.h"
 
 namespace Core
 {
@@ -87,12 +88,12 @@ namespace Core
 		return t * t * (3.0 - 2.0 * t);
 	}
 
-	glm::highp_quat Mathf::toQuaternion(glm::vec3 value)
+	glm::quat Mathf::toQuaternion(glm::vec3 value)
 	{
 		return toQuaternion(value.z, value.y, value.x);
 	}
 
-	glm::highp_quat Mathf::toQuaternion(double yaw, double pitch, double roll)
+	glm::quat Mathf::toQuaternion(double yaw, double pitch, double roll)
 	{
 		yaw *= fDeg2Rad;
 		pitch *= fDeg2Rad;
@@ -105,7 +106,7 @@ namespace Core
 		double cr = cos(roll * 0.5);
 		double sr = sin(roll * 0.5);
 
-		glm::highp_quat q;
+		glm::quat q;
 		q.w = cy * cp * cr + sy * sp * sr;
 		q.x = cy * cp * sr - sy * sp * cr;
 		q.y = sy * cp * sr + cy * sp * cr;
@@ -114,7 +115,7 @@ namespace Core
 		return q;
 	}
 
-	glm::vec3 Mathf::toEuler(glm::highp_quat q)
+	glm::vec3 Mathf::toEuler(glm::quat q)
 	{
 		glm::vec3 angles;
 
@@ -361,17 +362,17 @@ namespace Core
 		return std::acos(f) * 57.29578f;
 	}
 
-	glm::vec3 Mathf::rotateAround(glm::vec3 aPointToRotate, glm::vec3 aRotationCenter, glm::mat4x4 aRotation)
+	glm::vec3 Mathf::rotateAround(glm::vec3 aPointToRotate, glm::vec3 aRotationCenter, glm::mat4 aRotation)
 	{
-		glm::mat4x4 translate = glm::translate(glm::identity<glm::mat4x4>(), aRotationCenter);
+		glm::mat4 translate = glm::translate(glm::identity<glm::mat4>(), aRotationCenter);
 
-		glm::mat4x4 invTranslate = glm::inverse(translate);
+		glm::mat4 invTranslate = glm::inverse(translate);
 
 		// 1) Translate the object to the center
 		// 2) Make the rotation
 		// 3) Translate the object back to its original location
 
-		glm::mat4x4 transform = translate * aRotation * invTranslate;
+		glm::mat4 transform = translate * aRotation * invTranslate;
 
 		return transform * glm::vec4(aPointToRotate, 1.0f);
 	}
@@ -415,5 +416,52 @@ namespace Core
 	{
 		if (step <= 0.0f) return value;
 		return std::round(value / step) * step;
+	}
+
+	Ray Mathf::getCameraToViewportRay(float width, float height, glm::mat4& view, glm::mat4& proj, float x, float y)
+	{
+		glm::mat4x4 mViewProjInverse = glm::inverse(proj * view);
+
+		float mox = (x / width) * 2.0f - 1.0f;
+		float moy = (1.0f - (y / height)) * 2.0f - 1.0f;
+
+		glm::vec4 rayOrigin = mViewProjInverse * glm::vec4(mox, moy, 0.0f, 1.0f);
+		rayOrigin *= 1.0f / rayOrigin.w;
+		glm::vec4 rayEnd = mViewProjInverse * glm::vec4(mox, moy, 1.0f - FLT_EPSILON, 1.0f);
+		rayEnd *= 1.0f / rayEnd.w;
+		glm::vec4 rayDir = glm::normalize(rayEnd - rayOrigin);
+
+		return Ray(rayOrigin, rayDir);
+	}
+
+	glm::vec3 Mathf::worldToScreenPoint(float width, float height, glm::mat4& view, glm::mat4& proj, glm::vec3& fwd, glm::vec3& pos, glm::vec3& point)
+	{
+		glm::vec4 spPoint = proj * (view * glm::vec4(point, 1.0f));
+
+		bool isInFrustum = (spPoint.x < -1.0f) || (spPoint.x > 1.0f) || (spPoint.y < -1.0f) || (spPoint.y > 1.0f);
+
+		Plane cameraPlane = Plane(fwd, pos);
+
+		if (cameraPlane.getSide(point) == Plane::NEGATIVE_SIDE) isInFrustum = false;
+
+		glm::vec3 spoint = glm::vec3(spPoint) / spPoint.w;
+
+		glm::vec3 screenSpacePoint = glm::vec3(0);
+		screenSpacePoint.x = ((spoint.x * 0.5f) + 0.5f) * width;
+		screenSpacePoint.y = height - (((spoint.y * 0.5f) + 0.5f) * height);
+		screenSpacePoint.z = isInFrustum ? 1.0f : -1.0f;
+
+		return screenSpacePoint;
+	}
+
+	glm::vec3 Mathf::screenToWorldPoint(float width, float height, glm::mat4& view, glm::mat4& proj, glm::vec3& point)
+	{
+		float scrx = point.x / width;
+		float scry = point.y / height;
+
+		Core::Ray ray = getCameraToViewportRay(width, height, view, proj, scrx, scry);
+		glm::vec3 vect = ray.origin + ray.direction * point.z;
+
+		return vect;
 	}
 } // namespace Core

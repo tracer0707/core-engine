@@ -42,10 +42,10 @@ namespace Core
         const glm::mat4 getViewMatrix() const;
         const glm::mat4 getProjectionMatrix() const;
 
-        const Ray getCameraToViewportRay(float x, float y, float offsetX, float offsetY) const;
+        const Ray getCameraToViewportRay(float x, float y) const;
 
         const glm::vec3 worldToScreenPoint(glm::vec3 point) const;
-        const glm::vec3 screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY) const;
+        const glm::vec3 screenToWorldPoint(glm::vec3 point) const;
 
         void setRenderTexture(RenderTexture* value) { renderTexture = value; }
         RenderTexture* getRenderTexture() const { return renderTexture; }

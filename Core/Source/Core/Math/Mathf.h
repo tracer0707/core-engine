@@ -35,12 +35,12 @@ namespace Core
 
 			static float smoothstep(float edge0, float edge1, float x);
 
-			static glm::highp_quat toQuaternion(glm::vec3 value);
+			static glm::quat toQuaternion(glm::vec3 value);
 
 			// yaw (Z), pitch (Y), roll (X)
-			static glm::highp_quat toQuaternion(double yaw, double pitch, double roll);
+			static glm::quat toQuaternion(double yaw, double pitch, double roll);
 
-			static glm::vec3 toEuler(glm::highp_quat q);
+			static glm::vec3 toEuler(glm::quat q);
 
 			static glm::vec3 normalizeAngles(glm::vec3 angles);
 
@@ -78,7 +78,7 @@ namespace Core
 
 			static float angleBetweenVectors(glm::vec3 dir1, glm::vec3 dir2);
 
-			static glm::vec3 rotateAround(glm::vec3 aPointToRotate, glm::vec3 aRotationCenter, glm::mat4x4 aRotation);
+			static glm::vec3 rotateAround(glm::vec3 aPointToRotate, glm::vec3 aRotationCenter, glm::mat4 aRotation);
 
 			static glm::vec3 getForward(glm::quat rotation);
 
@@ -89,5 +89,11 @@ namespace Core
 			static glm::vec3 barycentric(glm::vec2 p, glm::vec2 a, glm::vec2 b, glm::vec2 c);
 
 			static float snapValue(float value, float step);
+
+			static Ray getCameraToViewportRay(float width, float height, glm::mat4& view, glm::mat4& proj, float x, float y);
+
+			static glm::vec3 worldToScreenPoint(float width, float height, glm::mat4& view, glm::mat4& proj, glm::vec3& fwd, glm::vec3& pos, glm::vec3& point);
+
+			static glm::vec3 screenToWorldPoint(float width, float height, glm::mat4& view, glm::mat4& proj, glm::vec3& point);
 	};
 } // namespace Core

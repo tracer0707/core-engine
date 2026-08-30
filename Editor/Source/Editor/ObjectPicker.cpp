@@ -93,7 +93,7 @@ namespace Editor
 
 	void ObjectPicker::pickObject(int x, int y)
 	{
-		Core::Ray ray = _camera->getCameraToViewportRay(x, y, _offsetX, _offsetY);
+		Core::Ray ray = _camera->getCameraToViewportRay(x - _offsetX, y - _offsetY);
 
 		RaycastHit hit;
 		Raycast::hitTest(_scene, ray, &hit);
