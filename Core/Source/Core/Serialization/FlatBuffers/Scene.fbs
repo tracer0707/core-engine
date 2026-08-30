@@ -5,5 +5,3 @@ namespace Core.Serialization;
 table Scene {
 	
 }
-
-root_type Scene;

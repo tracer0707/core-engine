@@ -26,8 +26,7 @@
 #include "../Utils/TextureUtils.h"
 
 #include "flatbuffers/flatbuffers.h"
-#include <Core/Serialization/FlatBuffers/Texture_generated.h>
-#include <Core/Serialization/FlatBuffers/Mesh_generated.h>
+#include <Core/Serialization/FlatBuffers/Content_generated.h>
 
 namespace fs = std::filesystem;
 

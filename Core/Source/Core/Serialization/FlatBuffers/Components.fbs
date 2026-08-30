@@ -8,4 +8,7 @@ table Camera {
     far:float;
 }
 
-root_type Camera;
+table MeshRenderer {
+	mesh:Uuid;
+    materials:[Uuid];
+}

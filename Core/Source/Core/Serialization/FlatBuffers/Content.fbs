@@ -1,0 +1,33 @@
+include "Base.fbs";
+
+namespace Core.Serialization;
+
+table Material {
+	program_name:string;
+	int_values:[MapEntryInt];
+	float_values:[MapEntryFloat];
+	vec2_values:[MapEntryVec2];
+	vec3_values:[MapEntryVec3];
+	vec4_values:[MapEntryVec4];
+	texture2d_values:[MapEntryUuid];
+}
+
+table Texture {
+	width:int32;
+	height:int32;
+	format:int32;
+	size:int32;
+	data:[uint8];
+}
+
+table SubMesh {
+	index_offset:uint32;
+    index_count:uint32;
+}
+
+table Mesh {
+	vertices:[Vertex];
+    indices:[uint32];
+    sub_meshes:[SubMesh];
+    aabb:AABB;
+}

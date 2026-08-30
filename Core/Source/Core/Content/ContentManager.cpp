@@ -13,9 +13,7 @@
 #include "Mesh.h"
 #include "RenderTexture.h"
 
-#include "../Serialization/FlatBuffers/Texture_generated.h"
-#include "../Serialization/FlatBuffers/Material_generated.h"
-#include "../Serialization/FlatBuffers/Mesh_generated.h"
+#include "../Serialization/FlatBuffers/Content_generated.h"
 
 namespace Core
 {
@@ -100,7 +98,7 @@ namespace Core
 			return nullptr;
 		}
 
-		auto materialSerialized = Core::Serialization::GetMaterial(buffer.data());
+		auto materialSerialized = flatbuffers::GetRoot<Core::Serialization::Material>(buffer.data());
 
 		Material* result = new Material(_renderer);
 		result->setUuid(uuid);
@@ -180,7 +178,7 @@ namespace Core
 			return nullptr;
 		}
 
-		auto texture2DSerialized = Core::Serialization::GetTexture(buffer.data());
+		auto texture2DSerialized = flatbuffers::GetRoot<Core::Serialization::Texture>(buffer.data());
 
 		unsigned char* dataRaw = const_cast<unsigned char*>(texture2DSerialized->data()->data());
 
@@ -223,7 +221,7 @@ namespace Core
 
 		Core::Mesh* result = new Mesh(_renderer);
 
-		const Core::Serialization::Mesh* serializer = Core::Serialization::GetMesh(buffer.data());
+		const Core::Serialization::Mesh* serializer = flatbuffers::GetRoot<Core::Serialization::Mesh>(buffer.data());
 
 		const auto* serializedVertices = serializer->vertices();
 		const uint32_t vertexCount = serializedVertices->size();

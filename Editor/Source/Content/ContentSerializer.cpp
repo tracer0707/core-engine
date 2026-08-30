@@ -7,7 +7,7 @@
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/ContentDatabase.h>
 
-#include <Core/Serialization/FlatBuffers/Material_generated.h>
+#include <Core/Serialization/FlatBuffers/Content_generated.h>
 
 namespace Editor
 {
