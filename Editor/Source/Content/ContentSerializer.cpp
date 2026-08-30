@@ -4,6 +4,7 @@
 
 #include <Core/Renderer/Program.h>
 #include <Core/Content/Material.h>
+#include <Core/Content/Scene.h>
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/ContentDatabase.h>
 
@@ -112,4 +113,12 @@ namespace Editor
 		file.write(reinterpret_cast<const char*>(buf), size);
 		file.close();
 	}
+	
+	void ContentSerializer::serializeScene(Core::Scene* value) 
+	{
+		Core::String path = Core::ContentDatabase::singleton()->getPath(value->getUuid());
+		serializeScene(value, path);
+	}
+	
+	void ContentSerializer::serializeScene(Core::Scene* value, Core::String path) {}
 } // namespace Editor

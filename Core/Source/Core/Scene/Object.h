@@ -2,7 +2,7 @@
 
 #include "../Shared/String.h"
 #include "../Shared/List.h"
-#include "../Shared/BitSet.h"
+#include "../Shared/Uuid.h"
 #include "../Components/ComponentType.h"
 
 namespace Core
@@ -22,10 +22,10 @@ namespace Core
 		~Object();
 
 		Renderer* _renderer = nullptr;
+		Uuid _uuid = Uuid::Empty;
+		String _name = String::Empty;
 		Transform* _transform = nullptr;
 		List<Component*> _components;
-		String _name = String::Empty;
-		BitSet _flags;
 
 		Component* addComponent(ComponentType type);
 
@@ -43,13 +43,14 @@ namespace Core
 		template <typename T>
 		T findComponent() const { }
 
-		Transform* getTransform() const { return _transform; }
-		Component* findComponent(ComponentType type) const;
+		Uuid getUuid() const { return _uuid; }
+		void setUuid(Uuid value) { _uuid = value; }
 
 		String getName() const { return _name; }
 		void setName(String value) { _name = value; }
 
-		BitSet& getFlags() { return _flags; }
+		Transform* getTransform() const { return _transform; }
+		Component* findComponent(ComponentType type) const;
 	};
 
 	/* ADD */

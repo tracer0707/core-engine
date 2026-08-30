@@ -2,6 +2,15 @@ include "Base.fbs";
 
 namespace Core.Serialization;
 
+union ComponentData {
+    Camera,
+    MeshRenderer
+}
+
+table Component {
+    data:ComponentData;
+}
+
 table Camera {
 	fov:float;
     near:float;

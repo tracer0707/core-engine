@@ -8,7 +8,7 @@
 #include <Core/Shared/String.h>
 #include <Core/Shared/Path.h>
 #include <Core/Renderer/Renderer.h>
-#include <Core/Scene/Scene.h>
+#include <Core/Content/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/Components/Camera.h>
 #include <Core/Interface/Transform.h>
@@ -42,7 +42,7 @@ namespace Editor
 
 	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Editor", 1366, 768)
 	{
-		_scene = new Core::Scene(_renderer, _time);
+		_scene = _contentManager->createScene();
 
 		_cameraObject = _scene->createObject();
 		_camera = _cameraObject->addComponent<Core::Camera*>();
@@ -117,7 +117,6 @@ namespace Editor
 
 		delete _gizmoRenderer;
 		delete _windowManager;
-		delete _scene;
 
 		_gizmoRenderer = nullptr;
 		_gridBuffer = nullptr;

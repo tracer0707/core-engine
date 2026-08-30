@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include <Core/Math/Mathf.h>
-#include <Core/Scene/Scene.h>
+#include <Core/Content/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Components/MeshRenderer.h>

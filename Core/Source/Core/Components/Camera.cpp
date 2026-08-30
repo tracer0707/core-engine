@@ -17,7 +17,7 @@ namespace Core
 
 	Camera::~Camera() {}
 
-	const glm::mat4 Camera::getViewMatrix()
+	const glm::mat4 Camera::getViewMatrix() const
 	{
 		Transform* transform = _owner->getTransform();
 
@@ -33,7 +33,7 @@ namespace Core
 		return glm::lookAt(position, at, up);
 	}
 
-	const glm::mat4 Camera::getProjectionMatrix()
+	const glm::mat4 Camera::getProjectionMatrix() const
 	{
 		unsigned int w = _renderer->getWidth();
 		unsigned int h = _renderer->getHeight();
@@ -49,7 +49,7 @@ namespace Core
 		return glm::perspective(glm::radians(_fov), aspect, _near, _far);
 	}
 
-	const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY)
+	const Ray Camera::getCameraToViewportRay(float x, float y, float offsetX, float offsetY) const
 	{
 		float screenW = (float)_renderer->getWidth();
 		float screenH = (float)_renderer->getHeight();
@@ -77,7 +77,7 @@ namespace Core
 		return Ray(rayOrigin, rayDir);
 	}
 
-	const glm::vec3 Camera::worldToScreenPoint(glm::vec3 point)
+	const glm::vec3 Camera::worldToScreenPoint(glm::vec3 point) const
 	{
 		Transform* transform = _owner->getTransform();
 		if (transform == nullptr) return glm::vec3(0.0f);
@@ -109,7 +109,7 @@ namespace Core
 		return screenSpacePoint;
 	}
 
-	const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY)
+	const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY) const
 	{
 		float width = _renderer->getWidth();
 		float height = _renderer->getHeight();

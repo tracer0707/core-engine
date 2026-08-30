@@ -37,6 +37,7 @@ namespace Editor
 			Core::Texture2D* getIcon(Core::String ext);
 			ContentButton* createThumbnailForEdit(Core::String ext);
 			void setInspector(ContentButton* thumbnail, Core::String ext);
+			void createResource(const Core::String& extension, std::function<void(const Core::String&)> createAndSaveFunc);
 
 		public:
 			ContentWindow(WindowManager* parent);

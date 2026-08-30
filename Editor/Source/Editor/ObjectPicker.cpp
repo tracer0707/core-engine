@@ -3,7 +3,7 @@
 #include <imgui.h>
 
 #include <Core/Scene/Object.h>
-#include <Core/Scene/Scene.h>
+#include <Core/Content/Scene.h>
 #include <Core/Components/Camera.h>
 #include <Core/System/InputManager.h>
 #include <Core/Renderer/VertexBuffer.h>

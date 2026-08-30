@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Object.h"
+#include "../Scene/Object.h"
 
 #include "../Math/Mathf.h"
 #include "../System/Time.h"

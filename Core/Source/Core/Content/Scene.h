@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Shared/List.h"
+#include "Content.h"
 
 namespace Core
 {
@@ -9,17 +10,21 @@ namespace Core
 	class Renderer;
 	class Time;
 
-	class Scene
+	class Scene : public Content
 	{
-	private:
-		Renderer* _renderer = nullptr;
-		List<Object*> _objects;
-		Camera* _mainCamera = nullptr;
-		Time* _time = nullptr;
+		friend class ContentManager;
 
-	public:
+	private:
 		Scene(Renderer* renderer, Time* time);
 		~Scene();
+
+		Renderer* _renderer = nullptr;
+		Camera* _mainCamera = nullptr;
+		Time* _time = nullptr;
+		List<Object*> _objects;
+
+	public:
+		virtual ContentType getContentType() const { return ContentType::Scene; }
 
 		List<Object*>& getObjects() { return _objects; }
 

@@ -1,7 +1,8 @@
 include "Base.fbs";
+include "Object.fbs";
 
 namespace Core.Serialization;
 
 table Scene {
-	
+	objects:[Object];
 }

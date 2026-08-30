@@ -5,7 +5,7 @@
 #include <SDL/SDL_scancode.h>
 
 #include <Core/Content/RenderTexture.h>
-#include <Core/Scene/Scene.h>
+#include <Core/Content/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/System/InputManager.h>
 

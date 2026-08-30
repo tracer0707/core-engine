@@ -105,32 +105,26 @@ namespace Editor
 		});
 
 		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
+		
 		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE "Material");
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
 		_materialMenuItem->setOnClick([this]() {
-			_parent->getEventHandler()->addEvent([this]() {
-				ContentButton* thumbnail = createThumbnailForEdit(".material");
-				thumbnail->setOnEditCancelled([this, thumbnail]() {
-					_parent->getEventHandler()->addEvent([this, thumbnail]() {
-						_rightPane->removeControl(thumbnail);
-						delete thumbnail;
-					});
-				});
-				thumbnail->setOnEditComplete([this, thumbnail](Core::String newName) {
-					Core::String _newName = newName;
-					if (!_newName.endsWith(".material")) _newName = _newName + ".material";
-					Core::Material* mat = _parent->getContentManager()->createMaterial();
-					Core::String path = Core::Path::combine(_currentDir, _newName);
-					ContentSerializer::serializeMaterial(mat, path);
-					_parent->getContentManager()->destroy(mat);
-					_parent->getEventHandler()->addEvent([this, thumbnail]() {
-						_rightPane->removeControl(thumbnail);
-						delete thumbnail;
-						rescanCurrentDir();
-					});
-				});
-				_rightPane->addControl(thumbnail);
+			createResource(".material", [this](const Core::String& path) {
+				Core::Material* material = _parent->getContentManager()->createMaterial();
+				ContentSerializer::serializeMaterial(material, path);
+				_parent->getContentManager()->destroy(material);
+			});
+		});
+
+		MenuItem* _sceneMenuItem = new MenuItem(ICON_FK_CUBES "Scene");
+		_createResourceBtnCm->addControl(_sceneMenuItem);
+
+		_sceneMenuItem->setOnClick([this]() {
+			createResource(".scene", [this](const Core::String& path) {
+				Core::Scene* scene = _parent->getContentManager()->createScene();
+				ContentSerializer::serializeScene(scene, path);
+				_parent->getContentManager()->destroy(scene);
 			});
 		});
 
@@ -301,5 +295,35 @@ namespace Editor
 		}
 
 		return nullptr;
+	}
+
+	void ContentWindow::createResource(const Core::String& extension, std::function<void(const Core::String&)> createAndSaveFunc)
+	{
+		_parent->getEventHandler()->addEvent([this, extension, createAndSaveFunc]() {
+			ContentButton* thumbnail = createThumbnailForEdit(extension);
+
+			thumbnail->setOnEditCancelled([this, thumbnail]() {
+				_parent->getEventHandler()->addEvent([this, thumbnail]() {
+					_rightPane->removeControl(thumbnail);
+					delete thumbnail;
+				});
+			});
+
+			thumbnail->setOnEditComplete([this, thumbnail, extension, createAndSaveFunc](Core::String newName) {
+				if (!newName.endsWith(extension)) newName += extension;
+
+				Core::String path = Core::Path::combine(_currentDir, newName);
+
+				createAndSaveFunc(path);
+
+				_parent->getEventHandler()->addEvent([this, thumbnail]() {
+					_rightPane->removeControl(thumbnail);
+					delete thumbnail;
+					rescanCurrentDir();
+				});
+			});
+
+			_rightPane->addControl(thumbnail);
+		});
 	}
 } // namespace Editor

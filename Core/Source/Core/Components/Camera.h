@@ -30,24 +30,24 @@ namespace Core
 
         virtual ComponentType getComponentType() const { return ComponentType::Camera; }
 
-        float getFov() { return _fov; }
+        float getFov() const { return _fov; }
         void setFov(float value) { _fov = value; }
 
-        float getNear() { return _near; }
+        float getNear() const { return _near; }
         void setNear(float value) { _near = value; }
 
-        float getFar() { return _far; }
+        float getFar() const { return _far; }
         void setFar(float value) { _far = value; }
 
-        const glm::mat4 getViewMatrix();
-        const glm::mat4 getProjectionMatrix();
+        const glm::mat4 getViewMatrix() const;
+        const glm::mat4 getProjectionMatrix() const;
 
-        const Ray getCameraToViewportRay(float x, float y, float offsetX, float offsetY);
+        const Ray getCameraToViewportRay(float x, float y, float offsetX, float offsetY) const;
 
-        const glm::vec3 worldToScreenPoint(glm::vec3 point);
-        const glm::vec3 screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY);
+        const glm::vec3 worldToScreenPoint(glm::vec3 point) const;
+        const glm::vec3 screenToWorldPoint(glm::vec3 point, float offsetX, float offsetY) const;
 
         void setRenderTexture(RenderTexture* value) { renderTexture = value; }
-        RenderTexture* getRenderTexture() { return renderTexture; }
+        RenderTexture* getRenderTexture() const { return renderTexture; }
     };
 } // namespace Core

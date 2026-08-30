@@ -1,7 +1,10 @@
 include "Base.fbs";
+include "Component.fbs";
 
 namespace Core.Serialization;
 
 table Object {
-	
+    name:string;
+    uuid:Uuid;
+    components:[Component];
 }

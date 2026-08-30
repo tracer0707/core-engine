@@ -9,6 +9,7 @@ namespace Core
 		Mesh,
 		RenderTexture,
 		Shader,
-		Texture2D
+		Texture2D,
+		Scene
 	};
 }

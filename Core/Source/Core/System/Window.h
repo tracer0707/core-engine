@@ -44,14 +44,15 @@ namespace Core
 			int _height = 0;
 
 		public:
-			void* getContext() { return _ctx; }
-			Renderer* getRenderer() { return _renderer; }
-			ContentManager* getContentManager() { return _contentManager; }
+			void* getContext() const { return _ctx; }
+			Renderer* getRenderer() const { return _renderer; }
+			ContentManager* getContentManager() const { return _contentManager; }
+			Time* getTime() const { return _time; }
 
 			void setTitle(String title);
 
-			int getWidth() { return _width; }
-			int getHeight() { return _height; }
+			int getWidth() const { return _width; }
+			int getHeight() const { return _height; }
 
 			void setOnClose(std::function<void()> event) { _onClose = event; }
 

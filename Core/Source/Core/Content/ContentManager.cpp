@@ -4,6 +4,7 @@
 
 #include "../Shared/Path.h"
 #include "../System/Application.h"
+#include "../System/Window.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
 
@@ -12,6 +13,7 @@
 #include "Texture2D.h"
 #include "Mesh.h"
 #include "RenderTexture.h"
+#include "Scene.h"
 
 #include "../Serialization/FlatBuffers/Content_generated.h"
 
@@ -73,6 +75,13 @@ namespace Core
 		RenderTexture* renderTexture = new RenderTexture(_renderer, width, height);
 		_renderTextures.add(renderTexture);
 		return renderTexture;
+	}
+
+	Scene* ContentManager::createScene()
+	{
+		Scene* _scene = new Scene(_renderer, _app->getMainWindow()->getTime());
+		_scenes.add(_scene);
+		return _scene;
 	}
 
 	// Load from files
@@ -293,6 +302,11 @@ namespace Core
 		return result;
 	}
 
+	Scene* ContentManager::loadSceneFromFile(String fileName)
+	{
+		return nullptr;
+	}
+
 	// Load by uuids
 
 	Material* ContentManager::loadMaterialByUuid(Uuid uuid)
@@ -314,6 +328,13 @@ namespace Core
 		ContentDatabase* db = ContentDatabase::singleton();
 		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
 		return loadMeshFromFile(db->getPath(uuid));
+	}
+
+	Scene* ContentManager::loadSceneByUuid(Uuid uuid)
+	{
+		ContentDatabase* db = ContentDatabase::singleton();
+		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadSceneFromFile(db->getPath(uuid));
 	}
 
 	// Load from memory
@@ -348,6 +369,11 @@ namespace Core
 	void ContentManager::destroy(RenderTexture* value)
 	{
 		destroyContent(value, _renderTextures);
+	}
+
+	void ContentManager::destroy(Scene* value)
+	{
+		destroyContent(value, _scenes);
 	}
 
 	void ContentManager::removeFromCache(Content* value, std::map<Uuid, Content*>& map)
