@@ -43,14 +43,12 @@ namespace Core
 		}
 	}
 
-	void MeshRenderer::render(Camera* camera)
+	void MeshRenderer::render(glm::mat4& view, glm::mat4& proj)
 	{
 		if (mesh == nullptr) return;
 
 		Transform* transform = _owner->getTransform();
 
-		glm::mat4 view = camera->getViewMatrix();
-		glm::mat4 proj = camera->getProjectionMatrix();
 		glm::mat4 model = transform->getTransformMatrix();
 
 		for (int i = 0; i < mesh->getSubMeshCount(); ++i)

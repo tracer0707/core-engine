@@ -36,6 +36,6 @@ namespace Core
 		Mesh* getMesh() { return mesh; }
 		void setMesh(Mesh* value);
 
-		void render(Camera* camera) override;
+		void render(glm::mat4& view, glm::mat4& proj) override;
 	};
 }

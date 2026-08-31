@@ -38,12 +38,12 @@ namespace Core
 		}
 	}
 
-	void Object::render(Camera* camera)
+	void Object::render(glm::mat4& view, glm::mat4& proj)
 	{
 		for (int i = 0; i < _components.count(); ++i)
 		{
 			Component* component = _components.get(i);
-			component->render(camera);
+			component->render(view, proj);
 		}
 	}
 

@@ -2,16 +2,17 @@
 
 namespace Core
 {
-	class Camera;
 	class Renderer;
 	class VertexBuffer;
 } // namespace Core
 
 namespace Editor
 {
+	class EditorCamera;
+
 	class Rendering
 	{
 		public:
-			static void renderGrid(Core::Renderer* renderer, Core::VertexBuffer* buffer, Core::Camera* camera);
+			static void renderGrid(Core::Renderer* renderer, Core::VertexBuffer* buffer, EditorCamera* camera);
 	};
 } // namespace Editor

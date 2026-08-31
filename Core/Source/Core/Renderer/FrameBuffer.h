@@ -1,12 +1,16 @@
 #pragma once
 
+#include <cstdint>
+
 namespace Core
 {
     class FrameBuffer
     {
       public:
-        unsigned int frameBuffer = 0;
-        unsigned int colorBuffer = 0;
-        unsigned int depthBuffer = 0;
+        uint32_t frameBuffer = 0u;
+		uint32_t colorBuffer = 0u;
+		uint32_t depthBuffer = 0u;
+        uint32_t width = 0u;
+		uint32_t height = 0u;
     };
 } // namespace Core

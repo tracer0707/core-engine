@@ -43,13 +43,21 @@ namespace Core
 	{
         if (_mainCamera == nullptr) return;
 
-        float dt = _time->getDeltaTime();
+		glm::mat4 view = _mainCamera->getViewMatrix();
+		glm::mat4 proj = _mainCamera->getProjectionMatrix();
 
-        for (int i = 0; i < _objects.count(); ++i)
-        {
-            Object* object = _objects.get(i);
-            object->update(dt);
-            object->render(_mainCamera);
-        }
+		render(view, proj);
 	}
+
+	void Scene::render(glm::mat4& view, glm::mat4& proj)
+    {
+		float dt = _time->getDeltaTime();
+
+		for (int i = 0; i < _objects.count(); ++i)
+		{
+			Object* object = _objects.get(i);
+			object->update(dt);
+			object->render(view, proj);
+		}
+    }
 }

@@ -1,14 +1,16 @@
 #include "EditorCamera.h"
 
 #include <Core/Renderer/Renderer.h>
+#include <Core/Renderer/FrameBuffer.h>
 #include <Core/Interface/Transform.h>
 #include <Core/Math/Mathf.h>
 
 namespace Editor
 {
-	EditorCamera::EditorCamera(Core::Renderer* renderer)
+	EditorCamera::EditorCamera(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer)
 	{
 		_renderer = renderer;
+		_frameBuffer = frameBuffer;
 		_transform = new Core::Transform();
 	}
 
@@ -28,18 +30,18 @@ namespace Editor
 
 	const glm::mat4 EditorCamera::getProjectionMatrix() const
 	{
-		unsigned int w = _renderer->getWidth();
-		unsigned int h = _renderer->getHeight();
+		float w = (float)_frameBuffer->width;
+		float h = (float)_frameBuffer->height;
 
-		float aspect = (float)w / (float)h;
+		float aspect = w / h;
 
 		return glm::perspective(glm::radians(_fov), aspect, _near, _far);
 	}
 
 	const Core::Ray EditorCamera::getCameraToViewportRay(float x, float y) const
 	{
-		float width = _renderer->getWidth();
-		float height = _renderer->getHeight();
+		float width = (float)_frameBuffer->width;
+		float height = (float)_frameBuffer->height;
 
 		glm::mat4 view = getViewMatrix();
 		glm::mat4 proj = getProjectionMatrix();
@@ -49,8 +51,8 @@ namespace Editor
 
 	const glm::vec3 EditorCamera::worldToScreenPoint(glm::vec3 point) const
 	{
-		float width = _renderer->getWidth();
-		float height = _renderer->getHeight();
+		float width = (float)_frameBuffer->width;
+		float height = (float)_frameBuffer->height;
 
 		glm::mat4 view = getViewMatrix();
 		glm::mat4 proj = getProjectionMatrix();
@@ -63,8 +65,8 @@ namespace Editor
 
 	const glm::vec3 EditorCamera::screenToWorldPoint(glm::vec3 point) const
 	{
-		float width = _renderer->getWidth();
-		float height = _renderer->getHeight();
+		float width = (float)_frameBuffer->width;
+		float height = (float)_frameBuffer->height;
 
 		glm::mat4 view = getViewMatrix();
 		glm::mat4 proj = getProjectionMatrix();

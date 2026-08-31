@@ -14,6 +14,6 @@ namespace Editor
 		FullscreenWindow() = default;
 		~FullscreenWindow() = default;
 
-		void update(const char* id, int width, int height);
+		void update(const char* id, uint32_t width, uint32_t height);
 	};
 }

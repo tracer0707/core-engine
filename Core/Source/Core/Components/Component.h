@@ -1,11 +1,12 @@
 #pragma once
 
+#include <glm/mat4x4.hpp>
+
 #include "ComponentType.h"
 
 namespace Core
 {
 	class Object;
-	class Camera;
 
 	class Component
 	{
@@ -20,8 +21,8 @@ namespace Core
 
 			virtual ComponentType getComponentType() const = 0;
 
-			virtual void update(float& dt);
-			virtual void render(Camera* camera);
+			virtual void update(float& dt) {}
+			virtual void render(glm::mat4& view, glm::mat4& proj) {}
 
 			Object* getOwner() { return _owner; }
 	};

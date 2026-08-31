@@ -5,7 +5,7 @@
 
 namespace Editor
 {
-	void FullscreenWindow::update(const char* id, int width, int height)
+	void FullscreenWindow::update(const char* id, uint32_t width, uint32_t height)
 	{
 		ImGuiWindowFlags _flags = ImGuiWindowFlags_NoTitleBar | ImGuiDockNodeFlags_NoDocking | ImGuiDockNodeFlags_NoDockingOverMe | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
 		

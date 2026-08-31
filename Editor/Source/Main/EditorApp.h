@@ -7,11 +7,8 @@
 
 namespace Core
 {
-	class Object;
-	class Camera;
-	class Transform;
 	class Scene;
-	class RenderTexture;
+	class FrameBuffer;
 	class VertexBuffer;
 } // namespace Core
 
@@ -28,6 +25,7 @@ namespace Editor
 	class ToolWindow;
 	class Font;
 	class GizmoRenderer;
+	class EditorCamera;
 
 	class EditorApp : public Core::Application
 	{
@@ -44,11 +42,10 @@ namespace Editor
 
 					float _timeAccumulator = 0.0f;
 
-					Core::Object* _cameraObject = nullptr;
-					Core::Camera* _camera = nullptr;
+					EditorCamera* _camera = nullptr;
 					Core::Scene* _scene = nullptr;
-					Core::RenderTexture* _renderTexture = nullptr;
 					Core::VertexBuffer* _gridBuffer = nullptr;
+					const Core::FrameBuffer* _frameBuffer = nullptr;
 
 					GizmoRenderer* _gizmoRenderer = nullptr;
 					WindowManager* _windowManager = nullptr;

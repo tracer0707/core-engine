@@ -8,11 +8,9 @@
 #include <Core/Shared/String.h>
 #include <Core/Shared/Path.h>
 #include <Core/Renderer/Renderer.h>
+#include <Core/Renderer/FrameBuffer.h>
 #include <Core/Content/Scene.h>
-#include <Core/Scene/Object.h>
-#include <Core/Components/Camera.h>
 #include <Core/Interface/Transform.h>
-#include <Core/Content/RenderTexture.h>
 #include <Core/Content/ContentManager.h>
 
 #include "../Editor/Font.h"
@@ -33,6 +31,7 @@
 #include "../../Dependencies/ImGuizmo/ImGuizmo.h"
 
 #include "../Editor/GizmoRenderer.h"
+#include "../Editor/EditorCamera.h"
 
 #include "../Shared/IconsForkAwesome.h"
 
@@ -44,17 +43,11 @@ namespace Editor
 	{
 		_scene = _contentManager->createScene();
 
-		_cameraObject = _scene->createObject();
-		_camera = _cameraObject->addComponent<Core::Camera*>();
-		Core::Transform* cameraTransform = (Core::Transform*)_cameraObject->getTransform();
+		_frameBuffer = _renderer->createFrameBuffer(512u, 512u);
 
-		_renderTexture = _contentManager->createRenderTexture(512, 512);
-		_camera->setRenderTexture(_renderTexture);
-
-		_scene->setMainCamera(_camera);
-
-		cameraTransform->setPosition(glm::vec3(0.0f, 5.0f, 5.0f));
-		cameraTransform->setRotation(glm::vec3(-10.0f, 0, 0));
+		_camera = new EditorCamera(_renderer, _frameBuffer);
+		_camera->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, 5.0f));
+		_camera->getTransform()->setRotation(glm::vec3(-10.0f, 0, 0));
 
 		_gridBuffer = _renderer->createBuffer(nullptr, 2048, nullptr, 0);
 
@@ -71,7 +64,19 @@ namespace Editor
 		_sceneWindow = _windowManager->addWindow<SceneWindow*>();
 		_sceneWindow->setTime(_time);
 		_sceneWindow->setScene(_scene);
-		_sceneWindow->setRenderTexture(_renderTexture);
+		_sceneWindow->setCamera(_camera);
+		_sceneWindow->setOnResize([this](uint32_t w, uint32_t h) {
+			uint32_t fw = std::max(w, 1u);
+			uint32_t fh = std::max(h, 1u);
+
+			if (_frameBuffer != nullptr)
+			{
+				_renderer->deleteFrameBuffer(_frameBuffer);
+			}
+
+			_frameBuffer = _renderer->createFrameBuffer(fw, fh);
+			_camera->setFrameBuffer(_frameBuffer);
+		});
 
 		_inspectorWindow = _windowManager->addWindow<InspectorWindow*>();
 		_hierarchyWindow = _windowManager->addWindow<HierarchyWindow*>();
@@ -127,16 +132,19 @@ namespace Editor
 	void EditorApp::MainWindow::update()
 	{
 		//** Render scene begin **//
-		_camera->getRenderTexture()->bind();
+		_renderer->bindFrameBuffer(_frameBuffer);
 
-		int viewportWidth = _renderTexture->getWidth();
-		int viewportHeight = _renderTexture->getHeight();
+		int viewportWidth = _frameBuffer->width;
+		int viewportHeight = _frameBuffer->height;
 
 		_renderer->setViewportSize(viewportWidth, viewportHeight);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
+		glm::mat4 view = _camera->getViewMatrix();
+		glm::mat4 proj = _camera->getProjectionMatrix();
+
 		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
-		_scene->render();
+		_scene->render(view, proj);
 		_gizmoRenderer->renderGizmo();
 
 		_renderer->bindFrameBuffer(nullptr);
@@ -157,8 +165,7 @@ namespace Editor
 		if (_timeAccumulator >= 0.5f)
 		{
 			_timeAccumulator = 0.0f;
-			setTitle(("Core Engine: " + std::to_string(_time->getFramesPerSecond()) + " FPS | " + std::to_string(_time->getFrameTimeMs()) + " ms")
-						 .c_str());
+			setTitle(("Core Engine: " + std::to_string(_time->getFramesPerSecond()) + " FPS | " + std::to_string(_time->getFrameTimeMs()) + " ms").c_str());
 		}
 	}
 

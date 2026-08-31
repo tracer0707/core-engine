@@ -38,7 +38,7 @@ namespace Editor
 
 			DockArea _dockArea;
 
-			std::function<void(int, int)> _onResize = nullptr;
+			std::function<void(uint32_t, uint32_t)> _onResize = nullptr;
 
 			std::string _name = "";
 
@@ -70,7 +70,7 @@ namespace Editor
 
 			WindowManager* _parent = nullptr;
 
-			virtual void onResize(int newWidth, int newHeight) {}
+			virtual void onResize(uint32_t newWidth, uint32_t newHeight) {}
 			virtual void onUpdate() {}
 			virtual void onClose() {}
 
@@ -124,7 +124,7 @@ namespace Editor
 			void setCanClose(bool value) { _canClose = value; }
 			bool getCanClose() const { return _canClose; }
 
-			void setOnResize(std::function<void(int, int)> value) { _onResize = value; }
+			void setOnResize(std::function<void(uint32_t, uint32_t)> value) { _onResize = value; }
 			void close();
 
 			Style& getStyle() { return _style; }

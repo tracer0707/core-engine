@@ -10,13 +10,14 @@
 
 namespace Core
 {
-	class Camera;
 	class Transform;
 	class InputManager;
 } // namespace Core
 
 namespace Editor
 {
+	class EditorCamera;
+
 	class Gizmo
 	{
 		public:
@@ -121,6 +122,6 @@ namespace Editor
 			void unsubscribeManipulateEndEvent(Core::Uuid id);
 
 			void init(Core::InputManager* inputManager);
-			void update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
+			void update(EditorCamera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
 	};
 } // namespace Editor

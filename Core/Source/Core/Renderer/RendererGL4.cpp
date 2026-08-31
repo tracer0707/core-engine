@@ -533,6 +533,9 @@ namespace Core
 	{
 		FrameBuffer* fb = new FrameBuffer();
 
+		fb->width = width;
+		fb->height = height;
+
 		glGenFramebuffers(1, &fb->frameBuffer);
 		glGenTextures(1, &fb->colorBuffer);
 		glGenRenderbuffers(1, &fb->depthBuffer);

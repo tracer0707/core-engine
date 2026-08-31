@@ -7,11 +7,11 @@
 #include <imgui_internal.h>
 
 #include <Core/Interface/Transform.h>
-#include <Core/Components/Camera.h>
 #include <Core/System/InputManager.h>
 #include <Core/Math/Mathf.h>
 
 #include "../../Dependencies/ImGuizmo/ImGuizmo.h"
+#include "EditorCamera.h"
 
 namespace Editor
 {
@@ -74,7 +74,7 @@ namespace Editor
 		_object = value;
 	}
 
-	void Gizmo::update(Core::Camera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed)
+	void Gizmo::update(EditorCamera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed)
 	{
 		if (_transform == nullptr)
 		{

@@ -4,10 +4,10 @@
 
 #include <SDL/SDL_scancode.h>
 
-#include <Core/Content/RenderTexture.h>
 #include <Core/Content/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/System/InputManager.h>
+#include <Core/Renderer/FrameBuffer.h>
 
 #include "../Controls/Dummy.h"
 #include "../Controls/Image.h"
@@ -19,6 +19,7 @@
 #include "../ObjectPicker.h"
 
 #include "../Gizmo.h"
+#include "../EditorCamera.h"
 #include "../../Shared/Tags.h"
 
 #include "WindowList.h"
@@ -63,19 +64,12 @@ namespace Editor
 	void SceneWindow::setScene(Core::Scene* scene)
 	{
 		_scene = scene;
-		_camera = _scene->getMainCamera();
 	}
 
-	void SceneWindow::setRenderTexture(Core::RenderTexture* renderTexture)
+	void SceneWindow::setCamera(EditorCamera* camera)
 	{
-		_renderTexture = renderTexture;
-		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
-	}
-
-	void SceneWindow::onResize(int newWidth, int newHeight)
-	{
-		_renderTexture->setSize(newWidth, newHeight);
-		_image->setNativeTextureId(_renderTexture->getNativeColorTextureId());
+		_camera = camera;
+		_image->setNativeTextureId(_camera->getFrameBuffer()->colorBuffer);
 	}
 
 	void SceneWindow::onUpdate()

@@ -6,9 +6,7 @@
 
 namespace Core
 {
-	class Camera;
 	class Scene;
-	class RenderTexture;
 	class Time;
 } // namespace Core
 
@@ -19,6 +17,7 @@ namespace Editor
 	class Image;
 	class Dummy;
 	class ToolWindow;
+	class EditorCamera;
 	struct DragDropData;
 
 	class SceneWindow : public Window
@@ -27,17 +26,15 @@ namespace Editor
 			Dummy* _dndTarget = nullptr;
 			Image* _image = nullptr;
 
+			EditorCamera* _camera = nullptr;
 			Core::Time* _time = nullptr;
-			Core::Camera* _camera = nullptr;
 			Core::Scene* _scene = nullptr;
-			Core::RenderTexture* _renderTexture = nullptr;
 
 			ToolWindow* _toolWindow = nullptr;
 
 			void onDragDrop(DragDropData* data, int x, int y);
 
 		protected:
-			virtual void onResize(int newWidth, int newHeight);
 			virtual void onUpdate();
 
 		public:
@@ -48,6 +45,6 @@ namespace Editor
 
 			void setTime(Core::Time* time) { _time = time; }
 			void setScene(Core::Scene* scene);
-			void setRenderTexture(Core::RenderTexture* renderTexture);
+			void setCamera(EditorCamera* camera);
 	};
 } // namespace Editor

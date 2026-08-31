@@ -35,16 +35,16 @@ namespace Core
 
 	const glm::mat4 Camera::getProjectionMatrix() const
 	{
-		unsigned int w = _renderer->getWidth();
-		unsigned int h = _renderer->getHeight();
+		float w = (float)_renderer->getWidth();
+		float h = (float)_renderer->getHeight();
 
 		if (renderTexture != nullptr)
 		{
-			w = renderTexture->getWidth();
-			h = renderTexture->getHeight();
+			w = (float)renderTexture->getWidth();
+			h = (float)renderTexture->getHeight();
 		}
 
-		float aspect = (float)w / (float)h;
+		float aspect = w / h;
 
 		return glm::perspective(glm::radians(_fov), aspect, _near, _far);
 	}
@@ -71,13 +71,13 @@ namespace Core
 		Transform* transform = _owner->getTransform();
 		if (transform == nullptr) return glm::vec3(0.0f);
 
-		float width = _renderer->getWidth();
-		float height = _renderer->getHeight();
+		float width = (float)_renderer->getWidth();
+		float height = (float)_renderer->getHeight();
 
 		if (renderTexture != nullptr)
 		{
-			width = renderTexture->getWidth();
-			height = renderTexture->getHeight();
+			width = (float)renderTexture->getWidth();
+			height = (float)renderTexture->getHeight();
 		}
 
 		glm::mat4 view = getViewMatrix();
@@ -91,13 +91,13 @@ namespace Core
 
 	const glm::vec3 Camera::screenToWorldPoint(glm::vec3 point) const
 	{
-		float width = _renderer->getWidth();
-		float height = _renderer->getHeight();
+		float width = (float)_renderer->getWidth();
+		float height = (float)_renderer->getHeight();
 
 		if (renderTexture != nullptr)
 		{
-			width = renderTexture->getWidth();
-			height = renderTexture->getHeight();
+			width = (float)renderTexture->getWidth();
+			height = (float)renderTexture->getHeight();
 		}
 
 		glm::mat4 view = getViewMatrix();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/mat4x4.hpp>
+
 #include "../Shared/String.h"
 #include "../Shared/List.h"
 #include "../Shared/Uuid.h"
@@ -33,7 +35,7 @@ namespace Core
 		List<Component*>& getComponents() { return _components; }
 
 		void update(float& dt);
-		void render(Camera* camera);
+		void render(glm::mat4& view, glm::mat4& proj);
 
 		void removeComponent(Component* component);
 

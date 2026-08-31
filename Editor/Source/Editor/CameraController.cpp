@@ -6,14 +6,15 @@
 #include <Core/System/EventHandler.h>
 #include <Core/System/InputManager.h>
 #include <Core/System/Time.h>
-#include <Core/Components/Camera.h>
 #include <Core/Interface/Transform.h>
 #include <Core/Scene/Object.h>
 #include <Core/Math/Mathf.h>
 
+#include "EditorCamera.h"
+
 namespace Editor
 {
-	Core::Camera* CameraController::_camera = nullptr;
+	EditorCamera* CameraController::_camera = nullptr;
 	Core::Time* CameraController::_time = nullptr;
 	Core::InputManager* CameraController::_inputManager = nullptr;
 
@@ -32,7 +33,7 @@ namespace Editor
 
 	glm::vec2 CameraController::prevMousePos = glm::vec2(0, 0);
 
-	void CameraController::init(Core::InputManager* inputManager, Core::Time* time, Core::Camera* camera)
+	void CameraController::init(Core::InputManager* inputManager, Core::Time* time, EditorCamera* camera)
 	{
 		_time = time;
 		_camera = camera;
@@ -63,7 +64,7 @@ namespace Editor
 		{
 			float dt = _time->getDeltaTime();
 
-			Core::Transform* t = _camera->getOwner()->getTransform();
+			Core::Transform* t = _camera->getTransform();
 
 			if (_inputManager->getKey(SDL_SCANCODE_W))
 			{
@@ -147,7 +148,7 @@ namespace Editor
 		float rOffsetX = x - prevMousePos.x;
 		float rOffsetY = y - prevMousePos.y;
 
-		Core::Transform* t = _camera->getOwner()->getTransform();
+		Core::Transform* t = _camera->getTransform();
 
 		if (rButtonDown)
 		{
@@ -180,7 +181,7 @@ namespace Editor
 
 		if (!lButtonDown)
 		{
-			Core::Transform* t = _camera->getOwner()->getTransform();
+			Core::Transform* t = _camera->getTransform();
 
 			glm::vec3 vCamPos = t->getPosition();
 			glm::vec3 vCamDir = t->getForward();

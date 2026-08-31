@@ -4,7 +4,6 @@
 
 #include <Core/Scene/Object.h>
 #include <Core/Content/Scene.h>
-#include <Core/Components/Camera.h>
 #include <Core/System/InputManager.h>
 #include <Core/Renderer/VertexBuffer.h>
 
@@ -14,12 +13,13 @@
 
 #include "../Shared/Tags.h"
 #include "../SceneUtils/Raycast.h"
+#include "EditorCamera.h"
 
 namespace Editor
 {
 	ObjectPicker ObjectPicker::_singleton;
 
-	void ObjectPicker::init(WindowManager* windowManager, Core::Scene* scene, Core::Camera* camera)
+	void ObjectPicker::init(WindowManager* windowManager, Core::Scene* scene, EditorCamera* camera)
 	{
 		_scene = scene;
 		_camera = camera;

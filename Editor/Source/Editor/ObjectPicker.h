@@ -5,7 +5,6 @@
 namespace Core
 {
 	class Scene;
-	class Camera;
 	class Mesh;
 	class Object;
 	class VertexBuffer;
@@ -14,15 +13,15 @@ namespace Core
 namespace Editor
 {
 	class WindowManager;
-	class CSGBrush;
+	class EditorCamera;
 
 	class ObjectPicker
 	{
 	private:
 		WindowManager* _windowManager = nullptr;
 
+		EditorCamera* _camera = nullptr;
 		Core::Scene* _scene = nullptr;
-		Core::Camera* _camera = nullptr;
 
 		Core::Uuid _mouseDownEventId = Core::Uuid::Empty;
 		Core::Uuid _mouseMoveEventId = Core::Uuid::Empty;
@@ -46,7 +45,7 @@ namespace Editor
 	public:
 		static ObjectPicker* singleton() { return &_singleton; }
 
-		void init(WindowManager* windowManager, Core::Scene* scene, Core::Camera* camera);
+		void init(WindowManager* windowManager, Core::Scene* scene, EditorCamera* camera);
 		void destroy();
 
 		void update(bool isMouseInView, bool isGizmoWasUsed, float offsetX, float offsetY);

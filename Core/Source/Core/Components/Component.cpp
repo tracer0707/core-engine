@@ -11,8 +11,4 @@ namespace Core
 	{
 		_owner = nullptr;
 	}
-
-	void Component::update(float& dt) {}
-
-	void Component::render(Camera* camera) {}
 } // namespace Core

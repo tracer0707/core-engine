@@ -4,18 +4,19 @@
 #include <Core/Renderer/Color.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Primitives.h>
-#include <Core/Components/Camera.h>
 #include <Core/Scene/Object.h>
+
+#include "EditorCamera.h"
 
 namespace Editor
 {
-	void Rendering::renderGrid(Core::Renderer* renderer, Core::VertexBuffer* buffer, Core::Camera* camera)
+	void Rendering::renderGrid(Core::Renderer* renderer, Core::VertexBuffer* buffer, EditorCamera* camera)
 	{
 		Core::Color lineColor = Core::Color(0.8f, 0.8f, 0.8f, 0.8f);
 		Core::Color xColor = Core::Color(0.8f, 0.0f, 0.0f, 0.8f);
 		Core::Color zColor = Core::Color(0.0f, 0.0f, 0.8f, 0.8f);
 
-		Core::Transform* t = camera->getOwner()->getTransform();
+		Core::Transform* t = camera->getTransform();
 		glm::vec3 camPos = t->getPosition();
 
 		Core::List<Core::Vertex> verts1;
