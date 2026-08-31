@@ -1,5 +1,7 @@
 #include "Texture.h"
 
+#include <cstring>
+
 #include <FreeImage.h>
 
 #include <Core/Renderer/Renderer.h>
