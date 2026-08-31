@@ -1,4 +1,5 @@
 #include <ctime>
+#include <cfloat>
 
 #include "Mathf.h"
 #include "Ray.h"
