@@ -1,5 +1,7 @@
 #include "String.h"
 
+#include <filesystem>
+
 namespace Core
 {
 	String String::Empty = "";
@@ -12,6 +14,11 @@ namespace Core
 	String::String(std::string buffer)
 	{
 		_buffer = icu::UnicodeString::fromUTF8(buffer.data());
+	}
+
+	String::String(const std::filesystem::path& path)
+	{
+		_buffer = icu::UnicodeString::fromUTF8(path.generic_string());
 	}
 
 	String& String::operator=(std::string str)

@@ -4,6 +4,14 @@
 
 #include <unicode/unistr.h>
 
+namespace std
+{
+	namespace filesystem
+	{
+		class path;
+	}
+} // namespace std
+
 namespace Core
 {
 	class String
@@ -15,6 +23,7 @@ namespace Core
 			String() = default;
 			String(const char* buffer);
 			String(std::string buffer);
+			String(const std::filesystem::path& path);
 
 			static String Empty;
 

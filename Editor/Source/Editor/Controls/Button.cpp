@@ -4,9 +4,8 @@
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 
-#include <Core/Content/Texture2D.h>
-
 #include "ContextMenu.h"
+#include "../../Resources/Texture.h"
 
 namespace Editor
 {
@@ -36,12 +35,12 @@ namespace Editor
 		_actualHeight = (_height > 0.0f) ? _height : ImGui::GetFrameHeightWithSpacing();
 	}
 
-	Button::Button(Core::Texture2D* image)
+	Button::Button(Texture* image)
 	{
 		_image = image;
 	}
 
-	Button::Button(Core::String text, Core::Texture2D* image)
+	Button::Button(Core::String text, Texture* image)
 	{
 		_text = text;
 		_image = image;

@@ -2,8 +2,6 @@
 
 #include <filesystem>
 
-#include <Core/Content/ContentManager.h>
-#include <Core/Content/Texture2D.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 
@@ -21,12 +19,13 @@
 #include "../Controls/Table.h"
 
 #include "../../Utils/TextureUtils.h"
+#include "../../Resources/Texture.h"
 
 namespace Editor
 {
 	ToolWindow::ToolWindow(WindowManager* parent) : Window(parent, TOOL_WINDOW)
 	{
-		Core::ContentManager* contentMgr = parent->getContentManager();
+		Core::Renderer* renderer = _parent->getRenderer();
 
 		/* Layout */
 
@@ -39,8 +38,7 @@ namespace Editor
 		/* Undo */
 
 		Button* undoBtn = new Button();
-		Core::Texture2D* undoBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/undo.png"), contentMgr);
+		Texture* undoBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/undo.png"));
 		undoBtn->setSize(32, 32);
 		undoBtn->setImage(undoBtnImage);
 
@@ -49,8 +47,7 @@ namespace Editor
 		/* Redo */
 
 		Button* redoBtn = new Button();
-		Core::Texture2D* redoBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/redo.png"), contentMgr);
+		Texture* redoBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/redo.png"));
 		redoBtn->setSize(32, 32);
 		redoBtn->setImage(redoBtnImage);
 
@@ -63,8 +60,7 @@ namespace Editor
 		/* Select */
 
 		_selectBtn = new Button();
-		Core::Texture2D* selectBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/select.png"), contentMgr);
+		Texture* selectBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/select.png"));
 		_selectBtn->setSize(32, 32);
 		_selectBtn->setImage(selectBtnImage);
 		_selectBtn->setOnClick([this]() {
@@ -78,8 +74,7 @@ namespace Editor
 
 		_translateBtn = new Button();
 		_translateBtn->setButtonType(ButtonType::Action);
-		Core::Texture2D* moveBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/move.png"), contentMgr);
+		Texture* moveBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/move.png"));
 		_translateBtn->setSize(45, 32);
 		_translateBtn->setImage(moveBtnImage);
 		_translateBtn->setOnClick([this]() {
@@ -126,8 +121,7 @@ namespace Editor
 
 		_rotateBtn = new Button();
 		_rotateBtn->setButtonType(ButtonType::Action);
-		Core::Texture2D* rotateBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/rotate.png"), contentMgr);
+		Texture* rotateBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/rotate.png"));
 		_rotateBtn->setSize(45, 32);
 		_rotateBtn->setImage(rotateBtnImage);
 		_rotateBtn->setOnClick([this]() {
@@ -174,8 +168,7 @@ namespace Editor
 
 		_scaleBtn = new Button();
 		_scaleBtn->setButtonType(ButtonType::Action);
-		Core::Texture2D* scaleBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/scale.png"), contentMgr);
+		Texture* scaleBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/scale.png"));
 		_scaleBtn->setSize(45, 32);
 		_scaleBtn->setImage(scaleBtnImage);
 		_scaleBtn->setOnClick([this]() {
@@ -222,8 +215,7 @@ namespace Editor
 
 		_boundsBtn = new Button();
 		_boundsBtn->setButtonType(ButtonType::Action);
-		Core::Texture2D* boundsBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/button.png"), contentMgr);
+		Texture* boundsBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/button.png"));
 		_boundsBtn->setSize(45, 32);
 		_boundsBtn->setImage(boundsBtnImage);
 		_boundsBtn->setOnClick([this]() {
@@ -273,8 +265,7 @@ namespace Editor
 		/* Local Space */
 
 		_localSpaceBtn = new Button();
-		Core::Texture2D* localSpaceBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/local.png"), contentMgr);
+		Texture* localSpaceBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/local.png"));
 		_localSpaceBtn->setSize(32, 32);
 		_localSpaceBtn->setImage(localSpaceBtnImage);
 		_localSpaceBtn->setOnClick([this]() {
@@ -287,8 +278,7 @@ namespace Editor
 		/* World Space */
 
 		_worldSpaceBtn = new Button();
-		Core::Texture2D* worldSpaceBtnImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/world.png"), contentMgr);
+		Texture* worldSpaceBtnImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/world.png"));
 		_worldSpaceBtn->setSize(32, 32);
 		_worldSpaceBtn->setImage(worldSpaceBtnImage);
 		_worldSpaceBtn->setOnClick([this]() {

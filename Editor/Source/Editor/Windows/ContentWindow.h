@@ -1,13 +1,11 @@
 #pragma once
 
 #include "Window.h"
+
+#include <unordered_map>
+
 #include <Core/Shared/String.h>
 #include <Core/Shared/List.h>
-
-namespace Core
-{
-	class Texture2D;
-}
 
 namespace Editor
 {
@@ -16,6 +14,7 @@ namespace Editor
 	class Button;
 	class ContentButton;
 	class FileSystemDialog;
+	class Texture;
 
 	class ContentWindow : public Window
 	{
@@ -30,11 +29,13 @@ namespace Editor
 			Button* _createResourceBtn = nullptr;
 			Button* _importResourceBtn = nullptr;
 
+			std::unordered_map<Core::String, Texture*> _iconCache;
+
 			void rescanStructure();
 			void rescanCurrentDir();
 			void setCurrentDir(Core::String path);
 
-			Core::Texture2D* getIcon(Core::String ext);
+			Texture* getIcon(Core::String ext);
 			ContentButton* createThumbnailForEdit(Core::String ext);
 			void setInspector(ContentButton* thumbnail, Core::String ext);
 			void createResource(const Core::String& extension, std::function<void(const Core::String&)> createAndSaveFunc);

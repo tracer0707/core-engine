@@ -17,6 +17,7 @@
 #include "../../Shared/IconsForkAwesome.h"
 #include "../../Shared/Tags.h"
 #include "../../Content/ContentSerializer.h"
+#include "../../Resources/Texture.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
@@ -66,11 +67,8 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Core::Texture2D* _addTex = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/add.png"), _parent->getContentManager());
-
-		Core::Texture2D* _importTex = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/down.png"), _parent->getContentManager());
+		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/add.png"));
+		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/down.png"));
 
 		_createResourceBtn = new Button("Create", _addTex);
 		_createResourceBtn->setHeight(24);
@@ -184,14 +182,15 @@ namespace Editor
 		{
 			if (fs::is_directory(it)) continue;
 
-			Core::Texture2D* tex = nullptr;
+			Texture* tex = nullptr;
+			Core::Texture2D* coreTex = nullptr;
 			Core::Content* content = nullptr;
 			Core::String ext = it.extension().generic_string();
 
 			if (ext == ".texture")
 			{
-				tex = _parent->getContentManager()->loadTexture2DFromFile(it.generic_string());
-				content = tex;
+				coreTex = _parent->getContentManager()->loadTexture2DFromFile(it.generic_string());
+				content = coreTex;
 			}
 			else if (ext == ".material")
 			{
@@ -212,6 +211,7 @@ namespace Editor
 			{
 				ContentButton* thumbnail = new ContentButton();
 				thumbnail->setImage(tex);
+				thumbnail->setCoreImage(coreTex);
 				thumbnail->setContent(content);
 				thumbnail->setSize(THUMB_W, THUMB_H);
 				thumbnail->setStringTag(TAG_FULL_PATH, it.generic_string());
@@ -239,7 +239,7 @@ namespace Editor
 	ContentButton* ContentWindow::createThumbnailForEdit(Core::String ext)
 	{
 		ContentButton* thumbnail = new ContentButton();
-		Core::Texture2D* tex = getIcon(ext);
+		Texture* tex = getIcon(ext);
 		thumbnail->setImage(tex);
 		thumbnail->setSize(THUMB_W, THUMB_H);
 		thumbnail->startEdit();
@@ -262,7 +262,7 @@ namespace Editor
 		}
 	}
 
-	Core::Texture2D* ContentWindow::getIcon(Core::String ext)
+	Texture* ContentWindow::getIcon(Core::String ext)
 	{
 		Core::String iconName = Core::String::Empty;
 
@@ -289,9 +289,15 @@ namespace Editor
 
 		if (iconName != Core::String::Empty)
 		{
-			return TextureUtils::loadCompressed(
-				Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/content", iconName),
-				_parent->getContentManager());
+			auto it = _iconCache.find(iconName);
+			if (it != _iconCache.end())
+			{
+				return it->second;
+			}
+
+			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/content", iconName));
+			_iconCache[iconName] = tex;
+			return tex;
 		}
 
 		return nullptr;

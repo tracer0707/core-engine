@@ -2,8 +2,6 @@
 
 #include <filesystem>
 
-#include <Core/Content/ContentManager.h>
-#include <Core/Content/Texture2D.h>
 #include <Core/Shared/Path.h>
 #include <Core/Shared/String.h>
 #include <Core/System/EventHandler.h>
@@ -14,12 +12,13 @@
 #include "../Controls/LinearLayout.h"
 
 #include "../../Utils/TextureUtils.h"
+#include "../../Resources/Texture.h"
 
 namespace Editor
 {
 	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, OBJECT_WINDOW)
 	{
-		Core::ContentManager* contentMgr = parent->getContentManager();
+		Core::Renderer* renderer = _parent->getRenderer();
 
 		/* Layout */
 
@@ -32,8 +31,7 @@ namespace Editor
 		/* Empty object */
 
 		Button* emptyObject = new Button();
-		Core::Texture2D* emptyObjectImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/editor/empty.png"), contentMgr);
+		Texture* emptyObjectImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/empty.png"));
 		emptyObject->setSize(32, 32);
 		emptyObject->setImage(emptyObjectImage);
 		emptyObject->setDragDropSource(true, "SCENE_OBJECT");
@@ -45,8 +43,7 @@ namespace Editor
 		/* Light object */
 
 		Button* lightObject = new Button();
-		Core::Texture2D* lightObjectImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/pointlight.png"), contentMgr);
+		Texture* lightObjectImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/gizmo/pointlight.png"));
 		lightObject->setSize(32, 32);
 		lightObject->setImage(lightObjectImage);
 
@@ -55,8 +52,7 @@ namespace Editor
 		/* Camera object */
 
 		Button* cameraObject = new Button();
-		Core::Texture2D* cameraObjectImage = TextureUtils::loadCompressed(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Icons/gizmo/camera.png"), contentMgr);
+		Texture* cameraObjectImage = Texture::loadFromFile(renderer, Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/gizmo/camera.png"));
 		cameraObject->setSize(32, 32);
 		cameraObject->setImage(cameraObjectImage);
 

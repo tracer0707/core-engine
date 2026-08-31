@@ -7,13 +7,9 @@
 
 #include "Control.h"
 
-namespace Core
-{
-	class Texture2D;
-}
-
 namespace Editor
 {
+	class Texture;
 	class ContextMenu;
 
 	enum class ButtonType
@@ -27,7 +23,7 @@ namespace Editor
 		private:
 			Core::String _text = "";
 
-			Core::Texture2D* _image = nullptr;
+			Texture* _image = nullptr;
 
 			bool _active = true;
 			bool _edit = false;
@@ -43,8 +39,8 @@ namespace Editor
 		public:
 			Button();
 			Button(Core::String text);
-			Button(Core::Texture2D* image);
-			Button(Core::String text, Core::Texture2D* image);
+			Button(Texture* image);
+			Button(Core::String text, Texture* image);
 			virtual ~Button();
 
 			virtual ControlType getControlType() const { return ControlType::Button; }
@@ -54,8 +50,8 @@ namespace Editor
 			Core::String getText() const { return _text; }
 			void setText(Core::String value) { _text = value; }
 
-			void setImage(Core::Texture2D* value) { _image = value; }
-			Core::Texture2D* getImage() { return _image; }
+			void setImage(Texture* value) { _image = value; }
+			Texture* getImage() { return _image; }
 
 			float getImageWidth() const { return _imgW; }
 			void setImageWidth(float value) { _imgW = value; }

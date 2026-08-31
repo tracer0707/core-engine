@@ -2,18 +2,15 @@
 
 #include "Control.h"
 
-namespace Core
-{
-	class Texture2D;
-}
-
 namespace Editor
 {
+	class Texture;
+
 	class Image : public Control
 	{
 		private:
-			Core::Texture2D* texture = nullptr;
-			unsigned int nativeTextureId = 0;
+			Texture* _texture = nullptr;
+			unsigned int _nativeTextureId = 0u;
 
 		public:
 			Image();
@@ -24,10 +21,10 @@ namespace Editor
 			virtual void measure() const;
 			virtual void update();
 
-			void setTexture(Core::Texture2D* value) { texture = value; }
-			Core::Texture2D* getTexture() { return texture; }
+			void setTexture(Texture* value) { _texture = value; }
+			Texture* getTexture() { return _texture; }
 
-			void setNativeTextureId(unsigned int value) { nativeTextureId = value; }
-			unsigned int getNativeTextureId() const { return nativeTextureId; }
+			void setNativeTextureId(unsigned int value) { _nativeTextureId = value; }
+			unsigned int getNativeTextureId() const { return _nativeTextureId; }
 	};
 } // namespace Editor

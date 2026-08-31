@@ -4,8 +4,6 @@
 
 #include <FreeImage.h>
 
-#include <Core/Content/ContentManager.h>
-
 namespace Editor
 {
 	FIBITMAP* TextureUtils::makeSquare(FIBITMAP* src)
@@ -72,40 +70,5 @@ namespace Editor
 		}
 
 		if (alphaChannel != nullptr) FreeImage_Unload(alphaChannel);
-	}
-
-	Core::Texture2D* TextureUtils::loadCompressed(Core::String fileName, Core::ContentManager* mgr)
-	{
-		int w, h, size;
-
-		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(fileName.std_str().c_str());
-		FIBITMAP* texture = FreeImage_Load(_fmt, fileName.std_str().c_str());
-
-		FIBITMAP* convert = TextureUtils::makeSquare(texture);
-		FreeImage_Unload(texture);
-		texture = convert;
-
-		if (FreeImage_GetBPP(texture) != 32)
-		{
-			FIBITMAP* convert = FreeImage_ConvertTo32Bits(texture);
-			FreeImage_Unload(texture);
-			texture = convert;
-		}
-
-		w = FreeImage_GetWidth(texture);
-		h = FreeImage_GetHeight(texture);
-
-		unsigned char* src = FreeImage_GetBits(texture);
-		unsigned int bpp = FreeImage_GetBPP(texture) / 8;
-		unsigned int pitch = FreeImage_GetPitch(texture);
-		size = w * h * bpp;
-		unsigned char* dst = new unsigned char[size];
-
-		for (unsigned y = 0; y < h; y++)
-		{
-			memcpy(dst + y * w * bpp, src + y * pitch, w * bpp);
-		}
-
-		return mgr->loadTexture2DFromBytes(dst, w, h, size, Core::TextureFormat::RGBA8);
 	}
 } // namespace Editor

@@ -3,7 +3,7 @@
 #include <imgui.h>
 #include <imgui_internal.h>
 
-#include <Core/Content/Texture2D.h>
+#include "../../Resources/Texture.h"
 
 namespace Editor
 {
@@ -19,16 +19,24 @@ namespace Editor
 
 	void Image::measure() const
 	{
-		_actualWidth = _width == 0 ? ImGui::GetContentRegionAvail().x : _width;
-		_actualHeight = _height == 0 ? ImGui::GetContentRegionAvail().y : _height;
+		if (_texture != nullptr)
+		{
+			_actualWidth = _width == 0 ? _texture->getWidth() : _width;
+			_actualHeight = _height == 0 ? _texture->getHeight() : _height;
+		}
+		else
+		{
+			_actualWidth = _width;
+			_actualHeight = _height;
+		}
 	}
 
 	void Image::update()
 	{
 		if (!_visible) return;
 
-		unsigned int texId = nativeTextureId;
-		if (texture != nullptr) texId = texture->getNativeId();
+		unsigned int texId = _nativeTextureId;
+		if (_texture != nullptr) texId = _texture->getNativeId();
 
 		ImGui::Image((ImTextureID)(intptr_t)texId, ImVec2(getWidth(), getHeight()), ImVec2(0, 1), ImVec2(1, 0));
 

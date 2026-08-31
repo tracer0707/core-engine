@@ -17,12 +17,14 @@ namespace Core
 namespace Editor
 {
 	class ContextMenu;
+	class Texture;
 
 	class ContentButton : public Control
 	{
 		private:
 			Core::Content* _content = nullptr;
-			Core::Texture2D* _image = nullptr;
+			Texture* _image = nullptr;
+			Core::Texture2D* _coreImage = nullptr;
 
 			bool _active = true;
 			bool _edit = false;
@@ -39,7 +41,8 @@ namespace Editor
 
 		public:
 			ContentButton();
-			ContentButton(Core::Texture2D* image);
+			ContentButton(Texture* image);
+			ContentButton(Core::Texture2D* coreImage);
 			virtual ~ContentButton();
 
 			virtual ControlType getControlType() const { return ControlType::ContentButton; }
@@ -49,8 +52,11 @@ namespace Editor
 			Core::Content* getContent() const { return _content; }
 			void setContent(Core::Content* value) { _content = value; }
 
-			Core::Texture2D* getImage() { return _image; }
-			void setImage(Core::Texture2D* value) { _image = value; }
+			Texture* getImage() const { return _image; }
+			void setImage(Texture* value) { _image = value; }
+
+			Core::Texture2D* getCoreImage() const { return _coreImage; }
+			void setCoreImage(Core::Texture2D* value) { _coreImage = value; }
 
 			bool getActive() const { return _active; }
 			void setActive(bool value);

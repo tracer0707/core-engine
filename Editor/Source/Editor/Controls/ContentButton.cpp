@@ -6,10 +6,12 @@
 #include <imgui_internal.h>
 #include <imgui_stdlib.h>
 
-#include <Core/Content/ContentDatabase.h>
 #include <Core/Content/Texture2D.h>
+#include <Core/Content/ContentDatabase.h>
 
 #include "ContextMenu.h"
+
+#include "../../Resources/Texture.h"
 
 namespace fs = std::filesystem;
 
@@ -17,21 +19,26 @@ namespace Editor
 {
 	ContentButton::ContentButton() : Control() {}
 
-	ContentButton::ContentButton(Core::Texture2D* image)
+	ContentButton::ContentButton(Texture* image)
 	{
 		_image = image;
 	}
 
+	ContentButton::ContentButton(Core::Texture2D* coreImage)
+	{
+		_coreImage = coreImage;
+	}
+
 	void ContentButton::measure() const
 	{
-		if (_image == nullptr) return;
+		if (_image == nullptr && _coreImage == nullptr) return;
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 padding = style.FramePadding;
 		std::string label = getContentName().std_str();
 		float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0.0f;
 		ImVec2 textSize = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
-		_actualWidth = _width == 0 ? _image->getWidth() + padding.x * 2.0f : _width;
-		_actualHeight = _height == 0 ? _image->getHeight() + spacing + textSize.y + padding.y * 2.0f : _height;
+		_actualWidth = _width == 0 ? (_image ? _image->getWidth() : _coreImage->getWidth()) + padding.x * 2.0f : _width;
+		_actualHeight = _height == 0 ? (_image ? _image->getHeight() : _coreImage->getHeight()) + spacing + textSize.y + padding.y * 2.0f : _height;
 	}
 
 	ContentButton::~ContentButton()
@@ -82,7 +89,7 @@ namespace Editor
 
 	void ContentButton::update()
 	{
-		if (!_visible || _image == nullptr) return;
+		if (!_visible || (_image == nullptr && _coreImage == nullptr)) return;
 
 		Core::String contentName = getContentName();
 
@@ -144,7 +151,7 @@ namespace Editor
 		ImVec2 img_p(pos.x + (total_size.x - imgSize.x) * 0.5f, pos.y + padding.y);
 
 		draw_list->AddRectFilled(pos, ImVec2(pos.x + total_size.x, pos.y + total_size.y), bg_col, style.FrameRounding);
-		draw_list->AddImage((ImTextureID)_image->getNativeId(), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1), ImVec2(1, 0));
+		draw_list->AddImage((ImTextureID)(_image ? _image->getNativeId() : _coreImage->getNativeId()), img_p, ImVec2(img_p.x + imgSize.x, img_p.y + imgSize.y), ImVec2(0, 1), ImVec2(1, 0));
 
 		float lowSize = (total_size.x - text_size.x) * 0.5f;
 		ImVec2 text_min(pos.x + lowSize + 1, img_p.y + imgSize.y + spacing);
@@ -196,7 +203,8 @@ namespace Editor
 			}
 			ImGui::SetCursorPos(cur);
 		}
-	ImGui::PopStyleVar();
+
+		ImGui::PopStyleVar();
 
 		if (!_style.enabled)
 		{
