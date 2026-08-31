@@ -69,7 +69,12 @@ namespace Editor
 	void SceneWindow::setCamera(EditorCamera* camera)
 	{
 		_camera = camera;
-		_image->setNativeTextureId(_camera->getFrameBuffer()->colorBuffer);
+	}
+
+	void SceneWindow::setFrameBufferHandle(uint32_t value)
+	{
+		_frameBufferHandle = value;
+		_image->setNativeTextureId(_frameBufferHandle);
 	}
 
 	void SceneWindow::onUpdate()

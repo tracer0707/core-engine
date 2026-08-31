@@ -26,6 +26,8 @@ namespace Editor
 			Dummy* _dndTarget = nullptr;
 			Image* _image = nullptr;
 
+			uint32_t _frameBufferHandle = 0u;
+
 			EditorCamera* _camera = nullptr;
 			Core::Time* _time = nullptr;
 			Core::Scene* _scene = nullptr;
@@ -46,5 +48,6 @@ namespace Editor
 			void setTime(Core::Time* time) { _time = time; }
 			void setScene(Core::Scene* scene);
 			void setCamera(EditorCamera* camera);
+			void setFrameBufferHandle(uint32_t value);
 	};
 } // namespace Editor

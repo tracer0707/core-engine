@@ -9,7 +9,6 @@ namespace Core
 {
 	class Renderer;
 	class Transform;
-	class FrameBuffer;
 }
 
 namespace Editor
@@ -19,14 +18,15 @@ namespace Editor
 		private:
 			Core::Renderer* _renderer = nullptr;
 			Core::Transform* _transform = nullptr;
-			const Core::FrameBuffer* _frameBuffer = nullptr;
 
 			float _fov = 75.0f;
 			float _near = 0.01f;
 			float _far = 1000.0f;
+			uint32_t _fbWidth = 1u;
+			uint32_t _fbHeight = 1u;
 
 		public:
-			EditorCamera(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer);
+			EditorCamera(Core::Renderer* renderer);
 			~EditorCamera();
 
 			float getFov() const { return _fov; }
@@ -38,8 +38,11 @@ namespace Editor
 			float getFar() const { return _far; }
 			void setFar(float value) { _far = value; }
 
-			void setFrameBuffer(const Core::FrameBuffer* value) { _frameBuffer = value; }
-			const Core::FrameBuffer* getFrameBuffer() const { return _frameBuffer; }
+			uint32_t getFrameBufferWidth() const { return _fbWidth; }
+			void setFrameBufferWidth(uint32_t value) { _fbWidth = value; }
+
+			uint32_t getFrameBufferHeight() const { return _fbHeight; }
+			void setFrameBufferHeight(uint32_t value) { _fbHeight = value; }
 
 			Core::Transform* getTransform() const { return _transform; }
 

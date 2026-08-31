@@ -45,7 +45,7 @@ namespace Editor
 
 		_frameBuffer = _renderer->createFrameBuffer(512u, 512u);
 
-		_camera = new EditorCamera(_renderer, _frameBuffer);
+		_camera = new EditorCamera(_renderer);
 		_camera->getTransform()->setPosition(glm::vec3(0.0f, 5.0f, 5.0f));
 		_camera->getTransform()->setRotation(glm::vec3(-10.0f, 0, 0));
 
@@ -75,7 +75,11 @@ namespace Editor
 			}
 
 			_frameBuffer = _renderer->createFrameBuffer(fw, fh);
-			_camera->setFrameBuffer(_frameBuffer);
+
+			_camera->setFrameBufferWidth(fw);
+			_camera->setFrameBufferHeight(fh);
+
+			_sceneWindow->setFrameBufferHandle(_frameBuffer->colorBuffer);
 		});
 
 		_inspectorWindow = _windowManager->addWindow<InspectorWindow*>();

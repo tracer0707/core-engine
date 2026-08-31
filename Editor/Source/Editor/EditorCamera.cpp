@@ -7,10 +7,9 @@
 
 namespace Editor
 {
-	EditorCamera::EditorCamera(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer)
+	EditorCamera::EditorCamera(Core::Renderer* renderer)
 	{
 		_renderer = renderer;
-		_frameBuffer = frameBuffer;
 		_transform = new Core::Transform();
 	}
 
@@ -30,47 +29,35 @@ namespace Editor
 
 	const glm::mat4 EditorCamera::getProjectionMatrix() const
 	{
-		float w = (float)_frameBuffer->width;
-		float h = (float)_frameBuffer->height;
-
-		float aspect = w / h;
+		float aspect = (float)_fbWidth / (float)_fbHeight;
 
 		return glm::perspective(glm::radians(_fov), aspect, _near, _far);
 	}
 
 	const Core::Ray EditorCamera::getCameraToViewportRay(float x, float y) const
 	{
-		float width = (float)_frameBuffer->width;
-		float height = (float)_frameBuffer->height;
-
 		glm::mat4 view = getViewMatrix();
 		glm::mat4 proj = getProjectionMatrix();
 
-		return Core::Mathf::getCameraToViewportRay(width, height, view, proj, x, y);
+		return Core::Mathf::getCameraToViewportRay((float)_fbWidth, (float)_fbHeight, view, proj, x, y);
 	}
 
 	const glm::vec3 EditorCamera::worldToScreenPoint(glm::vec3 point) const
 	{
-		float width = (float)_frameBuffer->width;
-		float height = (float)_frameBuffer->height;
-
 		glm::mat4 view = getViewMatrix();
 		glm::mat4 proj = getProjectionMatrix();
 
 		glm::vec3 fwd = _transform->getForward();
 		glm::vec3 pos = _transform->getPosition();
 
-		return Core::Mathf::worldToScreenPoint(width, height, view, proj, fwd, pos, point);
+		return Core::Mathf::worldToScreenPoint((float)_fbWidth, (float)_fbHeight, view, proj, fwd, pos, point);
 	}
 
 	const glm::vec3 EditorCamera::screenToWorldPoint(glm::vec3 point) const
 	{
-		float width = (float)_frameBuffer->width;
-		float height = (float)_frameBuffer->height;
-
 		glm::mat4 view = getViewMatrix();
 		glm::mat4 proj = getProjectionMatrix();
 
-		return Core::Mathf::screenToWorldPoint(width, height, view, proj, point);
+		return Core::Mathf::screenToWorldPoint((float)_fbWidth, (float)_fbHeight, view, proj, point);
 	}
 } // namespace Editor
