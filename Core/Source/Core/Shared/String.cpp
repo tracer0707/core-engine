@@ -1,39 +1,26 @@
 #include "String.h"
 
-#include <filesystem>
-
 namespace Core
 {
 	String String::Empty = "";
 
-	String::String(const char* buffer)
-	{
-		_buffer = icu::UnicodeString::fromUTF8(buffer);
-	}
+	String::String(const char* str) : _buffer(icu::UnicodeString::fromUTF8(str)) {}
 
-	String::String(std::string buffer)
-	{
-		_buffer = icu::UnicodeString::fromUTF8(buffer.data());
-	}
-
-	String::String(const std::filesystem::path& path)
-	{
-		_buffer = icu::UnicodeString::fromUTF8(path.generic_string());
-	}
-
-	String& String::operator=(std::string str)
-	{
-		_buffer = icu::UnicodeString::fromUTF8(str.data());
-		return *this;
-	}
+	String::String(const std::string& str) : _buffer(icu::UnicodeString::fromUTF8(str)) {}
 
 	String& String::operator=(const char* str)
 	{
-		_buffer = str;
+		_buffer = icu::UnicodeString::fromUTF8(str);
 		return *this;
 	}
 
-	String& String::operator+=(String str)
+	String& String::operator=(const std::string& str)
+	{
+		_buffer = icu::UnicodeString::fromUTF8(str);
+		return *this;
+	}
+
+	String& String::operator+=(const String& str)
 	{
 		_buffer += str._buffer;
 		return *this;
@@ -41,49 +28,42 @@ namespace Core
 
 	String& String::operator+=(char str)
 	{
-		_buffer += str;
+		_buffer += static_cast<UChar>(str);
 		return *this;
 	}
 
 	String String::operator+(const String& other) const
 	{
-		String result;
-		result._buffer = _buffer + other._buffer;
+		String result = *this;
+		result += other;
 		return result;
 	}
 
 	String String::operator+(const char* str) const
 	{
-		String result;
-		result._buffer = _buffer + icu::UnicodeString::fromUTF8(str);
+		String result = *this;
+		result += String(str);
 		return result;
-	}
-
-	String String::operator+(const std::string& str) const
-	{
-		String result;
-		result._buffer = _buffer + icu::UnicodeString::fromUTF8(str.data());
-		return result;
-	}
-
-	bool String::operator<(const String& a) const
-	{
-		return _buffer < a._buffer;
-	}
-
-	bool String::operator>(const String& a) const
-	{
-		return _buffer > a._buffer;
-	}
-
-	bool String::operator!=(const char* str)
-	{
-		return _buffer != str;
 	}
 
 	bool String::operator==(const String& str) const
 	{
 		return _buffer == str._buffer;
+	}
+
+	bool String::operator!=(const String& str) const
+	{
+		return !(*this == str);
+	}
+
+	bool String::operator<(const String& str) const
+	{
+		return _buffer < str._buffer;
+	}
+
+	bool String::operator>(const String& str) const
+	{
+		return _buffer > str._buffer;
 	}
 
 	std::string String::std_str() const

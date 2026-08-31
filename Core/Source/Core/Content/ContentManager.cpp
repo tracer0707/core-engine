@@ -1,6 +1,7 @@
 #include "ContentManager.h"
 
 #include <fstream>
+#include <filesystem>
 
 #include "../Shared/Path.h"
 #include "../System/Application.h"
@@ -17,6 +18,8 @@
 
 #include "../Serialization/FlatBuffers/Content_generated.h"
 
+namespace fs = std::filesystem;
+
 namespace Core
 {
 	ContentManager::ContentManager(Application* app, Renderer* renderer)
@@ -24,7 +27,7 @@ namespace Core
 		_app = app;
 		_renderer = renderer;
 
-		String dbPath = Path::combine(_app->getRootPath(), "ContentDatabase.json");
+		String dbPath = (fs::path(_app->getRootPath().std_str()) / fs::path("ContentDatabase.json")).generic_string();
 		ContentDatabase* db = ContentDatabase::singleton();
 		db->setApplication(app);
 		db->setFilePath(dbPath);

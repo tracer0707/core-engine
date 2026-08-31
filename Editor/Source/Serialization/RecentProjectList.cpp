@@ -8,13 +8,15 @@
 #include <Core/Shared/Path.h>
 #include <Core/Serialization/JsonSerialization.h>
 
+namespace fs = std::filesystem;
+
 namespace Editor
 {
     namespace Serialization
     {
         Core::List<Core::String> RecentProjectList::_projectList;
 
-        static Core::String filename = Core::Path::combine(std::filesystem::current_path().generic_string(), "projects.json");
+        static Core::String filename = (fs::current_path() / fs::path("projects.json")).generic_string();
 
         void RecentProjectList::save()
         {

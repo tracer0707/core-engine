@@ -35,6 +35,8 @@
 
 #include "../Shared/IconsForkAwesome.h"
 
+namespace fs = std::filesystem;
+
 namespace Editor
 {
 	/* WINDOW */
@@ -182,7 +184,7 @@ namespace Editor
 		float iconFontSize = 15.0f;
 
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), iconFontSize);
+		_mainFont = new Font((fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")).generic_string(), iconFontSize);
 
 		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
 		ImFontConfig icons_config;
@@ -190,7 +192,7 @@ namespace Editor
 		icons_config.PixelSnapH = true;
 		icons_config.GlyphMinAdvanceX = iconFontSize;
 		io.Fonts->AddFontFromFileTTF(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts", FONT_ICON_FILE_NAME_FK).std_str().c_str(),
+			(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).generic_string().c_str(),
 			iconFontSize, &icons_config, icons_ranges);
 
 		Font::rebuildFonts();

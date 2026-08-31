@@ -121,7 +121,7 @@ namespace Editor
 
 		Core::String srcFileName = _filesToImport[0];
 		fs::path path = srcFileName.std_str();
-		Core::String dstFileName = Core::Path::combine(_targetPath, path.filename().stem().generic_string() + ".texture");
+		Core::String dstFileName = (fs::path(_targetPath.std_str()) / fs::path(path.filename().stem().generic_string() + ".texture")).generic_string();
 
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName, texFormat]() {
 			ContentImporter importer(app);
@@ -152,7 +152,7 @@ namespace Editor
 
 		Core::String srcFileName = _filesToImport[0];
 		fs::path path = srcFileName.std_str();
-		Core::String dstFileName = Core::Path::combine(_targetPath, path.filename().stem().generic_string() + ".mesh");
+		Core::String dstFileName = (fs::path(_targetPath.std_str()) / fs::path(path.filename().stem().generic_string() + ".mesh")).generic_string();
 
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName]() {
 			ContentImporter importer(app);

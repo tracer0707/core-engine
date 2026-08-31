@@ -160,7 +160,7 @@ namespace Editor
 		});
 
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font(Core::Path::combine(fs::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+		_mainFont = new Font((fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")).generic_string(), 15.0f);
 		_mainFont->setDefault();
 
 		float baseFontSize = 15.0f;
@@ -171,7 +171,7 @@ namespace Editor
 		icons_config.MergeMode = true;
 		icons_config.PixelSnapH = true;
 		io.Fonts->AddFontFromFileTTF(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts", FONT_ICON_FILE_NAME_FK).std_str().c_str(),
+			(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).generic_string().c_str(),
 			iconFontSize, &icons_config, icons_ranges);
 
 		Font::rebuildFonts();
@@ -188,7 +188,7 @@ namespace Editor
 	void ProjectManager::initProject(Core::String value)
 	{
 		fs::path _rootPath = fs::path(value.std_str());
-		fs::path _contentPath = fs::path(Core::Path::combine(value, "Content").std_str());
+		fs::path _contentPath = _rootPath / fs::path("Content");
 
 		Core::List<fs::path> _dirsToCreate;
 		_dirsToCreate.add(_contentPath);

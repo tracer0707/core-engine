@@ -1,12 +1,16 @@
 #include "Application.h"
 
 #include <iostream>
+#include <filesystem>
+
 #define SDL_MAIN_HANDLED
 #include <SDL/SDL.h>
 
 #include "Window.h"
 #include "EventHandler.h"
 #include "../Shared/Path.h"
+
+namespace fs = std::filesystem;
 
 namespace Core
 {
@@ -184,6 +188,6 @@ namespace Core
 
 	String Application::getContentPath()
 	{
-		return Path::combine(_rootPath, _contentPath);
+		return (fs::path(_rootPath.std_str()) / fs::path(_contentPath.std_str())).generic_string();
 	}
 } // namespace Core

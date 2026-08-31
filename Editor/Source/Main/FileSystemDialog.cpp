@@ -28,7 +28,7 @@ namespace Editor
 	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title, FileSystemDialogType dialogType) : Core::Window(app, title, 800, 400)
 	{
 		_dialogType = dialogType;
-		_mainFont = new Font(Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+		_mainFont = new Font((fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")).generic_string(), 15.0f);
 
 		ImGuiIO& io = ImGui::GetIO();
 		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
@@ -37,7 +37,7 @@ namespace Editor
 		icons_config.PixelSnapH = true;
 		icons_config.GlyphMinAdvanceX = 15.0f;
 		io.Fonts->AddFontFromFileTTF(
-			Core::Path::combine(std::filesystem::current_path().generic_string(), "Editor/Fonts", FONT_ICON_FILE_NAME_FK).std_str().c_str(), 15.0f,
+			(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).generic_string().c_str(), 15.0f,
 			&icons_config, icons_ranges);
 
 		Font::rebuildFonts();
@@ -140,14 +140,14 @@ namespace Editor
 				bool valid = true;
 				for (auto& p : lst)
 				{
-					auto path = std::filesystem::path(p->getStringTag(TAG_FULL_PATH).std_str());
-					if (!std::filesystem::exists(path))
+					auto path = fs::path(p->getStringTag(TAG_FULL_PATH).std_str());
+					if (!fs::exists(path))
 					{
 						valid = false;
 						break;
 					}
 
-					if (!(_showFiles ? !std::filesystem::is_directory(path) : std::filesystem::is_directory(path)))
+					if (!(_showFiles ? !fs::is_directory(path) : fs::is_directory(path)))
 					{
 						valid = false;
 						break;
@@ -187,15 +187,15 @@ namespace Editor
 					return;
 				}
 
-				auto path = std::filesystem::path(value.std_str());
-				bool _exists = std::filesystem::exists(path);
+				auto path = fs::path(value.std_str());
+				bool _exists = fs::exists(path);
 				if (_showFiles)
 				{
-					okBtn->setEnabled(_exists && !std::filesystem::is_directory(path));
+					okBtn->setEnabled(_exists && !fs::is_directory(path));
 				}
 				else
 				{
-					okBtn->setEnabled(_exists && std::filesystem::is_directory(path));
+					okBtn->setEnabled(_exists && fs::is_directory(path));
 				}
 			}
 			else
@@ -207,8 +207,8 @@ namespace Editor
 					return;
 				}
 
-				auto path = std::filesystem::path(Core::Path::combine(_selectedCount->getText(), value).std_str());
-				bool _exists = std::filesystem::exists(path);
+				auto path = fs::path(_selectedCount->getText().std_str()) / fs::path(value.std_str());
+				bool _exists = fs::exists(path);
 
 				okBtn->setEnabled(!_exists);
 			}
@@ -235,7 +235,7 @@ namespace Editor
 
 						if (!_left.empty() && !_right.empty())
 						{
-							auto path = std::filesystem::path(Core::Path::combine(_left, _right).std_str());
+							auto path = fs::path(_left.std_str()) / fs::path(_right.std_str());
 							_onPathSelected({path.generic_string()});
 						}
 					}

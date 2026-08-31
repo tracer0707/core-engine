@@ -67,8 +67,8 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/add.png"));
-		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/editor/down.png"));
+		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), (fs::current_path() / fs::path("Editor/Icons/editor/add.png")).generic_string());
+		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), (fs::current_path() / fs::path("Editor/Icons/editor/down.png")).generic_string());
 
 		_createResourceBtn = new Button("Create", _addTex);
 		_createResourceBtn->setHeight(24);
@@ -295,7 +295,7 @@ namespace Editor
 				return it->second;
 			}
 
-			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::combine(std::filesystem::current_path(), "Editor/Icons/content", iconName));
+			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), (fs::current_path() / fs::path("Editor/Icons/content") / fs::path(iconName.std_str())).generic_string());
 			_iconCache[iconName] = tex;
 			return tex;
 		}
@@ -318,7 +318,7 @@ namespace Editor
 			thumbnail->setOnEditComplete([this, thumbnail, extension, createAndSaveFunc](Core::String newName) {
 				if (!newName.endsWith(extension)) newName += extension;
 
-				Core::String path = Core::Path::combine(_currentDir, newName);
+				Core::String path = (fs::path(_currentDir.std_str()) / fs::path(newName.std_str())).generic_string();
 
 				createAndSaveFunc(path);
 

@@ -24,27 +24,6 @@ namespace fs = std::filesystem;
 
 namespace Core
 {
-    String Path::combine(String part0, String part1)
-    {
-        String path = part0;
-        String right = part1;
-
-        if (!path.endsWith('/')) path += '/';
-        while (right.startsWith('/'))
-        {
-            right = right.substring(1);
-        }
-
-        path += right;
-
-        return path;
-    }
-
-    String Path::combine(String part0, String part1, String part2)
-    {
-        return combine(combine(part0, part1), part2);
-	}
-
 	String Path::relative(String target, String base)
 	{
 		fs::path p = fs::relative(target.std_str(), base.std_str());

@@ -1,16 +1,7 @@
 #pragma once
 
 #include <string>
-
 #include <unicode/unistr.h>
-
-namespace std
-{
-	namespace filesystem
-	{
-		class path;
-	}
-} // namespace std
 
 namespace Core
 {
@@ -21,23 +12,24 @@ namespace Core
 
 		public:
 			String() = default;
-			String(const char* buffer);
-			String(std::string buffer);
-			String(const std::filesystem::path& path);
+			String(const char* str);
+			String(const std::string& str);
 
 			static String Empty;
 
-			String& operator=(std::string str);
 			String& operator=(const char* str);
-			String& operator+=(String str);
+			String& operator=(const std::string& str);
+
+			String& operator+=(const String& str);
 			String& operator+=(char str);
-			String operator+(const String& other) const;
+
+			String operator+(const String& str) const;
 			String operator+(const char* str) const;
-			String operator+(const std::string& str) const;
-			bool operator<(const String& a) const;
-			bool operator>(const String& a) const;
-			bool operator!=(const char* str);
+
 			bool operator==(const String& str) const;
+			bool operator!=(const String& str) const;
+			bool operator<(const String& str) const;
+			bool operator>(const String& str) const;
 
 			std::string std_str() const;
 
