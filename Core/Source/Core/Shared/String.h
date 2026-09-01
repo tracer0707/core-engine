@@ -8,7 +8,10 @@ namespace Core
 	class String
 	{
 		private:
-			icu::UnicodeString _buffer;
+			std::string _buffer;
+
+			icu::UnicodeString toUnicodeString() const;
+			static String fromUnicodeString(const icu::UnicodeString&);
 
 		public:
 			String() = default;
@@ -32,6 +35,7 @@ namespace Core
 			bool operator>(const String& str) const;
 
 			std::string std_str() const;
+			const char* c_str() const;
 
 			String replace(char src, char dst);
 			String substring(int start);

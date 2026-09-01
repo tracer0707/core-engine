@@ -4,19 +4,19 @@ namespace Core
 {
 	String String::Empty = "";
 
-	String::String(const char* str) : _buffer(icu::UnicodeString::fromUTF8(str)) {}
+	String::String(const char* str) : _buffer(str) {}
 
-	String::String(const std::string& str) : _buffer(icu::UnicodeString::fromUTF8(str)) {}
+	String::String(const std::string& str) : _buffer(str) {}
 
 	String& String::operator=(const char* str)
 	{
-		_buffer = icu::UnicodeString::fromUTF8(str);
+		_buffer = std::string(str);
 		return *this;
 	}
 
 	String& String::operator=(const std::string& str)
 	{
-		_buffer = icu::UnicodeString::fromUTF8(str);
+		_buffer = str;
 		return *this;
 	}
 
@@ -28,7 +28,7 @@ namespace Core
 
 	String& String::operator+=(char str)
 	{
-		_buffer += static_cast<UChar>(str);
+		_buffer += str;
 		return *this;
 	}
 
@@ -68,78 +68,102 @@ namespace Core
 
 	std::string String::std_str() const
 	{
-		std::string dst;
-		_buffer.toUTF8String(dst);
-		return dst;
+		return _buffer;
+	}
+
+	const char* String::c_str() const
+	{
+		return _buffer.c_str();
 	}
 
 	bool String::empty() const
 	{
-		return _buffer.isEmpty();
+		return _buffer.empty();
 	}
 
 	String String::toLower()
 	{
-		String result;
-		result._buffer = icu::UnicodeString(_buffer.toLower());
-		return result;
+		auto str = toUnicodeString();
+		str.toLower();
+		return fromUnicodeString(str);
 	}
 
 	String String::toUpper()
 	{
-		String result;
-		result._buffer = icu::UnicodeString(_buffer.toUpper());
-		return result;
+		auto str = toUnicodeString();
+		str.toUpper();
+		return fromUnicodeString(str);
 	}
 
 	String String::replace(char src, char dst)
 	{
-		String s;
-		s._buffer = _buffer.findAndReplace(src, dst);
-		return s;
+		auto str = toUnicodeString();
+		str.findAndReplace(src, dst);
+		return fromUnicodeString(str);
 	}
 
 	String String::substring(int start)
 	{
-		String s;
-		s._buffer = _buffer.tempSubString(start);
-		return s;
+
+		auto str = toUnicodeString();
+		str.tempSubString(start);
+		return fromUnicodeString(str);
 	}
 
 	String String::substring(int start, int length)
 	{
-		String s;
-		s._buffer = _buffer.tempSubString(start, length);
-		return s;
+		auto str = toUnicodeString();
+		str.tempSubString(start, length);
+		return fromUnicodeString(str);
 	}
 
 	int String::lastIndexOf(char src) const
 	{
-		return _buffer.lastIndexOf(src);
+		auto str = toUnicodeString();
+		return str.lastIndexOf(src);
 	}
 
 	int String::length() const
 	{
-		return _buffer.countChar32();
+		auto str = toUnicodeString();
+		return str.countChar32();
 	}
 
 	bool String::startsWith(char val) const
 	{
-		return _buffer.startsWith(val);
+		auto str = toUnicodeString();
+		return str.startsWith(val);
 	}
 
 	bool String::startsWith(Core::String val) const
 	{
-		return _buffer.startsWith(val._buffer);
+		auto str = toUnicodeString();
+		auto str2 = val.toUnicodeString();
+		return str.startsWith(str2);
 	}
 
 	bool String::endsWith(char val) const
 	{
-		return _buffer.endsWith(val);
+		auto str = toUnicodeString();
+		return str.endsWith(val);
 	}
 
 	bool String::endsWith(Core::String val) const
 	{
-		return _buffer.endsWith(val._buffer);
+		auto str = toUnicodeString();
+		auto str2 = val.toUnicodeString();
+		return str.endsWith(str2);
+	}
+
+	icu::UnicodeString String::toUnicodeString() const
+	{
+		return icu::UnicodeString::fromUTF8(_buffer);
+	}
+
+	String String::fromUnicodeString(const icu::UnicodeString& str)
+	{
+		std::string utf8;
+		str.toUTF8String(utf8);
+		return String(utf8);
 	}
 } // namespace Core
