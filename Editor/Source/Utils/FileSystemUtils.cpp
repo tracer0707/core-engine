@@ -30,10 +30,10 @@ namespace Editor
 		fs::path mount_path("/");
 		if (fs::exists(mount_path))
 		{
-			drives.add(Core::Path::toUtf8(mount_path));
+			drives.add(mount_path);
 		}
 
-		std::vector<std::string> common_mounts = {"/mnt", "/media", "/Volumes"};
+		std::vector<fs::path> common_mounts = {fs::path("/mnt"), fs::path("/media"), fs::path("/Volumes")};
 		for (const auto& mount : common_mounts)
 		{
 			if (fs::exists(mount) && fs::is_directory(mount))
