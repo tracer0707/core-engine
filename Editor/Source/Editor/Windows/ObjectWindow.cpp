@@ -33,7 +33,7 @@ namespace Editor
 		/* Empty object */
 
 		Button* emptyObject = new Button();
-		Texture* emptyObjectImage = Texture::loadFromFile(renderer, Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/editor/empty.png")));
+		Texture* emptyObjectImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/empty.png"));
 		emptyObject->setSize(32, 32);
 		emptyObject->setImage(emptyObjectImage);
 		emptyObject->setDragDropSource(true, "SCENE_OBJECT");
@@ -45,7 +45,7 @@ namespace Editor
 		/* Light object */
 
 		Button* lightObject = new Button();
-		Texture* lightObjectImage = Texture::loadFromFile(renderer, Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/gizmo/pointlight.png")));
+		Texture* lightObjectImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/gizmo/pointlight.png"));
 		lightObject->setSize(32, 32);
 		lightObject->setImage(lightObjectImage);
 
@@ -54,7 +54,7 @@ namespace Editor
 		/* Camera object */
 
 		Button* cameraObject = new Button();
-		Texture* cameraObjectImage = Texture::loadFromFile(renderer, Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/gizmo/camera.png")));
+		Texture* cameraObjectImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/gizmo/camera.png"));
 		cameraObject->setSize(32, 32);
 		cameraObject->setImage(cameraObjectImage);
 

@@ -6,6 +6,7 @@
 
 #include <Core/Shared/String.h>
 #include <Core/Shared/List.h>
+#include <Core/Shared/Path.h>
 
 namespace Editor
 {
@@ -19,8 +20,8 @@ namespace Editor
 	class ContentWindow : public Window
 	{
 		private:
-			Core::String _contentDir = Core::String::Empty;
-			Core::String _currentDir = Core::String::Empty;
+			fs::path _contentDir;
+			fs::path _currentDir;
 
 			FileSystemDialog* _fsDlg = nullptr;
 
@@ -33,19 +34,19 @@ namespace Editor
 
 			void rescanStructure();
 			void rescanCurrentDir();
-			void setCurrentDir(Core::String path);
+			void setCurrentDir(const fs::path& path);
 
 			Texture* getIcon(Core::String ext);
 			ContentButton* createThumbnailForEdit(Core::String ext);
 			void setInspector(ContentButton* thumbnail, Core::String ext);
-			void createResource(const Core::String& extension, std::function<void(const Core::String&)> createAndSaveFunc);
+			void createResource(const Core::String& extension, std::function<void(const fs::path&)> createAndSaveFunc);
 
 		public:
 			ContentWindow(WindowManager* parent);
 			virtual ~ContentWindow();
 
-			Core::String getContentDir() { return _contentDir; }
-			void setContentDir(Core::String value) { _contentDir = value; }
+			fs::path getContentDir() const { return _contentDir; }
+			void setContentDir(const fs::path& value) { _contentDir = value; }
 
 			virtual void init();
 	};

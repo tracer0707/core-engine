@@ -3,6 +3,7 @@
 #include <cstdint>
 
 #include <Core/Shared/String.h>
+#include <Core/Shared/Path.h>
 
 namespace Core
 {
@@ -30,6 +31,6 @@ namespace Editor
 			const uint32_t& getHeight() const { return _height; }
 			const uint32_t& getNativeId() const { return _nativeId; }
 
-			static Texture* loadFromFile(Core::Renderer* renderer, Core::String fileName);
+			static Texture* loadFromFile(Core::Renderer* renderer, const fs::path& fileName);
 	};
 }

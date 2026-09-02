@@ -4,6 +4,7 @@
 
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
+#include <Core/Shared/Path.h>
 
 #include "Window.h"
 
@@ -17,13 +18,13 @@ namespace Editor
 	class ContentImportWindow : public Window
 	{
 		private:
-			Core::List<Core::String> _filesToImport;
+			Core::List<fs::path> _filesToImport;
 
 			LinearLayout* _importLayout = nullptr;
 			Label* _currentFileLbl = nullptr;
 			Button* _importBtn = nullptr;
 
-			Core::String _targetPath = Core::String::Empty;
+			fs::path _targetPath;
 
 			std::function<void(bool)> _onImportFinished = nullptr;
 
@@ -41,7 +42,7 @@ namespace Editor
 
 			virtual void init();
 
-			void import(Core::List<Core::String> value, Core::String targetPath);
+			void import(Core::List<fs::path> value, const fs::path& targetPath);
 
 			void setOnImportFinished(std::function<void(bool)> callback) { _onImportFinished = callback; }
 	};

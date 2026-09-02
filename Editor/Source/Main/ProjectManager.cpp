@@ -60,21 +60,20 @@ namespace Editor
 
 		for (auto& it : Serialization::RecentProjectList::getProjectList())
 		{
-			auto path = Core::Path::fromUtf8(it);
 			LinearLayout* ll = new LinearLayout(LayoutDirection::Vertical);
 			ll->setObjectTag(0, &it);
 			ll->getStyle().paddingX = 5;
 			ll->getStyle().paddingY = 5;
 			ll->setHeight(50);
-			Label* lbl1 = new Label(Core::Path::toUtf8(path.filename()));
-			Label* lbl2 = new Label(it);
+			Label* lbl1 = new Label(Core::Path::toUtf8(it.filename()));
+			Label* lbl2 = new Label(Core::Path::toUtf8(it));
 			ll->addControl(lbl1);
 			ll->addControl(lbl2);
 			listView->addControl(ll);
 		}
 
 		listView->setOnItemClick([this, app](Control* item) {
-			Core::String* path = (Core::String*)item->getObjectTag(0);
+			fs::path* path = (fs::path*)item->getObjectTag(0);
 			app->initProject(*path);
 			app->setSelectedProject(*path);
 			app->stop(false);
@@ -115,7 +114,7 @@ namespace Editor
 
 		_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
 
-		_fsDlg->setOnPathSelected([this](Core::List<Core::String> fileNames) {
+		_fsDlg->setOnPathSelected([this](Core::List<fs::path> fileNames) {
 			((ProjectManager*)_application)->initProject(fileNames[0]);
 			((ProjectManager*)_application)->setSelectedProject(fileNames[0]);
 
@@ -160,7 +159,7 @@ namespace Editor
 		});
 
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font(Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")), 15.0f);
+		_mainFont = new Font(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
 		_mainFont->setDefault();
 
 		float baseFontSize = 15.0f;
@@ -185,10 +184,9 @@ namespace Editor
 		_wnd = nullptr;
 	}
 
-	void ProjectManager::initProject(Core::String value)
+	void ProjectManager::initProject(const fs::path& value)
 	{
-		fs::path _rootPath = Core::Path::fromUtf8(value);
-		fs::path _contentPath = _rootPath / fs::path("Content");
+		fs::path _contentPath = value / fs::path("Content");
 
 		Core::List<fs::path> _dirsToCreate;
 		_dirsToCreate.add(_contentPath);

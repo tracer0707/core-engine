@@ -5,7 +5,7 @@
 
 namespace Editor
 {
-	Font::Font(Core::String path, float size)
+	Font::Font(const fs::path& path, float size)
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		ImFontGlyphRangesBuilder ranges;
@@ -20,7 +20,8 @@ namespace Editor
 		ImVector<ImWchar> glyphRanges;
 		ranges.BuildRanges(&glyphRanges);
 
-		_font = io.Fonts->AddFontFromFileTTF(path.std_str().c_str(), size, nullptr, glyphRanges.Data);
+		const Core::String utf8Path = Core::Path::toUtf8(path);
+		_font = io.Fonts->AddFontFromFileTTF(utf8Path.c_str(), size, nullptr, glyphRanges.Data);
 	}
 
 	Font::~Font()

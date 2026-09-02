@@ -186,8 +186,8 @@ namespace Core
 		delete value;
 	}
 
-	String Application::getContentPath()
+	fs::path Application::getContentPath() const
 	{
-		return Path::toUtf8(Path::fromUtf8(_rootPath) / Path::fromUtf8(_contentPath));
+		return _rootPath / _contentPath;
 	}
 } // namespace Core

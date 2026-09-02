@@ -3,6 +3,7 @@
 #include <Core/System/Window.h>
 #include <Core/Shared/String.h>
 #include <Core/Shared/List.h>
+#include <Core/Shared/Path.h>
 
 #include <functional>
 
@@ -38,9 +39,9 @@ namespace Editor
 			bool _showFiles = true;
 			bool _multiple = false;
 
-			Core::List<Core::String> _selected;
+			Core::List<fs::path> _selected;
 
-			std::function<void(Core::List<Core::String>)> _onPathSelected = nullptr;
+			std::function<void(Core::List<fs::path>)> _onPathSelected = nullptr;
 
 			void rescanFs();
 
@@ -56,6 +57,6 @@ namespace Editor
 			bool getIsMultiple() const { return _multiple; }
 			void setIsMultiple(bool value);
 
-			void setOnPathSelected(std::function<void(Core::List<Core::String>)> value) { _onPathSelected = value; }
+			void setOnPathSelected(std::function<void(Core::List<fs::path>)> value) { _onPathSelected = value; }
 	};
 } // namespace Editor

@@ -72,7 +72,7 @@ namespace Editor
 
 	void ContentImportWindow::init() {}
 
-	void ContentImportWindow::import(Core::List<Core::String> value, Core::String targetPath)
+	void ContentImportWindow::import(Core::List<fs::path> value, const fs::path& targetPath)
 	{
 		_filesToImport = value;
 		_targetPath = targetPath;
@@ -88,7 +88,7 @@ namespace Editor
 			return;
 		}
 
-		fs::path path = Core::Path::fromUtf8(_filesToImport[0]);
+		fs::path path = _filesToImport[0];
 		_currentFileLbl->setText(Core::Path::toUtf8(path.filename()));
 
 		_importLayout->clear();
@@ -119,9 +119,8 @@ namespace Editor
 		_importLayout->addControl(texFmtLbl);
 		_importLayout->addControl(texFormat);
 
-		Core::String srcFileName = _filesToImport[0];
-		fs::path path = Core::Path::fromUtf8(srcFileName);
-		Core::String dstFileName = Core::Path::toUtf8(Core::Path::fromUtf8(_targetPath) / Core::Path::fromUtf8(Core::Path::toUtf8(path.filename().stem()) + ".texture"));
+		fs::path srcFileName = _filesToImport[0];
+		fs::path dstFileName = _targetPath / Core::Path::fromUtf8(Core::Path::toUtf8(srcFileName.filename().stem()) + ".texture");
 
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName, texFormat]() {
 			ContentImporter importer(app);
@@ -150,9 +149,8 @@ namespace Editor
 		WindowManager* mgr = _parent;
 		EditorApp* app = mgr->getApplication();
 
-		Core::String srcFileName = _filesToImport[0];
-		fs::path path = Core::Path::fromUtf8(srcFileName);
-		Core::String dstFileName = Core::Path::toUtf8(Core::Path::fromUtf8(_targetPath) / Core::Path::fromUtf8(Core::Path::toUtf8(path.filename().stem()) + ".mesh"));
+		fs::path srcFileName = _filesToImport[0];
+		fs::path dstFileName = _targetPath / Core::Path::fromUtf8(Core::Path::toUtf8(srcFileName.filename().stem()) + ".mesh");
 
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName]() {
 			ContentImporter importer(app);

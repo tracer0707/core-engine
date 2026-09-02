@@ -14,13 +14,13 @@ namespace Editor
 {
     namespace Serialization
     {
-        Core::List<Core::String> RecentProjectList::_projectList;
+        Core::List<fs::path> RecentProjectList::_projectList;
 
-        static Core::String filename = Core::Path::toUtf8(fs::current_path() / fs::path("projects.json"));
+        static fs::path filename = fs::current_path() / fs::path("projects.json");
 
         void RecentProjectList::save()
         {
-			nlohmann::serialize(_projectList, filename.std_str());
+            nlohmann::serialize(_projectList, filename);
         }
 
         void RecentProjectList::load()

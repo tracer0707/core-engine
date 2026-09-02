@@ -32,19 +32,19 @@ namespace Editor
 		}
 	}
 
-	Texture* Texture::loadFromFile(Core::Renderer* renderer, Core::String fileName)
+	Texture* Texture::loadFromFile(Core::Renderer* renderer, const fs::path& fileName)
 	{
 		int w, h, size;
 
 		FREE_IMAGE_FORMAT _fmt;
 		FIBITMAP* texture;
 #ifdef _WIN32
-		const std::wstring wideFileName = fileName.wide_str();
+		const std::wstring wideFileName = fileName.wstring();
 		_fmt = FreeImage_GetFileTypeU(wideFileName.c_str());
 		texture = FreeImage_LoadU(_fmt, wideFileName.c_str());
 #else
-		_fmt = FreeImage_GetFileType(fileName.c_str());
-		texture = FreeImage_Load(_fmt, fileName.c_str());
+		_fmt = FreeImage_GetFileType(fileName.string().c_str());
+		texture = FreeImage_Load(_fmt, fileName.string().c_str());
 #endif
 		if (texture == nullptr)
 			return nullptr;

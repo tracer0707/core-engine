@@ -27,7 +27,7 @@ namespace Core
 		_app = app;
 		_renderer = renderer;
 
-		String dbPath = Path::toUtf8(Path::fromUtf8(_app->getRootPath()) / Path::fromUtf8("ContentDatabase.json"));
+		fs::path dbPath = _app->getRootPath() / "ContentDatabase.json";
 		ContentDatabase* db = ContentDatabase::singleton();
 		db->setApplication(app);
 		db->setFilePath(dbPath);
@@ -89,14 +89,14 @@ namespace Core
 
 	// Load from files
 
-	Material* ContentManager::loadMaterialFromFile(String fileName)
+	Material* ContentManager::loadMaterialFromFile(const fs::path& fileName)
 	{
 		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
 
 		auto it = _materialsCache.find(uuid);
 		if (it != _materialsCache.end()) return (Material*)it->second;
 
-		std::ifstream file(Path::fromUtf8(fileName), std::ios::binary | std::ios::ate);
+		std::ifstream file(fileName, std::ios::binary | std::ios::ate);
 		if (!file.is_open()) return nullptr;
 
 		const std::streamsize fileSize = file.tellg();
@@ -169,14 +169,14 @@ namespace Core
 		return result;
 	}
 
-	Texture2D* ContentManager::loadTexture2DFromFile(String fileName)
+	Texture2D* ContentManager::loadTexture2DFromFile(const fs::path& fileName)
 	{
 		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
 
 		auto it = _textures2DCache.find(uuid);
 		if (it != _textures2DCache.end()) return (Texture2D*)it->second;
 
-		std::ifstream file(Path::fromUtf8(fileName), std::ios::binary | std::ios::ate);
+		std::ifstream file(fileName, std::ios::binary | std::ios::ate);
 		if (!file.is_open()) return nullptr;
 
 		const std::streamsize fileSize = file.tellg();
@@ -210,14 +210,14 @@ namespace Core
 		return result;
 	}
 
-	Mesh* ContentManager::loadMeshFromFile(String fileName)
+	Mesh* ContentManager::loadMeshFromFile(const fs::path& fileName)
 	{
 		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
 
 		auto it = _meshesCache.find(uuid);
 		if (it != _meshesCache.end()) return (Mesh*)it->second;
 
-		std::ifstream file(Path::fromUtf8(fileName), std::ios::binary | std::ios::ate);
+		std::ifstream file(fileName, std::ios::binary | std::ios::ate);
 		if (!file.is_open()) return nullptr;
 
 		const std::streamsize fileSize = file.tellg();
@@ -305,7 +305,7 @@ namespace Core
 		return result;
 	}
 
-	Scene* ContentManager::loadSceneFromFile(String fileName)
+	Scene* ContentManager::loadSceneFromFile(const fs::path& fileName)
 	{
 		return nullptr;
 	}

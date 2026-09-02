@@ -68,8 +68,8 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/editor/add.png")));
-		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/editor/down.png")));
+		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), fs::current_path() / fs::path("Editor/Icons/editor/add.png"));
+		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), fs::current_path() / fs::path("Editor/Icons/editor/down.png"));
 
 		_createResourceBtn = new Button("Create", _addTex);
 		_createResourceBtn->setHeight(24);
@@ -91,7 +91,7 @@ namespace Editor
 
 				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
 
-				_fsDlg->setOnPathSelected([this, parent](Core::List<Core::String> fileNames) {
+				_fsDlg->setOnPathSelected([this, parent](Core::List<fs::path> fileNames) {
 					ContentImportWindow* wnd = (ContentImportWindow*)parent->getWindow(CONTENT_IMPORT_WINDOW);
 					wnd->setVisible(true);
 					wnd->import(fileNames, _currentDir);
@@ -109,7 +109,7 @@ namespace Editor
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
 		_materialMenuItem->setOnClick([this]() {
-			createResource(".material", [this](const Core::String& path) {
+			createResource(".material", [this](const fs::path& path) {
 				Core::Material* material = _parent->getContentManager()->createMaterial();
 				ContentSerializer::serializeMaterial(material, path);
 				_parent->getContentManager()->destroy(material);
@@ -120,7 +120,7 @@ namespace Editor
 		_createResourceBtnCm->addControl(_sceneMenuItem);
 
 		_sceneMenuItem->setOnClick([this]() {
-			createResource(".scene", [this](const Core::String& path) {
+			createResource(".scene", [this](const fs::path& path) {
 				Core::Scene* scene = _parent->getContentManager()->createScene();
 				ContentSerializer::serializeScene(scene, path);
 				_parent->getContentManager()->destroy(scene);
@@ -146,7 +146,7 @@ namespace Editor
 			if (nodes.count() == 0) return;
 			_createResourceBtn->setEnabled(true);
 			_importResourceBtn->setEnabled(true);
-			setCurrentDir(nodes[0]->getStringTag(TAG_FULL_PATH));
+			setCurrentDir(Core::Path::fromUtf8(nodes[0]->getStringTag(TAG_FULL_PATH)));
 		});
 
 		_parent->getContentManager()->setOnResourceLoaded([](Core::Content*) { Core::ContentDatabase::singleton()->save(); });
@@ -170,14 +170,14 @@ namespace Editor
 		setCurrentDir(_currentDir);
 	}
 
-	void ContentWindow::setCurrentDir(Core::String path)
+	void ContentWindow::setCurrentDir(const fs::path& path)
 	{
 		if (path.empty()) return;
 
 		_rightPane->clear();
 		_currentDir = path;
 
-		Core::List<std::filesystem::path> entries = FileSystemUtils::getPathEntries(path);
+		Core::List<fs::path> entries = FileSystemUtils::getPathEntries(path);
 
 		for (auto& it : entries)
 		{
@@ -190,18 +190,18 @@ namespace Editor
 
 			if (ext == ".texture")
 			{
-				coreTex = _parent->getContentManager()->loadTexture2DFromFile(Core::Path::toUtf8(it));
+				coreTex = _parent->getContentManager()->loadTexture2DFromFile(it);
 				content = coreTex;
 			}
 			else if (ext == ".material")
 			{
 				tex = getIcon(ext);
-				content = _parent->getContentManager()->loadMaterialFromFile(Core::Path::toUtf8(it));
+				content = _parent->getContentManager()->loadMaterialFromFile(it);
 			}
 			else if (ext == ".mesh")
 			{
 				tex = getIcon(ext);
-				content = _parent->getContentManager()->loadMeshFromFile(Core::Path::toUtf8(it));
+				content = _parent->getContentManager()->loadMeshFromFile(it);
 			}
 			else
 			{
@@ -254,7 +254,7 @@ namespace Editor
 		if (ext == ".material")
 		{
 			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
-				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(thumbnail->getStringTag(TAG_FULL_PATH));
+				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(Core::Path::fromUtf8(thumbnail->getStringTag(TAG_FULL_PATH)));
 				MaterialInspector* inspector = new MaterialInspector(mat, _parent->getRenderer(), _parent->getEventHandler());
 				inspector->build();
 				inspectorWnd->clear();
@@ -296,7 +296,7 @@ namespace Editor
 				return it->second;
 			}
 
-			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/content") / fs::path(iconName.std_str())));
+			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), fs::current_path() / fs::path("Editor/Icons/content") / Core::Path::fromUtf8(iconName));
 			_iconCache[iconName] = tex;
 			return tex;
 		}
@@ -304,7 +304,7 @@ namespace Editor
 		return nullptr;
 	}
 
-	void ContentWindow::createResource(const Core::String& extension, std::function<void(const Core::String&)> createAndSaveFunc)
+	void ContentWindow::createResource(const Core::String& extension, std::function<void(const fs::path&)> createAndSaveFunc)
 	{
 		_parent->getEventHandler()->addEvent([this, extension, createAndSaveFunc]() {
 			ContentButton* thumbnail = createThumbnailForEdit(extension);
@@ -319,7 +319,7 @@ namespace Editor
 			thumbnail->setOnEditComplete([this, thumbnail, extension, createAndSaveFunc](Core::String newName) {
 				if (!newName.endsWith(extension)) newName += extension;
 
-				Core::String path = Core::Path::toUtf8(Core::Path::fromUtf8(_currentDir) / Core::Path::fromUtf8(newName));
+				fs::path path = _currentDir / Core::Path::fromUtf8(newName);
 
 				createAndSaveFunc(path);
 

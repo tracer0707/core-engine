@@ -1,7 +1,8 @@
 #pragma once
 
 #include "../Shared/List.h"
-#include "../Shared/String.h"
+
+#include "../Shared/Path.h"
 
 typedef union SDL_Event;
 
@@ -33,8 +34,8 @@ namespace Core
 			bool _isRunning = false;
 			bool _forceClosed = false;
 
-			String _rootPath = String::Empty;
-			String _contentPath = "Content";
+			fs::path _rootPath;
+			fs::path _contentPath = "Content";
 
 			List<Window*> _windows;
 
@@ -51,10 +52,10 @@ namespace Core
 			EventHandler* getEventHandler() { return _eventHandler; }
 			bool isForceClosed() { return _forceClosed; }
 
-			String getRootPath() { return _rootPath; }
-			void setRootPath(String value) { _rootPath = value; }
+			fs::path getRootPath() const { return _rootPath; }
+			void setRootPath(const fs::path& value) { _rootPath = value; }
 
-			String getContentPath();
+			fs::path getContentPath() const;
 
 			void run();
 			void stop(bool forceClose);

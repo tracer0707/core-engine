@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include "../Shared/Path.h"
 
 #include "../Shared/Uuid.h"
 #include "../Shared/String.h"
@@ -18,16 +19,16 @@ namespace Core
 			~ContentDatabase();
 
 			Application* _app = nullptr;
-			Core::String _filePath = Core::String::Empty;
+			fs::path _filePath;
 
-			std::map<String, Uuid> _pathToUuid;
-			std::map<Uuid, String> _uuidToPath;
+			std::map<fs::path, Uuid> _pathToUuid;
+			std::map<Uuid, fs::path> _uuidToPath;
 
-			String getRelativePath(String absolutePath);
-			String getAbsolutePath(String relativePath);
+			fs::path getRelativePath(const fs::path& absolutePath);
+			fs::path getAbsolutePath(const fs::path& relativePath);
 
 			void setApplication(Application* value) { _app = value; }
-			void setFilePath(Core::String value) { _filePath = value; }
+			void setFilePath(const fs::path& value) { _filePath = value; }
 
 			static ContentDatabase _singleton;
 
@@ -35,12 +36,12 @@ namespace Core
 			static ContentDatabase* singleton() { return &_singleton; }
 
 			bool hasPath(Uuid uuid);
-			bool hasUuid(String path);
+			bool hasUuid(const fs::path& path);
 
-			String getPath(Uuid uuid);
-			Uuid getUuid(String path);
+			fs::path getPath(Uuid uuid);
+			Uuid getUuid(const fs::path& path);
 
-			void setPath(Uuid uuid, String path);
+			void setPath(Uuid uuid, const fs::path& path);
 
 			void load();
 			void save() const;

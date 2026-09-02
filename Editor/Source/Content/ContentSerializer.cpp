@@ -15,11 +15,11 @@ namespace Editor
 {
 	void ContentSerializer::serializeMaterial(Core::Material* value)
 	{
-		Core::String path = Core::ContentDatabase::singleton()->getPath(value->getUuid());
+		fs::path path = Core::ContentDatabase::singleton()->getPath(value->getUuid());
 		serializeMaterial(value, path);
 	}
 
-	void ContentSerializer::serializeMaterial(Core::Material* value, Core::String path)
+	void ContentSerializer::serializeMaterial(Core::Material* value, const fs::path& path)
 	{
 		flatbuffers::FlatBufferBuilder builder;
 
@@ -110,16 +110,16 @@ namespace Editor
 		uint8_t* buf = builder.GetBufferPointer();
 		size_t size = builder.GetSize();
 
-		std::ofstream file(Core::Path::fromUtf8(path), std::ios::binary);
+		std::ofstream file(path, std::ios::binary);
 		file.write(reinterpret_cast<const char*>(buf), size);
 		file.close();
 	}
 	
 	void ContentSerializer::serializeScene(Core::Scene* value) 
 	{
-		Core::String path = Core::ContentDatabase::singleton()->getPath(value->getUuid());
+		fs::path path = Core::ContentDatabase::singleton()->getPath(value->getUuid());
 		serializeScene(value, path);
 	}
 	
-	void ContentSerializer::serializeScene(Core::Scene* value, Core::String path) {}
+	void ContentSerializer::serializeScene(Core::Scene* value, const fs::path& path) {}
 } // namespace Editor

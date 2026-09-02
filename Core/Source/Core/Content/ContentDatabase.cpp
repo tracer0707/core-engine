@@ -4,6 +4,8 @@
 #include "../System/Application.h"
 #include "../Serialization/JsonSerialization.h"
 
+namespace fs = std::filesystem;
+
 namespace Core
 {
 	ContentDatabase ContentDatabase::_singleton;
@@ -15,19 +17,17 @@ namespace Core
 		_app = nullptr;
 	}
 
-	String ContentDatabase::getRelativePath(String absolutePath)
+	fs::path ContentDatabase::getRelativePath(const fs::path& absolutePath)
 	{
-		String contentPath = _app->getContentPath();
-		return Path::relative(absolutePath, contentPath);
+		return fs::relative(absolutePath, _app->getContentPath());
 	}
 
-	String ContentDatabase::getAbsolutePath(String relativePath)
+	fs::path ContentDatabase::getAbsolutePath(const fs::path& relativePath)
 	{
-		String contentPath = _app->getContentPath();
-		return Path::toUtf8(Path::fromUtf8(contentPath) / Path::fromUtf8(relativePath));
+		return _app->getContentPath() / relativePath;
 	}
 
-	String ContentDatabase::getPath(Uuid uuid)
+	fs::path ContentDatabase::getPath(Uuid uuid)
 	{
 		if (_uuidToPath.find(uuid) != _uuidToPath.end())
 		{
@@ -39,9 +39,9 @@ namespace Core
 		}
 	}
 
-	Uuid ContentDatabase::getUuid(String path)
+	Uuid ContentDatabase::getUuid(const fs::path& path)
 	{
-		String relativePath = getRelativePath(path);
+		fs::path relativePath = getRelativePath(path);
 
 		if (_pathToUuid.find(relativePath) != _pathToUuid.end())
 		{
@@ -62,15 +62,15 @@ namespace Core
 		return _uuidToPath.find(uuid) != _uuidToPath.end();
 	}
 
-	bool ContentDatabase::hasUuid(String path)
+	bool ContentDatabase::hasUuid(const fs::path& path)
 	{
-		String relativePath = getRelativePath(path);
+		fs::path relativePath = getRelativePath(path);
 		return _pathToUuid.find(relativePath) != _pathToUuid.end();
 	}
 
-	void ContentDatabase::setPath(Uuid uuid, String path)
+	void ContentDatabase::setPath(Uuid uuid, const fs::path& path)
 	{
-		String relativePath = getRelativePath(path);
+		fs::path relativePath = getRelativePath(path);
 
 		_uuidToPath[uuid] = relativePath;
 		_pathToUuid[relativePath] = uuid;
@@ -78,9 +78,14 @@ namespace Core
 
 	void ContentDatabase::load()
 	{
-		if (std::filesystem::exists(Path::fromUtf8(_filePath)))
+		if (fs::exists(_filePath))
 		{
-			nlohmann::deserialize(_pathToUuid, _filePath);
+			std::map<String, Uuid> serializedPaths;
+			nlohmann::deserialize(serializedPaths, _filePath);
+			for (const auto& [path, uuid] : serializedPaths)
+			{
+				_pathToUuid[Path::fromUtf8(path)] = uuid;
+			}
 
 			for (auto& p : _pathToUuid)
 			{
@@ -91,6 +96,11 @@ namespace Core
 
 	void ContentDatabase::save() const
 	{
-		nlohmann::serialize(_pathToUuid, _filePath);
+		std::map<String, Uuid> serializedPaths;
+		for (const auto& [path, uuid] : _pathToUuid)
+		{
+			serializedPaths[Path::toUtf8(path)] = uuid;
+		}
+		nlohmann::serialize(serializedPaths, _filePath);
 	}
 } // namespace Core

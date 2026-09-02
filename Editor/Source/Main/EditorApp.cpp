@@ -184,7 +184,7 @@ namespace Editor
 		float iconFontSize = 15.0f;
 
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font(Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")), iconFontSize);
+		_mainFont = new Font(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf"), iconFontSize);
 
 		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
 		ImFontConfig icons_config;

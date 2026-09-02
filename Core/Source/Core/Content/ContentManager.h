@@ -6,6 +6,7 @@
 #include "../Shared/Uuid.h"
 #include "../Shared/String.h"
 #include "../Shared/List.h"
+#include "../Shared/Path.h"
 #include "../Renderer/TextureFormat.h"
 
 namespace Core
@@ -57,10 +58,10 @@ namespace Core
 			Scene* createScene();
 
 			// Load from files
-			Material* loadMaterialFromFile(String fileName);
-			Texture2D* loadTexture2DFromFile(String fileName);
-			Mesh* loadMeshFromFile(String fileName);
-			Scene* loadSceneFromFile(String fileName);
+			Material* loadMaterialFromFile(const fs::path& fileName);
+			Texture2D* loadTexture2DFromFile(const fs::path& fileName);
+			Mesh* loadMeshFromFile(const fs::path& fileName);
+			Scene* loadSceneFromFile(const fs::path& fileName);
 
 			// Load by uuids
 			Material* loadMaterialByUuid(Uuid uuid);

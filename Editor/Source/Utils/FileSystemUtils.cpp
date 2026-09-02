@@ -13,17 +13,17 @@ namespace fs = std::filesystem;
 
 namespace Editor
 {
-	Core::List<Core::String> FileSystemUtils::getDiskDrives()
+	Core::List<fs::path> FileSystemUtils::getDiskDrives()
 	{
-		Core::List<Core::String> drives;
+		Core::List<fs::path> drives;
 
 #ifdef _WIN32
 		for (char drive = 'A'; drive <= 'Z'; ++drive)
 		{
-			std::string drive_path = std::string(1, drive) + ":\\";
+			fs::path drive_path = std::string(1, drive) + ":\\";
 			if (fs::exists(drive_path))
 			{
-				drives.add(Core::String(drive_path).replace('\\', '/'));
+				drives.add(drive_path);
 			}
 		}
 #else
@@ -46,10 +46,10 @@ namespace Editor
 		return drives;
 	}
 
-	Core::List<fs::path> FileSystemUtils::getPathEntries(Core::String path)
+	Core::List<fs::path> FileSystemUtils::getPathEntries(const fs::path& path)
 	{
 		Core::List<fs::path> fs;
-		for (const auto& entry : fs::directory_iterator(Core::Path::fromUtf8(path), fs::directory_options::skip_permission_denied))
+		for (const auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied))
 		{
 			fs.add(entry.path());
 		}
@@ -78,34 +78,31 @@ namespace Editor
 	{
 		for (const auto& entry : fs::recursive_directory_iterator(root))
 		{
-			Core::String _p = Core::Path::toUtf8(entry.path());
-			if (entry.is_regular_file() && !Core::Path::isHiddenOrSystem(_p))
+			if (entry.is_regular_file() && !Core::Path::isHiddenOrSystem(entry.path()))
 			{
-				_p = Core::Path::relative(Core::Path::toUtf8(entry.path()), Core::Path::toUtf8(root));
-				out.add(_p.std_str());
+				out.add(fs::relative(entry.path(), root));
 			}
 		}
 	}
 
-	void FileSystemUtils::fsToTreeView(Core::String path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode, bool lazyLoad)
+	void FileSystemUtils::fsToTreeView(const fs::path& path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode, bool lazyLoad)
 	{
-		std::string _path = Core::Path::toUtf8(Core::Path::fromUtf8(path)).std_str();
+		Core::String _path = Core::Path::toUtf8(path);
 
 		if (!showRootNode)
 		{
-			Core::List<fs::path> fs = getPathEntries(_path);
+			Core::List<fs::path> fs = getPathEntries(path);
 			for (const auto& entry : fs)
 			{
-				Core::String path = Core::Path::toUtf8(entry);
-				if (Core::Path::isHiddenOrSystem(path)) continue;
+				if (Core::Path::isHiddenOrSystem(entry)) continue;
 				if (!addFiles && !fs::is_directory(entry)) continue;
 
-				fsToTreeView(path, treeView, nullptr, addFiles, true, lazyLoad);
+				fsToTreeView(entry, treeView, nullptr, addFiles, true, lazyLoad);
 			}
 			return;
 		}
 
-		auto fs_path = Core::Path::fromUtf8(path);
+		auto fs_path = path;
 
 		TreeNode* _node = treeView->createNode();
 
@@ -137,7 +134,7 @@ namespace Editor
 
 		if (fs::is_directory(fs_path))
 		{
-			Core::List<fs::path> fs = getPathEntries(_path);
+			Core::List<fs::path> fs = getPathEntries(fs_path);
 
 			if (addFiles)
 			{
@@ -164,11 +161,10 @@ namespace Editor
 					{
 						for (const auto& entry : fs)
 						{
-				Core::String path = Core::Path::toUtf8(entry);
-							if (Core::Path::isHiddenOrSystem(path)) continue;
+							if (Core::Path::isHiddenOrSystem(entry)) continue;
 							if (!addFiles && !fs::is_directory(entry)) continue;
 
-							fsToTreeView(path, treeView, _node, addFiles, true, lazyLoad);
+							fsToTreeView(entry, treeView, _node, addFiles, true, lazyLoad);
 						}
 					}
 					else
@@ -181,11 +177,10 @@ namespace Editor
 			{
 				for (const auto& entry : fs)
 				{
-							Core::String path = Core::Path::toUtf8(entry);
-					if (Core::Path::isHiddenOrSystem(path)) continue;
+					if (Core::Path::isHiddenOrSystem(entry)) continue;
 					if (!addFiles && !fs::is_directory(entry)) continue;
 
-					fsToTreeView(path, treeView, _node, addFiles, true, lazyLoad);
+					fsToTreeView(entry, treeView, _node, addFiles, true, lazyLoad);
 				}
 			}
 		}

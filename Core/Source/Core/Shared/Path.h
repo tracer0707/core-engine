@@ -4,14 +4,15 @@
 
 #include <filesystem>
 
+namespace fs = std::filesystem;
+
 namespace Core
 {
 	class Path
 	{
 	public:
-		static std::filesystem::path fromUtf8(const String& path);
-		static String toUtf8(const std::filesystem::path& path);
-		static String relative(String target, String base);
-		static bool isHiddenOrSystem(String& path);
+		static fs::path fromUtf8(const String& path);
+		static String toUtf8(const fs::path& path);
+		static bool isHiddenOrSystem(const fs::path& path);
 	};
 }

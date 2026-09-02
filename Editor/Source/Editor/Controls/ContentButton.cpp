@@ -70,8 +70,8 @@ namespace Editor
 	{
 		if (_content != nullptr)
 		{
-			Core::String path = Core::ContentDatabase::singleton()->getPath(_content->getUuid());
-			return Core::Path::toUtf8(fs::path(Core::Path::fromUtf8(path)).filename().stem());
+			fs::path path = Core::ContentDatabase::singleton()->getPath(_content->getUuid());
+			return Core::Path::toUtf8(path.filename().stem());
 		}
 
 		return Core::String::Empty;

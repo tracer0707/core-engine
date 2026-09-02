@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Core/Shared/String.h>
+#include <Core/Shared/Path.h>
 
 struct ImFont;
 
@@ -12,7 +13,7 @@ namespace Editor
 			ImFont* _font = nullptr;
 
 		public:
-			Font(Core::String path, float size);
+			Font(const fs::path& path, float size);
 			~Font();
 
 			static void rebuildFonts();

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <fstream>
+#include <filesystem>
 
 #include "../Classes/json.hpp"
 #include "../Shared/String.h"
@@ -12,6 +13,25 @@
 
 namespace nlohmann
 {
+	template <>
+	struct adl_serializer<fs::path>
+	{
+		static void to_json(json& j, const fs::path& path)
+		{
+			j = Core::Path::toUtf8(path).std_str();
+		}
+
+		static void from_json(const json& j, fs::path& path)
+		{
+			if (!j.is_string())
+			{
+				throw std::runtime_error("type must be string, but is " + std::string(j.type_name()));
+			}
+
+			path = Core::Path::fromUtf8(j.get<std::string>());
+		}
+	};
+
 	template <>
 	struct adl_serializer<Core::String>
 	{
@@ -73,11 +93,11 @@ namespace nlohmann
 	};
 
 	template <typename T>
-	void serialize(const T& obj, Core::String filename)
+	void serialize(const T& obj, const fs::path& filename)
 	{
 		nlohmann::json j = nlohmann::json{{"data", obj}};
 
-		std::ofstream file(Core::Path::fromUtf8(filename));
+		std::ofstream file(filename);
 		if (file.is_open())
 		{
 			file << j.dump(4);
@@ -90,9 +110,9 @@ namespace nlohmann
 	}
 
 	template <typename T>
-	void deserialize(T& obj, Core::String filename)
+	void deserialize(T& obj, const fs::path& filename)
 	{
-		std::ifstream file(Core::Path::fromUtf8(filename));
+		std::ifstream file(filename);
 		if (file.is_open())
 		{
 			nlohmann::json j;

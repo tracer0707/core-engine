@@ -28,7 +28,7 @@ namespace Editor
 	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title, FileSystemDialogType dialogType) : Core::Window(app, title, 800, 400)
 	{
 		_dialogType = dialogType;
-		_mainFont = new Font(Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")), 15.0f);
+		_mainFont = new Font(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
 
 		ImGuiIO& io = ImGui::GetIO();
 		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
@@ -159,7 +159,7 @@ namespace Editor
 					_selected.clear();
 					for (auto& p : lst)
 					{
-						_selected.add(p->getStringTag(TAG_FULL_PATH).std_str());
+						_selected.add(Core::Path::fromUtf8(p->getStringTag(TAG_FULL_PATH)));
 					}
 				}
 
@@ -225,7 +225,7 @@ namespace Editor
 					{
 						if (_selectedPath->getValue() != Core::String::Empty)
 						{
-							_onPathSelected({_selectedPath->getValue()});
+							_onPathSelected({Core::Path::fromUtf8(_selectedPath->getValue())});
 						}
 					}
 					else
@@ -236,7 +236,7 @@ namespace Editor
 						if (!_left.empty() && !_right.empty())
 						{
 							auto path = Core::Path::fromUtf8(_left) / Core::Path::fromUtf8(_right);
-							_onPathSelected({Core::Path::toUtf8(path)});
+							_onPathSelected({path});
 						}
 					}
 				}
@@ -283,7 +283,7 @@ namespace Editor
 	void FileSystemDialog::rescanFs()
 	{
 		_treeView->clear();
-		Core::List<Core::String> _diskDrives = FileSystemUtils::getDiskDrives();
+		Core::List<fs::path> _diskDrives = FileSystemUtils::getDiskDrives();
 		for (auto& d : _diskDrives)
 		{
 			FileSystemUtils::fsToTreeView(d, _treeView, nullptr, _showFiles, true);

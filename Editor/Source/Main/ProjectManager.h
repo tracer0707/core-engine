@@ -5,6 +5,8 @@
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
 
+#include <Core/Shared/Path.h>
+
 namespace Editor
 {
 	class WindowManager;
@@ -24,7 +26,7 @@ namespace Editor
 					MainWindow(ProjectManager* app);
 					virtual ~MainWindow();
 
-					Core::List<Core::String> _recentProjects;
+					Core::List<fs::path> _recentProjects;
 
 					LinearLayout* _mainLayout = nullptr;
 					LinearLayout* _listLayout = nullptr;
@@ -36,7 +38,7 @@ namespace Editor
 					virtual void update();
 			};
 
-			Core::String _selectedProject = Core::String::Empty;
+			fs::path _selectedProject;
 
 			Font* _mainFont = nullptr;
 			MainWindow* _wnd = nullptr;
@@ -45,8 +47,8 @@ namespace Editor
 			virtual void destroy();
 
 		public:
-			Core::String getSelectedProject() { return _selectedProject; }
-			void setSelectedProject(Core::String value) { _selectedProject = value; }
-			void initProject(Core::String value);
+			fs::path getSelectedProject() const { return _selectedProject; }
+			void setSelectedProject(const fs::path& value) { _selectedProject = value; }
+			void initProject(const fs::path& value);
 	};
 } // namespace Editor
