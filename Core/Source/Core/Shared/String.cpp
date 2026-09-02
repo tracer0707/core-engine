@@ -76,6 +76,22 @@ namespace Core
 		return _buffer.c_str();
 	}
 
+#ifdef _WIN32
+	std::wstring String::wide_str() const
+	{
+		icu::UnicodeString unicode = toUnicodeString();
+		std::wstring result;
+		result.reserve(unicode.length());
+
+		for (int32_t i = 0; i < unicode.length(); ++i)
+		{
+			result.push_back(static_cast<wchar_t>(unicode.charAt(i)));
+		}
+
+		return result;
+	}
+#endif
+
 	bool String::empty() const
 	{
 		return _buffer.empty();

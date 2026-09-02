@@ -184,7 +184,7 @@ namespace Editor
 		float iconFontSize = 15.0f;
 
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font((fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")).generic_string(), iconFontSize);
+		_mainFont = new Font(Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")), iconFontSize);
 
 		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
 		ImFontConfig icons_config;
@@ -192,7 +192,7 @@ namespace Editor
 		icons_config.PixelSnapH = true;
 		icons_config.GlyphMinAdvanceX = iconFontSize;
 		io.Fonts->AddFontFromFileTTF(
-			(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).generic_string().c_str(),
+			Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).c_str(),
 			iconFontSize, &icons_config, icons_ranges);
 
 		Font::rebuildFonts();

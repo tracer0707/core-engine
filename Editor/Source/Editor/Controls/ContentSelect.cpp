@@ -5,6 +5,8 @@
 
 #include <filesystem>
 
+#include <Core/Shared/Path.h>
+
 #include <Core/Content/Content.h>
 #include <Core/Content/ContentDatabase.h>
 
@@ -31,7 +33,7 @@ namespace Editor
 		if (_content != nullptr)
 		{
 			Core::String path = Core::ContentDatabase::singleton()->getPath(_content->getUuid());
-			return fs::path(path.std_str()).filename().stem().generic_string();
+			return Core::Path::toUtf8(fs::path(Core::Path::fromUtf8(path)).filename().stem());
 		}
 
 		return "[None]";

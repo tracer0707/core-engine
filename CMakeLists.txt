@@ -15,6 +15,10 @@ else()
     message(WARNING "Unknown platform")
 endif()
 
+if(PLATFORM_WINDOWS)
+    add_compile_definitions(UNICODE _UNICODE NOMINMAX WIN32_LEAN_AND_MEAN)
+endif()
+
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)

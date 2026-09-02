@@ -8,7 +8,19 @@ namespace Editor
 	Font::Font(Core::String path, float size)
 	{
 		ImGuiIO& io = ImGui::GetIO();
-		_font = io.Fonts->AddFontFromFileTTF(path.std_str().c_str(), size, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+		ImFontGlyphRangesBuilder ranges;
+		ranges.AddRanges(io.Fonts->GetGlyphRangesDefault());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesGreek());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesVietnamese());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesThai());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesJapanese());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesChineseFull());
+		ranges.AddRanges(io.Fonts->GetGlyphRangesKorean());
+		ImVector<ImWchar> glyphRanges;
+		ranges.BuildRanges(&glyphRanges);
+
+		_font = io.Fonts->AddFontFromFileTTF(path.std_str().c_str(), size, nullptr, glyphRanges.Data);
 	}
 
 	Font::~Font()

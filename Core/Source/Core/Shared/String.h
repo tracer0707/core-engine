@@ -37,6 +37,10 @@ namespace Core
 			std::string std_str() const;
 			const char* c_str() const;
 
+#ifdef _WIN32
+			std::wstring wide_str() const;
+#endif
+
 			String replace(char src, char dst);
 			String substring(int start);
 			String substring(int start, int length);

@@ -188,6 +188,6 @@ namespace Core
 
 	String Application::getContentPath()
 	{
-		return (fs::path(_rootPath.std_str()) / fs::path(_contentPath.std_str())).generic_string();
+		return Path::toUtf8(Path::fromUtf8(_rootPath) / Path::fromUtf8(_contentPath));
 	}
 } // namespace Core

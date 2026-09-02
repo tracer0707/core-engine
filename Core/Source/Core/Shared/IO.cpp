@@ -13,7 +13,7 @@ namespace Core
     String IO::readText(String& path)
     {
         std::string result_str = "";
-        std::ifstream in(path.std_str(), std::ios::in);
+        std::ifstream in(Path::fromUtf8(path), std::ios::in);
 
         if (!in.is_open())
         {
@@ -36,7 +36,7 @@ namespace Core
         const std::ios_base::openmode open_mode = append ? (std::ios::out | std::ios::app) : std::ios::out;
 
         std::ofstream text_file;
-        text_file.open(path.std_str(), open_mode);
+        text_file.open(Path::fromUtf8(path), open_mode);
         text_file << text.std_str();
         text_file.close();
     }

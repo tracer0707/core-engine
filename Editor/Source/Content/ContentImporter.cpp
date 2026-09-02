@@ -53,8 +53,18 @@ namespace Editor
 		unsigned char* _data = nullptr;
 		int _size = 0;
 
-		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(sourceFileName.std_str().c_str());
-		FIBITMAP* texture = FreeImage_Load(_fmt, sourceFileName.std_str().c_str());
+		FREE_IMAGE_FORMAT _fmt;
+		FIBITMAP* texture;
+#ifdef _WIN32
+		const std::wstring wideFileName = sourceFileName.wide_str();
+		_fmt = FreeImage_GetFileTypeU(wideFileName.c_str());
+		texture = FreeImage_LoadU(_fmt, wideFileName.c_str());
+#else
+		_fmt = FreeImage_GetFileType(sourceFileName.c_str());
+		texture = FreeImage_Load(_fmt, sourceFileName.c_str());
+#endif
+		if (texture == nullptr)
+			throw std::runtime_error("Texture loading error");
 
 		FIBITMAP* convert = TextureUtils::makeSquare(texture);
 		FreeImage_Unload(texture);
@@ -116,7 +126,7 @@ namespace Editor
 		uint8_t* buf = builder.GetBufferPointer();
 		size_t size = builder.GetSize();
 
-		std::ofstream file(targetFileName.std_str(), std::ios::binary);
+		std::ofstream file(Core::Path::fromUtf8(targetFileName), std::ios::binary);
 		file.write(reinterpret_cast<const char*>(buf), size);
 		file.close();
 
@@ -298,13 +308,12 @@ namespace Editor
 
 					builder.Finish(meshOffset);
 
-					std::filesystem::path fileName = targetFileName.std_str();
-					Core::String outputFileName = fileName
-													  .replace_filename(fileName.filename().stem().generic_string() + "_" +
-																		std::to_string(meshIndex) + fileName.extension().generic_string())
-													  .generic_string();
+					std::filesystem::path fileName = Core::Path::fromUtf8(targetFileName);
+					Core::String outputFileName = Core::Path::toUtf8(
+						fileName.replace_filename(Core::Path::fromUtf8(Core::Path::toUtf8(fileName.filename().stem()) + "_" +
+							std::to_string(meshIndex) + Core::Path::toUtf8(fileName.extension()))));
 
-					std::ofstream file(outputFileName.std_str(), std::ios::binary);
+					std::ofstream file(Core::Path::fromUtf8(outputFileName), std::ios::binary);
 
 					if (file.is_open())
 					{

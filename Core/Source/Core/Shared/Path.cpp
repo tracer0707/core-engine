@@ -24,17 +24,28 @@ namespace fs = std::filesystem;
 
 namespace Core
 {
+    std::filesystem::path Path::fromUtf8(const String& path)
+    {
+        return std::filesystem::u8path(path.std_str());
+    }
+
+    String Path::toUtf8(const std::filesystem::path& path)
+    {
+        const auto utf8 = path.generic_u8string();
+        return std::string(reinterpret_cast<const char*>(utf8.data()), utf8.size());
+    }
+
 	String Path::relative(String target, String base)
 	{
-		fs::path p = fs::relative(target.std_str(), base.std_str());
-		return p.generic_string();
+        fs::path p = fs::relative(fromUtf8(target), fromUtf8(base));
+        return toUtf8(p);
 	}
 
     bool Path::isHiddenOrSystem(String& path)
     {
-        fs::path _path = fs::path(path.std_str());
+        fs::path _path = fromUtf8(path);
 
-        std::string filename = _path.filename().string();
+        std::string filename = toUtf8(_path.filename()).std_str();
         if (!filename.empty() && filename[0] == '.')
         {
             return true;

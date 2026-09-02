@@ -27,7 +27,7 @@ namespace Core
 		_app = app;
 		_renderer = renderer;
 
-		String dbPath = (fs::path(_app->getRootPath().std_str()) / fs::path("ContentDatabase.json")).generic_string();
+		String dbPath = Path::toUtf8(Path::fromUtf8(_app->getRootPath()) / Path::fromUtf8("ContentDatabase.json"));
 		ContentDatabase* db = ContentDatabase::singleton();
 		db->setApplication(app);
 		db->setFilePath(dbPath);
@@ -96,7 +96,7 @@ namespace Core
 		auto it = _materialsCache.find(uuid);
 		if (it != _materialsCache.end()) return (Material*)it->second;
 
-		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
+		std::ifstream file(Path::fromUtf8(fileName), std::ios::binary | std::ios::ate);
 		if (!file.is_open()) return nullptr;
 
 		const std::streamsize fileSize = file.tellg();
@@ -176,7 +176,7 @@ namespace Core
 		auto it = _textures2DCache.find(uuid);
 		if (it != _textures2DCache.end()) return (Texture2D*)it->second;
 
-		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
+		std::ifstream file(Path::fromUtf8(fileName), std::ios::binary | std::ios::ate);
 		if (!file.is_open()) return nullptr;
 
 		const std::streamsize fileSize = file.tellg();
@@ -217,7 +217,7 @@ namespace Core
 		auto it = _meshesCache.find(uuid);
 		if (it != _meshesCache.end()) return (Mesh*)it->second;
 
-		std::ifstream file(fileName.std_str(), std::ios::binary | std::ios::ate);
+		std::ifstream file(Path::fromUtf8(fileName), std::ios::binary | std::ios::ate);
 		if (!file.is_open()) return nullptr;
 
 		const std::streamsize fileSize = file.tellg();

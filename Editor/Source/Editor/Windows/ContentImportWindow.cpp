@@ -88,16 +88,16 @@ namespace Editor
 			return;
 		}
 
-		fs::path path = _filesToImport[0].std_str();
-		_currentFileLbl->setText(path.filename().generic_string());
+		fs::path path = Core::Path::fromUtf8(_filesToImport[0]);
+		_currentFileLbl->setText(Core::Path::toUtf8(path.filename()));
 
 		_importLayout->clear();
 
-		if (std::find(image_extensions.begin(), image_extensions.end(), Core::String(path.extension().generic_string()).toLower().std_str()) != image_extensions.end())
+		if (std::find(image_extensions.begin(), image_extensions.end(), Core::Path::toUtf8(path.extension()).toLower().std_str()) != image_extensions.end())
 		{
 			prepareTextureLayout();
 		}
-		else if (std::find(mesh_extensions.begin(), mesh_extensions.end(), Core::String(path.extension().generic_string()).toLower().std_str()) != mesh_extensions.end())
+		else if (std::find(mesh_extensions.begin(), mesh_extensions.end(), Core::Path::toUtf8(path.extension()).toLower().std_str()) != mesh_extensions.end())
 		{
 			prepareMeshLayout();
 		}
@@ -120,8 +120,8 @@ namespace Editor
 		_importLayout->addControl(texFormat);
 
 		Core::String srcFileName = _filesToImport[0];
-		fs::path path = srcFileName.std_str();
-		Core::String dstFileName = (fs::path(_targetPath.std_str()) / fs::path(path.filename().stem().generic_string() + ".texture")).generic_string();
+		fs::path path = Core::Path::fromUtf8(srcFileName);
+		Core::String dstFileName = Core::Path::toUtf8(Core::Path::fromUtf8(_targetPath) / Core::Path::fromUtf8(Core::Path::toUtf8(path.filename().stem()) + ".texture"));
 
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName, texFormat]() {
 			ContentImporter importer(app);
@@ -151,8 +151,8 @@ namespace Editor
 		EditorApp* app = mgr->getApplication();
 
 		Core::String srcFileName = _filesToImport[0];
-		fs::path path = srcFileName.std_str();
-		Core::String dstFileName = (fs::path(_targetPath.std_str()) / fs::path(path.filename().stem().generic_string() + ".mesh")).generic_string();
+		fs::path path = Core::Path::fromUtf8(srcFileName);
+		Core::String dstFileName = Core::Path::toUtf8(Core::Path::fromUtf8(_targetPath) / Core::Path::fromUtf8(Core::Path::toUtf8(path.filename().stem()) + ".mesh"));
 
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName]() {
 			ContentImporter importer(app);

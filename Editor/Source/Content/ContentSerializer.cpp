@@ -7,6 +7,7 @@
 #include <Core/Content/Scene.h>
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/ContentDatabase.h>
+#include <Core/Shared/Path.h>
 
 #include <Core/Serialization/FlatBuffers/Content_generated.h>
 
@@ -109,7 +110,7 @@ namespace Editor
 		uint8_t* buf = builder.GetBufferPointer();
 		size_t size = builder.GetSize();
 
-		std::ofstream file(path.std_str(), std::ios::binary);
+		std::ofstream file(Core::Path::fromUtf8(path), std::ios::binary);
 		file.write(reinterpret_cast<const char*>(buf), size);
 		file.close();
 	}

@@ -28,7 +28,7 @@ namespace Editor
 	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title, FileSystemDialogType dialogType) : Core::Window(app, title, 800, 400)
 	{
 		_dialogType = dialogType;
-		_mainFont = new Font((fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")).generic_string(), 15.0f);
+		_mainFont = new Font(Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")), 15.0f);
 
 		ImGuiIO& io = ImGui::GetIO();
 		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
@@ -37,7 +37,7 @@ namespace Editor
 		icons_config.PixelSnapH = true;
 		icons_config.GlyphMinAdvanceX = 15.0f;
 		io.Fonts->AddFontFromFileTTF(
-			(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).generic_string().c_str(), 15.0f,
+			Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).c_str(), 15.0f,
 			&icons_config, icons_ranges);
 
 		Font::rebuildFonts();
@@ -104,14 +104,14 @@ namespace Editor
 						else
 						{
 							Core::String path = lst.get(0)->getStringTag(TAG_FULL_PATH);
-							auto _path = fs::path(path.std_str());
+							auto _path = Core::Path::fromUtf8(path);
 
 							if (!fs::is_directory(_path))
 							{
-								Core::String dirPath = _path.parent_path().generic_string();
+								Core::String dirPath = Core::Path::toUtf8(_path.parent_path());
 								if (!dirPath.endsWith("/")) dirPath += "/";
 								_selectedCount->setText(dirPath);
-								_selectedPath->setValue(_path.filename().generic_string());
+								_selectedPath->setValue(Core::Path::toUtf8(_path.filename()));
 							}
 							else
 							{
@@ -140,7 +140,7 @@ namespace Editor
 				bool valid = true;
 				for (auto& p : lst)
 				{
-					auto path = fs::path(p->getStringTag(TAG_FULL_PATH).std_str());
+					auto path = Core::Path::fromUtf8(p->getStringTag(TAG_FULL_PATH));
 					if (!fs::exists(path))
 					{
 						valid = false;
@@ -187,7 +187,7 @@ namespace Editor
 					return;
 				}
 
-				auto path = fs::path(value.std_str());
+				auto path = Core::Path::fromUtf8(value);
 				bool _exists = fs::exists(path);
 				if (_showFiles)
 				{
@@ -207,7 +207,7 @@ namespace Editor
 					return;
 				}
 
-				auto path = fs::path(_selectedCount->getText().std_str()) / fs::path(value.std_str());
+				auto path = Core::Path::fromUtf8(_selectedCount->getText()) / Core::Path::fromUtf8(value);
 				bool _exists = fs::exists(path);
 
 				okBtn->setEnabled(!_exists);
@@ -235,8 +235,8 @@ namespace Editor
 
 						if (!_left.empty() && !_right.empty())
 						{
-							auto path = fs::path(_left.std_str()) / fs::path(_right.std_str());
-							_onPathSelected({path.generic_string()});
+							auto path = Core::Path::fromUtf8(_left) / Core::Path::fromUtf8(_right);
+							_onPathSelected({Core::Path::toUtf8(path)});
 						}
 					}
 				}

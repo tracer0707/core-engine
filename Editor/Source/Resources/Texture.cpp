@@ -6,6 +6,11 @@
 
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/TextureFormat.h>
+#include <Core/Shared/String.h>
+
+#ifdef _WIN32
+#include <Core/Shared/Path.h>
+#endif
 
 #include "../Utils/TextureUtils.h"
 
@@ -31,8 +36,18 @@ namespace Editor
 	{
 		int w, h, size;
 
-		FREE_IMAGE_FORMAT _fmt = FreeImage_GetFileType(fileName.std_str().c_str());
-		FIBITMAP* texture = FreeImage_Load(_fmt, fileName.std_str().c_str());
+		FREE_IMAGE_FORMAT _fmt;
+		FIBITMAP* texture;
+#ifdef _WIN32
+		const std::wstring wideFileName = fileName.wide_str();
+		_fmt = FreeImage_GetFileTypeU(wideFileName.c_str());
+		texture = FreeImage_LoadU(_fmt, wideFileName.c_str());
+#else
+		_fmt = FreeImage_GetFileType(fileName.c_str());
+		texture = FreeImage_Load(_fmt, fileName.c_str());
+#endif
+		if (texture == nullptr)
+			return nullptr;
 
 		FIBITMAP* convert = TextureUtils::makeSquare(texture);
 		FreeImage_Unload(texture);

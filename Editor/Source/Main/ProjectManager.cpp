@@ -60,13 +60,13 @@ namespace Editor
 
 		for (auto& it : Serialization::RecentProjectList::getProjectList())
 		{
-			auto path = fs::path(it.std_str());
+			auto path = Core::Path::fromUtf8(it);
 			LinearLayout* ll = new LinearLayout(LayoutDirection::Vertical);
 			ll->setObjectTag(0, &it);
 			ll->getStyle().paddingX = 5;
 			ll->getStyle().paddingY = 5;
 			ll->setHeight(50);
-			Label* lbl1 = new Label(path.filename().generic_string());
+			Label* lbl1 = new Label(Core::Path::toUtf8(path.filename()));
 			Label* lbl2 = new Label(it);
 			ll->addControl(lbl1);
 			ll->addControl(lbl2);
@@ -160,7 +160,7 @@ namespace Editor
 		});
 
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font((fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")).generic_string(), 15.0f);
+		_mainFont = new Font(Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf")), 15.0f);
 		_mainFont->setDefault();
 
 		float baseFontSize = 15.0f;
@@ -171,7 +171,7 @@ namespace Editor
 		icons_config.MergeMode = true;
 		icons_config.PixelSnapH = true;
 		io.Fonts->AddFontFromFileTTF(
-			(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).generic_string().c_str(),
+			Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).c_str(),
 			iconFontSize, &icons_config, icons_ranges);
 
 		Font::rebuildFonts();
@@ -187,7 +187,7 @@ namespace Editor
 
 	void ProjectManager::initProject(Core::String value)
 	{
-		fs::path _rootPath = fs::path(value.std_str());
+		fs::path _rootPath = Core::Path::fromUtf8(value);
 		fs::path _contentPath = _rootPath / fs::path("Content");
 
 		Core::List<fs::path> _dirsToCreate;

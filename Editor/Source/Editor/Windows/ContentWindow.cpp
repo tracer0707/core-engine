@@ -9,6 +9,7 @@
 #include <Core/Content/Mesh.h>
 #include <Core/Content/ContentManager.h>
 #include <Core/Content/ContentDatabase.h>
+#include <Core/Shared/Path.h>
 
 #include "../../Utils/FileSystemUtils.h"
 #include "../../Utils/TextureUtils.h"
@@ -67,8 +68,8 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), (fs::current_path() / fs::path("Editor/Icons/editor/add.png")).generic_string());
-		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), (fs::current_path() / fs::path("Editor/Icons/editor/down.png")).generic_string());
+		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/editor/add.png")));
+		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/editor/down.png")));
 
 		_createResourceBtn = new Button("Create", _addTex);
 		_createResourceBtn->setHeight(24);
@@ -185,22 +186,22 @@ namespace Editor
 			Texture* tex = nullptr;
 			Core::Texture2D* coreTex = nullptr;
 			Core::Content* content = nullptr;
-			Core::String ext = it.extension().generic_string();
+			Core::String ext = Core::Path::toUtf8(it.extension());
 
 			if (ext == ".texture")
 			{
-				coreTex = _parent->getContentManager()->loadTexture2DFromFile(it.generic_string());
+				coreTex = _parent->getContentManager()->loadTexture2DFromFile(Core::Path::toUtf8(it));
 				content = coreTex;
 			}
 			else if (ext == ".material")
 			{
 				tex = getIcon(ext);
-				content = _parent->getContentManager()->loadMaterialFromFile(it.generic_string());
+				content = _parent->getContentManager()->loadMaterialFromFile(Core::Path::toUtf8(it));
 			}
 			else if (ext == ".mesh")
 			{
 				tex = getIcon(ext);
-				content = _parent->getContentManager()->loadMeshFromFile(it.generic_string());
+				content = _parent->getContentManager()->loadMeshFromFile(Core::Path::toUtf8(it));
 			}
 			else
 			{
@@ -214,7 +215,7 @@ namespace Editor
 				thumbnail->setCoreImage(coreTex);
 				thumbnail->setContent(content);
 				thumbnail->setSize(THUMB_W, THUMB_H);
-				thumbnail->setStringTag(TAG_FULL_PATH, it.generic_string());
+				thumbnail->setStringTag(TAG_FULL_PATH, Core::Path::toUtf8(it));
 				setInspector(thumbnail, ext);
 
 				_rightPane->addControl(thumbnail);
@@ -295,7 +296,7 @@ namespace Editor
 				return it->second;
 			}
 
-			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), (fs::current_path() / fs::path("Editor/Icons/content") / fs::path(iconName.std_str())).generic_string());
+			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Icons/content") / fs::path(iconName.std_str())));
 			_iconCache[iconName] = tex;
 			return tex;
 		}
@@ -318,7 +319,7 @@ namespace Editor
 			thumbnail->setOnEditComplete([this, thumbnail, extension, createAndSaveFunc](Core::String newName) {
 				if (!newName.endsWith(extension)) newName += extension;
 
-				Core::String path = (fs::path(_currentDir.std_str()) / fs::path(newName.std_str())).generic_string();
+				Core::String path = Core::Path::toUtf8(Core::Path::fromUtf8(_currentDir) / Core::Path::fromUtf8(newName));
 
 				createAndSaveFunc(path);
 

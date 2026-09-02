@@ -16,7 +16,7 @@ namespace Editor
     {
         Core::List<Core::String> RecentProjectList::_projectList;
 
-        static Core::String filename = (fs::current_path() / fs::path("projects.json")).generic_string();
+        static Core::String filename = Core::Path::toUtf8(fs::current_path() / fs::path("projects.json"));
 
         void RecentProjectList::save()
         {

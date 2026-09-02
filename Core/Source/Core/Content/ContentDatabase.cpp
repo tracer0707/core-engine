@@ -1,12 +1,8 @@
 #include "ContentDatabase.h"
 
-#include <filesystem>
-
 #include "../Shared/Path.h"
 #include "../System/Application.h"
 #include "../Serialization/JsonSerialization.h"
-
-namespace fs = std::filesystem;
 
 namespace Core
 {
@@ -28,7 +24,7 @@ namespace Core
 	String ContentDatabase::getAbsolutePath(String relativePath)
 	{
 		String contentPath = _app->getContentPath();
-		return (fs::path(contentPath.std_str()) / fs::path(relativePath.std_str())).generic_string();
+		return Path::toUtf8(Path::fromUtf8(contentPath) / Path::fromUtf8(relativePath));
 	}
 
 	String ContentDatabase::getPath(Uuid uuid)

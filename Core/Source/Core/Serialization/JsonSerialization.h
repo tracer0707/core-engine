@@ -6,6 +6,7 @@
 
 #include "../Classes/json.hpp"
 #include "../Shared/String.h"
+#include "../Shared/Path.h"
 #include "../Shared/List.h"
 #include "../Shared/Uuid.h"
 
@@ -76,7 +77,7 @@ namespace nlohmann
 	{
 		nlohmann::json j = nlohmann::json{{"data", obj}};
 
-		std::ofstream file(filename.std_str());
+		std::ofstream file(Core::Path::fromUtf8(filename));
 		if (file.is_open())
 		{
 			file << j.dump(4);
@@ -91,7 +92,7 @@ namespace nlohmann
 	template <typename T>
 	void deserialize(T& obj, Core::String filename)
 	{
-		std::ifstream file(filename.std_str());
+		std::ifstream file(Core::Path::fromUtf8(filename));
 		if (file.is_open())
 		{
 			nlohmann::json j;
