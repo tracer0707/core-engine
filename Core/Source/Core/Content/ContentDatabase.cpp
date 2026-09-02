@@ -78,7 +78,7 @@ namespace Core
 
 	void ContentDatabase::load()
 	{
-		if (std::filesystem::exists(_filePath.std_str()))
+		if (std::filesystem::exists(Path::fromUtf8(_filePath)))
 		{
 			nlohmann::deserialize(_pathToUuid, _filePath);
 
