@@ -9,6 +9,7 @@ namespace Core
 {
 	Object::Object(Renderer* renderer)
 	{
+		_uuid = Uuid::create();
 		_renderer = renderer;
 		_transform = new Transform(this);
 	}

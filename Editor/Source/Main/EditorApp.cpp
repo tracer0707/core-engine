@@ -146,9 +146,10 @@ namespace Editor
 	void EditorApp::MainWindow::setScene(Core::Scene* value)
 	{
 		_scene = value;
-		_sceneWindow->setScene(_scene);
+		_sceneWindow->setScene(value);
 		_objectPicker->setScene(value);
 		_gizmoRenderer->setScene(value);
+		_hierarchyWindow->setScene(value);
 		_cameraController->setEnabled(value != nullptr);
 	}
 

@@ -18,6 +18,7 @@
 
 #include <Core/Interface/Transform.h>
 #include <Core/Scene/Object.h>
+#include <Core/Content/Scene.h>
 
 namespace Editor
 {
@@ -100,5 +101,29 @@ namespace Editor
 
 	void HierarchyWindow::onUpdate()
 	{
+
+	}
+
+	void HierarchyWindow::setScene(Core::Scene* value)
+	{
+		_scene = value;
+		refreshHierarchy();
+	}
+
+	void HierarchyWindow::refreshHierarchy()
+	{
+		_objectTree->clear();
+
+		if (_scene == nullptr)
+			return;
+
+		for (Core::Object* obj : _scene->getObjects())
+		{
+			TreeNode* node = _objectTree->createNode();
+			node->setText(obj->getName());
+			node->setObjectTag(TAG_SCENE_OBJECT, obj);
+			node->open();
+			_objectTree->addControl(node);
+		}
 	}
 } // namespace Editor

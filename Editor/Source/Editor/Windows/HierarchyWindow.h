@@ -4,6 +4,11 @@
 
 #include "Window.h"
 
+namespace Core
+{
+	class Scene;
+}
+
 namespace Editor
 {
 	class TreeView;
@@ -18,6 +23,8 @@ namespace Editor
 			LinearLayout* _linearLayout = nullptr;
 			Gizmo* _gizmo = nullptr;
 
+			Core::Scene* _scene = nullptr;
+
 			void setInspector(TreeNode* node);
 
 		public:
@@ -28,5 +35,9 @@ namespace Editor
 
 			TreeView* getTreeView() { return _objectTree; }
 			void setGizmo(Gizmo* value) { _gizmo = value; }
+
+			void setScene(Core::Scene* value);
+
+			void refreshHierarchy();
 	};
 } // namespace Editor
