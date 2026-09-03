@@ -26,6 +26,9 @@ namespace Editor
 	class Font;
 	class GizmoRenderer;
 	class EditorCamera;
+	class Gizmo;
+	class ObjectPicker;
+	class CameraController;
 
 	class EditorApp : public Core::Application
 	{
@@ -48,6 +51,9 @@ namespace Editor
 					const Core::FrameBuffer* _frameBuffer = nullptr;
 
 					GizmoRenderer* _gizmoRenderer = nullptr;
+					Gizmo* _gizmo = nullptr;
+					ObjectPicker* _objectPicker = nullptr;
+					CameraController* _cameraController = nullptr;
 					WindowManager* _windowManager = nullptr;
 
 					MainMenu* _mainMenu = nullptr;

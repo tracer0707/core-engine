@@ -14,39 +14,19 @@
 
 namespace Editor
 {
-	EditorCamera* CameraController::_camera = nullptr;
-	Core::Time* CameraController::_time = nullptr;
-	Core::InputManager* CameraController::_inputManager = nullptr;
-
-	bool CameraController::enabled = false;
-	bool CameraController::hovered = false;
-
-	bool CameraController::lButtonDown = false;
-	bool CameraController::rButtonDown = false;
-	bool CameraController::mButtonDown = false;
-	bool CameraController::ctrlPressed = false;
-	bool CameraController::shiftPressed = false;
-	bool CameraController::mouseOver = false;
-
-	float CameraController::cameraSpeed = 5.0f;
-	float CameraController::cameraSpeedNormal = 5.0f;
-	float CameraController::cameraSpeedFast = 10.0f;
-
-	glm::vec2 CameraController::prevMousePos = glm::vec2(0, 0);
-
-	void CameraController::init(Core::InputManager* inputManager, Core::Time* time, EditorCamera* camera)
+	CameraController::CameraController(Core::InputManager* inputManager, Core::Time* time, EditorCamera* camera)
 	{
 		_time = time;
 		_camera = camera;
 		_inputManager = inputManager;
 
-		_inputManager->subscribeMouseDownEvent([=](Core::InputManager::MouseButton mb, int x, int y) { mouseDown(x, y, static_cast<int>(mb)); });
+		_inputManager->subscribeMouseDownEvent([this](Core::InputManager::MouseButton mb, int x, int y) { mouseDown(x, y, static_cast<int>(mb)); });
 
-		_inputManager->subscribeMouseUpEvent([=](Core::InputManager::MouseButton mb, int x, int y) { mouseUp(x, y, static_cast<int>(mb)); });
+		_inputManager->subscribeMouseUpEvent([this](Core::InputManager::MouseButton mb, int x, int y) { mouseUp(x, y, static_cast<int>(mb)); });
 
-		_inputManager->subscribeMouseMoveEvent([=](int x, int y) { mouseMove(x, y); });
+		_inputManager->subscribeMouseMoveEvent([this](int x, int y) { mouseMove(x, y); });
 
-		_inputManager->subscribeMouseWheelEvent([=](int x, int y) { mouseWheel(x, y); });
+		_inputManager->subscribeMouseWheelEvent([this](int x, int y) { mouseWheel(x, y); });
 	}
 
 	void CameraController::update(bool isMouseInView)

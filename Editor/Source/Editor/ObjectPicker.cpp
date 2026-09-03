@@ -17,9 +17,7 @@
 
 namespace Editor
 {
-	ObjectPicker ObjectPicker::_singleton;
-
-	void ObjectPicker::init(WindowManager* windowManager, EditorCamera* camera)
+	ObjectPicker::ObjectPicker(WindowManager* windowManager, EditorCamera* camera)
 	{
 		_camera = camera;
 		_windowManager = windowManager;
@@ -71,7 +69,7 @@ namespace Editor
 		});
 	}
 
-	void ObjectPicker::destroy() 
+	ObjectPicker::~ObjectPicker()
 	{
 		_windowManager->getInputManager()->unsubscribeMouseDownEvent(_mouseDownEventId);
 		_windowManager->getInputManager()->unsubscribeMouseMoveEvent(_mouseMoveEventId);

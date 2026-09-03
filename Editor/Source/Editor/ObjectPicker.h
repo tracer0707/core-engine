@@ -40,14 +40,11 @@ namespace Editor
 
 		void pickObject(int x, int y);
 
-		static ObjectPicker _singleton;
-
 	public:
-		static ObjectPicker* singleton() { return &_singleton; }
+		ObjectPicker(WindowManager* windowManager, EditorCamera* camera);
+		~ObjectPicker();
 
-		void init(WindowManager* windowManager, EditorCamera* camera);
 		void setScene(Core::Scene* value) { _scene = value; }
-		void destroy();
 
 		void update(bool isMouseInView, bool isGizmoWasUsed, float offsetX, float offsetY);
 	};

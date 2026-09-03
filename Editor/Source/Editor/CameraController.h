@@ -16,33 +16,34 @@ namespace Editor
 	class CameraController
 	{
 	private:
-		static EditorCamera* _camera;
-		static Core::Time* _time;
-		static Core::InputManager* _inputManager;
+		EditorCamera* _camera = nullptr;
+		Core::Time* _time = nullptr;
+		Core::InputManager* _inputManager = nullptr;
 
-		static bool enabled;
-		static bool hovered;
+		bool enabled = false;
+		bool hovered = false;
 
-		static bool lButtonDown;
-		static bool rButtonDown;
-		static bool mButtonDown;
-		static bool ctrlPressed;
-		static bool shiftPressed;
-		static bool mouseOver;
-		static glm::vec2 prevMousePos;
+		bool lButtonDown = false;
+		bool rButtonDown = false;
+		bool mButtonDown = false;
+		bool ctrlPressed = false;
+		bool shiftPressed = false;
+		bool mouseOver = false;
+		glm::vec2 prevMousePos = glm::vec2(0, 0);
 
-		static float cameraSpeed;
-		static float cameraSpeedNormal;
-		static float cameraSpeedFast;
+		float cameraSpeed = 5.0f;
+		float cameraSpeedNormal = 5.0f;
+		float cameraSpeedFast = 10.0f;
 
-		static void mouseDown(int x, int y, int mb);
-		static void mouseUp(int x, int y, int mb);
-		static void mouseMove(int x, int y);
-		static void mouseWheel(int x, int y);
+		void mouseDown(int x, int y, int mb);
+		void mouseUp(int x, int y, int mb);
+		void mouseMove(int x, int y);
+		void mouseWheel(int x, int y);
 
 	public:
-		static void init(Core::InputManager* inputManager, Core::Time* time, EditorCamera* camera);
-		static void update(bool isMouseInView);
-		static void setEnabled(bool value) { enabled = value; }
+		CameraController(Core::InputManager* inputManager, Core::Time* time, EditorCamera* camera);
+
+		void update(bool isMouseInView);
+		void setEnabled(bool value) { enabled = value; }
 	};
 }

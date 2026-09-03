@@ -27,7 +27,11 @@ namespace fs = std::filesystem;
 
 namespace Editor
 {
-	ToolWindow::ToolWindow(WindowManager* parent) : Window(parent, TOOL_WINDOW)
+	ToolWindow::ToolWindow(WindowManager* parent) : Window(parent, TOOL_WINDOW) {}
+
+	ToolWindow::~ToolWindow() {}
+
+	void ToolWindow::init()
 	{
 		Core::Renderer* renderer = _parent->getRenderer();
 
@@ -88,7 +92,7 @@ namespace Editor
 		_selectBtn->setSize(32, 32);
 		_selectBtn->setImage(selectBtnImage);
 		_selectBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
+			_gizmo->setTransformMode(Gizmo::TransformMode::Select);
 			invalidate();
 		});
 
@@ -102,7 +106,7 @@ namespace Editor
 		_translateBtn->setSize(45, 32);
 		_translateBtn->setImage(moveBtnImage);
 		_translateBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
+			_gizmo->setTransformMode(Gizmo::TransformMode::Translate);
 			invalidate();
 		});
 		_translateBtn->setUseContextMenu(true);
@@ -116,20 +120,20 @@ namespace Editor
 		translateContextMenuTable->setWidth(255.0f);
 
 		Checkbox* enableMoveSnap = new Checkbox();
-		enableMoveSnap->setValue(Gizmo::singleton()->getMoveSnap());
-		enableMoveSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setMoveSnap(value); });
+		enableMoveSnap->setValue(_gizmo->getMoveSnap());
+		enableMoveSnap->setOnValueChanged([this](bool value) { _gizmo->setMoveSnap(value); });
 		Label* enableMoveSnapLabel = new Label("Enable Move Snap");
 		translateContextMenuTable->addControl(enableMoveSnapLabel);
 		translateContextMenuTable->addControl(enableMoveSnap);
 
 		InputFloat* moveSnapStepInput = new InputFloat();
-		moveSnapStepInput->setValue(Gizmo::singleton()->getMoveStepSize());
+		moveSnapStepInput->setValue(_gizmo->getMoveStepSize());
 		moveSnapStepInput->setWidth(120.0f);
 		moveSnapStepInput->setStep(2.0f);
 		moveSnapStepInput->setLimitMin(0.125f);
 		moveSnapStepInput->setLimitMax(16.0f);
 		moveSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
-		moveSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setMoveStepSize(value); });
+		moveSnapStepInput->setOnValueChanged([this](float value) { _gizmo->setMoveStepSize(value); });
 		Label* moveSnapStepLabel = new Label("Move Snap Step");
 		translateContextMenuTable->addControl(moveSnapStepLabel);
 		translateContextMenuTable->addControl(moveSnapStepInput);
@@ -149,7 +153,7 @@ namespace Editor
 		_rotateBtn->setSize(45, 32);
 		_rotateBtn->setImage(rotateBtnImage);
 		_rotateBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
+			_gizmo->setTransformMode(Gizmo::TransformMode::Rotate);
 			invalidate();
 		});
 		_rotateBtn->setUseContextMenu(true);
@@ -163,20 +167,20 @@ namespace Editor
 		rotateContextMenuTable->setWidth(255.0f);
 
 		Checkbox* enableRotateSnap = new Checkbox();
-		enableRotateSnap->setValue(Gizmo::singleton()->getRotateSnap());
-		enableRotateSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setRotateSnap(value); });
+		enableRotateSnap->setValue(_gizmo->getRotateSnap());
+		enableRotateSnap->setOnValueChanged([this](bool value) { _gizmo->setRotateSnap(value); });
 		Label* enableRotateSnapLabel = new Label("Enable Rotate Snap");
 		rotateContextMenuTable->addControl(enableRotateSnapLabel);
 		rotateContextMenuTable->addControl(enableRotateSnap);
 
 		InputFloat* rotateSnapStepInput = new InputFloat();
-		rotateSnapStepInput->setValue(Gizmo::singleton()->getRotateStepSize());
+		rotateSnapStepInput->setValue(_gizmo->getRotateStepSize());
 		rotateSnapStepInput->setWidth(120.0f);
 		rotateSnapStepInput->setStep(15.0f);
 		rotateSnapStepInput->setLimitMin(15.0f);
 		rotateSnapStepInput->setLimitMax(90.0f);
 		rotateSnapStepInput->setIncrementType(InputFloat::IncrementType::Additive);
-		rotateSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setRotateStepSize(value); });
+		rotateSnapStepInput->setOnValueChanged([this](float value) { _gizmo->setRotateStepSize(value); });
 		Label* rotateSnapStepLabel = new Label("Rotate Snap Step");
 		rotateContextMenuTable->addControl(rotateSnapStepLabel);
 		rotateContextMenuTable->addControl(rotateSnapStepInput);
@@ -196,7 +200,7 @@ namespace Editor
 		_scaleBtn->setSize(45, 32);
 		_scaleBtn->setImage(scaleBtnImage);
 		_scaleBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
+			_gizmo->setTransformMode(Gizmo::TransformMode::Scale);
 			invalidate();
 		});
 		_scaleBtn->setUseContextMenu(true);
@@ -210,20 +214,20 @@ namespace Editor
 		scaleContextMenuTable->setWidth(255.0f);
 
 		Checkbox* enableScaleSnap = new Checkbox();
-		enableScaleSnap->setValue(Gizmo::singleton()->getScaleSnap());
-		enableScaleSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setScaleSnap(value); });
+		enableScaleSnap->setValue(_gizmo->getScaleSnap());
+		enableScaleSnap->setOnValueChanged([this](bool value) { _gizmo->setScaleSnap(value); });
 		Label* enableScaleSnapLabel = new Label("Enable Scale Snap");
 		scaleContextMenuTable->addControl(enableScaleSnapLabel);
 		scaleContextMenuTable->addControl(enableScaleSnap);
 
 		InputFloat* scaleSnapStepInput = new InputFloat();
-		scaleSnapStepInput->setValue(Gizmo::singleton()->getScaleStepSize());
+		scaleSnapStepInput->setValue(_gizmo->getScaleStepSize());
 		scaleSnapStepInput->setWidth(120.0f);
 		scaleSnapStepInput->setStep(2.0f);
 		scaleSnapStepInput->setLimitMin(0.125f);
 		scaleSnapStepInput->setLimitMax(2.0f);
 		scaleSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
-		scaleSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setScaleStepSize(value); });
+		scaleSnapStepInput->setOnValueChanged([this](float value) { _gizmo->setScaleStepSize(value); });
 		Label* scaleSnapStepLabel = new Label("Scale Snap Step");
 		scaleContextMenuTable->addControl(scaleSnapStepLabel);
 		scaleContextMenuTable->addControl(scaleSnapStepInput);
@@ -243,7 +247,7 @@ namespace Editor
 		_boundsBtn->setSize(45, 32);
 		_boundsBtn->setImage(boundsBtnImage);
 		_boundsBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Bounds);
+			_gizmo->setTransformMode(Gizmo::TransformMode::Bounds);
 			invalidate();
 		});
 		_boundsBtn->setUseContextMenu(true);
@@ -257,20 +261,20 @@ namespace Editor
 		boundsContextMenuTable->setWidth(255.0f);
 
 		Checkbox* enableBoundsSnap = new Checkbox();
-		enableBoundsSnap->setValue(Gizmo::singleton()->getBoundsSnap());
-		enableBoundsSnap->setOnValueChanged([](bool value) { Gizmo::singleton()->setBoundsSnap(value); });
+		enableBoundsSnap->setValue(_gizmo->getBoundsSnap());
+		enableBoundsSnap->setOnValueChanged([this](bool value) { _gizmo->setBoundsSnap(value); });
 		Label* enableBoundsSnapLabel = new Label("Enable Bounds Snap");
 		boundsContextMenuTable->addControl(enableBoundsSnapLabel);
 		boundsContextMenuTable->addControl(enableBoundsSnap);
 
 		InputFloat* boundsSnapStepInput = new InputFloat();
-		boundsSnapStepInput->setValue(Gizmo::singleton()->getBoundsStepSize());
+		boundsSnapStepInput->setValue(_gizmo->getBoundsStepSize());
 		boundsSnapStepInput->setWidth(120.0f);
 		boundsSnapStepInput->setStep(2.0f);
 		boundsSnapStepInput->setLimitMin(0.125f);
 		boundsSnapStepInput->setLimitMax(16.0f);
 		boundsSnapStepInput->setIncrementType(InputFloat::IncrementType::Multiplicative);
-		boundsSnapStepInput->setOnValueChanged([](float value) { Gizmo::singleton()->setBoundsStepSize(value); });
+		boundsSnapStepInput->setOnValueChanged([this](float value) { _gizmo->setBoundsStepSize(value); });
 		Label* boundsSnapStepLabel = new Label("Bounds Snap Step");
 		boundsContextMenuTable->addControl(boundsSnapStepLabel);
 		boundsContextMenuTable->addControl(boundsSnapStepInput);
@@ -293,7 +297,7 @@ namespace Editor
 		_localSpaceBtn->setSize(32, 32);
 		_localSpaceBtn->setImage(localSpaceBtnImage);
 		_localSpaceBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformSpace(Gizmo::TransformSpace::Local);
+			_gizmo->setTransformSpace(Gizmo::TransformSpace::Local);
 			invalidate();
 		});
 
@@ -306,7 +310,7 @@ namespace Editor
 		_worldSpaceBtn->setSize(32, 32);
 		_worldSpaceBtn->setImage(worldSpaceBtnImage);
 		_worldSpaceBtn->setOnClick([this]() {
-			Gizmo::singleton()->setTransformSpace(Gizmo::TransformSpace::World);
+			_gizmo->setTransformSpace(Gizmo::TransformSpace::World);
 			invalidate();
 		});
 
@@ -315,17 +319,15 @@ namespace Editor
 		invalidate();
 	}
 
-	ToolWindow::~ToolWindow() {}
-
 	void ToolWindow::invalidate()
 	{
 		_saveBtn->setActive(((EditorApp::MainWindow*)_parent->getApplication()->getMainWindow())->getScene() != nullptr);
-		_selectBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Select);
-		_translateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Translate);
-		_rotateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Rotate);
-		_scaleBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Scale);
-		_boundsBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Bounds);
-		_localSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::Local);
-		_worldSpaceBtn->setActive(Gizmo::singleton()->getTransformSpace() == Gizmo::TransformSpace::World);
+		_selectBtn->setActive(_gizmo->getTransformMode() == Gizmo::TransformMode::Select);
+		_translateBtn->setActive(_gizmo->getTransformMode() == Gizmo::TransformMode::Translate);
+		_rotateBtn->setActive(_gizmo->getTransformMode() == Gizmo::TransformMode::Rotate);
+		_scaleBtn->setActive(_gizmo->getTransformMode() == Gizmo::TransformMode::Scale);
+		_boundsBtn->setActive(_gizmo->getTransformMode() == Gizmo::TransformMode::Bounds);
+		_localSpaceBtn->setActive(_gizmo->getTransformSpace() == Gizmo::TransformSpace::Local);
+		_worldSpaceBtn->setActive(_gizmo->getTransformSpace() == Gizmo::TransformSpace::World);
 	}
 } // namespace Editor

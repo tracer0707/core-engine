@@ -15,8 +15,6 @@
 
 namespace Editor
 {
-	Gizmo Gizmo::_singleton;
-
 	Core::Uuid Gizmo::subscribeManipulateEndEvent(GizmoEvent callback)
 	{
 		Core::Uuid uuid = Core::Uuid::create();
@@ -33,7 +31,7 @@ namespace Editor
 		if (it != _manipulateEndEvents.end()) _manipulateEndEvents.erase(it);
 	}
 
-	void Gizmo::init(Core::InputManager* inputManager)
+	Gizmo::Gizmo(Core::InputManager* inputManager)
 	{
 		_inputManager = inputManager;
 

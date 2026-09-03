@@ -21,6 +21,8 @@ namespace Editor
 	class Gizmo
 	{
 		public:
+			Gizmo(Core::InputManager* inputManager);
+
 			enum class TransformSpace
 			{
 				Local,
@@ -50,8 +52,6 @@ namespace Editor
 			TransformSpace _transformSpace = TransformSpace::World;
 			TransformMode _transformMode = TransformMode::Translate;
 
-			static Gizmo _singleton;
-
 			Core::InputManager* _inputManager = nullptr;
 			Core::Transform* _transform = nullptr;
 			ObjectType _objectType = ObjectType::None;
@@ -76,8 +76,6 @@ namespace Editor
 			std::vector<std::pair<Core::Uuid, GizmoEvent>> _manipulateEndEvents;
 
 		public:
-			static Gizmo* singleton() { return &_singleton; }
-
 			void setEnabled(bool value) { _enabled = value; }
 			bool isEnabled() const { return _enabled; }
 
@@ -121,7 +119,6 @@ namespace Editor
 			Core::Uuid subscribeManipulateEndEvent(GizmoEvent callback);
 			void unsubscribeManipulateEndEvent(Core::Uuid id);
 
-			void init(Core::InputManager* inputManager);
 			void update(EditorCamera* camera, bool isMouseInView, float viewX, float viewY, float viewW, float viewH, bool& wasUsed);
 	};
 } // namespace Editor

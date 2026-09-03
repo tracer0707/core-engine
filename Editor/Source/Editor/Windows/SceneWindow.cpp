@@ -97,40 +97,40 @@ namespace Editor
 		_image->setSize(getClientWidth(), getClientHeight());
 		_noSceneLbl->setPosition(getClientWidth() / 2 - _noSceneLbl->getWidth() / 2, getClientHeight() / 2 - _noSceneLbl->getHeight() / 2);
 
-		CameraController::update(isSceneWindowHovered);
-		Gizmo::singleton()->update(_camera, isSceneWindowHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
-		ObjectPicker::singleton()->update(isSceneWindowHovered, isGizmoWasUsed, getPositionX(), getPositionY());
+		_cameraController->update(isSceneWindowHovered);
+		_gizmo->update(_camera, isSceneWindowHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);
+		_objectPicker->update(isSceneWindowHovered, isGizmoWasUsed, getPositionX(), getPositionY());
 
 		if (!_parent->getInputManager()->getMouseButton(0) && !_parent->getInputManager()->getMouseButton(1) &&
 			!_parent->getInputManager()->getMouseButton(2) && !ImGui::GetIO().WantCaptureKeyboard)
 		{
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_Q))
 			{
-				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Select);
+				_gizmo->setTransformMode(Gizmo::TransformMode::Select);
 				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_W))
 			{
-				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Translate);
+				_gizmo->setTransformMode(Gizmo::TransformMode::Translate);
 				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_E))
 			{
-				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Rotate);
+				_gizmo->setTransformMode(Gizmo::TransformMode::Rotate);
 				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_R))
 			{
-				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Scale);
+				_gizmo->setTransformMode(Gizmo::TransformMode::Scale);
 				_toolWindow->invalidate();
 			}
 
 			if (_parent->getInputManager()->getKeyDown(SDL_SCANCODE_T))
 			{
-				Gizmo::singleton()->setTransformMode(Gizmo::TransformMode::Bounds);
+				_gizmo->setTransformMode(Gizmo::TransformMode::Bounds);
 				_toolWindow->invalidate();
 			}
 		}

@@ -27,14 +27,14 @@ namespace Editor
 
 	void GizmoRenderer::renderGizmo()
 	{
-		if (_scene == nullptr || Gizmo::singleton()->getTransform() == nullptr)
+		if (_scene == nullptr || _gizmo->getTransform() == nullptr)
 		{
 			return;
 		}
 
-		Core::Transform* transform = Gizmo::singleton()->getTransform();
+		Core::Transform* transform = _gizmo->getTransform();
 
-		if (Gizmo::singleton()->getObjectType() == Gizmo::ObjectType::SceneObject)
+		if (_gizmo->getObjectType() == Gizmo::ObjectType::SceneObject)
 		{
 		}
 	}

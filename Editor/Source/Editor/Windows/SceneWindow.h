@@ -18,6 +18,9 @@ namespace Editor
 	class Dummy;
 	class ToolWindow;
 	class EditorCamera;
+	class Gizmo;
+	class ObjectPicker;
+	class CameraController;
 	struct DragDropData;
 
 	class SceneWindow : public Window
@@ -34,6 +37,9 @@ namespace Editor
 			Core::Scene* _scene = nullptr;
 
 			ToolWindow* _toolWindow = nullptr;
+			Gizmo* _gizmo = nullptr;
+			ObjectPicker* _objectPicker = nullptr;
+			CameraController* _cameraController = nullptr;
 
 			void onDragDrop(DragDropData* data, int x, int y);
 
@@ -49,6 +55,9 @@ namespace Editor
 			void setTime(Core::Time* time) { _time = time; }
 			void setScene(Core::Scene* scene);
 			void setCamera(EditorCamera* camera);
+			void setGizmo(Gizmo* value) { _gizmo = value; }
+			void setObjectPicker(ObjectPicker* value) { _objectPicker = value; }
+			void setCameraController(CameraController* value) { _cameraController = value; }
 			void setFrameBufferHandle(uint32_t value);
 	};
 } // namespace Editor

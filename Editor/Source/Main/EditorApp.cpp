@@ -58,6 +58,10 @@ namespace Editor
 		_windowManager->setInputManager(_inputManager);
 		_windowManager->setEventHandler(_eventHandler);
 
+		_gizmo = new Gizmo(_inputManager);
+		_objectPicker = new ObjectPicker(_windowManager, _camera);
+		_cameraController = new CameraController(_inputManager, _time, _camera);
+
 		_mainMenu = new MainMenu();
 		_windowManager->setMenuBar(_mainMenu->getMenuBar());
 
@@ -99,6 +103,12 @@ namespace Editor
 		_objectWindow->setHasDockTitle(false);
 		_objectWindow->setCanAcceptDocking(false);
 
+		_sceneWindow->setGizmo(_gizmo);
+		_sceneWindow->setObjectPicker(_objectPicker);
+		_sceneWindow->setCameraController(_cameraController);
+		_hierarchyWindow->setGizmo(_gizmo);
+		_toolWindow->setGizmo(_gizmo);
+
 		_windowManager->setOnDock([this] {
 			auto dockTools = _toolWindow->dock(DockDirection::Up, 0, 0.053f);
 			auto dockInspector = _inspectorWindow->dock(DockDirection::Right, dockTools.area2, 0.25f);
@@ -110,25 +120,26 @@ namespace Editor
 
 		_windowManager->initWindows();
 
-		CameraController::init(_inputManager, _time, _camera);
-		Gizmo::singleton()->init(_inputManager);
-		ObjectPicker::singleton()->init(_windowManager, _camera);
-
 		_gizmoRenderer = new GizmoRenderer(_renderer);
+		_gizmoRenderer->setGizmo(_gizmo);
 	}
 
 	EditorApp::MainWindow::~MainWindow()
 	{
-		ObjectPicker::singleton()->destroy();
-
 		_renderer->deleteBuffer(_gridBuffer);
 
 		delete _gizmoRenderer;
+		delete _objectPicker;
+		delete _gizmo;
+		delete _cameraController;
 		delete _windowManager;
 
 		_gizmoRenderer = nullptr;
 		_gridBuffer = nullptr;
 		_windowManager = nullptr;
+		_cameraController = nullptr;
+		_objectPicker = nullptr;
+		_gizmo = nullptr;
 		_scene = nullptr;
 	}
 
@@ -136,9 +147,9 @@ namespace Editor
 	{
 		_scene = value;
 		_sceneWindow->setScene(_scene);
-		ObjectPicker::singleton()->setScene(value);
+		_objectPicker->setScene(value);
 		_gizmoRenderer->setScene(value);
-		CameraController::setEnabled(value != nullptr);
+		_cameraController->setEnabled(value != nullptr);
 	}
 
 	void EditorApp::MainWindow::update()

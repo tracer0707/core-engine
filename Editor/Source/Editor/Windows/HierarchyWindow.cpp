@@ -33,8 +33,8 @@ namespace Editor
 		_objectTree->setOnSelectionChanged([this](Core::List<TreeNode*>& selected) {
 			if (selected.count() == 0)
 			{
-				Gizmo::singleton()->setTransform(nullptr);
-				Gizmo::singleton()->setObject(Gizmo::ObjectType::None, nullptr);
+				_gizmo->setTransform(nullptr);
+				_gizmo->setObject(Gizmo::ObjectType::None, nullptr);
 				setInspector(nullptr);
 			}
 			else if (selected.count() == 1)
@@ -56,8 +56,8 @@ namespace Editor
 				}
 				
 				setInspector(node);
-				Gizmo::singleton()->setTransform(transform);
-				Gizmo::singleton()->setObject(objectType, gizmoObject);
+				_gizmo->setTransform(transform);
+				_gizmo->setObject(objectType, gizmoObject);
 			}
 
 			_parent->invalidateAll();
