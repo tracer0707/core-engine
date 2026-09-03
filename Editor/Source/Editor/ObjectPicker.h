@@ -45,7 +45,8 @@ namespace Editor
 	public:
 		static ObjectPicker* singleton() { return &_singleton; }
 
-		void init(WindowManager* windowManager, Core::Scene* scene, EditorCamera* camera);
+		void init(WindowManager* windowManager, EditorCamera* camera);
+		void setScene(Core::Scene* value) { _scene = value; }
 		void destroy();
 
 		void update(bool isMouseInView, bool isGizmoWasUsed, float offsetX, float offsetY);

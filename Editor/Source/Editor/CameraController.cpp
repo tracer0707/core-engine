@@ -18,6 +18,7 @@ namespace Editor
 	Core::Time* CameraController::_time = nullptr;
 	Core::InputManager* CameraController::_inputManager = nullptr;
 
+	bool CameraController::enabled = false;
 	bool CameraController::hovered = false;
 
 	bool CameraController::lButtonDown = false;
@@ -50,6 +51,8 @@ namespace Editor
 
 	void CameraController::update(bool isMouseInView)
 	{
+		if (!enabled) return;
+
 		hovered = isMouseInView;
 
 		ctrlPressed = _inputManager->getKey(SDL_SCANCODE_LCTRL);
@@ -100,7 +103,7 @@ namespace Editor
 
 	void CameraController::mouseDown(int x, int y, int mb)
 	{
-		if (!hovered) return;
+		if (!enabled || !hovered) return;
 
 		Core::InputManager::MouseButton mbe = static_cast<Core::InputManager::MouseButton>(mb);
 
@@ -125,6 +128,8 @@ namespace Editor
 
 	void CameraController::mouseUp(int x, int y, int mb)
 	{
+		if (!enabled) return;
+
 		Core::InputManager::MouseButton mbe = static_cast<Core::InputManager::MouseButton>(mb);
 
 		if (mbe == Core::InputManager::MouseButton::MBE_LEFT)
@@ -145,6 +150,8 @@ namespace Editor
 
 	void CameraController::mouseMove(int x, int y)
 	{
+		if (!enabled) return;
+
 		float rOffsetX = x - prevMousePos.x;
 		float rOffsetY = y - prevMousePos.y;
 
@@ -177,7 +184,7 @@ namespace Editor
 
 	void CameraController::mouseWheel(int x, int y)
 	{
-		if (!hovered) return;
+		if (!enabled || !hovered) return;
 
 		if (!lButtonDown)
 		{

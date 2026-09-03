@@ -43,8 +43,6 @@ namespace Editor
 
 	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Editor", 1366, 768)
 	{
-		_scene = _contentManager->createScene();
-
 		_frameBuffer = _renderer->createFrameBuffer(512u, 512u);
 
 		_camera = new EditorCamera(_renderer);
@@ -65,7 +63,6 @@ namespace Editor
 
 		_sceneWindow = _windowManager->addWindow<SceneWindow*>();
 		_sceneWindow->setTime(_time);
-		_sceneWindow->setScene(_scene);
 		_sceneWindow->setCamera(_camera);
 		_sceneWindow->setOnResize([this](uint32_t w, uint32_t h) {
 			uint32_t fw = std::max(w, 1u);
@@ -115,9 +112,9 @@ namespace Editor
 
 		CameraController::init(_inputManager, _time, _camera);
 		Gizmo::singleton()->init(_inputManager);
-		ObjectPicker::singleton()->init(_windowManager, _scene, _camera);
+		ObjectPicker::singleton()->init(_windowManager, _camera);
 
-		_gizmoRenderer = new GizmoRenderer(_renderer, _scene);
+		_gizmoRenderer = new GizmoRenderer(_renderer);
 	}
 
 	EditorApp::MainWindow::~MainWindow()
@@ -135,6 +132,15 @@ namespace Editor
 		_scene = nullptr;
 	}
 
+	void EditorApp::MainWindow::setScene(Core::Scene* value)
+	{
+		_scene = value;
+		_sceneWindow->setScene(_scene);
+		ObjectPicker::singleton()->setScene(value);
+		_gizmoRenderer->setScene(value);
+		CameraController::setEnabled(value != nullptr);
+	}
+
 	void EditorApp::MainWindow::update()
 	{
 		//** Render scene begin **//
@@ -146,12 +152,15 @@ namespace Editor
 		_renderer->setViewportSize(viewportWidth, viewportHeight);
 		_renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.4f, 0.4f, 0.4f, 1.0f));
 
-		glm::mat4 view = _camera->getViewMatrix();
-		glm::mat4 proj = _camera->getProjectionMatrix();
+		if (_scene != nullptr)
+		{
+			glm::mat4 view = _camera->getViewMatrix();
+			glm::mat4 proj = _camera->getProjectionMatrix();
 
-		Rendering::renderGrid(_renderer, _gridBuffer, _camera);
-		_scene->render(view, proj);
-		_gizmoRenderer->renderGizmo();
+			Rendering::renderGrid(_renderer, _gridBuffer, _camera);
+			_scene->render(view, proj);
+			_gizmoRenderer->renderGizmo();
+		}
 
 		_renderer->bindFrameBuffer(nullptr);
 		//** Render scene end **//

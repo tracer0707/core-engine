@@ -12,7 +12,7 @@ namespace Core
 
 namespace Editor
 {
-	class LinearLayout;
+	class Label;
 	class Control;
 	class Image;
 	class Dummy;
@@ -25,6 +25,7 @@ namespace Editor
 		private:
 			Dummy* _dndTarget = nullptr;
 			Image* _image = nullptr;
+			Label* _noSceneLbl = nullptr;
 
 			uint32_t _frameBufferHandle = 0u;
 

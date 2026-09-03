@@ -12,6 +12,7 @@
 #include "../Controls/Dummy.h"
 #include "../Controls/Image.h"
 #include "../Controls/Button.h"
+#include "../Controls/Label.h"
 #include "../Controls/LinearLayout.h"
 #include "../Controls/TreeNode.h"
 #include "../Controls/TreeView.h"
@@ -42,13 +43,18 @@ namespace Editor
 		layout->setFitWidth(LayoutFitMode::FitAvailable);
 		layout->setFitHeight(LayoutFitMode::FitAvailable);
 
+		_noSceneLbl = new Label("No scene loaded");
+
 		_image = new Image();
+		_image->setVisible(false);
 		
 		_dndTarget = new Dummy();
 		_dndTarget->setDragDropTarget(true, "SCENE_OBJECT");
 		_dndTarget->setOnDragDrop([this](DragDropData* data, int x, int y) { onDragDrop(data, x, y); });
+		_dndTarget->setVisible(false);
 
 		layout->addControl(_image);
+		layout->addControl(_noSceneLbl);
 		layout->addControl(_dndTarget);
 
 		addControl(layout);
@@ -64,6 +70,9 @@ namespace Editor
 	void SceneWindow::setScene(Core::Scene* scene)
 	{
 		_scene = scene;
+		_image->setVisible(_scene != nullptr);
+		_dndTarget->setVisible(_scene != nullptr);
+		_noSceneLbl->setVisible(_scene == nullptr);
 	}
 
 	void SceneWindow::setCamera(EditorCamera* camera)
@@ -86,6 +95,7 @@ namespace Editor
 		_dndTarget->setSize(getClientWidth() - 10, getClientHeight() - 10);
 		_image->setPosition(0, 0);
 		_image->setSize(getClientWidth(), getClientHeight());
+		_noSceneLbl->setPosition(getClientWidth() / 2 - _noSceneLbl->getWidth() / 2, getClientHeight() / 2 - _noSceneLbl->getHeight() / 2);
 
 		CameraController::update(isSceneWindowHovered);
 		Gizmo::singleton()->update(_camera, isSceneWindowHovered, getPositionX(), getPositionY(), getClientWidth(), getClientHeight(), isGizmoWasUsed);

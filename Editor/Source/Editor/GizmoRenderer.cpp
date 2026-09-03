@@ -11,10 +11,9 @@
 
 namespace Editor
 {
-	GizmoRenderer::GizmoRenderer(Core::Renderer* renderer, Core::Scene* scene)
+	GizmoRenderer::GizmoRenderer(Core::Renderer* renderer)
 	{
 		_renderer = renderer;
-		_scene = scene;
 		_wireframeBuffer = _renderer->createBuffer(nullptr, 2048, nullptr, 0);
 	}
 
@@ -28,7 +27,7 @@ namespace Editor
 
 	void GizmoRenderer::renderGizmo()
 	{
-		if (Gizmo::singleton()->getTransform() == nullptr)
+		if (_scene == nullptr || Gizmo::singleton()->getTransform() == nullptr)
 		{
 			return;
 		}

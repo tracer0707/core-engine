@@ -29,7 +29,7 @@ namespace Editor
 
 	class EditorApp : public Core::Application
 	{
-		private:
+		public:
 			class MainWindow : public Core::Window
 			{
 					friend class EditorApp;
@@ -58,14 +58,17 @@ namespace Editor
 					ContentWindow* _contentWindow = nullptr;
 					ContentImportWindow* _contentImportWindow = nullptr;
 					ToolWindow* _toolWindow = nullptr;
+
+				public:
+					void setScene(Core::Scene* value);
+					Core::Scene* getScene() const { return _scene; }
 			};
 
+		private:
 			Font* _mainFont = nullptr;
 			MainWindow* _wnd = nullptr;
 
 			virtual void init();
 			virtual void destroy();
-
-		public:
 	};
 } // namespace Editor

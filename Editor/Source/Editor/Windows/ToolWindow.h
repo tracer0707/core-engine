@@ -9,6 +9,7 @@ namespace Editor
 	class ToolWindow : public Window
 	{
 	private:
+		Button* _saveBtn = nullptr;
 		Button* _selectBtn = nullptr;
 		Button* _translateBtn = nullptr;
 		Button* _rotateBtn = nullptr;

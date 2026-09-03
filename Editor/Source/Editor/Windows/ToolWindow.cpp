@@ -18,8 +18,10 @@
 #include "../Controls/InputFloat.h"
 #include "../Controls/Table.h"
 
+#include "../../Main/EditorApp.h"
 #include "../../Utils/TextureUtils.h"
 #include "../../Resources/Texture.h"
+#include "../../Content/ContentSerializer.h"
 
 namespace fs = std::filesystem;
 
@@ -36,6 +38,26 @@ namespace Editor
 		layoutMain->setFitHeight(LayoutFitMode::FitContent);
 
 		addControl(layoutMain);
+
+		/* Save */
+
+		_saveBtn = new Button();
+		Texture* saveBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/save.png"));
+		_saveBtn->setSize(32, 32);
+		_saveBtn->setImage(saveBtnImage);
+		_saveBtn->setOnClick([this]() {
+			Core::Scene* currentScene = ((EditorApp::MainWindow*)_parent->getApplication()->getMainWindow())->getScene();
+			if (currentScene != nullptr)
+			{
+				ContentSerializer::serializeScene(currentScene);
+			}
+		});
+
+		layoutMain->addControl(_saveBtn);
+
+		Separator* separator0 = new Separator(SeparatorDirection::Vertical);
+		separator0->setHeight(30.0f);
+		layoutMain->addControl(separator0);
 
 		/* Undo */
 
@@ -297,6 +319,7 @@ namespace Editor
 
 	void ToolWindow::invalidate()
 	{
+		_saveBtn->setActive(((EditorApp::MainWindow*)_parent->getApplication()->getMainWindow())->getScene() != nullptr);
 		_selectBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Select);
 		_translateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Translate);
 		_rotateBtn->setActive(Gizmo::singleton()->getTransformMode() == Gizmo::TransformMode::Rotate);

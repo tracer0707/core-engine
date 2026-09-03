@@ -17,9 +17,10 @@ namespace Editor
 			Core::VertexBuffer* _wireframeBuffer = nullptr;
 
 		public:
-			GizmoRenderer(Core::Renderer* renderer, Core::Scene* scene);
+			GizmoRenderer(Core::Renderer* renderer);
 			~GizmoRenderer();
 
+			void setScene(Core::Scene* value) { _scene = value; }
 			void renderGizmo();
 	};
 } // namespace Editor

@@ -20,6 +20,7 @@ namespace Editor
 		static Core::Time* _time;
 		static Core::InputManager* _inputManager;
 
+		static bool enabled;
 		static bool hovered;
 
 		static bool lButtonDown;
@@ -42,5 +43,6 @@ namespace Editor
 	public:
 		static void init(Core::InputManager* inputManager, Core::Time* time, EditorCamera* camera);
 		static void update(bool isMouseInView);
+		static void setEnabled(bool value) { enabled = value; }
 	};
 }

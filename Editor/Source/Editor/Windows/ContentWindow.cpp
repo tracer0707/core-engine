@@ -222,6 +222,15 @@ namespace Editor
 				thumbnail->setContent(content);
 				thumbnail->setSize(THUMB_W, THUMB_H);
 				thumbnail->setStringTag(TAG_FULL_PATH, Core::Path::toUtf8(it));
+				if (content->getContentType() == Core::ContentType::Scene)
+				{
+					thumbnail->setOnDoubleClick([this, content]() {
+						_parent->getEventHandler()->addEvent([this, content]() {
+							((EditorApp::MainWindow*)_parent->getApplication()->getMainWindow())->setScene((Core::Scene*)content);
+							_parent->invalidateAll();
+						});
+					});
+				}
 				setInspector(thumbnail, ext);
 
 				_rightPane->addControl(thumbnail);

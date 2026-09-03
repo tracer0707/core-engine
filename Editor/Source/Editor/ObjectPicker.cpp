@@ -19,9 +19,8 @@ namespace Editor
 {
 	ObjectPicker ObjectPicker::_singleton;
 
-	void ObjectPicker::init(WindowManager* windowManager, Core::Scene* scene, EditorCamera* camera)
+	void ObjectPicker::init(WindowManager* windowManager, EditorCamera* camera)
 	{
-		_scene = scene;
 		_camera = camera;
 		_windowManager = windowManager;
 
@@ -93,6 +92,11 @@ namespace Editor
 
 	void ObjectPicker::pickObject(int x, int y)
 	{
+		if (_scene == nullptr)
+		{
+			return;
+		}
+
 		Core::Ray ray = _camera->getCameraToViewportRay(x - _offsetX, y - _offsetY);
 
 		RaycastHit hit;
