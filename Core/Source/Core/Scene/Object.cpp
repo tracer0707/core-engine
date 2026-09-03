@@ -10,7 +10,7 @@ namespace Core
 	Object::Object(Renderer* renderer)
 	{
 		_renderer = renderer;
-		_transform = new Transform();
+		_transform = new Transform(this);
 	}
 
 	Object::~Object()

@@ -3,6 +3,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "../Shared/List.h"
+#include "../Shared/Uuid.h"
 #include "Content.h"
 
 namespace Core
@@ -29,6 +30,7 @@ namespace Core
 		virtual ContentType getContentType() const { return ContentType::Scene; }
 
 		List<Object*>& getObjects() { return _objects; }
+		Object* findObject(Uuid uuid) const;
 
 		Object* createObject();
 		void removeObject(Object* object);

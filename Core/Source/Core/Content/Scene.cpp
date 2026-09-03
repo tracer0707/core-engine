@@ -25,7 +25,14 @@ namespace Core
         _renderer = nullptr;
 	}
 
-    Object* Scene::createObject()
+    Object* Scene::findObject(Uuid uuid) const
+	{
+		auto it = std::find_if(_objects.begin(), _objects.end(), [uuid](Object* obj) { return obj->getUuid() == uuid; });
+		if (it != _objects.end()) return *it;
+		return nullptr;
+	}
+
+	Object* Scene::createObject()
     {
         Object* object = new Object(_renderer);
         _objects.add(object);

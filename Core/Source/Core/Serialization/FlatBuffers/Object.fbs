@@ -6,5 +6,9 @@ namespace Core.Serialization;
 table Object {
     name:string;
     uuid:Uuid;
+    parent_uuid:Uuid;
+    position:Vec3;
+    rotation:Vec4;
+    scale:Vec3;
     components:[Component];
 }

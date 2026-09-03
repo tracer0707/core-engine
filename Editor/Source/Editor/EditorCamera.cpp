@@ -10,7 +10,7 @@ namespace Editor
 	EditorCamera::EditorCamera(Core::Renderer* renderer)
 	{
 		_renderer = renderer;
-		_transform = new Core::Transform();
+		_transform = new Core::Transform(this);
 	}
 
 	EditorCamera::~EditorCamera() {}

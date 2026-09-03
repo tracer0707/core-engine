@@ -3,80 +3,88 @@
 
 namespace Core
 {
-	Transform::Transform() = default;
+	Transform::Transform(void* owner)
+	{
+		_owner = owner;
+	}
 
 	Transform::~Transform()
 	{
 		setParent(nullptr);
+		_owner = nullptr;
 	}
 
 	// ================= HIERARCHY =================
 
 	void Transform::setParent(Transform* value)
 	{
-		if (parent == value) return;
+		if (_parent == value) return;
 
-		if (parent) parent->removeChild(this);
+		if (_parent != nullptr) _parent->removeChild(this);
 
-		parent = value;
+		_parent = value;
 
-		if (parent) parent->addChild(this);
+		if (_parent != nullptr) _parent->addChild(this);
 
 		markDirty();
 	}
 
 	void Transform::addChild(Transform* child)
 	{
-		if (!child || child == this) return;
-		children.push_back(child);
+		if (child == nullptr || child == this) return;
+		_children.push_back(child);
 		child->markDirty();
 	}
 
 	void Transform::removeChild(Transform* child)
 	{
-		auto it = std::find(children.begin(), children.end(), child);
-		if (it != children.end()) children.erase(it);
+		auto it = std::find(_children.begin(), _children.end(), child);
+		if (it != _children.end()) _children.erase(it);
 	}
 
 	void Transform::markDirty()
 	{
-		if (dirty) return;
-		dirty = true;
+		if (_dirty) return;
+		_dirty = true;
 
-		for (auto* c : children)
+		for (auto* c : _children)
+		{
 			c->markDirty();
+		}
 	}
 
 	// ================= LOCAL =================
 
 	glm::vec3 Transform::getLocalPosition() const
 	{
-		return position;
+		return _position;
 	}
+
 	glm::quat Transform::getLocalRotation() const
 	{
-		return rotation;
+		return _rotation;
 	}
+
 	glm::vec3 Transform::getLocalScale() const
 	{
-		return scale;
+		return _scale;
 	}
 
 	void Transform::setLocalPosition(const glm::vec3& value)
 	{
-		position = value;
+		_position = value;
 		markDirty();
 	}
 
 	void Transform::setLocalRotation(const glm::quat& value)
 	{
-		rotation = value;
+		_rotation = value;
 		markDirty();
 	}
 
 	void Transform::setLocalScale(const glm::vec3& value)
 	{
-		scale = value;
+		_scale = value;
 		markDirty();
 	}
 
@@ -89,42 +97,52 @@ namespace Core
 
 	glm::quat Transform::getRotation() const
 	{
-		return parent ? parent->getRotation() * rotation : rotation;
+		return _parent ? _parent->getRotation() * _rotation : _rotation;
 	}
 
 	glm::vec3 Transform::getScale() const
 	{
-		return parent ? parent->getScale() * scale : scale;
+		return _parent ? _parent->getScale() * _scale : _scale;
 	}
 
 	void Transform::setPosition(const glm::vec3& value)
 	{
-		if (parent)
+		if (_parent)
 		{
-			position = glm::inverse(parent->getRotation()) * ((value - parent->getPosition()) / parent->getScale());
+			_position = glm::inverse(_parent->getRotation()) * ((value - _parent->getPosition()) / _parent->getScale());
 		}
 		else
-			position = value;
+		{
+			_position = value;
+		}
 
 		markDirty();
 	}
 
 	void Transform::setRotation(const glm::quat& value)
 	{
-		if (parent)
-			rotation = glm::inverse(parent->getRotation()) * value;
+		if (_parent)
+		{
+			_rotation = glm::inverse(_parent->getRotation()) * value;
+		}
 		else
-			rotation = value;
+		{
+			_rotation = value;
+		}
 
 		markDirty();
 	}
 
 	void Transform::setScale(const glm::vec3& value)
 	{
-		if (parent)
-			scale = value / parent->getScale();
+		if (_parent)
+		{
+			_scale = value / _parent->getScale();
+		}
 		else
-			scale = value;
+		{
+			_scale = value;
+		}
 
 		markDirty();
 	}
@@ -133,21 +151,25 @@ namespace Core
 
 	glm::mat4 Transform::getLocalTransformMatrix() const
 	{
-		return glm::translate(glm::mat4(1.0f), position) * glm::mat4_cast(rotation) * glm::scale(glm::mat4(1.0f), scale);
+		return glm::translate(glm::mat4(1.0f), _position) * glm::mat4_cast(_rotation) * glm::scale(glm::mat4(1.0f), _scale);
 	}
 
 	glm::mat4 Transform::getTransformMatrix() const
 	{
-		if (dirty)
+		if (_dirty)
 		{
-			if (parent)
-				cachedWorldMatrix = parent->getTransformMatrix() * getLocalTransformMatrix();
+			if (_parent)
+			{
+				_cachedWorldMatrix = _parent->getTransformMatrix() * getLocalTransformMatrix();
+			}
 			else
-				cachedWorldMatrix = getLocalTransformMatrix();
+			{
+				_cachedWorldMatrix = getLocalTransformMatrix();
+			}
 
-			dirty = false;
+			_dirty = false;
 		}
-		return cachedWorldMatrix;
+		return _cachedWorldMatrix;
 	}
 
 	// ================= DIRECTIONS =================
@@ -195,9 +217,13 @@ namespace Core
 	void Transform::rotate(const glm::quat& q, bool world)
 	{
 		if (world)
+		{
 			setRotation(q * getRotation());
+		}
 		else
-			rotation = rotation * q;
+		{
+			_rotation = _rotation * q;
+		}
 
 		markDirty();
 	}
@@ -205,9 +231,13 @@ namespace Core
 	void Transform::translate(const glm::vec3& dir, bool world)
 	{
 		if (world)
+		{
 			setPosition(getPosition() + dir);
+		}
 		else
-			position += rotation * dir;
+		{
+			_position += _rotation * dir;
+		}
 
 		markDirty();
 	}

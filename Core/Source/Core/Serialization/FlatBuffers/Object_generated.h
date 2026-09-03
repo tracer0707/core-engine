@@ -27,13 +27,29 @@ struct Object FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
     VT_NAME = 4,
     VT_UUID = 6,
-    VT_COMPONENTS = 8
+    VT_PARENT_UUID = 8,
+    VT_POSITION = 10,
+    VT_ROTATION = 12,
+    VT_SCALE = 14,
+    VT_COMPONENTS = 16
   };
   const ::flatbuffers::String *name() const {
     return GetPointer<const ::flatbuffers::String *>(VT_NAME);
   }
   const Core::Serialization::Uuid *uuid() const {
     return GetStruct<const Core::Serialization::Uuid *>(VT_UUID);
+  }
+  const Core::Serialization::Uuid *parent_uuid() const {
+    return GetStruct<const Core::Serialization::Uuid *>(VT_PARENT_UUID);
+  }
+  const Core::Serialization::Vec3 *position() const {
+    return GetStruct<const Core::Serialization::Vec3 *>(VT_POSITION);
+  }
+  const Core::Serialization::Vec4 *rotation() const {
+    return GetStruct<const Core::Serialization::Vec4 *>(VT_ROTATION);
+  }
+  const Core::Serialization::Vec3 *scale() const {
+    return GetStruct<const Core::Serialization::Vec3 *>(VT_SCALE);
   }
   const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Serialization::Component>> *components() const {
     return GetPointer<const ::flatbuffers::Vector<::flatbuffers::Offset<Core::Serialization::Component>> *>(VT_COMPONENTS);
@@ -43,6 +59,10 @@ struct Object FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
            VerifyOffset(verifier, VT_NAME) &&
            verifier.VerifyString(name()) &&
            VerifyField<Core::Serialization::Uuid>(verifier, VT_UUID, 8) &&
+           VerifyField<Core::Serialization::Uuid>(verifier, VT_PARENT_UUID, 8) &&
+           VerifyField<Core::Serialization::Vec3>(verifier, VT_POSITION, 4) &&
+           VerifyField<Core::Serialization::Vec4>(verifier, VT_ROTATION, 4) &&
+           VerifyField<Core::Serialization::Vec3>(verifier, VT_SCALE, 4) &&
            VerifyOffset(verifier, VT_COMPONENTS) &&
            verifier.VerifyVector(components()) &&
            verifier.VerifyVectorOfTables(components()) &&
@@ -59,6 +79,18 @@ struct ObjectBuilder {
   }
   void add_uuid(const Core::Serialization::Uuid *uuid) {
     fbb_.AddStruct(Object::VT_UUID, uuid);
+  }
+  void add_parent_uuid(const Core::Serialization::Uuid *parent_uuid) {
+    fbb_.AddStruct(Object::VT_PARENT_UUID, parent_uuid);
+  }
+  void add_position(const Core::Serialization::Vec3 *position) {
+    fbb_.AddStruct(Object::VT_POSITION, position);
+  }
+  void add_rotation(const Core::Serialization::Vec4 *rotation) {
+    fbb_.AddStruct(Object::VT_ROTATION, rotation);
+  }
+  void add_scale(const Core::Serialization::Vec3 *scale) {
+    fbb_.AddStruct(Object::VT_SCALE, scale);
   }
   void add_components(::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Serialization::Component>>> components) {
     fbb_.AddOffset(Object::VT_COMPONENTS, components);
@@ -78,9 +110,17 @@ inline ::flatbuffers::Offset<Object> CreateObject(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     ::flatbuffers::Offset<::flatbuffers::String> name = 0,
     const Core::Serialization::Uuid *uuid = nullptr,
+    const Core::Serialization::Uuid *parent_uuid = nullptr,
+    const Core::Serialization::Vec3 *position = nullptr,
+    const Core::Serialization::Vec4 *rotation = nullptr,
+    const Core::Serialization::Vec3 *scale = nullptr,
     ::flatbuffers::Offset<::flatbuffers::Vector<::flatbuffers::Offset<Core::Serialization::Component>>> components = 0) {
   ObjectBuilder builder_(_fbb);
   builder_.add_components(components);
+  builder_.add_scale(scale);
+  builder_.add_rotation(rotation);
+  builder_.add_position(position);
+  builder_.add_parent_uuid(parent_uuid);
   builder_.add_uuid(uuid);
   builder_.add_name(name);
   return builder_.Finish();
@@ -90,6 +130,10 @@ inline ::flatbuffers::Offset<Object> CreateObjectDirect(
     ::flatbuffers::FlatBufferBuilder &_fbb,
     const char *name = nullptr,
     const Core::Serialization::Uuid *uuid = nullptr,
+    const Core::Serialization::Uuid *parent_uuid = nullptr,
+    const Core::Serialization::Vec3 *position = nullptr,
+    const Core::Serialization::Vec4 *rotation = nullptr,
+    const Core::Serialization::Vec3 *scale = nullptr,
     const std::vector<::flatbuffers::Offset<Core::Serialization::Component>> *components = nullptr) {
   auto name__ = name ? _fbb.CreateString(name) : 0;
   auto components__ = components ? _fbb.CreateVector<::flatbuffers::Offset<Core::Serialization::Component>>(*components) : 0;
@@ -97,6 +141,10 @@ inline ::flatbuffers::Offset<Object> CreateObjectDirect(
       _fbb,
       name__,
       uuid,
+      parent_uuid,
+      position,
+      rotation,
+      scale,
       components__);
 }
 

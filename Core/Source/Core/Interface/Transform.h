@@ -12,24 +12,28 @@ namespace Core
 	class Transform
 	{
 		private:
-			Transform* parent = nullptr;
-			std::vector<Transform*> children;
+			void* _owner = nullptr;
+			Transform* _parent = nullptr;
+			std::vector<Transform*> _children;
 
-			glm::vec3 position = glm::vec3(0.0f);
-			glm::quat rotation = glm::identity<glm::quat>();
-			glm::vec3 scale = glm::vec3(1.0f);
+			glm::vec3 _position = glm::vec3(0.0f);
+			glm::quat _rotation = glm::identity<glm::quat>();
+			glm::vec3 _scale = glm::vec3(1.0f);
 
-			mutable glm::mat4 cachedWorldMatrix = glm::identity<glm::mat4>();
-			mutable bool dirty = true;
-
-		public:
-			Transform();
-			~Transform();
-
-			void setParent(Transform* value);
+			mutable glm::mat4 _cachedWorldMatrix = glm::identity<glm::mat4>();
+			mutable bool _dirty = true;
 
 			void addChild(Transform* child);
 			void removeChild(Transform* child);
+
+		public:
+			Transform(void* owner);
+			~Transform();
+
+			void* getOwner() const { return _owner; }
+
+			Transform* getParent() const { return _parent; }
+			void setParent(Transform* value);
 
 			void markDirty();
 
