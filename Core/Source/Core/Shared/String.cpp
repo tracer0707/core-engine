@@ -136,17 +136,24 @@ namespace Core
 		return _buffer.empty();
 	}
 
-	String String::toLower()
+	String String::toLower() const
 	{
 		auto str = toUnicodeString();
 		str.toLower();
 		return fromUnicodeString(str);
 	}
 
-	String String::toUpper()
+	String String::toUpper() const
 	{
 		auto str = toUnicodeString();
 		str.toUpper();
+		return fromUnicodeString(str);
+	}
+
+	String String::foldCase() const
+	{
+		auto str = toUnicodeString();
+		str.foldCase();
 		return fromUnicodeString(str);
 	}
 

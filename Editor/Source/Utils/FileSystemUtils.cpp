@@ -48,30 +48,26 @@ namespace Editor
 
 	Core::List<fs::path> FileSystemUtils::getPathEntries(const fs::path& path)
 	{
-		Core::List<fs::path> fs;
+		Core::List<fs::path> entries;
+
 		for (const auto& entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied))
 		{
-			fs.add(entry.path());
+			entries.add(entry.path());
 		}
 
-		fs.sort([](fs::path& a, fs::path& b) -> bool {
-			bool isDirA = fs::is_directory(a);
-			bool isDirB = fs::is_directory(b);
+		entries.sort([](fs::path& a, fs::path& b) {
+			const bool isDirA = fs::is_directory(a);
+			const bool isDirB = fs::is_directory(b);
 
-			std::string _a = Core::Path::toUtf8(a).std_str();
-			std::string _b = Core::Path::toUtf8(b).std_str();
+			Core::String nameA = Core::Path::toUtf8(a.filename()).foldCase();
+			Core::String nameB = Core::Path::toUtf8(b.filename()).foldCase();
 
-			std::transform(_a.begin(), _a.end(), _a.begin(), [](unsigned char c) { return std::tolower(c); });
-			std::transform(_b.begin(), _b.end(), _b.begin(), [](unsigned char c) { return std::tolower(c); });
+			if (isDirA != isDirB) return isDirA;
 
-			if (isDirA && isDirB) return _a < _b;
-			if (isDirA) return 1;
-			if (isDirB) return 0;
-
-			return _a < _b;
+			return nameA < nameB;
 		});
 
-		return fs;
+		return entries;
 	}
 
 	void FileSystemUtils::enumerateFiles(const fs::path& root, Core::List<fs::path>& out)
