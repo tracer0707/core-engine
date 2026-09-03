@@ -32,6 +32,16 @@ namespace Core
 		return *this;
 	}
 
+	String& String::operator+=(Char codePoint)
+	{
+		icu::UnicodeString unicode = toUnicodeString();
+
+		unicode.append(codePoint);
+		*this = fromUnicodeString(unicode);
+
+		return *this;
+	}
+
 	String String::operator+(const String& other) const
 	{
 		String result = *this;
@@ -44,6 +54,35 @@ namespace Core
 		String result = *this;
 		result += String(str);
 		return result;
+	}
+
+	String String::operator+(Char codePoint) const
+	{
+		String result = *this;
+		result += codePoint;
+		return result;
+	}
+
+	Char String::operator[](int index) const
+	{
+		icu::UnicodeString unicode = toUnicodeString();
+
+		int32_t offset = 0;
+
+		for (int i = 0; i < index; ++i)
+			offset = unicode.moveIndex32(offset, 1);
+
+		return unicode.char32At(offset);
+	}
+
+	String::Iterator String::begin() const
+	{
+		return Iterator(this, 0);
+	}
+
+	String::Iterator String::end() const
+	{
+		return Iterator(this, toUnicodeString().length());
 	}
 
 	bool String::operator==(const String& str) const
@@ -120,7 +159,6 @@ namespace Core
 
 	String String::substring(int start)
 	{
-
 		auto str = toUnicodeString();
 		str.tempSubString(start);
 		return fromUnicodeString(str);
@@ -143,6 +181,11 @@ namespace Core
 	{
 		auto str = toUnicodeString();
 		return str.countChar32();
+	}
+
+	size_t String::byteSize() const
+	{
+		return _buffer.size();
 	}
 
 	bool String::startsWith(char val) const
@@ -181,5 +224,33 @@ namespace Core
 		std::string utf8;
 		str.toUTF8String(utf8);
 		return String(utf8);
+	}
+
+	String::Iterator::Iterator(const String* string, int32_t index)
+	{
+		_owner = string;
+		_string = string->toUnicodeString();
+		_index = index;
+	}
+
+	Char String::Iterator::operator*() const
+	{
+		return _string.char32At(_index);
+	}
+
+	String::Iterator& String::Iterator::operator++()
+	{
+		_index = _string.moveIndex32(_index, 1);
+		return *this;
+	}
+	
+	bool String::Iterator::operator==(const Iterator& other) const
+	{
+		return _owner == other._owner && _index == other._index;
+	}
+
+	bool String::Iterator::operator!=(const Iterator& other) const
+	{
+		return !(*this == other);
 	}
 } // namespace Core

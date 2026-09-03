@@ -113,7 +113,6 @@ namespace Editor
 		float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0;
 		ImVec2 text_size = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
 
-
 		ImVec2 imgSize(w - padding.x * 2.0f, h - spacing - text_size.y - padding.y * 2.0f);
 
 		ImDrawList* draw_list = ImGui::GetWindowDrawList();
@@ -134,16 +133,17 @@ namespace Editor
 		{
 			int ellipsisW = ImGui::CalcTextSize("...").x;
 
-			std::string croppedText = "";
+			Core::String croppedText = "";
+			Core::String tempText = label;
 			int prefSizeX = 0;
 			int c = 0;
-			while (prefSizeX < (total_size.x - ellipsisW) - 4 && c < label.size())
+			while (prefSizeX < (total_size.x - ellipsisW) - 4 && c < tempText.length())
 			{
-				croppedText += label[c];
+				croppedText += tempText[c];
 				prefSizeX = ImGui::CalcTextSize(croppedText.c_str()).x;
 				++c;
 			}
-			label = croppedText + "...";
+			label = (croppedText + "...").std_str();
 			text_size.x = prefSizeX + ellipsisW;
 		}
 
