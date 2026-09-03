@@ -2,12 +2,17 @@
 
 #include <fstream>
 #include <filesystem>
+#include <map>
 
 #include "../Shared/Path.h"
 #include "../System/Application.h"
 #include "../System/Window.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
+#include "../Components/Camera.h"
+#include "../Components/MeshRenderer.h"
+#include "../Interface/Transform.h"
+#include "../Scene/Object.h"
 
 #include "ContentDatabase.h"
 #include "Material.h"
@@ -17,6 +22,7 @@
 #include "Scene.h"
 
 #include "../Serialization/FlatBuffers/Content_generated.h"
+#include "../Serialization/FlatBuffers/Scene_generated.h"
 
 namespace fs = std::filesystem;
 
@@ -307,7 +313,118 @@ namespace Core
 
 	Scene* ContentManager::loadSceneFromFile(const fs::path& fileName)
 	{
-		return nullptr;
+		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
+
+		auto it = _scenesCache.find(uuid);
+		if (it != _scenesCache.end()) return (Scene*)it->second;
+
+		std::ifstream file(fileName, std::ios::binary | std::ios::ate);
+		if (!file.is_open()) return nullptr;
+
+		const std::streamsize fileSize = file.tellg();
+		if (fileSize <= 0) return nullptr;
+
+		file.seekg(0, std::ios::beg);
+		std::vector<uint8_t> buffer(static_cast<size_t>(fileSize));
+		if (!file.read(reinterpret_cast<char*>(buffer.data()), fileSize)) return nullptr;
+
+		const Core::Serialization::Scene* serializedScene = flatbuffers::GetRoot<Core::Serialization::Scene>(buffer.data());
+		Scene* result = new Scene(_renderer, _app->getMainWindow()->getTime());
+		result->setUuid(uuid);
+		std::map<Uuid, Object*> objectsByUuid;
+		std::map<Object*, Uuid> parentUuids;
+
+		const auto* serializedObjects = serializedScene->objects();
+		if (serializedObjects != nullptr)
+		{
+			for (const Core::Serialization::Object* serializedObject : *serializedObjects)
+			{
+				Object* object = result->createObject();
+				if (serializedObject->name() != nullptr) object->setName(serializedObject->name()->c_str());
+				if (serializedObject->uuid() != nullptr)
+					object->setUuid(Uuid(serializedObject->uuid()->low(), serializedObject->uuid()->high()));
+				objectsByUuid[object->getUuid()] = object;
+
+				if (serializedObject->parent_uuid() != nullptr)
+					parentUuids[object] = Uuid(serializedObject->parent_uuid()->low(), serializedObject->parent_uuid()->high());
+
+				if (serializedObject->position() != nullptr)
+				{
+					const Core::Serialization::Vec3* position = serializedObject->position();
+					object->getTransform()->setLocalPosition(glm::vec3(position->x(), position->y(), position->z()));
+				}
+				if (serializedObject->rotation() != nullptr)
+				{
+					const Core::Serialization::Vec4* rotation = serializedObject->rotation();
+					object->getTransform()->setLocalRotation(glm::quat(rotation->w(), rotation->x(), rotation->y(), rotation->z()));
+				}
+				if (serializedObject->scale() != nullptr)
+				{
+					const Core::Serialization::Vec3* scale = serializedObject->scale();
+					object->getTransform()->setLocalScale(glm::vec3(scale->x(), scale->y(), scale->z()));
+				}
+
+				const auto* serializedComponents = serializedObject->components();
+				if (serializedComponents == nullptr) continue;
+
+				for (const Core::Serialization::Component* serializedComponent : *serializedComponents)
+				{
+					if (serializedComponent->data_type() == Core::Serialization::ComponentData_Camera)
+					{
+						const Core::Serialization::Camera* serializedCamera = serializedComponent->data_as_Camera();
+						if (serializedCamera == nullptr) continue;
+
+						Camera* camera = object->addComponent<Camera*>();
+						camera->setFov(serializedCamera->fov());
+						camera->setNear(serializedCamera->near());
+						camera->setFar(serializedCamera->far());
+						if (result->getMainCamera() == nullptr) result->setMainCamera(camera);
+					}
+					else if (serializedComponent->data_type() == Core::Serialization::ComponentData_MeshRenderer)
+					{
+						const Core::Serialization::MeshRenderer* serializedMeshRenderer = serializedComponent->data_as_MeshRenderer();
+						if (serializedMeshRenderer == nullptr || serializedMeshRenderer->mesh() == nullptr) continue;
+
+						Uuid meshUuid(serializedMeshRenderer->mesh()->low(), serializedMeshRenderer->mesh()->high());
+						if (meshUuid == Uuid::Empty) continue;
+
+						Mesh* mesh = loadMeshByUuid(meshUuid);
+						if (mesh == nullptr) continue;
+
+						MeshRenderer* meshRenderer = object->addComponent<MeshRenderer*>();
+						meshRenderer->setMesh(mesh);
+
+						const auto* serializedMaterials = serializedMeshRenderer->materials();
+						if (serializedMaterials != nullptr)
+						{
+							for (uint32_t i = 0; i < serializedMaterials->size() && i < static_cast<uint32_t>(meshRenderer->getMaterialCount()); ++i)
+							{
+								const Core::Serialization::Uuid* materialUuid = serializedMaterials->Get(i);
+								if (materialUuid == nullptr) continue;
+
+								Uuid uuidValue(materialUuid->low(), materialUuid->high());
+								if (uuidValue != Uuid::Empty) meshRenderer->setMaterial(static_cast<int>(i), loadMaterialByUuid(uuidValue));
+							}
+						}
+					}
+				}
+			}
+		}
+
+		for (const auto& [object, parentUuid] : parentUuids)
+		{
+			if (parentUuid == Uuid::Empty) continue;
+
+			auto parent = objectsByUuid.find(parentUuid);
+			if (parent != objectsByUuid.end()) object->getTransform()->setParent(parent->second->getTransform());
+		}
+
+		_scenes.add(result);
+		_scenesCache[uuid] = result;
+
+		if (_onResourceLoaded != nullptr) _onResourceLoaded(result);
+
+		return result;
 	}
 
 	// Load by uuids

@@ -7,6 +7,7 @@
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/Mesh.h>
+#include <Core/Content/Scene.h>
 #include <Core/Content/ContentManager.h>
 #include <Core/Content/ContentDatabase.h>
 #include <Core/Shared/Path.h>
@@ -202,6 +203,11 @@ namespace Editor
 			{
 				tex = getIcon(ext);
 				content = _parent->getContentManager()->loadMeshFromFile(it);
+			}
+			else if (ext == ".scene")
+			{
+				tex = getIcon(ext);
+				content = _parent->getContentManager()->loadSceneFromFile(it);
 			}
 			else
 			{
