@@ -82,7 +82,7 @@ namespace Core
 
 	String::Iterator String::end() const
 	{
-		return Iterator(this, toUnicodeString().length());
+		return Iterator(this, length());
 	}
 
 	bool String::operator==(const String& str) const
@@ -157,25 +157,23 @@ namespace Core
 		return fromUnicodeString(str);
 	}
 
-	String String::replace(char src, char dst)
+	String String::replace(const String& src, const String& dst)
 	{
 		auto str = toUnicodeString();
-		str.findAndReplace(src, dst);
+		str.findAndReplace(src.toUnicodeString(), dst.toUnicodeString());
 		return fromUnicodeString(str);
 	}
 
 	String String::substring(int start)
 	{
 		auto str = toUnicodeString();
-		str.tempSubString(start);
-		return fromUnicodeString(str);
+		return fromUnicodeString(str.tempSubString(start));
 	}
 
 	String String::substring(int start, int length)
 	{
 		auto str = toUnicodeString();
-		str.tempSubString(start, length);
-		return fromUnicodeString(str);
+		return fromUnicodeString(str.tempSubString(start, length));
 	}
 
 	int String::lastIndexOf(char src) const
@@ -250,7 +248,7 @@ namespace Core
 		_index = _string.moveIndex32(_index, 1);
 		return *this;
 	}
-	
+
 	bool String::Iterator::operator==(const Iterator& other) const
 	{
 		return _owner == other._owner && _index == other._index;

@@ -7,35 +7,32 @@ namespace Editor
 {
 	Font::Font(const fs::path& path, float size)
 	{
+		_glyphRanges = new ImVector<ImWchar>();
+
 		ImGuiIO& io = ImGui::GetIO();
 		ImFontGlyphRangesBuilder ranges;
 		ranges.AddRanges(io.Fonts->GetGlyphRangesDefault());
 		ranges.AddRanges(io.Fonts->GetGlyphRangesCyrillic());
-		ranges.AddRanges(io.Fonts->GetGlyphRangesGreek());
-		ranges.AddRanges(io.Fonts->GetGlyphRangesVietnamese());
-		ranges.AddRanges(io.Fonts->GetGlyphRangesThai());
-		ranges.AddRanges(io.Fonts->GetGlyphRangesJapanese());
-		ranges.AddRanges(io.Fonts->GetGlyphRangesChineseFull());
-		ranges.AddRanges(io.Fonts->GetGlyphRangesKorean());
-		ImVector<ImWchar> glyphRanges;
-		ranges.BuildRanges(&glyphRanges);
+		ranges.BuildRanges(_glyphRanges);
 
 		const Core::String utf8Path = Core::Path::toUtf8(path);
-		_font = io.Fonts->AddFontFromFileTTF(utf8Path.c_str(), size, nullptr, glyphRanges.Data);
+		_font = io.Fonts->AddFontFromFileTTF(utf8Path.c_str(), size, nullptr, _glyphRanges->Data);
 	}
 
 	Font::~Font()
 	{
+		delete _glyphRanges;
+		_glyphRanges = nullptr;
 		_font = nullptr;
-    }
+	}
 
-    void Font::rebuildFonts()
+	void Font::rebuildFonts()
 	{
 		ImGuiIO& io = ImGui::GetIO();
-        io.Fonts->Build();
+		io.Fonts->Build();
 
-        ImGui_ImplOpenGL3_DestroyFontsTexture();
-        ImGui_ImplOpenGL3_CreateFontsTexture();
+		ImGui_ImplOpenGL3_DestroyFontsTexture();
+		ImGui_ImplOpenGL3_CreateFontsTexture();
 	}
 
 	void Font::setDefault()
@@ -43,4 +40,4 @@ namespace Editor
 		ImGuiIO& io = ImGui::GetIO();
 		io.FontDefault = _font;
 	}
-}
+} // namespace Editor

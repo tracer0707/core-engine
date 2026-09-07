@@ -98,15 +98,15 @@ namespace Editor
 					Core::SubMesh& subMesh = mesh->getSubMesh(i);
 					if (j >= subMesh.getIndexOffset() && j < subMesh.getIndexOffset() + subMesh.getIndexCount())
 					{
-						//SubMesh found
+						// SubMesh found
 						break;
 					}
 				}
 
-				//TODO
+				// TODO
 			}
 		}
-		
+
 		if (!foundHit) return false;
 
 		return true;

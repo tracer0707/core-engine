@@ -10,34 +10,34 @@
 
 namespace Core
 {
-    String IO::readText(const fs::path& path)
-    {
-        std::string result_str = "";
-        std::ifstream in(path, std::ios::in);
+	String IO::readText(const fs::path& path)
+	{
+		std::string result_str = "";
+		std::ifstream in(path, std::ios::in);
 
-        if (!in.is_open())
-        {
-            return "";
-        }
+		if (!in.is_open())
+		{
+			return "";
+		}
 
-        std::string line;
-        while (std::getline(in, line))
-        {
-            result_str += line + "\n";
-        }
+		std::string line;
+		while (std::getline(in, line))
+		{
+			result_str += line + "\n";
+		}
 
-        in.close();
+		in.close();
 
-        return String(result_str).replace('\r\n', '\n');
-    }
+		return String(result_str).replace("\r\n", "\n");
+	}
 
-    void IO::writeText(const fs::path& path, String& text, bool append)
-    {
-        const std::ios_base::openmode open_mode = append ? (std::ios::out | std::ios::app) : std::ios::out;
+	void IO::writeText(const fs::path& path, String& text, bool append)
+	{
+		const std::ios_base::openmode open_mode = append ? (std::ios::out | std::ios::app) : std::ios::out;
 
-        std::ofstream text_file;
-        text_file.open(path, open_mode);
-        text_file << text.std_str();
-        text_file.close();
-    }
+		std::ofstream text_file;
+		text_file.open(path, open_mode);
+		text_file << text.std_str();
+		text_file.close();
+	}
 } // namespace Core

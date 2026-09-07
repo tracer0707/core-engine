@@ -74,7 +74,7 @@ namespace Core
 			std::wstring wide_str() const;
 #endif
 
-			String replace(char src, char dst);
+			String replace(const String& src, const String& dst);
 			String substring(int start);
 			String substring(int start, int length);
 			int lastIndexOf(char src) const;
@@ -96,9 +96,6 @@ namespace std
 	template <>
 	struct hash<Core::String>
 	{
-		size_t operator()(const Core::String& s) const
-		{
-			return hash<string>()(s.std_str());
-		}
+			size_t operator()(const Core::String& s) const { return hash<string>()(s.std_str()); }
 	};
 } // namespace std
