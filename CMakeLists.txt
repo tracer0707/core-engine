@@ -43,14 +43,21 @@ file(GLOB_RECURSE CORE_SOURCES "Core/Source/*.cpp" "Core/Dependencies/imgui/*.cp
 # glad sources
 file(GLOB_RECURSE GLAD_SOURCES "Core/Dependencies/glad/include/glad/gl.h" "Core/Dependencies/glad/src/gl.c")
 
+# lua sources
+file(GLOB_RECURSE LUA_SOURCES "Core/Dependencies/lua/include/*.h" "Core/Dependencies/lua/src/*.c")
+
 # Core (static lib)
 add_library(Core STATIC ${CORE_HEADERS} ${CORE_SOURCES})
 
 add_library(glad STATIC ${GLAD_SOURCES})
 set_target_properties(glad PROPERTIES LINKER_LANGUAGE C)
 
+add_library(lua STATIC ${LUA_SOURCES})
+set_target_properties(lua PROPERTIES LINKER_LANGUAGE C)
+
 set_target_properties(Core PROPERTIES OUTPUT_NAME "core")
 set_target_properties(glad PROPERTIES OUTPUT_NAME "glad")
+set_target_properties(lua PROPERTIES OUTPUT_NAME "lua")
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
@@ -67,7 +74,11 @@ target_include_directories(glad PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glad/include
 )
 
-target_include_directories(Core PUBLIC 
+target_include_directories(lua PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/lua/include
+)
+
+target_include_directories(Core PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/include
@@ -138,10 +149,11 @@ target_link_libraries(Core
     PRIVATE glm
     PRIVATE glad
     PRIVATE flatbuffers
+    PRIVATE lua
 )
 
 # Editor headers
-file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h" "Editor/Dependencies/ImGuizmo/*.h" "Core/Source/Core/Serialization/FlatBuffers/*.h")
+file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h" "Editor/Dependencies/ImGuizmo/*.h")
 
 # Editor sources
 file(GLOB_RECURSE EDITOR_SOURCES "Editor/Source/*.cpp" "Editor/Dependencies/ImGuizmo/*.cpp")
@@ -167,9 +179,8 @@ if(PLATFORM_LINUX)
     )
 endif()
 
-target_include_directories(Editor PRIVATE 
+target_include_directories(Editor PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Source
-    ${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include
@@ -229,11 +240,11 @@ target_link_libraries(Editor
     PRIVATE Assimp
     PRIVATE FreeImage
     PRIVATE bc7enc
-    PRIVATE flatbuffers
 )
 
 # Group projects
 set_property(TARGET glad PROPERTY FOLDER "glad")
+set_property(TARGET lua PROPERTY FOLDER "lua")
 set_property(TARGET Core PROPERTY FOLDER "Core")
 set_property(TARGET Editor PROPERTY FOLDER "Editor")
 

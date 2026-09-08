@@ -11,3 +11,4 @@
 - FlatBuffers - 25.9.23 (Apache-2.0 license https://github.com/google/flatbuffers)
 - bc7enc
 - Manifold - 3.5.2 (Apache-2.0 license https://github.com/elalish/manifold)
+- Lua - 5.5.1
