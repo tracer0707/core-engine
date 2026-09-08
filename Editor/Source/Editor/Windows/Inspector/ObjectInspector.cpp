@@ -7,6 +7,7 @@
 
 #include "TransformInspector.h"
 #include "MeshRendererInspector.h"
+#include "BehaviorInspector.h"
 
 #include "../../Controls/Collapse.h"
 #include "../../Controls/Button.h"
@@ -40,6 +41,15 @@ namespace Editor
 				collapse->addControl(inspector);
 				addControl(collapse);
 			}
+
+			if (it->getComponentType() == Core::ComponentType::Behavior)
+			{
+				Collapse* collapse = new Collapse("Behavior");
+				Inspector* inspector = new BehaviorInspector((Core::Behavior*)it, _eventHandler);
+				inspector->build();
+				collapse->addControl(inspector);
+				addControl(collapse);
+			}
 		}
 
 		LinearLayout* bottomLayout = new LinearLayout(LayoutDirection::Horizontal);
@@ -59,7 +69,18 @@ namespace Editor
 			});
 		});
 
+		MenuItem* _behaviorMenuItem = new MenuItem("Behavior");
+		_behaviorMenuItem->setOnClick([this]() {
+			_object->addComponent<Core::Behavior*>();
+			_eventHandler->addEvent([this]() {
+				clear();
+				build();
+			});
+		});
+
 		addComponentButton->getContextMenu()->addControl(_materialMenuItem);
+		addComponentButton->getContextMenu()->addControl(_behaviorMenuItem);
+
 		bottomLayout->addControl(addComponentButton);
 		addControl(bottomLayout);
 	}

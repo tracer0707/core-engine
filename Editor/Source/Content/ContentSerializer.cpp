@@ -2,20 +2,26 @@
 
 #include <fstream>
 
+#include <Core/Shared/Path.h>
+#include <Core/Scene/Object.h>
+#include <Core/Interface/Transform.h>
+
 #include <Core/Renderer/Program.h>
+
 #include <Core/Content/Material.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Content/Scene.h>
 #include <Core/Content/Texture2D.h>
+#include <Core/Content/Script.h>
 #include <Core/Content/ContentDatabase.h>
-#include <Core/Shared/Path.h>
-#include <Core/Scene/Object.h>
-#include <Core/Interface/Transform.h>
+
 #include <Core/Components/Camera.h>
 #include <Core/Components/MeshRenderer.h>
+#include <Core/Components/Behavior.h>
 
 #include <Core/Serialization/FlatBuffers/Content_generated.h>
 #include <Core/Serialization/FlatBuffers/Scene_generated.h>
+#include <Core/Serialization/FlatBuffers/Component_generated.h>
 
 namespace Editor
 {
@@ -184,6 +190,16 @@ namespace Editor
 					auto materials = builder.CreateVectorOfStructs(materialUuids);
 					data = Core::Serialization::CreateMeshRenderer(builder, &fbMeshUuid, materials).Union();
 					dataType = Core::Serialization::ComponentData_MeshRenderer;
+				}
+				else if (component->getComponentType() == Core::ComponentType::Behavior)
+				{
+					Core::Behavior* behavior = static_cast<Core::Behavior*>(component);
+					Core::Uuid scriptUuid = behavior->getScript() != nullptr ? behavior->getScript()->getUuid() : Core::Uuid::Empty;
+					auto [scriptLow, scriptHigh] = scriptUuid.toUInt64();
+					Core::Serialization::Uuid fbScriptUuid(scriptLow, scriptHigh);
+
+					data = Core::Serialization::CreateBehavior(builder, &fbScriptUuid).Union();
+					dataType = Core::Serialization::ComponentData_Behavior;
 				}
 
 				if (dataType != Core::Serialization::ComponentData_NONE)

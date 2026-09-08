@@ -27,35 +27,41 @@ struct CameraBuilder;
 struct MeshRenderer;
 struct MeshRendererBuilder;
 
+struct Behavior;
+struct BehaviorBuilder;
+
 enum ComponentData : uint8_t {
   ComponentData_NONE = 0,
   ComponentData_Camera = 1,
   ComponentData_MeshRenderer = 2,
+  ComponentData_Behavior = 3,
   ComponentData_MIN = ComponentData_NONE,
-  ComponentData_MAX = ComponentData_MeshRenderer
+  ComponentData_MAX = ComponentData_Behavior
 };
 
-inline const ComponentData (&EnumValuesComponentData())[3] {
+inline const ComponentData (&EnumValuesComponentData())[4] {
   static const ComponentData values[] = {
     ComponentData_NONE,
     ComponentData_Camera,
-    ComponentData_MeshRenderer
+    ComponentData_MeshRenderer,
+    ComponentData_Behavior
   };
   return values;
 }
 
 inline const char * const *EnumNamesComponentData() {
-  static const char * const names[4] = {
+  static const char * const names[5] = {
     "NONE",
     "Camera",
     "MeshRenderer",
+    "Behavior",
     nullptr
   };
   return names;
 }
 
 inline const char *EnumNameComponentData(ComponentData e) {
-  if (::flatbuffers::IsOutRange(e, ComponentData_NONE, ComponentData_MeshRenderer)) return "";
+  if (::flatbuffers::IsOutRange(e, ComponentData_NONE, ComponentData_Behavior)) return "";
   const size_t index = static_cast<size_t>(e);
   return EnumNamesComponentData()[index];
 }
@@ -70,6 +76,10 @@ template<> struct ComponentDataTraits<Core::Serialization::Camera> {
 
 template<> struct ComponentDataTraits<Core::Serialization::MeshRenderer> {
   static const ComponentData enum_value = ComponentData_MeshRenderer;
+};
+
+template<> struct ComponentDataTraits<Core::Serialization::Behavior> {
+  static const ComponentData enum_value = ComponentData_Behavior;
 };
 
 bool VerifyComponentData(::flatbuffers::Verifier &verifier, const void *obj, ComponentData type);
@@ -94,6 +104,9 @@ struct Component FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
   const Core::Serialization::MeshRenderer *data_as_MeshRenderer() const {
     return data_type() == Core::Serialization::ComponentData_MeshRenderer ? static_cast<const Core::Serialization::MeshRenderer *>(data()) : nullptr;
   }
+  const Core::Serialization::Behavior *data_as_Behavior() const {
+    return data_type() == Core::Serialization::ComponentData_Behavior ? static_cast<const Core::Serialization::Behavior *>(data()) : nullptr;
+  }
   bool Verify(::flatbuffers::Verifier &verifier) const {
     return VerifyTableStart(verifier) &&
            VerifyField<uint8_t>(verifier, VT_DATA_TYPE, 1) &&
@@ -109,6 +122,10 @@ template<> inline const Core::Serialization::Camera *Component::data_as<Core::Se
 
 template<> inline const Core::Serialization::MeshRenderer *Component::data_as<Core::Serialization::MeshRenderer>() const {
   return data_as_MeshRenderer();
+}
+
+template<> inline const Core::Serialization::Behavior *Component::data_as<Core::Serialization::Behavior>() const {
+  return data_as_Behavior();
 }
 
 struct ComponentBuilder {
@@ -266,6 +283,47 @@ inline ::flatbuffers::Offset<MeshRenderer> CreateMeshRendererDirect(
       materials__);
 }
 
+struct Behavior FLATBUFFERS_FINAL_CLASS : private ::flatbuffers::Table {
+  typedef BehaviorBuilder Builder;
+  enum FlatBuffersVTableOffset FLATBUFFERS_VTABLE_UNDERLYING_TYPE {
+    VT_SCRIPT = 4
+  };
+  const Core::Serialization::Uuid *script() const {
+    return GetStruct<const Core::Serialization::Uuid *>(VT_SCRIPT);
+  }
+  bool Verify(::flatbuffers::Verifier &verifier) const {
+    return VerifyTableStart(verifier) &&
+           VerifyField<Core::Serialization::Uuid>(verifier, VT_SCRIPT, 8) &&
+           verifier.EndTable();
+  }
+};
+
+struct BehaviorBuilder {
+  typedef Behavior Table;
+  ::flatbuffers::FlatBufferBuilder &fbb_;
+  ::flatbuffers::uoffset_t start_;
+  void add_script(const Core::Serialization::Uuid *script) {
+    fbb_.AddStruct(Behavior::VT_SCRIPT, script);
+  }
+  explicit BehaviorBuilder(::flatbuffers::FlatBufferBuilder &_fbb)
+        : fbb_(_fbb) {
+    start_ = fbb_.StartTable();
+  }
+  ::flatbuffers::Offset<Behavior> Finish() {
+    const auto end = fbb_.EndTable(start_);
+    auto o = ::flatbuffers::Offset<Behavior>(end);
+    return o;
+  }
+};
+
+inline ::flatbuffers::Offset<Behavior> CreateBehavior(
+    ::flatbuffers::FlatBufferBuilder &_fbb,
+    const Core::Serialization::Uuid *script = nullptr) {
+  BehaviorBuilder builder_(_fbb);
+  builder_.add_script(script);
+  return builder_.Finish();
+}
+
 inline bool VerifyComponentData(::flatbuffers::Verifier &verifier, const void *obj, ComponentData type) {
   switch (type) {
     case ComponentData_NONE: {
@@ -277,6 +335,10 @@ inline bool VerifyComponentData(::flatbuffers::Verifier &verifier, const void *o
     }
     case ComponentData_MeshRenderer: {
       auto ptr = reinterpret_cast<const Core::Serialization::MeshRenderer *>(obj);
+      return verifier.VerifyTable(ptr);
+    }
+    case ComponentData_Behavior: {
+      auto ptr = reinterpret_cast<const Core::Serialization::Behavior *>(obj);
       return verifier.VerifyTable(ptr);
     }
     default: return true;

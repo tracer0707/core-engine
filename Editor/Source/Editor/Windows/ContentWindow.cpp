@@ -8,6 +8,7 @@
 #include <Core/Content/Material.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Content/Scene.h>
+#include <Core/Content/Script.h>
 #include <Core/Content/ContentManager.h>
 #include <Core/Content/ContentDatabase.h>
 #include <Core/Shared/Path.h>
@@ -209,6 +210,11 @@ namespace Editor
 				tex = getIcon(ext);
 				content = _parent->getContentManager()->loadSceneFromFile(it);
 			}
+			else if (ext == ".lua")
+			{
+				tex = getIcon(ext);
+				content = _parent->getContentManager()->loadScriptFromFile(it);
+			}
 			else
 			{
 				tex = getIcon(ext);
@@ -297,6 +303,14 @@ namespace Editor
 		else if (ext == ".material")
 		{
 			iconName = "material.png";
+		}
+		else if (ext == ".scene")
+		{
+			iconName = "scene.png";
+		}
+		else if (ext == ".lua")
+		{
+			iconName = "script.png";
 		}
 		else
 		{

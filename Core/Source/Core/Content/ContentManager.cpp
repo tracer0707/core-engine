@@ -12,6 +12,7 @@
 #include "../Renderer/VertexBuffer.h"
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
+#include "../Components/Behavior.h"
 #include "../Interface/Transform.h"
 #include "../Scene/Object.h"
 
@@ -25,6 +26,7 @@
 
 #include "../Serialization/FlatBuffers/Content_generated.h"
 #include "../Serialization/FlatBuffers/Scene_generated.h"
+#include "../Serialization/FlatBuffers/Component_generated.h"
 
 namespace fs = std::filesystem;
 
@@ -354,6 +356,7 @@ namespace Core
 				if (serializedObject->name() != nullptr) object->setName(serializedObject->name()->c_str());
 				if (serializedObject->uuid() != nullptr)
 					object->setUuid(Uuid(serializedObject->uuid()->low(), serializedObject->uuid()->high()));
+
 				objectsByUuid[object->getUuid()] = object;
 
 				if (serializedObject->parent_uuid() != nullptr)
@@ -394,13 +397,14 @@ namespace Core
 					else if (serializedComponent->data_type() == Core::Serialization::ComponentData_MeshRenderer)
 					{
 						const Core::Serialization::MeshRenderer* serializedMeshRenderer = serializedComponent->data_as_MeshRenderer();
-						if (serializedMeshRenderer == nullptr || serializedMeshRenderer->mesh() == nullptr) continue;
+						if (serializedMeshRenderer == nullptr) continue;
 
+						Mesh* mesh = nullptr;
 						Uuid meshUuid(serializedMeshRenderer->mesh()->low(), serializedMeshRenderer->mesh()->high());
-						if (meshUuid == Uuid::Empty) continue;
-
-						Mesh* mesh = loadMeshByUuid(meshUuid);
-						if (mesh == nullptr) continue;
+						if (meshUuid != Uuid::Empty)
+						{
+							mesh = loadMeshByUuid(meshUuid);
+						}
 
 						MeshRenderer* meshRenderer = object->addComponent<MeshRenderer*>();
 						meshRenderer->setMesh(mesh);
@@ -417,6 +421,21 @@ namespace Core
 								if (uuidValue != Uuid::Empty) meshRenderer->setMaterial(static_cast<int>(i), loadMaterialByUuid(uuidValue));
 							}
 						}
+					}
+					else if (serializedComponent->data_type() == Core::Serialization::ComponentData_Behavior)
+					{
+						const Core::Serialization::Behavior* serializedBehavior = serializedComponent->data_as_Behavior();
+						if (serializedBehavior == nullptr) continue;
+						
+						Script* script = nullptr;
+						Uuid scriptUuid(serializedBehavior->script()->low(), serializedBehavior->script()->high());
+						if (scriptUuid != Uuid::Empty)
+						{
+							script = loadScriptByUuid(scriptUuid);
+						}
+
+						Behavior* behavior = object->addComponent<Behavior*>();
+						behavior->setScript(script);
 					}
 				}
 			}

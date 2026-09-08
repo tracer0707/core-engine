@@ -4,7 +4,8 @@ namespace Core.Serialization;
 
 union ComponentData {
     Camera,
-    MeshRenderer
+    MeshRenderer,
+    Behavior
 }
 
 table Component {
@@ -20,4 +21,8 @@ table Camera {
 table MeshRenderer {
 	mesh:Uuid;
     materials:[Uuid];
+}
+
+table Behavior {
+    script:Uuid;
 }

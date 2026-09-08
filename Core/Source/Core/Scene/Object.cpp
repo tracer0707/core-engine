@@ -3,6 +3,7 @@
 #include "../Components/Component.h"
 #include "../Components/Camera.h"
 #include "../Components/MeshRenderer.h"
+#include "../Components/Behavior.h"
 #include "../Interface/Transform.h"
 
 namespace Core
@@ -70,6 +71,10 @@ namespace Core
 		else if (type == ComponentType::MeshRenderer)
 		{
 			newComponent = new MeshRenderer(this, _renderer);
+		}
+		else if (type == ComponentType::Behavior)
+		{
+			newComponent = new Behavior(this);
 		}
 
 		assert(newComponent != nullptr && "Unknown component");

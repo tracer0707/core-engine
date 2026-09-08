@@ -14,6 +14,7 @@ namespace Core
 	class MeshRenderer;
 	class Transform;
 	class Renderer;
+	class Behavior;
 
 	class Object
 	{
@@ -68,6 +69,12 @@ namespace Core
 		return (MeshRenderer*)addComponent(ComponentType::MeshRenderer);
 	}
 
+	template <>
+	inline Behavior* Object::addComponent<Behavior*>()
+	{
+		return (Behavior*)addComponent(ComponentType::Behavior);
+	}
+
 	/* FIND */
 	template <>
 	inline Camera* Object::findComponent<Camera*>() const
@@ -79,5 +86,11 @@ namespace Core
 	inline MeshRenderer* Object::findComponent<MeshRenderer*>() const
 	{
 		return (MeshRenderer*)findComponent(ComponentType::MeshRenderer);
+	}
+
+	template <>
+	inline Behavior* Object::findComponent<Behavior*>() const
+	{
+		return (Behavior*)findComponent(ComponentType::Behavior);
 	}
 } // namespace Core
