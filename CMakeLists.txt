@@ -35,10 +35,10 @@ endif()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 # Core headers
-file(GLOB_RECURSE CORE_HEADERS "Core/Source/*.h" "Core/Dependencies/imgui/*.h")
+file(GLOB_RECURSE CORE_HEADERS CONFIGURE_DEPENDS "Core/Source/*.h" "Core/Dependencies/imgui/*.h")
 
 # Core sources
-file(GLOB_RECURSE CORE_SOURCES "Core/Source/*.cpp" "Core/Dependencies/imgui/*.cpp")
+file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS "Core/Source/*.cpp" "Core/Dependencies/imgui/*.cpp")
 
 # glad sources
 file(GLOB_RECURSE GLAD_SOURCES "Core/Dependencies/glad/include/glad/gl.h" "Core/Dependencies/glad/src/gl.c")
@@ -153,10 +153,10 @@ target_link_libraries(Core
 )
 
 # Editor headers
-file(GLOB_RECURSE EDITOR_HEADERS "Editor/Source/*.h" "Editor/Dependencies/ImGuizmo/*.h")
+file(GLOB_RECURSE EDITOR_HEADERS CONFIGURE_DEPENDS "Editor/Source/*.h" "Editor/Dependencies/ImGuizmo/*.h")
 
 # Editor sources
-file(GLOB_RECURSE EDITOR_SOURCES "Editor/Source/*.cpp" "Editor/Dependencies/ImGuizmo/*.cpp")
+file(GLOB_RECURSE EDITOR_SOURCES CONFIGURE_DEPENDS "Editor/Source/*.cpp" "Editor/Dependencies/ImGuizmo/*.cpp")
 
 # Editor (executable, depends on Core)
 add_executable(Editor ${EDITOR_HEADERS} ${EDITOR_SOURCES} Editor/Editor.rc)

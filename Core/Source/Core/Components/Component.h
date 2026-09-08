@@ -21,6 +21,7 @@ namespace Core
 
 			virtual ComponentType getComponentType() const = 0;
 
+			virtual void init() {}
 			virtual void update(float& dt) {}
 			virtual void render(glm::mat4& view, glm::mat4& proj) {}
 

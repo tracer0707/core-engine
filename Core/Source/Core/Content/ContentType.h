@@ -10,6 +10,7 @@ namespace Core
 		RenderTexture,
 		Shader,
 		Texture2D,
-		Scene
+		Scene,
+		Script
 	};
 }

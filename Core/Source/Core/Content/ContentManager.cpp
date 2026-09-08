@@ -5,6 +5,7 @@
 #include <map>
 
 #include "../Shared/Path.h"
+#include "../Shared/IO.h"
 #include "../System/Application.h"
 #include "../System/Window.h"
 #include "../Renderer/Renderer.h"
@@ -20,6 +21,7 @@
 #include "Mesh.h"
 #include "RenderTexture.h"
 #include "Scene.h"
+#include "Script.h"
 
 #include "../Serialization/FlatBuffers/Content_generated.h"
 #include "../Serialization/FlatBuffers/Scene_generated.h"
@@ -50,15 +52,24 @@ namespace Core
 			delete it;
 		for (auto it : _renderTextures)
 			delete it;
+		for (auto it : _scenes)
+			delete it;
+		for (auto it : _scripts)
+			delete it;
 
 		_materials.clear();
 		_textures.clear();
 		_meshes.clear();
 		_renderTextures.clear();
+		_scenes.clear();
+		_scripts.clear();
 
 		_materialsCache.clear();
 		_textures2DCache.clear();
 		_meshesCache.clear();
+		_renderTexturesCache.clear();
+		_scenesCache.clear();
+		_scriptsCache.clear();
 
 		_renderer = nullptr;
 	}
@@ -422,7 +433,33 @@ namespace Core
 		_scenes.add(result);
 		_scenesCache[uuid] = result;
 
-		if (_onResourceLoaded != nullptr) _onResourceLoaded(result);
+		if (_onResourceLoaded != nullptr)
+		{
+			_onResourceLoaded(result);
+		}
+
+		return result;
+	}
+
+	Script* ContentManager::loadScriptFromFile(const fs::path& fileName)
+	{
+		Uuid uuid = ContentDatabase::singleton()->getUuid(fileName);
+
+		auto it = _scriptsCache.find(uuid);
+		if (it != _scriptsCache.end()) return (Script*)it->second;
+
+		String sourceCode = IO::readText(fileName);
+		Script* result = new Script(sourceCode);
+
+		result->setUuid(uuid);
+
+		_scripts.add(result);
+		_scriptsCache[uuid] = result;
+
+		if (_onResourceLoaded != nullptr)
+		{
+			_onResourceLoaded(result);
+		}
 
 		return result;
 	}
@@ -457,6 +494,13 @@ namespace Core
 		return loadSceneFromFile(db->getPath(uuid));
 	}
 
+	Script* ContentManager::loadScriptByUuid(Uuid uuid)
+	{
+		ContentDatabase* db = ContentDatabase::singleton();
+		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		return loadScriptFromFile(db->getPath(uuid));
+	}
+
 	// Load from memory
 
 	Texture2D* ContentManager::loadTexture2DFromBytes(unsigned char* data, int w, int h, int size, TextureFormat fmt)
@@ -488,12 +532,20 @@ namespace Core
 
 	void ContentManager::destroy(RenderTexture* value)
 	{
+		removeFromCache(value, _renderTexturesCache);
 		destroyContent(value, _renderTextures);
 	}
 
 	void ContentManager::destroy(Scene* value)
 	{
+		removeFromCache(value, _scenesCache);
 		destroyContent(value, _scenes);
+	}
+
+	void ContentManager::destroy(Script* value)
+	{
+		removeFromCache(value, _scriptsCache);
+		destroyContent(value, _scripts);
 	}
 
 	void ContentManager::removeFromCache(Content* value, std::map<Uuid, Content*>& map)
