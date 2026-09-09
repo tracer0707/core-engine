@@ -43,6 +43,7 @@ namespace Core
 			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
 			virtual void deleteFrameBuffer(const FrameBuffer* buffer);
 			virtual void bindFrameBuffer(const FrameBuffer* buffer);
+			virtual std::vector<unsigned char> readFrameBufferPixels(const FrameBuffer* buffer);
 
 			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format);
 			virtual void bindTexture(unsigned int id, unsigned int slot);

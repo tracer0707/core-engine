@@ -43,5 +43,7 @@ namespace Core
 			Core::List<UniformInfo> uniforms;
 
 			bool operator==(const Program& left);
+
+			int getUniformLocation(uint64_t nameHash) const;
 	};
 } // namespace Core

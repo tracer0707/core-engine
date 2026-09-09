@@ -23,12 +23,15 @@ namespace Core
 			};
 
 			static void lines(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model, Vertex* points,
-							  int pointsCount, unsigned int flags);
+							  unsigned int pointsCount, unsigned int flags);
 
 			static void wireCube(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model, glm::vec3 size,
 								 glm::vec3 center, Color color, unsigned int flags);
 
 			static void wireMesh(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
 								 List<glm::vec3>& vertices, List<uint32_t>& indices, Color color, WireframeMode mode, unsigned int flags);
+
+			static void sphere(Renderer* renderer, VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
+							   unsigned int sectors, unsigned int stacks, unsigned int flags);
 	};
 } // namespace Core

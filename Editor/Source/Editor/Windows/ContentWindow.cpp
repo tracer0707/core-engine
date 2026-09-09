@@ -17,6 +17,7 @@
 #include "../../Utils/TextureUtils.h"
 #include "../../Main/EditorApp.h"
 #include "../../Main/FileSystemDialog.h"
+#include "../../Main/ThumbManager.h"
 #include "../../Shared/IconsForkAwesome.h"
 #include "../../Shared/Tags.h"
 #include "../../Content/ContentSerializer.h"
@@ -189,6 +190,9 @@ namespace Editor
 			Core::Texture2D* coreTex = nullptr;
 			Core::Content* content = nullptr;
 			Core::String ext = Core::Path::toUtf8(it.extension());
+
+			ThumbManager thumbManager(_parent->getApplication(), _parent->getContentManager());
+			fs::path thumbPath = thumbManager.getThumbPath(it);
 
 			if (ext == ".texture")
 			{

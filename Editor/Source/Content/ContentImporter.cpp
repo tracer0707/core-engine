@@ -60,8 +60,8 @@ namespace Editor
 		_fmt = FreeImage_GetFileTypeU(wideFileName.c_str());
 		texture = FreeImage_LoadU(_fmt, wideFileName.c_str());
 #else
-		_fmt = FreeImage_GetFileType(sourceFileName.string().c_str());
-		texture = FreeImage_Load(_fmt, sourceFileName.string().c_str());
+		_fmt = FreeImage_GetFileType(sourceFileName.c_str());
+		texture = FreeImage_Load(_fmt, sourceFileName.c_str());
 #endif
 		if (texture == nullptr)
 			throw std::runtime_error("Texture loading error");

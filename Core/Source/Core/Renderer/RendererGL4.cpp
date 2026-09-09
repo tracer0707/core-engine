@@ -21,6 +21,7 @@
 #include "Shaders/GL4/Default.h"
 #include "Shaders/GL4/UnlitColor.h"
 #include "Shaders/GL4/UnlitTexture.h"
+#include "Shaders/GL4/FullScreenQuad.h"
 
 namespace Core
 {
@@ -70,6 +71,7 @@ namespace Core
 		_defaultProgram = createProgram("Builtin/Default", Shaders::Default::getVertexSource(), Shaders::Default::getFragmentSource());
 		_unlitColorProgram = createProgram("Builtin/UnlitColor", Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
 		_unlitTextureProgram = createProgram("Builtin/UnlitTexture", Shaders::UnlitTexture::getVertexSource(), Shaders::UnlitTexture::getFragmentSource());
+		_fullScreenQuadProgram = createProgram("Hidden/FullScreenQuad", Shaders::FullScreenQuad::getVertexSource(), Shaders::FullScreenQuad::getFragmentSource());
 	}
 
 	RendererGL4::~RendererGL4()
@@ -446,9 +448,9 @@ namespace Core
 
 	void RendererGL4::bindBuffer(VertexBuffer* buffer, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
 	{
-		glUniformMatrix4fv(_currentProgram->u_viewMtxLocation, 1, false, glm::value_ptr(view));
-		glUniformMatrix4fv(_currentProgram->u_projMtxLocation, 1, false, glm::value_ptr(proj));
-		glUniformMatrix4fv(_currentProgram->u_modelMtxLocation, 1, false, glm::value_ptr(model));
+		if (_currentProgram->u_viewMtxLocation != -1) setUniform(_currentProgram->u_viewMtxLocation, view);
+		if (_currentProgram->u_projMtxLocation != -1) setUniform(_currentProgram->u_projMtxLocation, proj);
+		if (_currentProgram->u_modelMtxLocation != -1) setUniform(_currentProgram->u_modelMtxLocation, model);
 
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
@@ -574,6 +576,24 @@ namespace Core
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
+	}
+
+	std::vector<unsigned char> RendererGL4::readFrameBufferPixels(const FrameBuffer* buffer)
+	{
+		if (buffer == nullptr || buffer->width == 0 || buffer->height == 0)
+		{
+			return {};
+		}
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, buffer->frameBuffer);
+		glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+		std::vector<unsigned char> pixels(static_cast<size_t>(buffer->width) * buffer->height * 4u);
+		glReadPixels(0, 0, static_cast<GLsizei>(buffer->width), static_cast<GLsizei>(buffer->height), GL_RGBA, GL_UNSIGNED_BYTE,
+			pixels.data());
+
+		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
+		return pixels;
 	}
 
 	const unsigned int RendererGL4::createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size,

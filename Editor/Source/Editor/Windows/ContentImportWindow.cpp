@@ -5,9 +5,10 @@
 #include <Core/Shared/Path.h>
 
 #include "WindowList.h"
+#include "WindowManager.h"
 
 #include "../../Content/ContentImporter.h"
-#include "WindowManager.h"
+#include "../../Shared/ContentExtensions.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/Label.h"
@@ -15,13 +16,8 @@
 #include "../Controls/Dropdown.h"
 #include "../Controls/Separator.h"
 
-static std::vector<std::string> image_extensions = {".jpg",	 ".jpeg", ".jpe",  ".jif",	".jfif", ".jfi", ".png", ".gif", ".bmp", ".dib",  ".tiff",
-													".tif",	 ".webp", ".heic", ".heif", ".avif", ".cr2", ".cr3", ".crw", ".nef", ".nrw",  ".arw",
-													".srf",	 ".sr2",  ".raf",  ".orf",	".rw2",	 ".raw", ".dng", ".psd", ".psb", ".ai",	  ".eps",
-													".epsf", ".epsi", ".svg",  ".svgz", ".tga",	 ".dds", ".exr", ".hdr", ".ico", ".icns", ".jp2",
-													".j2k",	 ".jxr",  ".jxl",  ".apng", ".pcx",	 ".xbm", ".xpm", ".pnm", ".ppm", ".pgm",  ".pbm"};
-
-static std::vector<std::string> mesh_extensions = {".fbx", ".3ds", ".obj", ".glb"};
+static std::vector<Core::String> image_ext = Editor::ContentExtensions::getSupportedTextureExtensions();
+static std::vector<Core::String> mesh_ext = Editor::ContentExtensions::getSupportedMeshExtensions();
 
 namespace fs = std::filesystem;
 
@@ -93,11 +89,11 @@ namespace Editor
 
 		_importLayout->clear();
 
-		if (std::find(image_extensions.begin(), image_extensions.end(), Core::Path::toUtf8(path.extension()).toLower().std_str()) != image_extensions.end())
+		if (std::find(image_ext.begin(), image_ext.end(), Core::Path::toUtf8(path.extension()).toLower()) != image_ext.end())
 		{
 			prepareTextureLayout();
 		}
-		else if (std::find(mesh_extensions.begin(), mesh_extensions.end(), Core::Path::toUtf8(path.extension()).toLower().std_str()) != mesh_extensions.end())
+		else if (std::find(mesh_ext.begin(), mesh_ext.end(), Core::Path::toUtf8(path.extension()).toLower()) != mesh_ext.end())
 		{
 			prepareMeshLayout();
 		}

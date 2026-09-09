@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
@@ -74,6 +75,7 @@ namespace Core
 			Program* _defaultProgram = nullptr;
 			Program* _unlitColorProgram = nullptr;
 			Program* _unlitTextureProgram = nullptr;
+			Program* _fullScreenQuadProgram = nullptr;
 
 			Program* _currentProgram = nullptr;
 
@@ -98,6 +100,7 @@ namespace Core
 			Program* getDefaultProgram() { return _defaultProgram; }
 			Program* getUnlitColorProgram() { return _unlitColorProgram; }
 			Program* getUnlitTextureProgram() { return _unlitTextureProgram; }
+			Program* getFullScreenQuadProgram() { return _fullScreenQuadProgram; }
 
 			const std::unordered_map<String, Program*>& getShaderPrograms() const { return _shaderPrograms; }
 			Program* getShaderProgram(String name) const;
@@ -112,6 +115,7 @@ namespace Core
 			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
 			virtual void deleteFrameBuffer(const FrameBuffer* buffer) = 0;
 			virtual void bindFrameBuffer(const FrameBuffer* buffer) = 0;
+			virtual std::vector<unsigned char> readFrameBufferPixels(const FrameBuffer* buffer) = 0;
 
 			virtual const unsigned int createTexture(unsigned char* data, unsigned int width, unsigned int height, unsigned int size, TextureFormat format) = 0;
 			virtual void bindTexture(unsigned int id, unsigned int slot) = 0;
