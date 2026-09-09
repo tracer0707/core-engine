@@ -20,11 +20,17 @@ namespace Core
 	class Scene;
 	class Script;
 	class Application;
+	class Time;
+	class EventHandler;
+	class BehaviorManager;
 
 	class ContentManager
 	{
 		private:
 			Renderer* _renderer = nullptr;
+			EventHandler* _eventHandler = nullptr;
+			BehaviorManager* _behaviorManager = nullptr;
+			Time* _time = nullptr;
 
 			Application* _app = nullptr;
 
@@ -48,7 +54,7 @@ namespace Core
 			void destroyContent(Content* value, List<Content*>& list);
 
 		public:
-			ContentManager(Application* app, Renderer* renderer);
+			ContentManager(Application* app, Renderer* renderer, EventHandler* eventHandler, BehaviorManager* behaviorManager, Time* time);
 			~ContentManager();
 
 			Renderer* getRenderer() const { return _renderer; }

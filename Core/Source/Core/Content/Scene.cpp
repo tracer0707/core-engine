@@ -11,12 +11,16 @@
 #include "../Content/Material.h"
 
 #include "../Renderer/Renderer.h"
+#include "../System/EventHandler.h"
+#include "../System/BehaviorManager.h"
 
 namespace Core
 {
-	Scene::Scene(Renderer* renderer, Time* time)
+	Scene::Scene(Renderer* renderer, EventHandler* eventHandler, BehaviorManager* behaviorManager, Time* time)
 	{
         _renderer = renderer;
+        _eventHandler = eventHandler;
+        _behaviorManager = behaviorManager;
         _time = time;
 	}
 
@@ -34,7 +38,7 @@ namespace Core
 
 	Object* Scene::createObject()
     {
-        Object* object = new Object(_renderer);
+        Object* object = new Object(_renderer, _eventHandler, _behaviorManager);
         _objects.add(object);
 
         return object;

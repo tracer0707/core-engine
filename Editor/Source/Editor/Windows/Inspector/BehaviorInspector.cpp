@@ -14,6 +14,7 @@ namespace Editor
 	{
 		_behavior = behavior;
 	}
+
 	BehaviorInspector::~BehaviorInspector() {}
 
 	void BehaviorInspector::build()

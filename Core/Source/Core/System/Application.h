@@ -49,8 +49,8 @@ namespace Core
 			Window* getMainWindow() { return _mainWindow; }
 			void setMainWindow(Window* value) { _mainWindow = value; }
 
-			EventHandler* getEventHandler() { return _eventHandler; }
-			bool isForceClosed() { return _forceClosed; }
+			EventHandler* getEventHandler() const { return _eventHandler; }
+			bool isForceClosed() const { return _forceClosed; }
 
 			fs::path getRootPath() const { return _rootPath; }
 			void setRootPath(const fs::path& value) { _rootPath = value; }

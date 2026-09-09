@@ -12,6 +12,7 @@ namespace Core
 	class InputManager;
 	class EventHandler;
 	class Application;
+	class BehaviorManager;
 
 	class Window
 	{
@@ -39,6 +40,7 @@ namespace Core
 			Time* _time = nullptr;
 			InputManager* _inputManager = nullptr;
 			EventHandler* _eventHandler = nullptr;
+			BehaviorManager* _behaviorManager = nullptr;
 
 			int _width = 0;
 			int _height = 0;
@@ -48,6 +50,8 @@ namespace Core
 			Renderer* getRenderer() const { return _renderer; }
 			ContentManager* getContentManager() const { return _contentManager; }
 			Time* getTime() const { return _time; }
+			EventHandler* getEventHandler() const { return _eventHandler; }
+			BehaviorManager* getBehaviorManager() const { return _behaviorManager; }
 
 			void setTitle(String title);
 

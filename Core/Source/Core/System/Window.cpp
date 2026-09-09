@@ -10,6 +10,7 @@
 #include "../System/Application.h"
 #include "../System/EventHandler.h"
 #include "../System/InputManager.h"
+#include "../System/BehaviorManager.h"
 #include "../System/Time.h"
 
 namespace Core
@@ -29,10 +30,11 @@ namespace Core
 
 		_application = application;
 		_renderer = Renderer::init(_ctx);
-		_contentManager = new ContentManager(_application, _renderer);
 		_time = new Time();
 		_inputManager = new InputManager();
 		_eventHandler = new EventHandler();
+		_behaviorManager = new BehaviorManager();
+		_contentManager = new ContentManager(_application, _renderer, _eventHandler, _behaviorManager, _time);
 		_opened = true;
 
 		_application->addWindow(this);

@@ -11,12 +11,14 @@ namespace Core
 		friend class ContentManager;
 
 		private:
-			Script(String sourceCode);
+			Script(String source);
 			~Script();
 
-			String _sourceCode = String::Empty;
+			String _source = String::Empty;
 
 		public:
 			virtual ContentType getContentType() const { return ContentType::Script; }
+
+			const String& getSource() const { return _source; }
 	};
 } // namespace Core

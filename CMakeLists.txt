@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 
 project(CoreEngine LANGUAGES C CXX)
 
@@ -23,13 +23,10 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
-if(PLATFORM_WINDOWS)
-    string(REPLACE "/MD" "/MT" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-    string(REPLACE "/MDd" "/MTd" CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
-    
-    if(NOT CMAKE_CXX_FLAGS_RELWITHDEBINFO MATCHES "/MT")
-        set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELWITHDEBINFO} /MT")
-    endif()
+if(MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY
+        "MultiThreaded$<$<CONFIG:Debug>:Debug>"
+    )
 endif()
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -167,8 +164,6 @@ if(PLATFORM_LINUX)
     set_target_properties(Editor PROPERTIES OUTPUT_NAME "Editor.app")
 elseif(PLATFORM_WINDOWS)
     set_target_properties(Editor PROPERTIES OUTPUT_NAME "Editor")
-    target_link_options(Editor PRIVATE "/NODEFAULTLIB:msvcrt.lib")
-    target_link_options(Editor PRIVATE "/NODEFAULTLIB:msvcprtd.lib")
     target_link_libraries(Core PRIVATE winmm imm32 version setupapi)
 endif()
 

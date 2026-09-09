@@ -6,12 +6,17 @@
 #include "../Components/Behavior.h"
 #include "../Interface/Transform.h"
 
+#include "../System/EventHandler.h"
+#include "../System/BehaviorManager.h"
+
 namespace Core
 {
-	Object::Object(Renderer* renderer)
+	Object::Object(Renderer* renderer, EventHandler* eventHandler, BehaviorManager* behaviorManager)
 	{
 		_uuid = Uuid::create();
 		_renderer = renderer;
+		_eventHandler = eventHandler;
+		_behaviorManager = behaviorManager;
 		_transform = new Transform(this);
 	}
 
@@ -74,7 +79,7 @@ namespace Core
 		}
 		else if (type == ComponentType::Behavior)
 		{
-			newComponent = new Behavior(this);
+			newComponent = new Behavior(this, _behaviorManager);
 		}
 
 		assert(newComponent != nullptr && "Unknown component");

@@ -8,6 +8,9 @@
 #include "../Shared/IO.h"
 #include "../System/Application.h"
 #include "../System/Window.h"
+#include "../System/Time.h"
+#include "../System/EventHandler.h"
+#include "../System/BehaviorManager.h"
 #include "../Renderer/Renderer.h"
 #include "../Renderer/VertexBuffer.h"
 #include "../Components/Camera.h"
@@ -32,10 +35,13 @@ namespace fs = std::filesystem;
 
 namespace Core
 {
-	ContentManager::ContentManager(Application* app, Renderer* renderer)
+	ContentManager::ContentManager(Application* app, Renderer* renderer, EventHandler* eventHandler, BehaviorManager* behaviorManager, Time* time)
 	{
 		_app = app;
 		_renderer = renderer;
+		_eventHandler = eventHandler;
+		_behaviorManager = behaviorManager;
+		_time = time;
 
 		fs::path dbPath = _app->getRootPath() / "ContentDatabase.json";
 		ContentDatabase* db = ContentDatabase::singleton();
@@ -101,7 +107,7 @@ namespace Core
 
 	Scene* ContentManager::createScene()
 	{
-		Scene* _scene = new Scene(_renderer, _app->getMainWindow()->getTime());
+		Scene* _scene = new Scene(_renderer, _eventHandler, _behaviorManager, _time);
 		_scenes.add(_scene);
 		return _scene;
 	}
@@ -342,7 +348,7 @@ namespace Core
 		if (!file.read(reinterpret_cast<char*>(buffer.data()), fileSize)) return nullptr;
 
 		const Core::Serialization::Scene* serializedScene = flatbuffers::GetRoot<Core::Serialization::Scene>(buffer.data());
-		Scene* result = new Scene(_renderer, _app->getMainWindow()->getTime());
+		Scene* result = new Scene(_renderer, _eventHandler, _behaviorManager, _time);
 		result->setUuid(uuid);
 		std::map<Uuid, Object*> objectsByUuid;
 		std::map<Object*, Uuid> parentUuids;

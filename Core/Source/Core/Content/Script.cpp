@@ -2,10 +2,13 @@
 
 namespace Core
 {
-	Script::Script(String sourceCode)
+	Script::Script(String source)
 	{
-		_sourceCode = sourceCode;
+		_source = source;
 	}
 
-	Script::~Script() {}
+	Script::~Script()
+	{
+
+	}
 } // namespace Core

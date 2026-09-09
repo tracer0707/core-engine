@@ -12,16 +12,20 @@ namespace Core
 	class Camera;
 	class Renderer;
 	class Time;
+	class EventHandler;
+	class BehaviorManager;
 
 	class Scene : public Content
 	{
 		friend class ContentManager;
 
 	private:
-		Scene(Renderer* renderer, Time* time);
+		Scene(Renderer* renderer, EventHandler* eventHandler, BehaviorManager* behaviorManager, Time* time);
 		~Scene();
 
 		Renderer* _renderer = nullptr;
+		EventHandler* _eventHandler = nullptr;
+		BehaviorManager* _behaviorManager = nullptr;
 		Camera* _mainCamera = nullptr;
 		Time* _time = nullptr;
 		List<Object*> _objects;

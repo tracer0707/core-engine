@@ -9,22 +9,26 @@
 
 namespace Core
 {
+	class Renderer;
+	class EventHandler;
 	class Component;
 	class Camera;
 	class MeshRenderer;
 	class Transform;
-	class Renderer;
 	class Behavior;
+	class BehaviorManager;
 
 	class Object
 	{
 		friend class Scene;
 
 	private:
-		Object(Renderer* renderer);
+		Object(Renderer* renderer, EventHandler* eventHandler, BehaviorManager* behaviorManager);
 		~Object();
 
 		Renderer* _renderer = nullptr;
+		EventHandler* _eventHandler = nullptr;
+		BehaviorManager* _behaviorManager = nullptr;
 		Uuid _uuid = Uuid::Empty;
 		String _name = String::Empty;
 		Transform* _transform = nullptr;
