@@ -186,27 +186,28 @@ namespace Editor
 		{
 			if (fs::is_directory(it)) continue;
 
-			Texture* tex = nullptr;
-			Core::Texture2D* coreTex = nullptr;
 			Core::Content* content = nullptr;
 			Core::String ext = Core::Path::toUtf8(it.extension());
 
 			ThumbManager thumbManager(_parent->getApplication(), _parent->getContentManager());
 			fs::path thumbPath = thumbManager.getThumbPath(it);
 
+			Texture* tex = nullptr;
+			if (!thumbPath.empty())
+			{
+				tex = Texture::loadFromFile(_parent->getRenderer(), thumbPath);
+			}
+
 			if (ext == ".texture")
 			{
-				coreTex = _parent->getContentManager()->loadTexture2DFromFile(it);
-				content = coreTex;
+				content = _parent->getContentManager()->loadTexture2DFromFile(it);
 			}
 			else if (ext == ".material")
 			{
-				tex = getIcon(ext);
 				content = _parent->getContentManager()->loadMaterialFromFile(it);
 			}
 			else if (ext == ".mesh")
 			{
-				tex = getIcon(ext);
 				content = _parent->getContentManager()->loadMeshFromFile(it);
 			}
 			else if (ext == ".scene")
@@ -228,7 +229,6 @@ namespace Editor
 			{
 				ContentButton* thumbnail = new ContentButton();
 				thumbnail->setImage(tex);
-				thumbnail->setCoreImage(coreTex);
 				thumbnail->setContent(content);
 				thumbnail->setSize(THUMB_W, THUMB_H);
 				thumbnail->setStringTag(TAG_FULL_PATH, Core::Path::toUtf8(it));
@@ -245,20 +245,6 @@ namespace Editor
 
 				_rightPane->addControl(thumbnail);
 			}
-
-			/*if (fs::is_directory(it))
-			{
-				thumbnail->setOnDoubleClick([this, thumbnail]() {
-					Core::String p = thumbnail->getStringTag(TAG_FULL_PATH);
-					TreeNode* node = _treeView->findNodeByTag(0, p);
-					if (node != nullptr)
-					{
-						node->openParents();
-						_treeView->selectNode(node, false);
-					}
-					_parent->getEventHandler()->addEvent([this, p]() { setCurrentDir(p); });
-				});
-			}*/
 		}
 	}
 

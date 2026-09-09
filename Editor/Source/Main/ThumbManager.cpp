@@ -55,6 +55,10 @@ namespace Editor
 			{
 				renderMaterialThumbnail(sourcePath, thumbPath);
 			}
+			else
+			{
+				return fs::path();
+			}
 		}
 
 		return thumbPath;
@@ -141,7 +145,7 @@ namespace Editor
 		glm::mat4 projection;
 		glm::mat4 model;
 		
-		getPreviewMatrices(Core::AxisAlignedBox(glm::vec3(-1.0f), glm::vec3(1.0f)), view, projection, model);
+		getPreviewMatrices(Core::AxisAlignedBox(glm::vec3(-1.0f), glm::vec3(1.0f)), 25.0f, view, projection, model);
 
 		if (material->getProgram() != nullptr)
 		{
@@ -166,7 +170,7 @@ namespace Editor
 		const Core::FrameBuffer* frameBuffer = renderer->createFrameBuffer(ThumbnailSize, ThumbnailSize);
 		renderer->bindFrameBuffer(frameBuffer);
 		renderer->setViewportSize(ThumbnailSize, ThumbnailSize);
-		renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.08f, 0.08f, 0.08f, 1.0f));
+		renderer->clear(C_CLEAR_COLOR | C_CLEAR_DEPTH, Core::Color(0.08f, 0.08f, 0.08f, 0.0f));
 		return frameBuffer;
 	}
 
@@ -177,7 +181,7 @@ namespace Editor
 		renderer->deleteFrameBuffer(frameBuffer);
 	}
 
-	void ThumbManager::getPreviewMatrices(const Core::AxisAlignedBox& box, glm::mat4& view, glm::mat4& projection, glm::mat4& model)
+	void ThumbManager::getPreviewMatrices(const Core::AxisAlignedBox& box, float fov, glm::mat4& view, glm::mat4& projection, glm::mat4& model)
 	{
 		glm::vec3 center(0.0f);
 		float radius = 1.0f;
@@ -189,7 +193,7 @@ namespace Editor
 
 		glm::vec3 eye = center + glm::vec3(radius * 1.8f, radius * 1.2f, radius * 1.8f);
 		view = glm::lookAt(eye, center, glm::vec3(0.0f, 1.0f, 0.0f));
-		projection = glm::perspective(glm::radians(35.0f), 1.0f, 0.01f, radius * 10.0f);
+		projection = glm::perspective(glm::radians(fov), 1.0f, 0.01f, radius * 10.0f);
 		model = glm::mat4(1.0f);
 	}
 
@@ -201,7 +205,7 @@ namespace Editor
 		glm::mat4 projection;
 		glm::mat4 model;
 
-		getPreviewMatrices(mesh->getBoundingBox(), view, projection, model);
+		getPreviewMatrices(mesh->getBoundingBox(), 35.0f, view, projection, model);
 
 		if (material != nullptr && material->getProgram() != nullptr)
 		{

@@ -166,14 +166,9 @@ namespace Core
 			return;
 		}
 
-		sectors = std::max(sectors, 3u);
-		stacks = std::max(stacks, 2u);
-
 		std::vector<Vertex> vertices;
 		std::vector<unsigned int> indices;
-		vertices.reserve(static_cast<size_t>(stacks + 1u) * (sectors + 1u));
-		indices.reserve(static_cast<size_t>(stacks) * sectors * 6u);
-
+		
 		constexpr float pi = 3.14159265358979323846f;
 		constexpr float twoPi = pi * 2.0f;
 
@@ -188,7 +183,7 @@ namespace Core
 				float sectorAngle = static_cast<float>(sector) * twoPi / static_cast<float>(sectors);
 				glm::vec3 normal(xy * std::cos(sectorAngle), z, xy * std::sin(sectorAngle));
 				glm::vec2 uv(static_cast<float>(sector) / static_cast<float>(sectors), static_cast<float>(stack) / static_cast<float>(stacks));
-				vertices.emplace_back(normal, normal, uv, Color::WHITE);
+				vertices.push_back(Vertex(normal, normal, uv, Color::WHITE));
 			}
 		}
 
