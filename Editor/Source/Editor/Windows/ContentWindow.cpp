@@ -112,7 +112,7 @@ namespace Editor
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
 		_materialMenuItem->setOnClick([this]() {
-			createResource(".material", [this](const fs::path& path) {
+			createResource(Core::Path::fromUtf8("new.material"), [this](const fs::path& path) {
 				Core::Material* material = _parent->getContentManager()->createMaterial();
 				ContentSerializer::serializeMaterial(material, path);
 				_parent->getContentManager()->destroy(material);
@@ -123,7 +123,7 @@ namespace Editor
 		_createResourceBtnCm->addControl(_sceneMenuItem);
 
 		_sceneMenuItem->setOnClick([this]() {
-			createResource(".scene", [this](const fs::path& path) {
+			createResource(Core::Path::fromUtf8("new.scene"), [this](const fs::path& path) {
 				Core::Scene* scene = _parent->getContentManager()->createScene();
 				ContentSerializer::serializeScene(scene, path);
 				_parent->getContentManager()->destroy(scene);
@@ -186,87 +186,47 @@ namespace Editor
 		{
 			if (fs::is_directory(it)) continue;
 
-			Core::Content* content = nullptr;
-			Core::String ext = Core::Path::toUtf8(it.extension());
+			Core::Uuid contentUuid = Core::ContentDatabase::singleton()->getUuid(it);
+			Core::String contentName = Core::Path::toUtf8(it.filename().stem());
+			Core::ContentType contentType = getContentTypeFromPath(it);
+			int contentTypeInt = static_cast<int>(contentType);
 
-			ThumbManager thumbManager(_parent->getApplication(), _parent->getContentManager());
-			fs::path thumbPath = thumbManager.getThumbPath(it);
+			Texture* tex = getThumb(it);
 
-			Texture* tex = nullptr;
-			if (!thumbPath.empty())
+			ContentButton* thumbnail = new ContentButton();
+			thumbnail->setImage(tex);
+			thumbnail->setContentUuid(contentUuid);
+			thumbnail->setContentName(contentName);
+			thumbnail->setContentType(contentType);
+			thumbnail->setSize(THUMB_W, THUMB_H);
+			thumbnail->setStringTag(TAG_FULL_PATH, Core::Path::toUtf8(it));
+			thumbnail->setDragDropSource(true, Core::String("CONTENT_") + std::to_string(contentTypeInt));
+			thumbnail->setDragDropSourceLabel(contentName);
+			thumbnail->setDragDropSourceData(DragDropData(contentUuid));
+			if (contentType == Core::ContentType::Scene)
 			{
-				tex = Texture::loadFromFile(_parent->getRenderer(), thumbPath);
-			}
-
-			if (ext == ".texture")
-			{
-				content = _parent->getContentManager()->loadTexture2DFromFile(it);
-			}
-			else if (ext == ".material")
-			{
-				content = _parent->getContentManager()->loadMaterialFromFile(it);
-			}
-			else if (ext == ".mesh")
-			{
-				content = _parent->getContentManager()->loadMeshFromFile(it);
-			}
-			else if (ext == ".scene")
-			{
-				tex = getIcon(ext);
-				content = _parent->getContentManager()->loadSceneFromFile(it);
-			}
-			else if (ext == ".lua")
-			{
-				tex = getIcon(ext);
-				content = _parent->getContentManager()->loadScriptFromFile(it);
-			}
-			else
-			{
-				tex = getIcon(ext);
-			}
-
-			if (content != nullptr)
-			{
-				ContentButton* thumbnail = new ContentButton();
-				thumbnail->setImage(tex);
-				thumbnail->setContent(content);
-				thumbnail->setSize(THUMB_W, THUMB_H);
-				thumbnail->setStringTag(TAG_FULL_PATH, Core::Path::toUtf8(it));
-				if (content->getContentType() == Core::ContentType::Scene)
-				{
-					thumbnail->setOnDoubleClick([this, content]() {
-						_parent->getEventHandler()->addEvent([this, content]() {
-							((EditorApp::MainWindow*)_parent->getApplication()->getMainWindow())->setScene((Core::Scene*)content);
-							_parent->invalidateAll();
-						});
+				thumbnail->setOnDoubleClick([this, it]() {
+					_parent->getEventHandler()->addEvent([this, it]() {
+						((EditorApp::MainWindow*)_parent->getApplication()->getMainWindow())->loadScene(it);
+						_parent->invalidateAll();
 					});
-				}
-				setInspector(thumbnail, ext);
-
-				_rightPane->addControl(thumbnail);
+				});
 			}
+			setInspector(thumbnail, contentType);
+
+			_rightPane->addControl(thumbnail);
 		}
 	}
 
-	ContentButton* ContentWindow::createThumbnailForEdit(Core::String ext)
-	{
-		ContentButton* thumbnail = new ContentButton();
-		Texture* tex = getIcon(ext);
-		thumbnail->setImage(tex);
-		thumbnail->setSize(THUMB_W, THUMB_H);
-		thumbnail->startEdit();
-		return thumbnail;
-	}
-
-	void ContentWindow::setInspector(ContentButton* thumbnail, Core::String ext)
+	void ContentWindow::setInspector(ContentButton* thumbnail, const Core::ContentType& contentType)
 	{
 		InspectorWindow* inspectorWnd = (InspectorWindow*)_parent->getWindow(INSPECTOR_WINDOW);
 
-		if (ext == ".material")
+		if (contentType == Core::ContentType::Material)
 		{
 			thumbnail->setOnClick([this, thumbnail, inspectorWnd]() {
 				Core::Material* mat = _parent->getContentManager()->loadMaterialFromFile(Core::Path::fromUtf8(thumbnail->getStringTag(TAG_FULL_PATH)));
-				MaterialInspector* inspector = new MaterialInspector(mat, _parent->getRenderer(), _parent->getEventHandler());
+				MaterialInspector* inspector = new MaterialInspector(mat, _parent->getRenderer(), _parent->getEventHandler(), _parent->getContentManager());
 				inspector->build();
 				inspectorWnd->clear();
 				inspectorWnd->addControl(inspector);
@@ -274,59 +234,10 @@ namespace Editor
 		}
 	}
 
-	Texture* ContentWindow::getIcon(Core::String ext)
+	void ContentWindow::createResource(const fs::path& thumbPath, std::function<void(const fs::path&)> createAndSaveFunc)
 	{
-		Core::String iconName = Core::String::Empty;
-
-		if (ext == Core::String::Empty)
-		{
-			iconName = "folder.png";
-		}
-		else if (ext == ".ttf")
-		{
-			iconName = "font.png";
-		}
-		else if (ext == ".mesh")
-		{
-			iconName = "mesh.png";
-		}
-		else if (ext == ".material")
-		{
-			iconName = "material.png";
-		}
-		else if (ext == ".scene")
-		{
-			iconName = "scene.png";
-		}
-		else if (ext == ".lua")
-		{
-			iconName = "script.png";
-		}
-		else
-		{
-			iconName = "fileEmpty.png";
-		}
-
-		if (iconName != Core::String::Empty)
-		{
-			auto it = _iconCache.find(iconName);
-			if (it != _iconCache.end())
-			{
-				return it->second;
-			}
-
-			Texture* tex = Texture::loadFromFile(_parent->getRenderer(), fs::current_path() / fs::path("Editor/Icons/content") / Core::Path::fromUtf8(iconName));
-			_iconCache[iconName] = tex;
-			return tex;
-		}
-
-		return nullptr;
-	}
-
-	void ContentWindow::createResource(const Core::String& extension, std::function<void(const fs::path&)> createAndSaveFunc)
-	{
-		_parent->getEventHandler()->addEvent([this, extension, createAndSaveFunc]() {
-			ContentButton* thumbnail = createThumbnailForEdit(extension);
+		_parent->getEventHandler()->addEvent([this, thumbPath, createAndSaveFunc]() {
+			ContentButton* thumbnail = createContentButtonForEdit(thumbPath);
 
 			thumbnail->setOnEditCancelled([this, thumbnail]() {
 				_parent->getEventHandler()->addEvent([this, thumbnail]() {
@@ -335,8 +246,9 @@ namespace Editor
 				});
 			});
 
-			thumbnail->setOnEditComplete([this, thumbnail, extension, createAndSaveFunc](Core::String newName) {
-				if (!newName.endsWith(extension)) newName += extension;
+			thumbnail->setOnEditComplete([this, thumbnail, thumbPath, createAndSaveFunc](Core::String newName) {
+				Core::String ext = Core::Path::toUtf8(thumbPath.extension());
+				if (!newName.endsWith(ext)) newName += ext;
 
 				fs::path path = _currentDir / Core::Path::fromUtf8(newName);
 
@@ -351,5 +263,106 @@ namespace Editor
 
 			_rightPane->addControl(thumbnail);
 		});
+	}
+
+	ContentButton* ContentWindow::createContentButtonForEdit(const fs::path& thumbPath)
+	{
+		ContentButton* thumbnail = new ContentButton();
+		Texture* tex = getThumb(thumbPath);
+		thumbnail->setImage(tex);
+		thumbnail->setSize(THUMB_W, THUMB_H);
+		thumbnail->startEdit();
+		return thumbnail;
+	}
+
+	Texture* ContentWindow::getThumb(const fs::path& path)
+	{
+		ThumbManager thumbManager(_parent->getApplication(), _parent->getContentManager());
+		
+		fs::path thumbPath = thumbManager.getThumbPath(path);
+		
+		if (!fs::exists(thumbPath))
+		{
+			Core::String iconName = Core::String::Empty;
+			Core::String ext = Core::Path::toUtf8(path.extension());
+
+			if (ext == Core::String::Empty)
+			{
+				iconName = "folder.png";
+			}
+			else if (ext == ".ttf")
+			{
+				iconName = "font.png";
+			}
+			else if (ext == ".texture")
+			{
+				iconName = "texture.png";
+			}
+			else if (ext == ".mesh")
+			{
+				iconName = "mesh.png";
+			}
+			else if (ext == ".material")
+			{
+				iconName = "material.png";
+			}
+			else if (ext == ".scene")
+			{
+				iconName = "scene.png";
+			}
+			else if (ext == ".lua")
+			{
+				iconName = "script.png";
+			}
+			else
+			{
+				iconName = "fileEmpty.png";
+			}
+
+			thumbPath = fs::current_path() / fs::path("Editor/Icons/content") / Core::Path::fromUtf8(iconName);
+		}
+
+		auto it = _iconCache.find(thumbPath);
+		if (it != _iconCache.end())
+		{
+			return it->second;
+		}
+
+		Texture* tex = Texture::loadFromFile(_parent->getRenderer(), thumbPath);
+		if (tex != nullptr)
+		{
+			_iconCache[thumbPath] = tex;
+		}
+
+		return tex;
+	}
+
+	Core::ContentType ContentWindow::getContentTypeFromPath(const fs::path& path)
+	{
+		Core::String ext = Core::Path::toUtf8(path.extension());
+		Core::ContentType contentType = Core::ContentType::None;
+
+		if (ext == ".texture")
+		{
+			contentType = Core::ContentType::Texture2D;
+		}
+		else if (ext == ".material")
+		{
+			contentType = Core::ContentType::Material;
+		}
+		else if (ext == ".mesh")
+		{
+			contentType = Core::ContentType::Mesh;
+		}
+		else if (ext == ".scene")
+		{
+			contentType = Core::ContentType::Scene;
+		}
+		else if (ext == ".lua")
+		{
+			contentType = Core::ContentType::Script;
+		}
+
+		return contentType;
 	}
 } // namespace Editor

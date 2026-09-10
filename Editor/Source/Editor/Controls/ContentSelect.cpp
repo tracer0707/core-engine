@@ -39,6 +39,13 @@ namespace Editor
 		return "[None]";
 	}
 
+	void ContentSelect::setContentType(Core::ContentType value)
+	{
+		_contentType = value;
+		int contentTypeInt = static_cast<int>(_contentType);
+		setDragDropTarget(true, Core::String("CONTENT_") + std::to_string(contentTypeInt));
+	}
+
 	void ContentSelect::update()
 	{
 		if (!_visible) return;
@@ -66,19 +73,6 @@ namespace Editor
 		draw_list->AddRectFilled(pos, ImVec2(pos.x + total_size.x, pos.y + total_size.y), bg_col, style.FrameRounding);
 		draw_list->AddText(pos, ImGui::GetColorU32(ImGuiCol_Text), label.std_str().c_str());
 
-		if (ImGui::BeginDragDropTarget())
-		{
-			int contentTypeInt = static_cast<int>(_contentType);
-			if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload(("CONTENT_" + std::to_string(contentTypeInt)).c_str()))
-			{
-				_content = reinterpret_cast<Core::Content*>(*(void**)payload->Data);
-				if (_onContentChanged != nullptr)
-				{
-					_onContentChanged(_content);
-				}
-			}
-			ImGui::EndDragDropTarget();
-		}
-
+		updateDragDropTarget();
 	}
 } // namespace Editor

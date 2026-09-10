@@ -140,7 +140,7 @@ namespace Editor
 	{
 		HierarchyWindow* _hierarchyWindow = (HierarchyWindow*)_parent->getWindow(HIERARCHY_WINDOW);
 
-		if (data->key == "EmptyObject")
+		if (data->valueString == "EmptyObject")
 		{
 			createObject(_scene, "Empty Object", _hierarchyWindow->getTreeView());
 		}

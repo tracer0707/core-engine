@@ -1,8 +1,5 @@
 #pragma once
 
-#include <functional>
-#include <climits>
-
 #include <Core/Shared/String.h>
 #include <Core/Shared/Uuid.h>
 #include <Core/Content/ContentType.h>
@@ -22,8 +19,6 @@ namespace Editor
 			Core::Content* _content = nullptr;
 			Core::ContentType _contentType = Core::ContentType::None;
 
-			std::function<void(Core::Content*)> _onContentChanged = nullptr;
-
 			Core::String getContentName() const;
 
 		public:
@@ -38,8 +33,6 @@ namespace Editor
 			void setContent(Core::Content* value) { _content = value; }
 
 			Core::ContentType getContentType() const { return _contentType; }
-			void setContentType(Core::ContentType value) { _contentType = value; }
-
-			void setOnContentChanged(std::function<void(Core::Content*)> value) { _onContentChanged = value; }
+			void setContentType(Core::ContentType value);
 	};
 }

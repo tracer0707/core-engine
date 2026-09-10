@@ -4,6 +4,7 @@
 #include <Core/Components/MeshRenderer.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Content/Material.h>
+#include <Core/Content/ContentManager.h>
 
 #include "../../Controls/Table.h"
 #include "../../Controls/Label.h"
@@ -12,7 +13,9 @@
 
 namespace Editor
 {
-	MeshRendererInspector::MeshRendererInspector(Core::MeshRenderer* meshRenderer, Core::EventHandler* eventHandler) : Inspector(eventHandler)
+	MeshRendererInspector::MeshRendererInspector(Core::MeshRenderer* meshRenderer, Core::EventHandler* eventHandler,
+												 Core::ContentManager* contentManager)
+		: Inspector(eventHandler, contentManager)
 	{
 		_meshRenderer = meshRenderer;
 	}
@@ -28,9 +31,10 @@ namespace Editor
 		ContentSelect* meshSelect = new ContentSelect();
 		meshSelect->setContentType(Core::ContentType::Mesh);
 		meshSelect->setContent(_meshRenderer->getMesh());
-		meshSelect->setOnContentChanged([this](Core::Content* content)
+		meshSelect->setOnDragDrop([this](DragDropData* data, int x, int y)
 		{
-			_meshRenderer->setMesh((Core::Mesh*)content);
+			Core::Mesh* mesh = _contentManager->loadMeshByUuid(data->valueUuid);
+			_meshRenderer->setMesh(mesh);
 			_eventHandler->addEvent([this]() {
 				clear();
 				build();
@@ -53,7 +57,12 @@ namespace Editor
 				ContentSelect* materialSelect = new ContentSelect();
 				materialSelect->setContentType(Core::ContentType::Material);
 				materialSelect->setContent(_meshRenderer->getMaterial(i));
-				materialSelect->setOnContentChanged([this, i](Core::Content* content) { _meshRenderer->setMaterial(i, (Core::Material*)content); });
+				materialSelect->setOnDragDrop([this, materialSelect, i](DragDropData* data, int x, int y)
+				{
+					Core::Material* material = _contentManager->loadMaterialByUuid(data->valueUuid);
+					_meshRenderer->setMaterial(i, material);
+					materialSelect->setContent(material);
+				});
 				materialsTable->addControl(materialSelect);
 			}
 			materialsCollapse->addControl(materialsTable);

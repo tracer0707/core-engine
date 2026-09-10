@@ -6,6 +6,7 @@ namespace Core
 {
 	class Material;
 	class Renderer;
+	class ContentManager;
 } // namespace Core
 
 namespace Editor
@@ -17,7 +18,7 @@ namespace Editor
 			Core::Renderer* _renderer = nullptr;
 
 		public:
-			MaterialInspector(Core::Material* material, Core::Renderer* renderer, Core::EventHandler* eventHandler);
+			MaterialInspector(Core::Material* material, Core::Renderer* renderer, Core::EventHandler* eventHandler, Core::ContentManager* contentManager);
 			virtual ~MaterialInspector();
 
 			virtual void build();

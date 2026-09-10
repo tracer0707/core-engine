@@ -5,6 +5,7 @@
 #include <Core/Shared/List.h>
 #include <Core/Content/Material.h>
 #include <Core/Content/Texture2D.h>
+#include <Core/Content/ContentManager.h>
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/Program.h>
 #include <Core/System/EventHandler.h>
@@ -22,7 +23,9 @@
 
 namespace Editor
 {
-	MaterialInspector::MaterialInspector(Core::Material* material, Core::Renderer* renderer, Core::EventHandler* eventHandler) : Inspector(eventHandler)
+	MaterialInspector::MaterialInspector(Core::Material* material, Core::Renderer* renderer, Core::EventHandler* eventHandler,
+										 Core::ContentManager* contentManager)
+		: Inspector(eventHandler, contentManager)
 	{
 		_material = material;
 		_renderer = renderer;
@@ -82,8 +85,10 @@ namespace Editor
 					ContentSelect* textureSelect = new ContentSelect();
 					textureSelect->setContentType(Core::ContentType::Texture2D);
 					textureSelect->setContent(_material->getTexture2D(uniform.nameHash));
-					textureSelect->setOnContentChanged([this, uniform](Core::Content* value) {
-						_material->setTexture2D(uniform.nameHash, (Core::Texture2D*)value);
+					textureSelect->setOnDragDrop([this, textureSelect, uniform](DragDropData* data, int x, int y) {
+						Core::Texture2D* texture = _contentManager->loadTexture2DByUuid(data->valueUuid);
+						_material->setTexture2D(uniform.nameHash, texture);
+						textureSelect->setContent(texture);
 						ContentSerializer::serializeMaterial(_material);
 					});
 					table->addControl(textureSelect);

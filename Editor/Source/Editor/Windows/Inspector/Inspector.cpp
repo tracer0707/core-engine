@@ -5,9 +5,10 @@
 
 namespace Editor
 {
-	Inspector::Inspector(Core::EventHandler* eventHandler) : LinearLayout(LayoutDirection::Vertical)
+	Inspector::Inspector(Core::EventHandler* eventHandler, Core::ContentManager* contentManager) : LinearLayout(LayoutDirection::Vertical)
 	{
 		_eventHandler = eventHandler;
+		_contentManager = contentManager;
 
 		setWrapMode(LayoutWrapMode::NoWrap);
 		setFitWidth(LayoutFitMode::FitAvailable);

@@ -6,6 +6,11 @@
 
 namespace Editor
 {
+	DragDropData::DragDropData(void* value) : valuePtr(value) {}
+	DragDropData::DragDropData(Core::String value) : valueString(value) {}
+	DragDropData::DragDropData(Core::Uuid value) : valueUuid(value) {}
+	DragDropData::DragDropData(fs::path value) : valuePath(value) {}
+
 	Control::Control() : Container()
 	{
 		_id = Core::Uuid::create().toString();
@@ -82,8 +87,7 @@ namespace Editor
 
 	void Control::setDragDropSourceData(DragDropData data)
 	{
-		_dragDropSourceData->key = data.key;
-		_dragDropSourceData->value = data.value;
+		*_dragDropSourceData = data;
 	}
 
 	void Control::setDragDropTarget(bool value, Core::String key)

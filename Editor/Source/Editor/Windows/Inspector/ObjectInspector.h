@@ -5,6 +5,7 @@
 namespace Core
 {
 	class Object;
+	class ContentManager;
 } // namespace Core
 
 namespace Editor
@@ -15,7 +16,7 @@ namespace Editor
 			Core::Object* _object = nullptr;
 			
 		public:
-			ObjectInspector(Core::Object* object, Core::EventHandler* eventHandler);
+			ObjectInspector(Core::Object* object, Core::EventHandler* eventHandler, Core::ContentManager* contentManager);
 			virtual ~ObjectInspector();
 
 			virtual void build();

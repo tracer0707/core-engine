@@ -11,7 +11,7 @@
 
 namespace Editor
 {
-	TransformInspector::TransformInspector(Core::Transform* transform, Core::EventHandler* eventHandler) : Inspector(eventHandler)
+	TransformInspector::TransformInspector(Core::Transform* transform, Core::EventHandler* eventHandler) : Inspector(eventHandler, nullptr)
 	{
 		_transform = transform;
 		if (_transform == nullptr)

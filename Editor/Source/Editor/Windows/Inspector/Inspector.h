@@ -7,6 +7,7 @@
 namespace Core
 {
 	class EventHandler;
+	class ContentManager;
 }
 
 namespace Editor
@@ -17,9 +18,10 @@ namespace Editor
 	{
 		protected:
 			Core::EventHandler* _eventHandler = nullptr;
+			Core::ContentManager* _contentManager = nullptr;
 
 		public:
-			Inspector(Core::EventHandler* eventHandler);
+			Inspector(Core::EventHandler* eventHandler, Core::ContentManager* contentManager);
 			virtual ~Inspector();
 
 			virtual void build() = 0;

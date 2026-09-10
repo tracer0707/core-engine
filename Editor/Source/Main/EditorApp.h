@@ -1,9 +1,13 @@
 #pragma once
 
+#include <filesystem>
+
 #include <Core/Shared/String.h>
 #include <Core/Shared/Path.h>
 #include <Core/System/Application.h>
 #include <Core/System/Window.h>
+
+namespace fs = std::filesystem;
 
 namespace Core
 {
@@ -66,7 +70,7 @@ namespace Editor
 					ToolWindow* _toolWindow = nullptr;
 
 				public:
-					void setScene(Core::Scene* value);
+					void loadScene(const fs::path& path);
 					Core::Scene* getScene() const { return _scene; }
 			};
 

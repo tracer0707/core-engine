@@ -16,7 +16,8 @@
 
 namespace Editor
 {
-	ObjectInspector::ObjectInspector(Core::Object* object, Core::EventHandler* eventHandler) : Inspector(eventHandler)
+	ObjectInspector::ObjectInspector(Core::Object* object, Core::EventHandler* eventHandler, Core::ContentManager* contentManager)
+		: Inspector(eventHandler, contentManager)
 	{
 		_object = object;
 	}
@@ -36,7 +37,7 @@ namespace Editor
 			if (it->getComponentType() == Core::ComponentType::MeshRenderer)
 			{
 				Collapse* collapse = new Collapse("Mesh Renderer");
-				Inspector* inspector = new MeshRendererInspector((Core::MeshRenderer*)it, _eventHandler);
+				Inspector* inspector = new MeshRendererInspector((Core::MeshRenderer*)it, _eventHandler, _contentManager);
 				inspector->build();
 				collapse->addControl(inspector);
 				addControl(collapse);
@@ -45,7 +46,7 @@ namespace Editor
 			if (it->getComponentType() == Core::ComponentType::Behavior)
 			{
 				Collapse* collapse = new Collapse("Behavior");
-				Inspector* inspector = new BehaviorInspector((Core::Behavior*)it, _eventHandler);
+				Inspector* inspector = new BehaviorInspector((Core::Behavior*)it, _eventHandler, _contentManager);
 				inspector->build();
 				collapse->addControl(inspector);
 				addControl(collapse);

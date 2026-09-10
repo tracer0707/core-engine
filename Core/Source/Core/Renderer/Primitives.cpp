@@ -22,14 +22,7 @@ namespace Core
 	{
 		renderer->updateBuffer(buffer, points, pointsCount, nullptr, 0);
 		renderer->bindProgram(renderer->getUnlitColorProgram());
-		for (auto& uniform : renderer->getUnlitColorProgram()->uniforms)
-		{
-			if (uniform.nameHash == u_color_Hash)
-			{
-				renderer->setUniform(uniform.location, glm::vec4(1.0f));
-				break;
-			}
-		}
+		renderer->setUniform(renderer->getUnlitColorProgram()->getUniformLocation(u_color_Hash), glm::vec4(1.0f));
 		renderer->bindBuffer(buffer, flags, view, proj, model);
 		renderer->drawBufferArray(PrimitiveType::Line, 0, pointsCount);
 	}

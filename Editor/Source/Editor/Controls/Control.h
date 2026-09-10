@@ -3,12 +3,16 @@
 #include <string>
 #include <map>
 #include <functional>
+#include <filesystem>
 
 #include "Container.h"
 #include "Style.h"
 #include "ControlType.h"
 
+#include <Core/Shared/Uuid.h>
 #include <Core/Shared/String.h>
+
+namespace fs = std::filesystem;
 
 namespace Editor
 {
@@ -17,8 +21,16 @@ namespace Editor
 
 	struct DragDropData
 	{
-			Core::String key = Core::String::Empty;
-			void* value = nullptr;
+			void* valuePtr = nullptr;
+			Core::String valueString = Core::String::Empty;
+			Core::Uuid valueUuid = Core::Uuid::Empty;
+			fs::path valuePath = fs::path();
+
+			DragDropData() = default;
+			DragDropData(void* value);
+			DragDropData(Core::String value);
+			DragDropData(Core::Uuid value);
+			DragDropData(fs::path value);
 	};
 
 	class Control : public Container

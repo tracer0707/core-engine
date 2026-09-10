@@ -7,6 +7,7 @@
 #include <Core/Shared/String.h>
 #include <Core/Shared/List.h>
 #include <Core/Shared/Path.h>
+#include <Core/Content/ContentType.h>
 
 namespace Editor
 {
@@ -30,16 +31,17 @@ namespace Editor
 			Button* _createResourceBtn = nullptr;
 			Button* _importResourceBtn = nullptr;
 
-			std::unordered_map<Core::String, Texture*> _iconCache;
+			std::unordered_map<fs::path, Texture*> _iconCache;
 
 			void rescanStructure();
 			void rescanCurrentDir();
 			void setCurrentDir(const fs::path& path);
 
-			Texture* getIcon(Core::String ext);
-			ContentButton* createThumbnailForEdit(Core::String ext);
-			void setInspector(ContentButton* thumbnail, Core::String ext);
-			void createResource(const Core::String& extension, std::function<void(const fs::path&)> createAndSaveFunc);
+			Texture* getThumb(const fs::path& path);
+			Core::ContentType getContentTypeFromPath(const fs::path& path);
+			void setInspector(ContentButton* thumbnail, const Core::ContentType& contentType);
+			void createResource(const fs::path& thumbPath, std::function<void(const fs::path&)> createAndSaveFunc);
+			ContentButton* createContentButtonForEdit(const fs::path& thumbPath);
 
 		public:
 			ContentWindow(WindowManager* parent);

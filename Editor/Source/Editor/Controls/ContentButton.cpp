@@ -66,33 +66,15 @@ namespace Editor
 		}
 	}
 
-	Core::String ContentButton::getContentName() const
-	{
-		if (_content != nullptr)
-		{
-			fs::path path = Core::ContentDatabase::singleton()->getPath(_content->getUuid());
-			return Core::Path::toUtf8(path.filename().stem());
-		}
-
-		return Core::String::Empty;
-	}
-
 	void ContentButton::startEdit()
 	{
 		_edit = true;
-		_editValue = Core::String::Empty;
-
-		if (_content != nullptr)
-		{
-			_editValue = getContentName();
-		}
+		_editValue = _contentName;
 	}
 
 	void ContentButton::update()
 	{
 		if (!_visible || (_image == nullptr && _coreImage == nullptr)) return;
-
-		Core::String contentName = getContentName();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * _style.opacity);
 
@@ -108,7 +90,7 @@ namespace Editor
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 padding = style.FramePadding;
 
-		std::string label = contentName.std_str();
+		std::string label = _contentName.std_str();
 		std::string editLabel = _editValue.std_str();
 		float spacing = (!label.empty() || _edit) ? style.ItemInnerSpacing.y : 0;
 		ImVec2 text_size = (!label.empty() || _edit) ? ImGui::CalcTextSize(label.c_str()) : ImVec2(0, 0);
@@ -161,14 +143,7 @@ namespace Editor
 		{
 			draw_list->AddText(text_min, text_col, label.c_str());
 
-			if (_content != nullptr && ImGui::BeginDragDropSource())
-			{
-				int contentType = static_cast<int>(_content->getContentType());
-				void* data = reinterpret_cast<void*>(_content);
-				ImGui::SetDragDropPayload(("CONTENT_" + std::to_string(contentType)).c_str(), &data, sizeof(void*));
-				ImGui::Text(contentName.std_str().c_str());
-				ImGui::EndDragDropSource();
-			}
+			updateDragDropSource();
 		}
 		else
 		{

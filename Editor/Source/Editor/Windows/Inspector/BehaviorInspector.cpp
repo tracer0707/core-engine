@@ -3,6 +3,7 @@
 #include <Core/System/EventHandler.h>
 #include <Core/Components/Behavior.h>
 #include <Core/Content/Script.h>
+#include <Core/Content/ContentManager.h>
 
 #include "../../Controls/Table.h"
 #include "../../Controls/Label.h"
@@ -10,7 +11,8 @@
 
 namespace Editor
 {
-	BehaviorInspector::BehaviorInspector(Core::Behavior* behavior, Core::EventHandler* eventHandler) : Inspector(eventHandler)
+	BehaviorInspector::BehaviorInspector(Core::Behavior* behavior, Core::EventHandler* eventHandler, Core::ContentManager* contentManager)
+		: Inspector(eventHandler, contentManager)
 	{
 		_behavior = behavior;
 	}
@@ -26,8 +28,9 @@ namespace Editor
 		ContentSelect* scriptSelect = new ContentSelect();
 		scriptSelect->setContentType(Core::ContentType::Script);
 		scriptSelect->setContent(_behavior->getScript());
-		scriptSelect->setOnContentChanged([this](Core::Content* content) {
-			_behavior->setScript((Core::Script*)content);
+		scriptSelect->setOnDragDrop([this](DragDropData* data, int x, int y) {
+			Core::Script* script = _contentManager->loadScriptByUuid(data->valueUuid);
+			_behavior->setScript(script);
 			_eventHandler->addEvent([this]() {
 				clear();
 				build();

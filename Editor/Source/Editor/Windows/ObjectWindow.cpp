@@ -38,7 +38,7 @@ namespace Editor
 		emptyObject->setImage(emptyObjectImage);
 		emptyObject->setDragDropSource(true, "SCENE_OBJECT");
 		emptyObject->setDragDropSourceLabel(Core::String("Empty Object"));
-		emptyObject->setDragDropSourceData(DragDropData({Core::String("EmptyObject"), nullptr}));
+		emptyObject->setDragDropSourceData(DragDropData(Core::String("EmptyObject")));
 
 		_layoutMain->addControl(emptyObject);
 

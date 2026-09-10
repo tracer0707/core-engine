@@ -5,6 +5,7 @@
 namespace Core
 {
 	class MeshRenderer;
+	class ContentManager;
 } // namespace Core
 
 namespace Editor
@@ -15,7 +16,7 @@ namespace Editor
 			Core::MeshRenderer* _meshRenderer = nullptr;
 
 		public:
-			MeshRendererInspector(Core::MeshRenderer* meshRenderer, Core::EventHandler* eventHandler);
+			MeshRendererInspector(Core::MeshRenderer* meshRenderer, Core::EventHandler* eventHandler, Core::ContentManager* contentManager);
 			virtual ~MeshRendererInspector();
 
 			virtual void build();

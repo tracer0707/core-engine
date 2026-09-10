@@ -143,14 +143,14 @@ namespace Editor
 		_scene = nullptr;
 	}
 
-	void EditorApp::MainWindow::setScene(Core::Scene* value)
+	void EditorApp::MainWindow::loadScene(const fs::path& path)
 	{
-		_scene = value;
-		_sceneWindow->setScene(value);
-		_objectPicker->setScene(value);
-		_gizmoRenderer->setScene(value);
-		_hierarchyWindow->setScene(value);
-		_cameraController->setEnabled(value != nullptr);
+		_scene = _contentManager->loadSceneFromFile(path);
+		_sceneWindow->setScene(_scene);
+		_objectPicker->setScene(_scene);
+		_gizmoRenderer->setScene(_scene);
+		_hierarchyWindow->setScene(_scene);
+		_cameraController->setEnabled(_scene != nullptr);
 	}
 
 	void EditorApp::MainWindow::update()
