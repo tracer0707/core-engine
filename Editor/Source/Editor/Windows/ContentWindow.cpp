@@ -191,7 +191,7 @@ namespace Editor
 			Core::ContentType contentType = getContentTypeFromPath(it);
 			int contentTypeInt = static_cast<int>(contentType);
 
-			Texture* tex = getThumb(it);
+			Texture* tex = getThumbnailTexture(it);
 
 			ContentButton* thumbnail = new ContentButton();
 			thumbnail->setImage(tex);
@@ -200,9 +200,6 @@ namespace Editor
 			thumbnail->setContentType(contentType);
 			thumbnail->setSize(THUMB_W, THUMB_H);
 			thumbnail->setStringTag(TAG_FULL_PATH, Core::Path::toUtf8(it));
-			thumbnail->setDragDropSource(true, Core::String("CONTENT_") + std::to_string(contentTypeInt));
-			thumbnail->setDragDropSourceLabel(contentName);
-			thumbnail->setDragDropSourceData(DragDropData(contentUuid));
 			if (contentType == Core::ContentType::Scene)
 			{
 				thumbnail->setOnDoubleClick([this, it]() {
@@ -268,14 +265,14 @@ namespace Editor
 	ContentButton* ContentWindow::createContentButtonForEdit(const fs::path& thumbPath)
 	{
 		ContentButton* thumbnail = new ContentButton();
-		Texture* tex = getThumb(thumbPath);
+		Texture* tex = getThumbnailTexture(thumbPath);
 		thumbnail->setImage(tex);
 		thumbnail->setSize(THUMB_W, THUMB_H);
 		thumbnail->startEdit();
 		return thumbnail;
 	}
 
-	Texture* ContentWindow::getThumb(const fs::path& path)
+	Texture* ContentWindow::getThumbnailTexture(const fs::path& path)
 	{
 		ThumbManager thumbManager(_parent->getApplication(), _parent->getContentManager());
 		

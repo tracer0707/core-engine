@@ -37,7 +37,7 @@ namespace Editor
 			void rescanCurrentDir();
 			void setCurrentDir(const fs::path& path);
 
-			Texture* getThumb(const fs::path& path);
+			Texture* getThumbnailTexture(const fs::path& path);
 			Core::ContentType getContentTypeFromPath(const fs::path& path);
 			void setInspector(ContentButton* thumbnail, const Core::ContentType& contentType);
 			void createResource(const fs::path& thumbPath, std::function<void(const fs::path&)> createAndSaveFunc);

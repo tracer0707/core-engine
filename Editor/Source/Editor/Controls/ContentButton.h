@@ -52,10 +52,13 @@ namespace Editor
 			virtual void update();
 
 			Core::Uuid getContentUuid() const { return _contentUuid; }
-			void setContentUuid(Core::Uuid value) { _contentUuid = value; }
+			void setContentUuid(Core::Uuid value);
 
 			Core::String getContentName() const { return _contentName; }
-			void setContentName(Core::String value) { _contentName = value; }
+			void setContentName(Core::String value);
+
+			Core::ContentType getContentType() const { return _contentType; }
+			void setContentType(Core::ContentType value);
 
 			Texture* getImage() const { return _image; }
 			void setImage(Texture* value) { _image = value; }
@@ -68,9 +71,6 @@ namespace Editor
 
 			bool getUseContextMenu() const { return _contextMenu != nullptr; }
 			void setUseContextMenu(bool value);
-
-			Core::ContentType getContentType() const { return _contentType; }
-			void setContentType(Core::ContentType value) { _contentType = value; }
 
 			ContextMenu* getContextMenu() const { return _contextMenu; }
 

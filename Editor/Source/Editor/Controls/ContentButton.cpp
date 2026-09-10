@@ -47,6 +47,25 @@ namespace Editor
 		setUseContextMenu(false);
 	}
 
+	void ContentButton::setContentUuid(Core::Uuid value)
+	{
+		_contentUuid = value;
+		setDragDropSourceData(DragDropData(_contentUuid));
+	}
+
+	void ContentButton::setContentName(Core::String value)
+	{
+		_contentName = value;
+		setDragDropSourceLabel(_contentName);
+	}
+
+	void ContentButton::setContentType(Core::ContentType value)
+	{
+		_contentType = value;
+		int contentTypeInt = static_cast<int>(_contentType);
+		setDragDropSource(true, Core::String("CONTENT_") + std::to_string(contentTypeInt));
+	}
+
 	void ContentButton::setUseContextMenu(bool value)
 	{
 		if (value)
