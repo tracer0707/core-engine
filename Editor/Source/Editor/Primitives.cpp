@@ -157,7 +157,7 @@ namespace Editor
 	void Primitives::sphere(Core::Renderer* renderer, Core::VertexBuffer* buffer, glm::mat4& view, glm::mat4& proj, glm::mat4& model,
 							unsigned int sectors, unsigned int stacks, unsigned int flags)
 	{
-		if (renderer == nullptr || buffer == nullptr || buffer->getIndexArraySize() == 0)
+		if (renderer == nullptr || buffer == nullptr || sectors < 3 || stacks < 2)
 		{
 			return;
 		}
@@ -198,6 +198,8 @@ namespace Editor
 				indices.push_back(second + sector + 1u);
 			}
 		}
+
+		if (vertices.empty() || indices.empty()) return;
 
 		renderer->updateBuffer(buffer, vertices.data(), static_cast<unsigned int>(vertices.size()), indices.data(), static_cast<unsigned int>(indices.size()));
 		renderer->bindBuffer(buffer, flags, view, proj, model);

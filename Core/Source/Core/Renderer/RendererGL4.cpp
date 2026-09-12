@@ -394,6 +394,8 @@ namespace Core
 		assert(buffer->type == VertexBufferType::Dynamic && "Only dynamic vertex buffers can be updated");
 		assert(vertexArraySize <= buffer->getMaxVertexArraySize() && "Vertex array size exceeds maximum");
 
+		glBindVertexArray(buffer->getVao());
+
 		glBindBuffer(GL_ARRAY_BUFFER, buffer->getVbo());
 		void* vptr = glMapBufferRange(GL_ARRAY_BUFFER, 0, vertexArraySize * sizeof(Vertex), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
 
