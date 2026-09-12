@@ -12,13 +12,13 @@
 #include <Core/Renderer/Renderer.h>
 #include <Core/Renderer/FrameBuffer.h>
 #include <Core/Renderer/Program.h>
-#include <Core/Renderer/Primitives.h>
 #include <Core/Content/ContentDatabase.h>
 #include <Core/Content/ContentManager.h>
 #include <Core/Content/Texture2D.h>
 #include <Core/Content/Mesh.h>
 #include <Core/Content/Material.h>
 
+#include "../Editor/Primitives.h"
 #include "../Utils/TextureUtils.h"
 
 namespace Editor
@@ -157,7 +157,7 @@ namespace Editor
 		}
 
 		Core::VertexBuffer* sphere = renderer->createBuffer(nullptr, 4096, nullptr, 4096);
-		Core::Primitives::sphere(renderer, sphere, view, projection, model, 32, 16,
+		Primitives::sphere(renderer, sphere, view, projection, model, 32, 16,
 			C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
 		
 		renderer->deleteBuffer(sphere);

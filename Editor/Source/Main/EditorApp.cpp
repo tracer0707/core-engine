@@ -24,7 +24,7 @@
 #include "../Editor/Windows/ToolWindow.h"
 #include "../Editor/Windows/ContentImportWindow.h"
 #include "../Editor/CameraController.h"
-#include "../Editor/Rendering.h"
+#include "../Editor/Primitives.h"
 #include "../Editor/Gizmo.h"
 #include "../Editor/ObjectPicker.h"
 
@@ -169,7 +169,7 @@ namespace Editor
 			glm::mat4 view = _camera->getViewMatrix();
 			glm::mat4 proj = _camera->getProjectionMatrix();
 
-			Rendering::renderGrid(_renderer, _gridBuffer, _camera);
+			Primitives::grid(_renderer, _gridBuffer, _camera);
 			_scene->render(view, proj);
 			_gizmoRenderer->renderGizmo();
 		}

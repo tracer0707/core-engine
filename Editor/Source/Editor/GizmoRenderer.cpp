@@ -1,13 +1,13 @@
 #include "GizmoRenderer.h"
 
 #include <Core/Renderer/Renderer.h>
-#include <Core/Renderer/Primitives.h>
 #include <Core/Content/Scene.h>
 #include <Core/Scene/Object.h>
 #include <Core/Components/Camera.h>
 #include <Core/Interface/Transform.h>
 
 #include "Gizmo.h"
+#include "Primitives.h"
 
 namespace Editor
 {
