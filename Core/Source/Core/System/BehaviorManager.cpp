@@ -8,12 +8,16 @@ extern "C" {
 #include "../Scene/Object.h"
 #include "../Scene/BehaviorInstance.h"
 
+#include "../API/API.h"
+
 namespace Core
 {
 	BehaviorManager::BehaviorManager()
 	{
 		_state = luaL_newstate();
 		luaL_openlibs(_state);
+
+		API::registerObjectAPI(_state);
 	}
 
 	BehaviorManager::~BehaviorManager()

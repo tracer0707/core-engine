@@ -8,14 +8,10 @@ extern "C" {
 #include "Object.h"
 #include "../Shared/String.h"
 #include "../Content/Script.h"
+#include "../API/API.h"
 
 namespace Core
 {
-	struct LuaObject
-	{
-		Object* object = nullptr;
-	};
-
 	BehaviorInstance::BehaviorInstance(lua_State* state, Script* script, Object* object)
 	{
 		_state = state;
@@ -26,7 +22,6 @@ namespace Core
 
 		lua_State* L = _state;
 		
-		registerObject();
 		createEnvironment();
 		bindObject();
 
@@ -122,17 +117,6 @@ namespace Core
 		lua_pop(L, 1);
 	}
 
-	int BehaviorInstance::lua_Object_getName(lua_State* L)
-	{
-		auto* userData = static_cast<LuaObject*>(luaL_checkudata(L, 1, "Core.Object"));
-
-		Object* object = userData->object;
-
-		lua_pushstring(L, object->getName().c_str());
-
-		return 1;
-	}
-
 	void BehaviorInstance::createEnvironment()
 	{
 		lua_State* L = _state;
@@ -145,22 +129,6 @@ namespace Core
 		lua_setmetatable(L, -2);
 
 		_environmentRef = luaL_ref(L, LUA_REGISTRYINDEX);
-	}
-
-	void BehaviorInstance::registerObject()
-	{
-		lua_State* L = _state;
-
-		if (luaL_newmetatable(L, "Core.Object"))
-		{
-			lua_pushcfunction(L, lua_Object_getName);
-			lua_setfield(L, -2, "getName");
-
-			lua_pushvalue(L, -1);
-			lua_setfield(L, -2, "__index");
-		}
-
-		lua_pop(L, 1);
 	}
 
 	void BehaviorInstance::bindObject()

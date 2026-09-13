@@ -16,10 +16,7 @@ namespace Core
 
 			int _environmentRef = -2;
 
-			static int lua_Object_getName(lua_State* L);
-
 			void createEnvironment();
-			void registerObject();
 			void bindObject();
 			void pushObject();
 
