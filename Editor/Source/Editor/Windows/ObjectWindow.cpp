@@ -13,12 +13,20 @@
 
 #include "../../Utils/TextureUtils.h"
 #include "../../Resources/Texture.h"
+#include "../../Resources/TextureManager.h"
 
 namespace fs = std::filesystem;
 
 namespace Editor
 {
 	ObjectWindow::ObjectWindow(WindowManager* parent) : Window(parent, OBJECT_WINDOW)
+	{
+		
+	}
+
+	ObjectWindow::~ObjectWindow() {}
+
+	void ObjectWindow::init()
 	{
 		Core::Renderer* renderer = _parent->getRenderer();
 
@@ -33,7 +41,7 @@ namespace Editor
 		/* Empty object */
 
 		Button* emptyObject = new Button();
-		Texture* emptyObjectImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/empty.png"));
+		Texture* emptyObjectImage = _textureManager->getIcon(EditorIcon::Object);
 		emptyObject->setSize(32, 32);
 		emptyObject->setImage(emptyObjectImage);
 		emptyObject->setDragDropSource(true, "SCENE_OBJECT");
@@ -45,7 +53,7 @@ namespace Editor
 		/* Light object */
 
 		Button* lightObject = new Button();
-		Texture* lightObjectImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/gizmo/pointlight.png"));
+		Texture* lightObjectImage = _textureManager->getIcon(EditorIcon::PointLight);
 		lightObject->setSize(32, 32);
 		lightObject->setImage(lightObjectImage);
 
@@ -54,12 +62,10 @@ namespace Editor
 		/* Camera object */
 
 		Button* cameraObject = new Button();
-		Texture* cameraObjectImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/gizmo/camera.png"));
+		Texture* cameraObjectImage = _textureManager->getIcon(EditorIcon::Camera);
 		cameraObject->setSize(32, 32);
 		cameraObject->setImage(cameraObjectImage);
 
 		_layoutMain->addControl(cameraObject);
 	}
-
-	ObjectWindow::~ObjectWindow() {}
 } // namespace Editor

@@ -21,6 +21,7 @@
 #include "../../Main/EditorApp.h"
 #include "../../Utils/TextureUtils.h"
 #include "../../Resources/Texture.h"
+#include "../../Resources/TextureManager.h"
 #include "../../Content/ContentSerializer.h"
 
 namespace fs = std::filesystem;
@@ -46,7 +47,7 @@ namespace Editor
 		/* Save */
 
 		_saveBtn = new Button();
-		Texture* saveBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/save.png"));
+		Texture* saveBtnImage = _textureManager->getIcon(EditorIcon::Save);
 		_saveBtn->setSize(32, 32);
 		_saveBtn->setImage(saveBtnImage);
 		_saveBtn->setOnClick([this]() {
@@ -66,7 +67,7 @@ namespace Editor
 		/* Undo */
 
 		Button* undoBtn = new Button();
-		Texture* undoBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/undo.png"));
+		Texture* undoBtnImage = _textureManager->getIcon(EditorIcon::Undo);
 		undoBtn->setSize(32, 32);
 		undoBtn->setImage(undoBtnImage);
 
@@ -75,7 +76,7 @@ namespace Editor
 		/* Redo */
 
 		Button* redoBtn = new Button();
-		Texture* redoBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/redo.png"));
+		Texture* redoBtnImage = _textureManager->getIcon(EditorIcon::Redo);
 		redoBtn->setSize(32, 32);
 		redoBtn->setImage(redoBtnImage);
 
@@ -88,7 +89,7 @@ namespace Editor
 		/* Select */
 
 		_selectBtn = new Button();
-		Texture* selectBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/select.png"));
+		Texture* selectBtnImage = _textureManager->getIcon(EditorIcon::Select);
 		_selectBtn->setSize(32, 32);
 		_selectBtn->setImage(selectBtnImage);
 		_selectBtn->setOnClick([this]() {
@@ -102,7 +103,7 @@ namespace Editor
 
 		_translateBtn = new Button();
 		_translateBtn->setButtonType(ButtonType::Action);
-		Texture* moveBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/move.png"));
+		Texture* moveBtnImage = _textureManager->getIcon(EditorIcon::Translate);
 		_translateBtn->setSize(45, 32);
 		_translateBtn->setImage(moveBtnImage);
 		_translateBtn->setOnClick([this]() {
@@ -149,7 +150,7 @@ namespace Editor
 
 		_rotateBtn = new Button();
 		_rotateBtn->setButtonType(ButtonType::Action);
-		Texture* rotateBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/rotate.png"));
+		Texture* rotateBtnImage = _textureManager->getIcon(EditorIcon::Rotate);
 		_rotateBtn->setSize(45, 32);
 		_rotateBtn->setImage(rotateBtnImage);
 		_rotateBtn->setOnClick([this]() {
@@ -196,7 +197,7 @@ namespace Editor
 
 		_scaleBtn = new Button();
 		_scaleBtn->setButtonType(ButtonType::Action);
-		Texture* scaleBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/scale.png"));
+		Texture* scaleBtnImage = _textureManager->getIcon(EditorIcon::Scale);
 		_scaleBtn->setSize(45, 32);
 		_scaleBtn->setImage(scaleBtnImage);
 		_scaleBtn->setOnClick([this]() {
@@ -243,7 +244,7 @@ namespace Editor
 
 		_boundsBtn = new Button();
 		_boundsBtn->setButtonType(ButtonType::Action);
-		Texture* boundsBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/button.png"));
+		Texture* boundsBtnImage = _textureManager->getIcon(EditorIcon::Bounds);
 		_boundsBtn->setSize(45, 32);
 		_boundsBtn->setImage(boundsBtnImage);
 		_boundsBtn->setOnClick([this]() {
@@ -293,7 +294,7 @@ namespace Editor
 		/* Local Space */
 
 		_localSpaceBtn = new Button();
-		Texture* localSpaceBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/local.png"));
+		Texture* localSpaceBtnImage = _textureManager->getIcon(EditorIcon::LocalSpace);
 		_localSpaceBtn->setSize(32, 32);
 		_localSpaceBtn->setImage(localSpaceBtnImage);
 		_localSpaceBtn->setOnClick([this]() {
@@ -306,7 +307,7 @@ namespace Editor
 		/* World Space */
 
 		_worldSpaceBtn = new Button();
-		Texture* worldSpaceBtnImage = Texture::loadFromFile(renderer, fs::current_path() / fs::path("Editor/Icons/editor/world.png"));
+		Texture* worldSpaceBtnImage = _textureManager->getIcon(EditorIcon::WorldSpace);
 		_worldSpaceBtn->setSize(32, 32);
 		_worldSpaceBtn->setImage(worldSpaceBtnImage);
 		_worldSpaceBtn->setOnClick([this]() {

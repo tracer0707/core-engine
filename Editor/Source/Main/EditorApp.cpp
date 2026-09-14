@@ -33,6 +33,7 @@
 #include "../Editor/GizmoRenderer.h"
 #include "../Editor/EditorCamera.h"
 
+#include "../Resources/TextureManager.h"
 #include "../Shared/IconsForkAwesome.h"
 
 namespace fs = std::filesystem;
@@ -43,6 +44,9 @@ namespace Editor
 
 	EditorApp::MainWindow::MainWindow(EditorApp* app) : Window(app, "Core Editor", 1366, 768)
 	{
+		_textureManager = new TextureManager(_renderer);
+		_textureManager->loadIcons(fs::current_path() / "Editor" / "Icons");
+
 		_frameBuffer = _renderer->createFrameBuffer(512u, 512u);
 
 		_camera = new EditorCamera(_renderer);
@@ -91,6 +95,7 @@ namespace Editor
 		_contentImportWindow = _windowManager->addWindow<ContentImportWindow*>();
 		_contentImportWindow->setVisible(false);
 
+		_contentWindow->setTextureManager(_textureManager);
 		_contentWindow->setContentDir(app->getContentPath());
 
 		_toolWindow = _windowManager->addWindow<ToolWindow*>();
@@ -102,12 +107,14 @@ namespace Editor
 		_objectWindow->setCanClose(false);
 		_objectWindow->setHasDockTitle(false);
 		_objectWindow->setCanAcceptDocking(false);
+		_objectWindow->setTextureManager(_textureManager);
 
 		_sceneWindow->setGizmo(_gizmo);
 		_sceneWindow->setObjectPicker(_objectPicker);
 		_sceneWindow->setCameraController(_cameraController);
 		_hierarchyWindow->setGizmo(_gizmo);
 		_toolWindow->setGizmo(_gizmo);
+		_toolWindow->setTextureManager(_textureManager);
 
 		_windowManager->setOnDock([this] {
 			auto dockTools = _toolWindow->dock(DockDirection::Up, 0, 0.053f);
@@ -132,7 +139,9 @@ namespace Editor
 		delete _objectPicker;
 		delete _gizmo;
 		delete _cameraController;
+		delete _camera;
 		delete _windowManager;
+		delete _textureManager;
 
 		_gizmoRenderer = nullptr;
 		_gridBuffer = nullptr;
@@ -141,6 +150,7 @@ namespace Editor
 		_objectPicker = nullptr;
 		_gizmo = nullptr;
 		_scene = nullptr;
+		_camera = nullptr;
 	}
 
 	void EditorApp::MainWindow::loadScene(const fs::path& path)

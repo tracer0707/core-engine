@@ -6,6 +6,7 @@ namespace Editor
 {
 	class Button;
 	class Gizmo;
+	class TextureManager;
 
 	class ToolWindow : public Window
 	{
@@ -19,6 +20,7 @@ namespace Editor
 		Button* _localSpaceBtn = nullptr;
 		Button* _worldSpaceBtn = nullptr;
 		Gizmo* _gizmo = nullptr;
+		TextureManager* _textureManager = nullptr;
 
 	public:
 		ToolWindow(WindowManager* parent);
@@ -28,5 +30,6 @@ namespace Editor
 		virtual void invalidate();
 
 		void setGizmo(Gizmo* value) { _gizmo = value; }
+		void setTextureManager(TextureManager* value) { _textureManager = value; }
 	};
 }

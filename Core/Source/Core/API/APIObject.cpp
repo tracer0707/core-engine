@@ -1,5 +1,7 @@
 #include "API.h"
 
+#include <cstring>
+
 extern "C" {
 #include <lauxlib.h>
 #include <lualib.h>

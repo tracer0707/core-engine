@@ -22,6 +22,7 @@
 #include "../../Shared/Tags.h"
 #include "../../Content/ContentSerializer.h"
 #include "../../Resources/Texture.h"
+#include "../../Resources/TextureManager.h"
 
 #include "../Controls/LinearLayout.h"
 #include "../Controls/SplitPanel.h"
@@ -51,6 +52,13 @@ namespace Editor
 
 	ContentWindow::ContentWindow(WindowManager* parent) : Window(parent, CONTENT_WINDOW)
 	{
+		
+	}
+
+	ContentWindow::~ContentWindow() {}
+
+	void ContentWindow::init()
+	{
 		LinearLayout* _mainLayout = new LinearLayout(LayoutDirection::Vertical);
 		_mainLayout->setWrapMode(LayoutWrapMode::NoWrap);
 		_mainLayout->setFitWidth(LayoutFitMode::FitAvailable);
@@ -71,8 +79,8 @@ namespace Editor
 		SplitPanel* _splitPanel = new SplitPanel();
 		_treeView = new TreeView();
 
-		Texture* _addTex = Texture::loadFromFile(_parent->getRenderer(), fs::current_path() / fs::path("Editor/Icons/editor/add.png"));
-		Texture* _importTex = Texture::loadFromFile(_parent->getRenderer(), fs::current_path() / fs::path("Editor/Icons/editor/down.png"));
+		Texture* _addTex = _textureManager->getIcon(EditorIcon::Add);
+		Texture* _importTex = _textureManager->getIcon(EditorIcon::ChevronDown);
 
 		_createResourceBtn = new Button("Create", _addTex);
 		_createResourceBtn->setHeight(24);
@@ -85,17 +93,17 @@ namespace Editor
 		_importResourceBtn->getStyle().paddingX = 8;
 		_importResourceBtn->setEnabled(false);
 
-		_importResourceBtn->setOnClick([this, parent]() {
-			parent->getApplication()->getEventHandler()->addEvent([this, parent] {
+		_importResourceBtn->setOnClick([this]() {
+			_parent->getApplication()->getEventHandler()->addEvent([this] {
 				if (_fsDlg != nullptr) return;
 
-				_fsDlg = new FileSystemDialog(parent->getApplication(), "Import Content", FileSystemDialogType::Open);
+				_fsDlg = new FileSystemDialog(_parent->getApplication(), "Import Content", FileSystemDialogType::Open);
 				_fsDlg->setIsMultiple(true);
 
 				_fsDlg->setOnClose([this]() { _fsDlg = nullptr; });
 
-				_fsDlg->setOnPathSelected([this, parent](Core::List<fs::path> fileNames) {
-					ContentImportWindow* wnd = (ContentImportWindow*)parent->getWindow(CONTENT_IMPORT_WINDOW);
+				_fsDlg->setOnPathSelected([this](Core::List<fs::path> fileNames) {
+					ContentImportWindow* wnd = (ContentImportWindow*)_parent->getWindow(CONTENT_IMPORT_WINDOW);
 					wnd->setVisible(true);
 					wnd->import(fileNames, _currentDir);
 					wnd->setOnImportFinished([this](bool allFinished) {
@@ -107,7 +115,7 @@ namespace Editor
 		});
 
 		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
-		
+
 		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE " Material");
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
@@ -153,12 +161,7 @@ namespace Editor
 		});
 
 		_parent->getContentManager()->setOnResourceLoaded([](Core::Content*) { Core::ContentDatabase::singleton()->save(); });
-	}
 
-	ContentWindow::~ContentWindow() {}
-
-	void ContentWindow::init()
-	{
 		rescanStructure();
 	}
 
@@ -280,58 +283,43 @@ namespace Editor
 		
 		if (!fs::exists(thumbPath))
 		{
-			Core::String iconName = Core::String::Empty;
 			Core::String ext = Core::Path::toUtf8(path.extension());
 
 			if (ext == Core::String::Empty)
 			{
-				iconName = "folder.png";
+				return _textureManager->getIcon(EditorIcon::Folder);
 			}
 			else if (ext == ".ttf")
 			{
-				iconName = "font.png";
+				return _textureManager->getIcon(EditorIcon::Font);
 			}
 			else if (ext == ".texture")
 			{
-				iconName = "texture.png";
+				return _textureManager->getIcon(EditorIcon::Texture);
 			}
 			else if (ext == ".mesh")
 			{
-				iconName = "mesh.png";
+				return _textureManager->getIcon(EditorIcon::Mesh);
 			}
 			else if (ext == ".material")
 			{
-				iconName = "material.png";
+				return _textureManager->getIcon(EditorIcon::Material);
 			}
 			else if (ext == ".scene")
 			{
-				iconName = "scene.png";
+				return _textureManager->getIcon(EditorIcon::Scene);
 			}
 			else if (ext == ".lua")
 			{
-				iconName = "script.png";
+				return _textureManager->getIcon(EditorIcon::Script);
 			}
 			else
 			{
-				iconName = "fileEmpty.png";
+				return _textureManager->getIcon(EditorIcon::File);
 			}
-
-			thumbPath = fs::current_path() / fs::path("Editor/Icons/content") / Core::Path::fromUtf8(iconName);
 		}
 
-		auto it = _iconCache.find(thumbPath);
-		if (it != _iconCache.end())
-		{
-			return it->second;
-		}
-
-		Texture* tex = Texture::loadFromFile(_parent->getRenderer(), thumbPath);
-		if (tex != nullptr)
-		{
-			_iconCache[thumbPath] = tex;
-		}
-
-		return tex;
+		return _textureManager->loadFromFile(thumbPath);
 	}
 
 	Core::ContentType ContentWindow::getContentTypeFromPath(const fs::path& path)

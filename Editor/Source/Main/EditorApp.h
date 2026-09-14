@@ -33,6 +33,7 @@ namespace Editor
 	class Gizmo;
 	class ObjectPicker;
 	class CameraController;
+	class TextureManager;
 
 	class EditorApp : public Core::Application
 	{
@@ -54,6 +55,7 @@ namespace Editor
 					Core::VertexBuffer* _gridBuffer = nullptr;
 					const Core::FrameBuffer* _frameBuffer = nullptr;
 
+					TextureManager* _textureManager = nullptr;
 					GizmoRenderer* _gizmoRenderer = nullptr;
 					Gizmo* _gizmo = nullptr;
 					ObjectPicker* _objectPicker = nullptr;

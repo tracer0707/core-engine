@@ -17,6 +17,7 @@ namespace Editor
 	class ContentButton;
 	class FileSystemDialog;
 	class Texture;
+	class TextureManager;
 
 	class ContentWindow : public Window
 	{
@@ -26,12 +27,12 @@ namespace Editor
 
 			FileSystemDialog* _fsDlg = nullptr;
 
+			TextureManager* _textureManager = nullptr;
+
 			TreeView* _treeView = nullptr;
 			LinearLayout* _rightPane = nullptr;
 			Button* _createResourceBtn = nullptr;
 			Button* _importResourceBtn = nullptr;
-
-			std::unordered_map<fs::path, Texture*> _iconCache;
 
 			void rescanStructure();
 			void rescanCurrentDir();
@@ -46,6 +47,8 @@ namespace Editor
 		public:
 			ContentWindow(WindowManager* parent);
 			virtual ~ContentWindow();
+
+			void setTextureManager(TextureManager* value) { _textureManager = value; }
 
 			fs::path getContentDir() const { return _contentDir; }
 			void setContentDir(const fs::path& value) { _contentDir = value; }
