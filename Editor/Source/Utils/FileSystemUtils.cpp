@@ -6,8 +6,9 @@
 
 #include "../Editor/Controls/TreeView.h"
 #include "../Editor/Controls/TreeNode.h"
-#include "../Shared/IconsForkAwesome.h"
 #include "../Shared/Tags.h"
+#include "../Resources/TextureManager.h"
+#include "../Resources/Texture.h"
 
 namespace fs = std::filesystem;
 
@@ -81,7 +82,8 @@ namespace Editor
 		}
 	}
 
-	void FileSystemUtils::fsToTreeView(const fs::path& path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode, bool lazyLoad)
+	void FileSystemUtils::fsToTreeView(const fs::path& path, TextureManager* textureManager, TreeView* treeView, TreeNode* rootNode,
+									   bool addFiles, bool showRootNode, bool lazyLoad)
 	{
 		Core::String _path = Core::Path::toUtf8(path);
 
@@ -93,7 +95,7 @@ namespace Editor
 				if (Core::Path::isHiddenOrSystem(entry)) continue;
 				if (!addFiles && !fs::is_directory(entry)) continue;
 
-				fsToTreeView(entry, treeView, nullptr, addFiles, true, lazyLoad);
+				fsToTreeView(entry, textureManager, treeView, nullptr, addFiles, true, lazyLoad);
 			}
 			return;
 		}
@@ -104,17 +106,18 @@ namespace Editor
 
 		if (fs_path.has_filename())
 		{
-			std::string icon;
+			Texture* icon = nullptr;
 			if (fs::is_directory(fs_path))
 			{
-				icon = ICON_FK_FOLDER;
+				icon = textureManager->getIcon(EditorIcon::Folder);
 			}
 			else
 			{
-				icon = ICON_FK_FILE;
+				icon = textureManager->getIcon(EditorIcon::File);
 			}
 
-			_node->setText(icon + " " + Core::Path::toUtf8(fs_path.filename()).std_str());
+			_node->setText(Core::Path::toUtf8(fs_path.filename()).std_str());
+			_node->setIcon(icon);
 		}
 		else
 		{
@@ -152,7 +155,7 @@ namespace Editor
 
 			if (lazyLoad)
 			{
-				_node->setOnOpen([_path, treeView, _node, addFiles, fs, lazyLoad](bool opened) {
+				_node->setOnOpen([_path, treeView, _node, addFiles, fs, lazyLoad, textureManager](bool opened) {
 					if (opened)
 					{
 						for (const auto& entry : fs)
@@ -160,7 +163,7 @@ namespace Editor
 							if (Core::Path::isHiddenOrSystem(entry)) continue;
 							if (!addFiles && !fs::is_directory(entry)) continue;
 
-							fsToTreeView(entry, treeView, _node, addFiles, true, lazyLoad);
+							fsToTreeView(entry, textureManager, treeView, _node, addFiles, true, lazyLoad);
 						}
 					}
 					else
@@ -176,7 +179,7 @@ namespace Editor
 					if (Core::Path::isHiddenOrSystem(entry)) continue;
 					if (!addFiles && !fs::is_directory(entry)) continue;
 
-					fsToTreeView(entry, treeView, _node, addFiles, true, lazyLoad);
+					fsToTreeView(entry, textureManager, treeView, _node, addFiles, true, lazyLoad);
 				}
 			}
 		}

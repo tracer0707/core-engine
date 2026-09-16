@@ -11,6 +11,7 @@ namespace Editor
 {
     class TreeView;
     class TreeNode;
+	class TextureManager;
 
     class FileSystemUtils
     {
@@ -18,6 +19,7 @@ namespace Editor
         static Core::List<fs::path> getDiskDrives();
         static Core::List<fs::path> getPathEntries(const fs::path& path);
         static void enumerateFiles(const fs::path& root, Core::List<fs::path>& out);
-        static void fsToTreeView(const fs::path& path, TreeView* treeView, TreeNode* rootNode, bool addFiles, bool showRootNode, bool lazyLoad = true);
+		static void fsToTreeView(const fs::path& path, TextureManager* textureManager, TreeView* treeView, TreeNode* rootNode, bool addFiles,
+								 bool showRootNode, bool lazyLoad = true);
     };
 } // namespace Editor

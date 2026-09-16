@@ -9,8 +9,8 @@
 #include <Core/Shared/String.h>
 #include <Core/System/EventHandler.h>
 
+#include "../Resources/TextureManager.h"
 #include "../Utils/FileSystemUtils.h"
-#include "../Shared/IconsForkAwesome.h"
 #include "../Shared/Tags.h"
 #include "../Editor/Font.h"
 #include "../Editor/Windows/FullscreenWindow.h"
@@ -27,22 +27,14 @@ namespace Editor
 {
 	FileSystemDialog::FileSystemDialog(Core::Application* app, Core::String title, FileSystemDialogType dialogType) : Core::Window(app, title, 800, 400)
 	{
+		_textureManager = new TextureManager(_renderer);
+		_textureManager->loadIcons(fs::current_path() / "Editor" / "Icons");
+
 		_dialogType = dialogType;
 		_mainFont = new Font(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
-
-		ImGuiIO& io = ImGui::GetIO();
-		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
-		ImFontConfig icons_config;
-		icons_config.MergeMode = true;
-		icons_config.PixelSnapH = true;
-		icons_config.GlyphMinAdvanceX = 15.0f;
-		io.Fonts->AddFontFromFileTTF(
-			Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).c_str(), 15.0f,
-			&icons_config, icons_ranges);
+		_mainFont->setDefault();
 
 		Font::rebuildFonts();
-
-		_mainFont->setDefault();
 
 		_layout = new LinearLayout(LayoutDirection::Vertical);
 		_layout->setFitWidth(LayoutFitMode::FitAvailable);
@@ -286,7 +278,7 @@ namespace Editor
 		Core::List<fs::path> _diskDrives = FileSystemUtils::getDiskDrives();
 		for (auto& d : _diskDrives)
 		{
-			FileSystemUtils::fsToTreeView(d, _treeView, nullptr, _showFiles, true);
+			FileSystemUtils::fsToTreeView(d, _textureManager, _treeView, nullptr, _showFiles, true);
 		}
 	}
 

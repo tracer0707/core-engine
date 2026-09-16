@@ -18,7 +18,6 @@
 #include "../../Main/EditorApp.h"
 #include "../../Main/FileSystemDialog.h"
 #include "../../Main/ThumbManager.h"
-#include "../../Shared/IconsForkAwesome.h"
 #include "../../Shared/Tags.h"
 #include "../../Content/ContentSerializer.h"
 #include "../../Resources/Texture.h"
@@ -116,7 +115,8 @@ namespace Editor
 
 		ContextMenu* _createResourceBtnCm = _createResourceBtn->getContextMenu();
 
-		MenuItem* _materialMenuItem = new MenuItem(ICON_FK_CIRCLE " Material");
+		MenuItem* _materialMenuItem = new MenuItem("Material");
+		_materialMenuItem->setIcon(_textureManager->getIcon(EditorIcon::Material));
 		_createResourceBtnCm->addControl(_materialMenuItem);
 
 		_materialMenuItem->setOnClick([this]() {
@@ -127,7 +127,8 @@ namespace Editor
 			});
 		});
 
-		MenuItem* _sceneMenuItem = new MenuItem(ICON_FK_CUBES " Scene");
+		MenuItem* _sceneMenuItem = new MenuItem("Scene");
+		_sceneMenuItem->setIcon(_textureManager->getIcon(EditorIcon::Scene));
 		_createResourceBtnCm->addControl(_sceneMenuItem);
 
 		_sceneMenuItem->setOnClick([this]() {
@@ -168,7 +169,7 @@ namespace Editor
 	void ContentWindow::rescanStructure()
 	{
 		_treeView->clear();
-		FileSystemUtils::fsToTreeView(_contentDir, _treeView, nullptr, false, true, false);
+		FileSystemUtils::fsToTreeView(_contentDir, _textureManager, _treeView, nullptr, false, true, false);
 	}
 
 	void ContentWindow::rescanCurrentDir()

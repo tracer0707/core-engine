@@ -15,6 +15,7 @@ namespace Editor
 	class TreeView;
 	class InputText;
 	class Label;
+	class TextureManager;
 
 	enum class FileSystemDialogType
 	{
@@ -25,6 +26,7 @@ namespace Editor
 	class FileSystemDialog : public Core::Window
 	{
 		private:
+			TextureManager* _textureManager = nullptr;
 			Font* _mainFont = nullptr;
 			FullscreenWindow* _wnd = nullptr;
 			LinearLayout* _layout = nullptr;

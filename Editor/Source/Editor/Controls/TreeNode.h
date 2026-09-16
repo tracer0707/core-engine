@@ -9,13 +9,15 @@
 namespace Editor
 {
 	class TreeView;
+	class Texture;
 
 	class TreeNode : public Control
 	{
 			friend class TreeView;
 
 		private:
-			Core::String _text = "";
+			Core::String _text = Core::String::Empty;
+			Texture* _icon = nullptr;
 			bool _prevOpened = false;
 			bool _alwaysShowOpenArrow = false;
 			bool _isNodeOpened = false;
@@ -35,6 +37,9 @@ namespace Editor
 
 			void setText(Core::String value) { _text = value; }
 			Core::String getText() const { return _text; }
+
+			Texture* getIcon() const { return _icon; }
+			void setIcon(Texture* value) { _icon = value; }
 
 			void setOnClick(std::function<void()> callback) { _onClick = callback; }
 			void setOnOpen(std::function<void(bool)> callback) { _onOpen = callback; }

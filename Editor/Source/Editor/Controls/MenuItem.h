@@ -9,12 +9,15 @@
 
 namespace Editor
 {
+	class Texture;
+
 	class MenuItem : public Control
 	{
 		friend class MenuBar;
 
 	private:
-		Core::String _text = "";
+		Core::String _text = Core::String::Empty;
+		Texture* _icon = nullptr;
 		
 		std::function<void()> _onClick = nullptr;
 
@@ -28,6 +31,9 @@ namespace Editor
 
 		Core::String getText() const { return _text; }
 		void setText(Core::String value) { _text = value; }
+
+		Texture* getIcon() const { return _icon; }
+		void setIcon(Texture* value) { _icon = value; }
 
 		void setOnClick(std::function<void()> callback) { _onClick = callback; }
 	};

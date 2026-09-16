@@ -34,7 +34,6 @@
 #include "../Editor/EditorCamera.h"
 
 #include "../Resources/TextureManager.h"
-#include "../Shared/IconsForkAwesome.h"
 
 namespace fs = std::filesystem;
 
@@ -212,23 +211,11 @@ namespace Editor
 	{
 		_wnd = new MainWindow(this);
 
-		float iconFontSize = 15.0f;
-
 		ImGuiIO& io = ImGui::GetIO();
-		_mainFont = new Font(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf"), iconFontSize);
-
-		static const ImWchar icons_ranges[] = {ICON_MIN_FK, ICON_MAX_16_FK, 0};
-		ImFontConfig icons_config;
-		icons_config.MergeMode = true;
-		icons_config.PixelSnapH = true;
-		icons_config.GlyphMinAdvanceX = iconFontSize;
-		io.Fonts->AddFontFromFileTTF(
-			Core::Path::toUtf8(fs::current_path() / fs::path("Editor/Fonts") / fs::path(FONT_ICON_FILE_NAME_FK)).c_str(),
-			iconFontSize, &icons_config, icons_ranges);
+		_mainFont = new Font(fs::current_path() / fs::path("Editor/Fonts/Roboto-Regular.ttf"), 15.0f);
+		_mainFont->setDefault();
 
 		Font::rebuildFonts();
-
-		_mainFont->setDefault();
 	}
 
 	void EditorApp::destroy()

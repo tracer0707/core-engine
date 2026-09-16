@@ -6,6 +6,8 @@
 
 #include "TreeView.h"
 
+#include "../../Resources/Texture.h"
+
 namespace Editor
 {
 	TreeNode::TreeNode(TreeView* treeView) : Control()
@@ -16,7 +18,13 @@ namespace Editor
 	void TreeNode::measure() const
 	{
 		_actualWidth = _width > 0.0f ? _width : ImGui::GetContentRegionAvail().x;
+		if (_icon != nullptr)
+		{
+			_actualWidth += 16.0f + ImGui::GetStyle().ItemSpacing.x;
+		}
+
 		_actualHeight = ImGui::GetTextLineHeightWithSpacing();
+
 		if (_isNodeOpened)
 		{
 			for (auto it : _controls)
@@ -42,7 +50,20 @@ namespace Editor
 		if (isLeaf) flags |= ImGuiTreeNodeFlags_Leaf;
 
 		ImGui::SetNextItemOpen(_isNodeOpened, ImGuiCond_Always);
-		_isNodeOpened = ImGui::TreeNodeEx(_text.std_str().c_str(), flags);
+		ImGui::SetNextItemAllowOverlap();
+
+		_isNodeOpened = ImGui::TreeNodeEx(("##" + _id).c_str(), flags);
+		bool clicked = ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered();
+
+		ImGui::SameLine();
+
+		if (_icon != nullptr)
+		{
+			ImGui::Image((ImTextureID)_icon->getNativeId(), ImVec2(16, 16), ImVec2(0, 1), ImVec2(1, 0));
+			ImGui::SameLine();
+		}
+
+		ImGui::TextUnformatted(_text.c_str());
 
 		if (_prevOpened != _isNodeOpened && !isLeaf)
 		{
@@ -50,7 +71,7 @@ namespace Editor
 		}
 		else
 		{
-			if (ImGui::IsMouseClicked(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
+			if (clicked)
 			{
 				_tree->selectNode(this, true);
 				if (_onClick != nullptr) _onClick();
