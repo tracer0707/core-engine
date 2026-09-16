@@ -97,8 +97,8 @@ namespace Editor
 		renderer->bindProgram(program);
 		renderer->setTransform(identity, identity, identity);
 		renderer->setUniform(program->getUniformLocation(Hash("u_color")), glm::vec4(1.0f));
+		renderer->bindTexture(texture->getNativeId(), 0);
 		renderer->setUniform(program->getUniformLocation(Hash("u_texture")), 0);
-		texture->bind(0);
 		
 		renderer->bindBuffer(buffer, 0);
 		renderer->drawBufferIndexed(Core::PrimitiveType::Triangle, 0, 6);
@@ -148,6 +148,8 @@ namespace Editor
 		
 		getPreviewMatrices(Core::AxisAlignedBox(glm::vec3(-1.0f), glm::vec3(1.0f)), 25.0f, view, projection, model);
 
+		Core::VertexBuffer* sphere = renderer->createBuffer(nullptr, 4096, nullptr, 4096);
+
 		if (material->getProgram() != nullptr)
 		{
 			material->bind();
@@ -157,7 +159,6 @@ namespace Editor
 			renderer->bindProgram(renderer->getDefaultProgram());
 		}
 
-		Core::VertexBuffer* sphere = renderer->createBuffer(nullptr, 4096, nullptr, 4096);
 		Primitives::sphere(renderer, sphere, view, projection, model, 32, 16,
 			C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
 		
