@@ -166,8 +166,17 @@ namespace Core
 		std::string errorsVs = checkProgramErrors(vs);
 		std::string errorsFs = checkProgramErrors(fs);
 
-		if (!errorsVs.empty()) std::cout << errorsVs;
-		if (!errorsFs.empty()) std::cout << errorsFs;
+		if (!errorsVs.empty())
+		{
+			std::cout << errorsVs;
+			glDeleteShader(vs);
+		}
+
+		if (!errorsFs.empty())
+		{
+			std::cout << errorsFs;
+			glDeleteShader(fs);
+		}
 
 		if (!errorsVs.empty() || !errorsFs.empty())
 		{
@@ -188,6 +197,8 @@ namespace Core
 			std::vector<char> infoLog(maxLength);
 			glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
 			std::cerr << "Program link error:\n" << infoLog.data() << std::endl;
+			glDeleteShader(vs);
+			glDeleteShader(fs);
 			glDeleteProgram(programId);
 			return nullptr;
 		}
@@ -316,7 +327,6 @@ namespace Core
 			std::string log(result);
 			delete[] result;
 
-			glDeleteShader(program);
 			return log;
 		}
 
@@ -351,41 +361,35 @@ namespace Core
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexArraySize * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
 		}
 
-		// Position
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(0));
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _position)));
 		glEnableVertexAttribArray(0);
 
-		// Normal
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _normal)));
 		glEnableVertexAttribArray(1);
-		
-		// Tangent
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(6 * sizeof(float)));
+
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _tangent)));
 		glEnableVertexAttribArray(2);
-		
-		// Bitangent
-		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(9 * sizeof(float)));
+
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _bitangent)));
 		glEnableVertexAttribArray(3);
 
-		// UV0
-		glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(12 * sizeof(float)));
+		glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _uv0)));
 		glEnableVertexAttribArray(4);
 
-		// UV1
-		glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(14 * sizeof(float)));
+		glVertexAttribPointer(5, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _uv1)));
 		glEnableVertexAttribArray(5);
 
-		// Color
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(16 * sizeof(float)));
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _color)));
 		glEnableVertexAttribArray(6);
 
-		// Blend Weight
-		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(20 * sizeof(float)));
+		glVertexAttribPointer(7, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _blendWeights)));
 		glEnableVertexAttribArray(7);
 
-		// Blend Indices
-		glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(24 * sizeof(float)));
+		glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), reinterpret_cast<void*>(offsetof(Vertex, _blendIndices)));
 		glEnableVertexAttribArray(8);
+
+		glBindVertexArray(0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		VertexBuffer* buffer = new VertexBuffer(vao, vbo, ibo, vertexArray != nullptr ? VertexBufferType::Static : VertexBufferType::Dynamic, vertexArray, vertexArraySize, indexArray, indexArraySize);
 
@@ -415,6 +419,7 @@ namespace Core
 		{
 			assert(indexArraySize > 0);
 			assert(indexArraySize <= buffer->getMaxIndexArraySize() && "Index array size exceeds maximum");
+			assert(buffer->getIbo() != 0);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffer->getIbo());
 			void* iptr =
@@ -504,7 +509,7 @@ namespace Core
 			break;
 		}
 
-		if (offset >= 0 && count > 0)
+		if (count > 0)
 		{
 			glDrawArrays(_primitiveType, offset, count);
 		}
@@ -527,7 +532,7 @@ namespace Core
 			break;
 		}
 
-		if (offset >= 0 && count > 0)
+		if (count > 0)
 		{
 			glDrawElements(_primitiveType, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(offset * sizeof(uint32_t)));
 		}
@@ -535,6 +540,8 @@ namespace Core
 
 	void RendererGL4::setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model)
 	{
+		assert(_currentProgram != nullptr && "Program is not binded");
+
 		if (_currentProgram->u_viewMtxLocation != -1) setUniform(_currentProgram->u_viewMtxLocation, view);
 		if (_currentProgram->u_projMtxLocation != -1) setUniform(_currentProgram->u_projMtxLocation, proj);
 		if (_currentProgram->u_modelMtxLocation != -1) setUniform(_currentProgram->u_modelMtxLocation, model);
@@ -559,6 +566,9 @@ namespace Core
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fb->colorBuffer, 0);
+
+		GLenum drawBuffers[] = {GL_COLOR_ATTACHMENT0};
+		glDrawBuffers(1, drawBuffers);
 
 		glBindRenderbuffer(GL_RENDERBUFFER, fb->depthBuffer);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
@@ -614,6 +624,7 @@ namespace Core
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 		if (format == TextureFormat::RGBA8)
 		{

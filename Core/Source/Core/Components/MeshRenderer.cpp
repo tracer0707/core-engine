@@ -17,16 +17,16 @@ namespace Core
 
 	MeshRenderer::~MeshRenderer()
 	{
-		mesh = nullptr;
+		_mesh = nullptr;
 	}
 
 	AxisAlignedBox MeshRenderer::getWorldBoundingBox()
 	{
-		if (mesh == nullptr) return AxisAlignedBox::BOX_NULL;
+		if (_mesh == nullptr) return AxisAlignedBox::BOX_NULL;
 
 		Transform* transform = _owner->getTransform();
 
-		AxisAlignedBox aab = mesh->getBoundingBox();
+		AxisAlignedBox aab = _mesh->getBoundingBox();
 		aab.transform(transform->getTransformMatrix());
 
 		return aab;
@@ -34,10 +34,15 @@ namespace Core
 
 	void MeshRenderer::setMesh(Mesh* value)
 	{
-		mesh = value;
-		
+		_mesh = value;
 		_materials.clear();
-		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
+
+		if (_mesh == nullptr)
+		{
+			return;
+		}
+		
+		for (int i = 0; i < _mesh->getSubMeshCount(); ++i)
 		{
 			_materials.add(nullptr);
 		}
@@ -45,17 +50,17 @@ namespace Core
 
 	void MeshRenderer::render(glm::mat4& view, glm::mat4& proj)
 	{
-		if (mesh == nullptr) return;
+		if (_mesh == nullptr) return;
 
 		Transform* transform = _owner->getTransform();
 
 		glm::mat4 model = transform->getTransformMatrix();
 
-		_renderer->bindBuffer(mesh->getVertexBuffer(), C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+		_renderer->bindBuffer(_mesh->getVertexBuffer(), C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
 
-		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
+		for (int i = 0; i < _mesh->getSubMeshCount(); ++i)
 		{
-			SubMesh& subMesh = mesh->getSubMesh(i);
+			SubMesh& subMesh = _mesh->getSubMesh(i);
 			Material* material = _materials[i];
 
 			if (material != nullptr)
@@ -69,7 +74,7 @@ namespace Core
 
 			_renderer->setTransform(view, proj, model);
 
-			if (mesh->getVertexBuffer()->getIndexArraySize() > 0)
+			if (_mesh->getVertexBuffer()->getIndexArraySize() > 0)
 			{
 				_renderer->drawBufferIndexed(PrimitiveType::Triangle, subMesh.getIndexOffset(), subMesh.getIndexCount());
 			}

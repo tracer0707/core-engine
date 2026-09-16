@@ -93,7 +93,7 @@ namespace Editor
 
 		for (const auto& [key, value] : value->getTexture2dValues())
 		{
-			const Core::Uuid& uuid = value->getUuid();
+			const Core::Uuid& uuid = value != nullptr ? value->getUuid() : Core::Uuid::Empty;
 			if (uuid == Core::Uuid::Empty)
 			{
 				tex2ds.push_back(Core::Serialization::CreateMapEntryUuid(builder, key, nullptr));

@@ -494,35 +494,35 @@ namespace Core
 	Material* ContentManager::loadMaterialByUuid(Uuid uuid)
 	{
 		ContentDatabase* db = ContentDatabase::singleton();
-		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		if (!db->hasPath(uuid)) return nullptr;
 		return loadMaterialFromFile(db->getPath(uuid));
 	}
 
 	Texture2D* ContentManager::loadTexture2DByUuid(Uuid uuid)
 	{
 		ContentDatabase* db = ContentDatabase::singleton();
-		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		if (!db->hasPath(uuid)) return nullptr;
 		return loadTexture2DFromFile(db->getPath(uuid));
 	}
 
 	Mesh* ContentManager::loadMeshByUuid(Uuid uuid)
 	{
 		ContentDatabase* db = ContentDatabase::singleton();
-		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		if (!db->hasPath(uuid)) return nullptr;
 		return loadMeshFromFile(db->getPath(uuid));
 	}
 
 	Scene* ContentManager::loadSceneByUuid(Uuid uuid)
 	{
 		ContentDatabase* db = ContentDatabase::singleton();
-		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		if (!db->hasPath(uuid)) return nullptr;
 		return loadSceneFromFile(db->getPath(uuid));
 	}
 
 	Script* ContentManager::loadScriptByUuid(Uuid uuid)
 	{
 		ContentDatabase* db = ContentDatabase::singleton();
-		if (!db->hasPath(uuid)) throw std::runtime_error("Resource not found");
+		if (!db->hasPath(uuid)) return nullptr;
 		return loadScriptFromFile(db->getPath(uuid));
 	}
 

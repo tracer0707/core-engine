@@ -16,7 +16,7 @@ namespace Core
 	{
 	private:
 		Renderer* _renderer = nullptr;
-		Mesh* mesh = nullptr;
+		Mesh* _mesh = nullptr;
 
 		List<Material*> _materials;
 
@@ -33,7 +33,7 @@ namespace Core
 		Material* getMaterial(int index) { return _materials.get(index); }
 		void setMaterial(int index, Material* value) { _materials.set(index, value); }
 
-		Mesh* getMesh() { return mesh; }
+		Mesh* getMesh() const { return _mesh; }
 		void setMesh(Mesh* value);
 
 		void render(glm::mat4& view, glm::mat4& proj) override;
