@@ -92,14 +92,15 @@ namespace Editor
 		Core::VertexBuffer* buffer = renderer->createBuffer(vertices, 4, indices, 6);
 		Core::Program* program = renderer->getFullScreenQuadProgram();
 		
+		glm::mat4 identity(1.0f);
+
 		renderer->bindProgram(program);
+		renderer->setTransform(identity, identity, identity);
 		renderer->setUniform(program->getUniformLocation(Hash("u_color")), glm::vec4(1.0f));
 		renderer->setUniform(program->getUniformLocation(Hash("u_texture")), 0);
 		texture->bind(0);
 		
-		glm::mat4 identity(1.0f);
-		
-		renderer->bindBuffer(buffer, 0, identity, identity, identity);
+		renderer->bindBuffer(buffer, 0);
 		renderer->drawBufferIndexed(Core::PrimitiveType::Triangle, 0, 6);
 		renderer->deleteBuffer(buffer);
 		
@@ -121,7 +122,7 @@ namespace Editor
 			return;
 		}
 
-		renderPreviewMesh(renderer, mesh, nullptr, thumbPath);
+		renderPreviewMesh(renderer, mesh, thumbPath);
 	}
 
 	void ThumbManager::renderMaterialThumbnail(const fs::path& sourcePath, const fs::path& thumbPath)
@@ -197,7 +198,7 @@ namespace Editor
 		model = glm::mat4(1.0f);
 	}
 
-	void ThumbManager::renderPreviewMesh(Core::Renderer* renderer, Core::Mesh* mesh, Core::Material* material, const fs::path& fileName)
+	void ThumbManager::renderPreviewMesh(Core::Renderer* renderer, Core::Mesh* mesh, const fs::path& fileName)
 	{
 		const Core::FrameBuffer* frameBuffer = beginThumbnail(renderer);
 
@@ -205,25 +206,26 @@ namespace Editor
 		glm::mat4 projection;
 		glm::mat4 model;
 
+		uint32_t textureId = renderer->getDefaultTextureId();
+		int colorLocation = renderer->getUnlitTextureProgram()->getUniformLocation(Hash("u_color"));
+		int textureLocation = renderer->getUnlitTextureProgram()->getUniformLocation(Hash("u_texture"));
+
 		getPreviewMatrices(mesh->getBoundingBox(), 35.0f, view, projection, model);
 
-		if (material != nullptr && material->getProgram() != nullptr)
-		{
-			material->bind();
-		}
-		else
-		{
-			renderer->bindProgram(renderer->getUnlitColorProgram());
-			renderer->setUniform(renderer->getUnlitColorProgram()->getUniformLocation(Hash("u_color")), glm::vec4(0.85f, 0.85f, 0.85f, 1.0f));
-		}
-
 		Core::VertexBuffer* buffer = mesh->getVertexBuffer();
+		renderer->bindBuffer(buffer, C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+
 		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 		{
 			Core::SubMesh& subMesh = mesh->getSubMesh(i);
-			renderer->bindBuffer(buffer, C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL, view,
-								 projection, model);
 
+			renderer->bindProgram(renderer->getUnlitTextureProgram());
+			renderer->setTransform(view, projection, model);
+			renderer->setUniform(colorLocation, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+			
+			renderer->bindTexture(textureId, 0);
+			renderer->setUniform(textureLocation, 0);
+			
 			if (buffer->getIndexArraySize() > 0)
 			{
 				renderer->drawBufferIndexed(Core::PrimitiveType::Triangle, subMesh.getIndexOffset(), subMesh.getIndexCount());

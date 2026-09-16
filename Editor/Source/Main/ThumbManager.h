@@ -15,7 +15,6 @@ namespace Core
 	class FrameBuffer;
 	class Renderer;
 	class Mesh;
-	class Material;
 }
 
 namespace Editor
@@ -33,7 +32,7 @@ namespace Editor
 			const Core::FrameBuffer* beginThumbnail(Core::Renderer* renderer);
 			void finishThumbnail(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer, const fs::path& fileName);
 			void getPreviewMatrices(const Core::AxisAlignedBox& box, float fov, glm::mat4& view, glm::mat4& projection, glm::mat4& model);
-			void renderPreviewMesh(Core::Renderer* renderer, Core::Mesh* mesh, Core::Material* material, const fs::path& fileName);
+			void renderPreviewMesh(Core::Renderer* renderer, Core::Mesh* mesh, const fs::path& fileName);
 
 		public:
 			ThumbManager(Core::Application* application, Core::ContentManager* contentManager);

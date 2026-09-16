@@ -44,4 +44,29 @@ namespace Core
 		}
 		return nullptr;
 	}
+
+	std::vector<unsigned char> Renderer::generateDefaultTextureData(unsigned int width, unsigned int height, unsigned int cellSize)
+	{
+		std::vector<unsigned char> data(width * height * 4);
+
+		for (unsigned int y = 0; y < height; ++y)
+		{
+			for (unsigned int x = 0; x < width; ++x)
+			{
+				const bool checker = ((x / cellSize) + (y / cellSize)) % 2 == 0;
+
+				const unsigned char value = checker ? 175 : 80;
+
+				const size_t index = (y * width + x) * 4;
+
+				// BGRA
+				data[index + 0] = value; // B
+				data[index + 1] = value; // G
+				data[index + 2] = value; // R
+				data[index + 3] = 255;	 // A
+			}
+		}
+
+		return data;
+	}
 } // namespace Core

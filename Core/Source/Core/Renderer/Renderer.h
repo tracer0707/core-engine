@@ -42,7 +42,6 @@ namespace Core
 {
 	class DeviceContext;
 	class Program;
-	class Material;
 
 	enum class PrimitiveType
 	{
@@ -55,8 +54,6 @@ namespace Core
 			friend class Window;
 
 		private:
-			Material* _defaultMaterial = nullptr;
-
 			static Renderer* init(void* windowCtx);
 			static void destroy(Renderer* renderer);
 
@@ -72,6 +69,8 @@ namespace Core
 			virtual void swapBuffers() = 0;
 			virtual void processEvents(void* event) = 0;
 
+			uint32_t _defaultTextureId = 0;
+
 			Program* _defaultProgram = nullptr;
 			Program* _unlitColorProgram = nullptr;
 			Program* _unlitTextureProgram = nullptr;
@@ -83,6 +82,8 @@ namespace Core
 
 			unsigned int _width = 0;
 			unsigned int _height = 0;
+
+			std::vector<unsigned char> generateDefaultTextureData(unsigned int width, unsigned int height, unsigned int cellSize);
 
 		public:
 			unsigned int getWidth() { return _width; }
@@ -97,6 +98,8 @@ namespace Core
 			virtual void bindProgram(Program* program) = 0;
 			virtual std::string checkProgramErrors(unsigned int program) = 0;
 
+			uint32_t getDefaultTextureId() const { return _defaultTextureId; }
+
 			Program* getDefaultProgram() { return _defaultProgram; }
 			Program* getUnlitColorProgram() { return _unlitColorProgram; }
 			Program* getUnlitTextureProgram() { return _unlitTextureProgram; }
@@ -108,9 +111,10 @@ namespace Core
 			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize) = 0;
 			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize) = 0;
 			virtual void deleteBuffer(VertexBuffer* buffer) = 0;
-			virtual void bindBuffer(VertexBuffer* buffer, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model) = 0;
+			virtual void bindBuffer(VertexBuffer* buffer, unsigned int flags) = 0;
 			virtual void drawBufferArray(PrimitiveType primitiveType, unsigned int offset, unsigned int count) = 0;
 			virtual void drawBufferIndexed(PrimitiveType primitiveType, unsigned int offset, unsigned int count) = 0;
+			virtual void setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model) = 0;
 
 			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height) = 0;
 			virtual void deleteFrameBuffer(const FrameBuffer* buffer) = 0;

@@ -105,13 +105,17 @@ namespace Core
 			}
 			else if (uniform.type == UniformType::Sampler2D)
 			{
+				uint32_t textureId = _renderer->getDefaultTextureId();
+
 				Texture2D* texture = getTexture2D(uniform.nameHash);
 				if (texture != nullptr)
 				{
-					_renderer->bindTexture(texture->getNativeId(), texture2dSlot);
-					_renderer->setUniform(uniform.location, texture2dSlot);
-					texture2dSlot++;
+					textureId = texture->getNativeId();
 				}
+
+				_renderer->bindTexture(textureId, texture2dSlot);
+				_renderer->setUniform(uniform.location, texture2dSlot);
+				texture2dSlot++;
 			}
 		}
 	}

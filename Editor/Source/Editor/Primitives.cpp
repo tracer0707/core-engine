@@ -24,8 +24,9 @@ namespace Editor
 	{
 		renderer->updateBuffer(buffer, points, pointsCount, nullptr, 0);
 		renderer->bindProgram(renderer->getUnlitColorProgram());
+		renderer->setTransform(view, proj, model);
 		renderer->setUniform(renderer->getUnlitColorProgram()->getUniformLocation(u_color_Hash), glm::vec4(1.0f));
-		renderer->bindBuffer(buffer, flags, view, proj, model);
+		renderer->bindBuffer(buffer, flags);
 		renderer->drawBufferArray(Core::PrimitiveType::Line, 0, pointsCount);
 	}
 
@@ -191,18 +192,20 @@ namespace Editor
 			for (unsigned int sector = 0; sector < sectors; ++sector)
 			{
 				indices.push_back(first + sector);
-				indices.push_back(second + sector);
-				indices.push_back(first + sector + 1u);
 				indices.push_back(first + sector + 1u);
 				indices.push_back(second + sector);
+
+				indices.push_back(first + sector + 1u);
 				indices.push_back(second + sector + 1u);
+				indices.push_back(second + sector);
 			}
 		}
 
 		if (vertices.empty() || indices.empty()) return;
 
+		renderer->setTransform(view, proj, model);
 		renderer->updateBuffer(buffer, vertices.data(), static_cast<unsigned int>(vertices.size()), indices.data(), static_cast<unsigned int>(indices.size()));
-		renderer->bindBuffer(buffer, flags, view, proj, model);
+		renderer->bindBuffer(buffer, flags);
 		renderer->drawBufferIndexed(Core::PrimitiveType::Triangle, 0, buffer->getIndexArraySize());
 	}
 

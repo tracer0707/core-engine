@@ -72,11 +72,17 @@ namespace Core
 		_unlitColorProgram = createProgram("Builtin/UnlitColor", Shaders::UnlitColor::getVertexSource(), Shaders::UnlitColor::getFragmentSource());
 		_unlitTextureProgram = createProgram("Builtin/UnlitTexture", Shaders::UnlitTexture::getVertexSource(), Shaders::UnlitTexture::getFragmentSource());
 		_fullScreenQuadProgram = createProgram("Hidden/FullScreenQuad", Shaders::FullScreenQuad::getVertexSource(), Shaders::FullScreenQuad::getFragmentSource());
+
+		auto data = generateDefaultTextureData(128, 128, 16);
+		_defaultTextureId = createTexture(data.data(), 128, 128, 0, TextureFormat::RGBA8);
 	}
 
 	RendererGL4::~RendererGL4()
 	{
 		makeCurrent();
+
+		deleteTexture(_defaultTextureId);
+		_defaultTextureId = 0;
 
 		glDisable(GL_MULTISAMPLE);
 
@@ -381,8 +387,6 @@ namespace Core
 		glVertexAttribPointer(8, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(24 * sizeof(float)));
 		glEnableVertexAttribArray(8);
 
-		glBindVertexArray(0);
-
 		VertexBuffer* buffer = new VertexBuffer(vao, vbo, ibo, vertexArray != nullptr ? VertexBufferType::Static : VertexBufferType::Dynamic, vertexArray, vertexArraySize, indexArray, indexArraySize);
 
 		return buffer;
@@ -448,12 +452,8 @@ namespace Core
 		delete buffer;
 	}
 
-	void RendererGL4::bindBuffer(VertexBuffer* buffer, unsigned int flags, glm::mat4& view, glm::mat4& proj, glm::mat4& model)
+	void RendererGL4::bindBuffer(VertexBuffer* buffer, unsigned int flags)
 	{
-		if (_currentProgram->u_viewMtxLocation != -1) setUniform(_currentProgram->u_viewMtxLocation, view);
-		if (_currentProgram->u_projMtxLocation != -1) setUniform(_currentProgram->u_projMtxLocation, proj);
-		if (_currentProgram->u_modelMtxLocation != -1) setUniform(_currentProgram->u_modelMtxLocation, model);
-
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
 		glDisable(GL_CULL_FACE);
@@ -533,6 +533,13 @@ namespace Core
 		}
 	}
 
+	void RendererGL4::setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model)
+	{
+		if (_currentProgram->u_viewMtxLocation != -1) setUniform(_currentProgram->u_viewMtxLocation, view);
+		if (_currentProgram->u_projMtxLocation != -1) setUniform(_currentProgram->u_projMtxLocation, proj);
+		if (_currentProgram->u_modelMtxLocation != -1) setUniform(_currentProgram->u_modelMtxLocation, model);
+	}
+
 	const FrameBuffer* RendererGL4::createFrameBuffer(unsigned int width, unsigned int height)
 	{
 		FrameBuffer* fb = new FrameBuffer();
@@ -591,8 +598,7 @@ namespace Core
 		glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
 		std::vector<unsigned char> pixels(static_cast<size_t>(buffer->width) * buffer->height * 4u);
-		glReadPixels(0, 0, static_cast<GLsizei>(buffer->width), static_cast<GLsizei>(buffer->height), GL_RGBA, GL_UNSIGNED_BYTE,
-			pixels.data());
+		glReadPixels(0, 0, static_cast<GLsizei>(buffer->width), static_cast<GLsizei>(buffer->height), GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
 
 		glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 		return pixels;
