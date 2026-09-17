@@ -399,7 +399,7 @@ namespace Core
 	void RendererGL4::updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray,
 								   unsigned int indexArraySize)
 	{
-		assert(buffer->type == VertexBufferType::Dynamic && "Only dynamic vertex buffers can be updated");
+		assert(buffer->getType() == VertexBufferType::Dynamic && "Only dynamic vertex buffers can be updated");
 		assert(vertexArraySize <= buffer->getMaxVertexArraySize() && "Vertex array size exceeds maximum");
 
 		glBindVertexArray(buffer->getVao());
@@ -595,6 +595,7 @@ namespace Core
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
+		glDepthMask(GL_TRUE);
 	}
 
 	std::vector<unsigned char> RendererGL4::readFrameBufferPixels(const FrameBuffer* buffer)

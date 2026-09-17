@@ -160,7 +160,7 @@ namespace Editor
 		}
 
 		Primitives::sphere(renderer, sphere, view, projection, model, 32, 16,
-			C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+			C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_DEPTH_LEQUAL);
 		
 		renderer->deleteBuffer(sphere);
 		
@@ -211,10 +211,10 @@ namespace Editor
 		int colorLocation = renderer->getUnlitTextureProgram()->getUniformLocation(Hash("u_color"));
 		int textureLocation = renderer->getUnlitTextureProgram()->getUniformLocation(Hash("u_texture"));
 
-		getPreviewMatrices(mesh->getBoundingBox(), 35.0f, view, projection, model);
+		getPreviewMatrices(mesh->getBoundingBox(), 40.0f, view, projection, model);
 
 		Core::VertexBuffer* buffer = mesh->getVertexBuffer();
-		renderer->bindBuffer(buffer, C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+		renderer->bindBuffer(buffer, C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_DEPTH_LEQUAL);
 
 		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 		{

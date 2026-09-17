@@ -69,5 +69,7 @@ namespace Core
 			uint32_t getVao() const { return _vao; }
 			uint32_t getVbo() const { return _vbo; }
 			uint32_t getIbo() const { return _ibo; }
+
+			VertexBufferType getType() const { return _type; }
     };
 } // namespace Core
