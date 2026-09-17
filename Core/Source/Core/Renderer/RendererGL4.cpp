@@ -595,7 +595,6 @@ namespace Core
 		}
 
 		glBindFramebuffer(GL_FRAMEBUFFER, buffer->frameBuffer);
-		glDepthMask(GL_TRUE);
 	}
 
 	std::vector<unsigned char> RendererGL4::readFrameBufferPixels(const FrameBuffer* buffer)
@@ -699,6 +698,7 @@ namespace Core
 		if (flags & C_CLEAR_DEPTH)
 		{
 			_flags |= GL_DEPTH_BUFFER_BIT;
+			glDepthMask(GL_TRUE);
 			glClearDepth(1.0f);
 		}
 
