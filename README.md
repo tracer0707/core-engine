@@ -9,6 +9,6 @@
 - FreeImage - 3.19.10
 - ImGui - 1.90.3
 - FlatBuffers - 25.9.23 (Apache-2.0 license https://github.com/google/flatbuffers)
-- bc7enc
 - Manifold - 3.5.2 (Apache-2.0 license https://github.com/elalish/manifold)
 - Lua - 5.5.1
+- AMD Compressonator - 4.5.52

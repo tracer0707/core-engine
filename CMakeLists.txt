@@ -89,22 +89,6 @@ add_library(SDL2 STATIC IMPORTED)
 add_library(glm STATIC IMPORTED)
 add_library(flatbuffers STATIC IMPORTED)
 
-set_target_properties(ICUDT PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include"
-)
-set_target_properties(ICUUC PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/include"
-)
-set_target_properties(SDL2 PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/sdl/include"
-)
-set_target_properties(glm PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/glm/include"
-)
-set_target_properties(flatbuffers PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/flatbuffers/include"
-)
-
 if(PLATFORM_LINUX)
     set_target_properties(ICUUC PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Core/Dependencies/icu/lib/linux64/libicuuc.a"
@@ -177,7 +161,7 @@ endif()
 target_include_directories(Editor PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/Core/Source
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/include
-    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include
     ${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Manifold/include
 )
@@ -185,20 +169,11 @@ target_include_directories(Editor PRIVATE
 add_library(Manifold STATIC IMPORTED)
 add_library(Assimp STATIC IMPORTED)
 add_library(FreeImage STATIC IMPORTED)
-add_library(bc7enc STATIC IMPORTED)
-
-set_target_properties(Manifold PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Manifold/include"
-)
-set_target_properties(Assimp PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/assimp/include"
-)
-set_target_properties(FreeImage PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/include"
-)
-set_target_properties(bc7enc PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/include"
-)
+add_library(Compressonator STATIC IMPORTED)
+add_library(CompressonatorCore STATIC IMPORTED)
+add_library(CompressonatorCoreAVX STATIC IMPORTED)
+add_library(CompressonatorCoreAVX512 STATIC IMPORTED)
+add_library(CompressonatorCoreSSE STATIC IMPORTED)
 
 if(PLATFORM_LINUX)
     set_target_properties(Manifold PROPERTIES
@@ -210,8 +185,20 @@ if(PLATFORM_LINUX)
     set_target_properties(FreeImage PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/lib/linux64/libFreeImage.a"
     )
-    set_target_properties(bc7enc PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/lib/linux64/libbc7enc.a"
+    set_target_properties(Compressonator PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/linux64/libCMP_Compressonator.a"
+    )
+    set_target_properties(CompressonatorCore PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/linux64/libCMP_Core.a"
+    )
+    set_target_properties(CompressonatorCoreAVX PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/linux64/libCMP_Core_AVX.a"
+    )
+    set_target_properties(CompressonatorCoreAVX512 PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/linux64/libCMP_Core_AVX512.a"
+    )
+    set_target_properties(CompressonatorCoreSSE PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/linux64/libCMP_Core_SSE.a"
     )
 elseif(PLATFORM_WINDOWS)
     set_target_properties(Manifold PROPERTIES
@@ -223,8 +210,20 @@ elseif(PLATFORM_WINDOWS)
     set_target_properties(FreeImage PROPERTIES
         IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/FreeImage/lib/win64/FreeImage.lib"
     )
-    set_target_properties(bc7enc PROPERTIES
-        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/bc7enc/lib/win64/bc7enc.lib"
+    set_target_properties(Compressonator PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/win64/CMP_Compressonator.lib"
+    )
+    set_target_properties(CompressonatorCore PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/win64/CMP_Core.lib"
+    )
+    set_target_properties(CompressonatorCoreAVX PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/win64/CMP_Core_AVX.lib"
+    )
+    set_target_properties(CompressonatorCoreAVX512 PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/win64/CMP_Core_AVX512.lib"
+    )
+    set_target_properties(CompressonatorCoreSSE PROPERTIES
+        IMPORTED_LOCATION "${CMAKE_CURRENT_SOURCE_DIR}/Editor/Dependencies/Compressonator/lib/win64/CMP_Core_SSE.lib"
     )
 endif()
 
@@ -234,7 +233,11 @@ target_link_libraries(Editor
     PRIVATE Manifold
     PRIVATE Assimp
     PRIVATE FreeImage
-    PRIVATE bc7enc
+    PRIVATE Compressonator
+    PRIVATE CompressonatorCore
+    PRIVATE CompressonatorCoreAVX
+    PRIVATE CompressonatorCoreAVX512
+    PRIVATE CompressonatorCoreSSE
 )
 
 # Group projects

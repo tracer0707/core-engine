@@ -1,7 +1,5 @@
 #include "TextureUtils.h"
 
-#include "bc7compressor.h"
-
 #include <FreeImage.h>
 
 #include <Core/Renderer/Renderer.h>
@@ -11,8 +9,8 @@ namespace Editor
 {
 	FIBITMAP* TextureUtils::makeSquare(FIBITMAP* src)
 	{
-		int w = FreeImage_GetWidth(src);
-		int h = FreeImage_GetHeight(src);
+		unsigned int w = FreeImage_GetWidth(src);
+		unsigned int h = FreeImage_GetHeight(src);
 
 		size_t u2 = 1;
 		while (u2 < w)
@@ -43,36 +41,6 @@ namespace Editor
 	FIBITMAP* TextureUtils::rescale(FIBITMAP* src, int newW, int newH)
 	{
 		return FreeImage_Rescale(src, newW, newH, FREE_IMAGE_FILTER::FILTER_BOX);
-	}
-
-	void TextureUtils::copyPixels(std::vector<color_quad_u8>& dst, FIBITMAP* src, int width, int height)
-	{
-		BYTE* pixels = (BYTE*)FreeImage_GetBits(src);
-		FIBITMAP* alphaChannel = FreeImage_GetChannel(src, FREE_IMAGE_COLOR_CHANNEL::FICC_ALPHA);
-		BYTE* bits = FreeImage_GetBits(alphaChannel);
-
-		int pixelsCount = width * height;
-		dst.resize(pixelsCount);
-
-		int pos = 0;
-		for (int i = 0; i < width; ++i)
-		{
-			for (int j = 0; j < height; ++j)
-			{
-				color_quad_u8 pixel;
-				RGBQUAD rgb;
-				FreeImage_GetPixelColor(src, j, i, &rgb);
-
-				BYTE alpha = 255;
-				if (alphaChannel != nullptr) alpha = pixels[pos * 4 + 3];
-
-				pixel.set(rgb.rgbRed, rgb.rgbGreen, rgb.rgbBlue, alpha);
-				dst[pos] = pixel;
-				++pos;
-			}
-		}
-
-		if (alphaChannel != nullptr) FreeImage_Unload(alphaChannel);
 	}
 
 	bool TextureUtils::saveFrameBuffer(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer, const fs::path& fileName)

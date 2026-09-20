@@ -1,5 +1,6 @@
 #include "ContentImporter.h"
 
+#include <cstdint>
 #include <vector>
 #include <fstream>
 #include <filesystem>
@@ -8,6 +9,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <compressonator.h>
 #include <FreeImage.h>
 
 #include <Core/System/Application.h>
@@ -22,7 +24,6 @@
 #include <Core/Content/ContentManager.h>
 
 #include "../Main/EditorApp.h"
-#include "../Utils/bc7compressor.h"
 #include "../Utils/TextureUtils.h"
 
 #include "flatbuffers/flatbuffers.h"
@@ -86,24 +87,55 @@ namespace Editor
 			unsigned int bpp = FreeImage_GetBPP(texture) / 8;
 			unsigned int pitch = FreeImage_GetPitch(texture);
 			_size = _width * _height * bpp;
-			unsigned char* dst = new unsigned char[_size];
+			_data = new unsigned char[_size];
 
 			for (unsigned y = 0; y < _height; y++)
 			{
-				memcpy(dst + y * _width * bpp, src + y * pitch, _width * bpp);
+				memcpy(_data + y * _width * bpp, src + y * pitch, _width * bpp);
 			}
-
-			_data = dst;
 		}
 		else if (format == Core::TextureFormat::BC7)
 		{
-			color_quad_u8_vec pixels;
-			_size = (((_width + 3) & ~3) * ((_height + 3) & ~3) * 8) >> 3;
-			unsigned char* newPixels = new unsigned char[_size];
-			TextureUtils::copyPixels(pixels, texture, _width, _height);
-			bc7compress(pixels, _width, _height, newPixels, _size, 1);
-			pixels.clear();
-			_data = newPixels;
+			BYTE* pixels = (BYTE*)FreeImage_GetBits(texture);
+
+			CMP_Texture src{};
+			src.dwSize = sizeof(CMP_Texture);
+			src.dwWidth = _width;
+			src.dwHeight = _height;
+			src.dwPitch = _width * 4;
+			src.format = CMP_FORMAT_RGBA_8888;
+			src.dwDataSize = _width * _height * 4;
+			src.pData = pixels;
+
+			// BC7:
+			const uint32_t blockWidth = (_width + 3) / 4;
+			const uint32_t blockHeight = (_height + 3) / 4;
+			const uint32_t blockSize = 16;
+
+			const uint32_t compressedSize = blockWidth * blockHeight * blockSize;
+
+			std::vector<uint8_t> compressed(compressedSize);
+
+			CMP_Texture dst{};
+			dst.dwSize = sizeof(CMP_Texture);
+			dst.dwWidth = _width;
+			dst.dwHeight = _height;
+			dst.dwPitch = blockWidth * blockSize;
+			dst.format = CMP_FORMAT_BC7;
+			dst.dwDataSize = compressedSize;
+			dst.pData = compressed.data();
+
+			CMP_CompressOptions options{};
+			options.dwSize = sizeof(CMP_CompressOptions);
+
+			CMP_ERROR result = CMP_ConvertTexture(&src, &dst, &options, nullptr);
+
+			if (result == CMP_OK)
+			{
+				_size = dst.dwDataSize;
+				_data = new unsigned char[_size];
+				memcpy(_data, dst.pData, _size);
+			}
 		}
 		else
 		{
