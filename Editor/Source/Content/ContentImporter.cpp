@@ -49,11 +49,6 @@ namespace Editor
 
 	void ContentImporter::importTexture2D(const fs::path& sourceFileName, const fs::path& targetFileName, Core::TextureFormat format)
 	{
-		int _width = 0;
-		int _height = 0;
-		unsigned char* _data = nullptr;
-		int _size = 0;
-
 		FREE_IMAGE_FORMAT _fmt;
 		FIBITMAP* texture;
 #ifdef _WIN32
@@ -64,8 +59,7 @@ namespace Editor
 		_fmt = FreeImage_GetFileType(sourceFileName.c_str());
 		texture = FreeImage_Load(_fmt, sourceFileName.c_str());
 #endif
-		if (texture == nullptr)
-			throw std::runtime_error("Texture loading error");
+		if (texture == nullptr) throw std::runtime_error("Texture loading error");
 
 		FIBITMAP* convert = TextureUtils::makeSquare(texture);
 		FreeImage_Unload(texture);
@@ -78,36 +72,38 @@ namespace Editor
 			texture = convert;
 		}
 
-		_width = FreeImage_GetWidth(texture);
-		_height = FreeImage_GetHeight(texture);
+		unsigned int _width = FreeImage_GetWidth(texture);
+		unsigned int _height = FreeImage_GetHeight(texture);
+		unsigned int _pitch = FreeImage_GetPitch(texture);
+		unsigned int _bpp = FreeImage_GetBPP(texture) / 8;
+		unsigned char* _pixels = FreeImage_GetBits(texture);
+		unsigned char* _data = nullptr;
+		unsigned int _size = 0;
 
 		if (format == Core::TextureFormat::RGBA8)
 		{
-			unsigned char* src = FreeImage_GetBits(texture);
-			unsigned int bpp = FreeImage_GetBPP(texture) / 8;
-			unsigned int pitch = FreeImage_GetPitch(texture);
-			_size = _width * _height * bpp;
+			_size = _width * _height * _bpp;
 			_data = new unsigned char[_size];
 
 			for (unsigned y = 0; y < _height; y++)
 			{
-				memcpy(_data + y * _width * bpp, src + y * pitch, _width * bpp);
+				memcpy(_data + y * _width * _bpp, _pixels + y * _pitch, _width * _bpp);
 			}
 		}
 		else if (format == Core::TextureFormat::BC7)
 		{
-			BYTE* pixels = (BYTE*)FreeImage_GetBits(texture);
+			TextureUtils::swapRedBlueChannels(_pixels, _width, _height, _pitch);
 
 			CMP_Texture src{};
 			src.dwSize = sizeof(CMP_Texture);
 			src.dwWidth = _width;
 			src.dwHeight = _height;
-			src.dwPitch = _width * 4;
+			src.dwPitch = _pitch;
 			src.format = CMP_FORMAT_RGBA_8888;
-			src.dwDataSize = _width * _height * 4;
-			src.pData = pixels;
+			src.dwDataSize = _pitch * _height;
+			src.pData = _pixels;
 
-			// BC7:
+			// BC7
 			const uint32_t blockWidth = (_width + 3) / 4;
 			const uint32_t blockHeight = (_height + 3) / 4;
 			const uint32_t blockSize = 16;
@@ -342,8 +338,8 @@ namespace Editor
 
 					fs::path fileName = targetFileName;
 					Core::String outputFileName = Core::Path::toUtf8(
-							fileName.replace_filename(Core::Path::fromUtf8(Core::Path::toUtf8(fileName.filename().stem()) + "_" +
-							std::to_string(meshIndex) + Core::Path::toUtf8(fileName.extension()))));
+						fileName.replace_filename(Core::Path::fromUtf8(Core::Path::toUtf8(fileName.filename().stem()) + "_" +
+																	   std::to_string(meshIndex) + Core::Path::toUtf8(fileName.extension()))));
 
 					std::ofstream file(Core::Path::fromUtf8(outputFileName), std::ios::binary);
 

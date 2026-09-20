@@ -23,6 +23,7 @@ namespace Editor
 		public:
 			static FIBITMAP* makeSquare(FIBITMAP* src);
 			static FIBITMAP* rescale(FIBITMAP* src, int newW, int newH);
+			static void swapRedBlueChannels(uint8_t* pixels, uint32_t width, uint32_t height, uint32_t pitch);
 			static bool saveFrameBuffer(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer, const fs::path& fileName);
 	};
 } // namespace Editor

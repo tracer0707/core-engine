@@ -43,6 +43,20 @@ namespace Editor
 		return FreeImage_Rescale(src, newW, newH, FREE_IMAGE_FILTER::FILTER_BOX);
 	}
 
+	void TextureUtils::swapRedBlueChannels(uint8_t* pixels, uint32_t width, uint32_t height, uint32_t pitch)
+	{
+		for (uint32_t y = 0; y < height; ++y)
+		{
+			uint8_t* row = pixels + y * pitch;
+
+			for (uint32_t x = 0; x < width; ++x)
+			{
+				uint8_t* pixel = row + x * 4;
+				std::swap(pixel[0], pixel[2]);
+			}
+		}
+	}
+
 	bool TextureUtils::saveFrameBuffer(Core::Renderer* renderer, const Core::FrameBuffer* frameBuffer, const fs::path& fileName)
 	{
 		std::vector<unsigned char> pixels = renderer->readFrameBufferPixels(frameBuffer);
