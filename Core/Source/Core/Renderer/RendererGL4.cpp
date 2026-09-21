@@ -457,7 +457,19 @@ namespace Core
 		delete buffer;
 	}
 
-	void RendererGL4::bindBuffer(VertexBuffer* buffer, unsigned int flags)
+	void RendererGL4::bindBuffer(VertexBuffer* buffer)
+	{
+		if (buffer->getVao() > 0)
+		{
+			glBindVertexArray(buffer->getVao());
+		}
+		else
+		{
+			glBindVertexArray(0);
+		}
+	}
+
+	void RendererGL4::setState(unsigned int flags)
 	{
 		glFrontFace(GL_CCW);
 		glCullFace(GL_BACK);
@@ -481,15 +493,15 @@ namespace Core
 		if (flags & C_DEPTH_LESS) glDepthFunc(GL_LESS);
 		if (flags & C_DEPTH_NEVER) glDepthFunc(GL_NEVER);
 		if (flags & C_DEPTH_NOTEQUAL) glDepthFunc(GL_NOTEQUAL);
+	}
 
-		if (buffer->getVao() > 0)
-		{
-			glBindVertexArray(buffer->getVao());
-		}
-		else
-		{
-			glBindVertexArray(0);
-		}
+	void RendererGL4::setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model)
+	{
+		assert(_currentProgram != nullptr && "Program is not binded");
+
+		if (_currentProgram->u_viewMtxLocation != -1) setUniform(_currentProgram->u_viewMtxLocation, view);
+		if (_currentProgram->u_projMtxLocation != -1) setUniform(_currentProgram->u_projMtxLocation, proj);
+		if (_currentProgram->u_modelMtxLocation != -1) setUniform(_currentProgram->u_modelMtxLocation, model);
 	}
 
 	void RendererGL4::drawBufferArray(PrimitiveType primitiveType, unsigned int offset, unsigned int count)
@@ -536,15 +548,6 @@ namespace Core
 		{
 			glDrawElements(_primitiveType, count, GL_UNSIGNED_INT, reinterpret_cast<void*>(offset * sizeof(uint32_t)));
 		}
-	}
-
-	void RendererGL4::setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model)
-	{
-		assert(_currentProgram != nullptr && "Program is not binded");
-
-		if (_currentProgram->u_viewMtxLocation != -1) setUniform(_currentProgram->u_viewMtxLocation, view);
-		if (_currentProgram->u_projMtxLocation != -1) setUniform(_currentProgram->u_projMtxLocation, proj);
-		if (_currentProgram->u_modelMtxLocation != -1) setUniform(_currentProgram->u_modelMtxLocation, model);
 	}
 
 	const FrameBuffer* RendererGL4::createFrameBuffer(unsigned int width, unsigned int height)

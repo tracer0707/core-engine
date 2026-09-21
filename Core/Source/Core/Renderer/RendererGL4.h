@@ -36,10 +36,11 @@ namespace Core
 			virtual VertexBuffer* createBuffer(Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 			virtual void updateBuffer(VertexBuffer* buffer, Vertex* vertexArray, unsigned int vertexArraySize, unsigned int* indexArray, unsigned int indexArraySize);
 			virtual void deleteBuffer(VertexBuffer* buffer);
-			virtual void bindBuffer(VertexBuffer* buffer, unsigned int flags);
+			virtual void bindBuffer(VertexBuffer* buffer);
+			virtual void setState(unsigned int flags);
+			virtual void setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model);
 			virtual void drawBufferArray(PrimitiveType primitiveType, unsigned int offset, unsigned int count);
 			virtual void drawBufferIndexed(PrimitiveType primitiveType, unsigned int offset, unsigned int count);
-			virtual void setTransform(const glm::mat4& view, const glm::mat4& proj, const glm::mat4& model);
 
 			virtual const FrameBuffer* createFrameBuffer(unsigned int width, unsigned int height);
 			virtual void deleteFrameBuffer(const FrameBuffer* buffer);

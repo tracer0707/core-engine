@@ -100,7 +100,8 @@ namespace Editor
 		renderer->bindTexture(texture->getNativeId(), 0);
 		renderer->setUniform(program->getUniformLocation(Hash("u_texture")), 0);
 		
-		renderer->bindBuffer(buffer, 0);
+		renderer->setState(C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_DEPTH_LEQUAL);
+		renderer->bindBuffer(buffer);
 		renderer->drawBufferIndexed(Core::PrimitiveType::Triangle, 0, 6);
 		renderer->deleteBuffer(buffer);
 		
@@ -214,7 +215,8 @@ namespace Editor
 		getPreviewMatrices(mesh->getBoundingBox(), 40.0f, view, projection, model);
 
 		Core::VertexBuffer* buffer = mesh->getVertexBuffer();
-		renderer->bindBuffer(buffer, C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_DEPTH_LEQUAL);
+		renderer->setState(C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_DEPTH_LEQUAL);
+		renderer->bindBuffer(buffer);
 
 		for (int i = 0; i < mesh->getSubMeshCount(); ++i)
 		{

@@ -25,8 +25,9 @@ namespace Editor
 		renderer->updateBuffer(buffer, points, pointsCount, nullptr, 0);
 		renderer->bindProgram(renderer->getUnlitColorProgram());
 		renderer->setTransform(view, proj, model);
+		renderer->setState(flags);
 		renderer->setUniform(renderer->getUnlitColorProgram()->getUniformLocation(u_color_Hash), glm::vec4(1.0f));
-		renderer->bindBuffer(buffer, flags);
+		renderer->bindBuffer(buffer);
 		renderer->drawBufferArray(Core::PrimitiveType::Line, 0, pointsCount);
 	}
 
@@ -203,9 +204,10 @@ namespace Editor
 
 		if (vertices.empty() || indices.empty()) return;
 
-		renderer->setTransform(view, proj, model);
 		renderer->updateBuffer(buffer, vertices.data(), static_cast<unsigned int>(vertices.size()), indices.data(), static_cast<unsigned int>(indices.size()));
-		renderer->bindBuffer(buffer, flags);
+		renderer->setTransform(view, proj, model);
+		renderer->setState(flags);
+		renderer->bindBuffer(buffer);
 		renderer->drawBufferIndexed(Core::PrimitiveType::Triangle, 0, buffer->getIndexArraySize());
 	}
 

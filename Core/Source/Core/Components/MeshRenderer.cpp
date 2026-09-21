@@ -56,7 +56,8 @@ namespace Core
 
 		glm::mat4 model = transform->getTransformMatrix();
 
-		_renderer->bindBuffer(_mesh->getVertexBuffer(), C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+		_renderer->setState(C_CCW | C_CULL_BACK | C_ENABLE_DEPTH_TEST | C_ENABLE_DEPTH_WRITE | C_ENABLE_CULL_FACE | C_DEPTH_LEQUAL);
+		_renderer->bindBuffer(_mesh->getVertexBuffer());
 
 		for (int i = 0; i < _mesh->getSubMeshCount(); ++i)
 		{
