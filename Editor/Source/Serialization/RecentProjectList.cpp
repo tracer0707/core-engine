@@ -1,14 +1,8 @@
 #include "RecentProjectList.h"
 
-#include <iostream>
-#include <fstream>
-#include <stdexcept>
-
 #include <Core/Classes/json.hpp>
 #include <Core/Shared/Path.h>
 #include <Core/Serialization/JsonSerialization.h>
-
-namespace fs = std::filesystem;
 
 namespace Editor
 {

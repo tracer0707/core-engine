@@ -1,12 +1,14 @@
 #pragma once
 
 #include <functional>
+#include <filesystem>
 
 #include <Core/Shared/List.h>
 #include <Core/Shared/String.h>
-#include <Core/Shared/Path.h>
 
 #include "Window.h"
+
+namespace fs = std::filesystem;
 
 namespace Editor
 {

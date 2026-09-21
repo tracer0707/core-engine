@@ -95,7 +95,7 @@ namespace nlohmann
 	template <typename T>
 	void serialize(const T& obj, const fs::path& filename)
 	{
-		nlohmann::json j = nlohmann::json{{"data", obj}};
+		nlohmann::json j = obj;
 
 		std::ofstream file(filename);
 		if (file.is_open())
@@ -118,7 +118,7 @@ namespace nlohmann
 			nlohmann::json j;
 			file >> j;
 			file.close();
-			obj = j["data"].get<T>();
+			obj = j.get<T>();
 		}
 		else
 		{

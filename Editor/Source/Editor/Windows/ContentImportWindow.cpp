@@ -2,12 +2,15 @@
 
 #include <filesystem>
 
+#include <Core/Shared/Uuid.h>
 #include <Core/Shared/Path.h>
+#include <Core/Content/ContentDatabase.h>
 
 #include "WindowList.h"
 #include "WindowManager.h"
 
 #include "../../Content/ContentImporter.h"
+#include "../../Content/ContentMeta.h"
 #include "../../Shared/ContentExtensions.h"
 
 #include "../Controls/LinearLayout.h"
@@ -15,6 +18,8 @@
 #include "../Controls/Button.h"
 #include "../Controls/Dropdown.h"
 #include "../Controls/Separator.h"
+
+#include "../../Serialization/Meta/Texture2DMeta.h"
 
 static std::vector<Core::String> image_ext = Editor::ContentExtensions::getSupportedTextureExtensions();
 static std::vector<Core::String> mesh_ext = Editor::ContentExtensions::getSupportedMeshExtensions();
@@ -110,7 +115,8 @@ namespace Editor
 		EditorApp* app = mgr->getApplication();
 
 		Label* texFmtLbl = new Label("Texture format");
-		Dropdown* texFormat = new Dropdown({"RGBA", "BC7"});
+		Dropdown* texFormat = new Dropdown({"Uncompressed", "Color", "Normal"});
+		texFormat->setSelectedIndex(1);
 
 		_importLayout->addControl(texFmtLbl);
 		_importLayout->addControl(texFormat);
@@ -121,13 +127,31 @@ namespace Editor
 		_importBtn->setOnClick([this, app, srcFileName, dstFileName, texFormat]() {
 			ContentImporter importer(app);
 			Core::TextureFormat fmt;
+			Serialization::Texture2DMeta meta;
 
-			if (texFormat->getSelectedIndex() == 0)
+			Core::Uuid uuid = Core::ContentDatabase::singleton()->getUuid(dstFileName);
+			fs::path metaPath = ContentMeta::getMetaPathFromUuid((Core::Application*)app, uuid);
+
+			int selectedIndex = texFormat->getSelectedIndex();
+			if (selectedIndex == 0)
+			{
 				fmt = Core::TextureFormat::RGBA8;
-			else
+				meta.usage = Serialization::Texture2DMeta::Usage::Uncompressed;
+			}
+			else if (selectedIndex == 1)
+			{
 				fmt = Core::TextureFormat::BC7;
+				meta.usage = Serialization::Texture2DMeta::Usage::Color;
+			}
+			else
+			{
+				fmt = Core::TextureFormat::BC5;
+				meta.usage = Serialization::Texture2DMeta::Usage::Normal;
+			}
 
 			importer.importTexture2D(srcFileName, dstFileName, fmt);
+
+			meta.save(metaPath);
 
 			_filesToImport.removeAt(0);
 

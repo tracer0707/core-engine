@@ -20,6 +20,7 @@
 
 #include "../Editor/Primitives.h"
 #include "../Utils/TextureUtils.h"
+#include "../Content/ContentMeta.h"
 
 namespace Editor
 {
@@ -37,12 +38,16 @@ namespace Editor
 	fs::path ThumbManager::getThumbPath(const fs::path& sourcePath)
 	{
 		Core::Uuid uuid = Core::ContentDatabase::singleton()->getUuid(sourcePath);
-		fs::path thumbPath = _application->getRootPath() / fs::path("Thumbnails") / (fs::path(uuid.toString() + ".png"));
+		fs::path thumbPath = ContentMeta::getThumbPathFromUuid(_application, uuid);
 		Core::String ext = Core::Path::toUtf8(sourcePath.extension()).toLower();
+
+		if (!fs::exists(thumbPath.parent_path()))
+		{
+			fs::create_directories(thumbPath.parent_path());
+		}
 
 		if (!fs::exists(thumbPath))
 		{
-			fs::create_directories(thumbPath.parent_path());
 			if (ext == ".texture")
 			{
 				renderTextureThumbnail(sourcePath, thumbPath);

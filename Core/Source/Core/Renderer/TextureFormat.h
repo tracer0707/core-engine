@@ -6,5 +6,6 @@ namespace Core
 	{
 		RGBA8,
 		BC7,
+		BC5
 	};
 }

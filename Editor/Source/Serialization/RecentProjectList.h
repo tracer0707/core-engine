@@ -6,6 +6,8 @@
 
 #include <filesystem>
 
+namespace fs = std::filesystem;
+
 namespace Editor
 {
     namespace Serialization
